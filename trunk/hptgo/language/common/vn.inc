@@ -6,6 +6,8 @@ $charset = 'utf-8';
 //main language menu file register login and other non logged in pages
 //common
 
+$title = "Chương trình Quản lý Doanh nghiệp<br>OPEN BUSINESS MANAGEMENT";
+
 $cmdCapnhat = "Cập nhật";
 
 $cmdLogin = "Đăng nhập";
