@@ -227,12 +227,12 @@ switch ($content["priority"])
 <td>
 <table border="0" cellpadding="1" cellspacing="0">
 <tr>
-<td><b><?php echo $ml_subject; ?>:&nbsp;</b></td>
+<td nowrap><b><?php echo $ml_subject; ?>:&nbsp;</b></td>
 <td><?php echo $subject; ?></td>
 </tr>
 
 <tr>
-<td><b><?php echo $ml_from; ?>:&nbsp;</b></td>
+<td nowrap><b><?php echo $ml_from; ?>:&nbsp;</b></td>
 <td>
 <?php
 echo show_profile_by_email($content['sender'], $content['from']).'&nbsp;&lt;'.$content['sender'].'&gt;';
@@ -240,7 +240,7 @@ echo show_profile_by_email($content['sender'], $content['from']).'&nbsp;&lt;'.$c
 </td>
 </tr>
 <tr>
-<td valign="top"><b><?php echo $ml_to; ?>:&nbsp;</b></td>
+<td valign="top" nowrap><b><?php echo $ml_to; ?>:&nbsp;</b></td>
 <td>
 <?php
 $to == "";
@@ -308,7 +308,7 @@ if (isset($content["bcc"]))
 <?php
 if ($account['type'] == "imap" && !$print)
 {
-  echo '<tr><td><b>'.$ml_folder.':&nbsp;</b></td><td>';
+  echo '<tr><td nowrap><b>'.$ml_folder.':&nbsp;</b></td><td>';
 
   if ($email->get_all_folders($account['id'],true) > 0)
   {
