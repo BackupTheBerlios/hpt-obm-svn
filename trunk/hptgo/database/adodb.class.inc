@@ -500,41 +500,39 @@ class db {
     // result
     if ($table) {
       $this->connect();
-      $id = @mysql_list_fields($this->Database, $table);
-      if (!$id)
-        $this->halt("Metadata query failed.");
+      $ret = $this->adodb->MetaColumns($table);
+      $count = count($ret);
+      if ($full)
+        $res["num_fields"]= $count;
+
+      $i = 0;
+      foreach ($ret as $r) {
+        $res[$i]["table"] = $table;
+	$res[$i]["name"] = $r->name;
+	$res[$i]["type"] = $r->type;
+	$res[$i]["len"] = $r->max_length;
+	$res[$i]["flags"] = '';
+	if ($full)
+          $res["meta"][$res[$i]["name"]] = $i;
+	$i ++;
+      }
     } else {
-      $id = $this->Query_ID;
-      if (!$id)
-        $this->halt("No query specified.");
-    }
+      $count = $this->RS->FieldCount();
+      if ($full)
+        $res["num_fields"]= $count;
 
-    $count = @mysql_num_fields($id);
-
-    // made this IF due to performance (one if is faster than $count if's)
-    if (!$full) {
-      for ($i=0; $i<$count; $i++) {
-        $res[$i]["table"] = @mysql_field_table ($id, $i);
-        $res[$i]["name"]  = @mysql_field_name  ($id, $i);
-        $res[$i]["type"]  = @mysql_field_type  ($id, $i);
-        $res[$i]["len"]   = @mysql_field_len   ($id, $i);
-        $res[$i]["flags"] = @mysql_field_flags ($id, $i);
-      }
-    } else { // full
-      $res["num_fields"]= $count;
-
-      for ($i=0; $i<$count; $i++) {
-        $res[$i]["table"] = @mysql_field_table ($id, $i);
-        $res[$i]["name"]  = @mysql_field_name  ($id, $i);
-        $res[$i]["type"]  = @mysql_field_type  ($id, $i);
-        $res[$i]["len"]   = @mysql_field_len   ($id, $i);
-        $res[$i]["flags"] = @mysql_field_flags ($id, $i);
-        $res["meta"][$res[$i]["name"]] = $i;
+      for ($i = 0;$i < $count;$i ++) {
+        $field = $this->RS->FetchField($i);
+        $res[$i]["table"] = '';
+	$res[$i]["name"] = $field->name;
+	$res[$i]["type"] = $field->type;
+	$res[$i]["len"] = $field->max_length;
+	$res[$i]["flags"] = '';
+	if ($full)
+          $res["meta"][$res[$i]["name"]] = $i;
       }
     }
 
-    // free the result only if we were called on a table
-    if ($table) @mysql_free_result($id);
     return $res;
   }
 
@@ -573,11 +571,11 @@ class db {
    * @return mixed 
    */
   function table_names() { // NOTIMPL
-    $this->query("SHOW TABLES");
-    $i=0;
-    while ($info=mysql_fetch_row($this->Query_ID))
+    $tables = $this->adodb->MetaTables('TABLES');
+    $i = 0;
+    foreach ($tables as $info)
      {
-      $return[$i]["table_name"]= $info[0];
+      $return[$i]["table_name"]= $info;
       $return[$i]["tablespace_name"]=$this->Database;
       $return[$i]["database"]=$this->Database;
       $i++;
