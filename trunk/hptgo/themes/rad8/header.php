@@ -101,6 +101,7 @@ function Bold_Text(id,imgfile)
 			foreach ($module_list as $module)
 			{
 				if (!isset($module_map[$module])) continue;
+				if (!isset($module['id'])) continue;
 				$module = $modules[$module_map[$module]];
 				echo "\n<!-- ".$module['id']." -->\n";
 				if ($module['enable'] && 
