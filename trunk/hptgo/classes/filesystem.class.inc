@@ -1,14 +1,14 @@
 <?php
-/*
-   Copyright Intermesh 2003
-   Author: Merijn Schering <mschering@intermesh.nl>
-   Version: 1.0 Release date: 08 July 2003
-
-   This program is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation; either version 2 of the License, or (at your
-   option) any later version.
- */
+/**
+*   Copyright Intermesh 2003
+*   Author: Merijn Schering <mschering@intermesh.nl>
+*   Version: 1.0 Release date: 08 July 2003
+*
+*   This program is free software; you can redistribute it and/or modify it
+*   under the terms of the GNU General Public License as published by the
+*   Free Software Foundation; either version 2 of the License, or (at your
+*   option) any later version.
+*/
 
 /**
  * Class filesystem is used by module filesystem and other modules to provide
@@ -16,15 +16,24 @@
  */
 class filesystem extends db
 {
+/**
+* @var	array	$search_result
+*/
   var $search_results = array();
+/**
+* @var	bool	$disable_go_permissions
+*/
   var $disable_go_permissions = false;
+/**
+* @var	bool	$action_result
+*/
   var $action_result = false;
 
   /**
    * Get filesystem settings from fs_settings.
    *
-   * @param integer $user_id
-   * @return array the setting record
+   * @param 	integer $user_id
+   * @return	array	the setting record
    */
   function get_settings($user_id)
   {
@@ -46,7 +55,7 @@ class filesystem extends db
    * @param integer $user_id
    * @param string $sort_field sort field
    * @param string $sort_order sort order
-   * @return boolean
+   * @return bool
    */
   function set_sorting($user_id, $sort_field, $sort_order)
   {
@@ -57,11 +66,10 @@ class filesystem extends db
 
   /**
    * Check if $sub_path is a subdirectory of $parent_path.
-   * Return true if it is, false otherwise.
    *
-   * @param string $sub_path
-   * @param string $parent_path 
-   * @return boolean
+   * @param		string	$sub_path
+   * @param		string	$parent_path 
+   * @return	bool	true if it is, false otherwise.
    */
   function is_sub_dir($sub_path, $parent_path)
   {
@@ -81,7 +89,7 @@ class filesystem extends db
   /**
    * Filesystem class constructor.
    *
-   * @param boolean $disable_go_permissions ignore checking go permissions
+   * @param bool $disable_go_permissions ignore checking go permissions
    */
   function filesystem($disable_go_permissions=false)
   {
@@ -94,7 +102,7 @@ class filesystem extends db
    *
    * @param integer $user_id
    * @param string $path
-   * @return boolean
+   * @return bool
    */
   function is_home_path($user_id, $path)
   {
@@ -117,7 +125,7 @@ class filesystem extends db
    *
    * @param integer $user_id
    * @param string $path
-   * @return boolean
+   * @return bool
    */
   function is_owner($user_id, $path)
   {
@@ -164,7 +172,7 @@ class filesystem extends db
    * Check if $folder is a common folder.
    *
    * @param string $folder
-   * @return boolean
+   * @return bool
    */
   function is_common_folder($folder)
   {
@@ -188,7 +196,7 @@ class filesystem extends db
    * Check if $folder is a system folder.
    *
    * @param string $folder
-   * @return boolean
+   * @return bool
    */
   function is_system_folder($folder)
   {
@@ -204,7 +212,7 @@ class filesystem extends db
    *
    * @param string $old_folder
    * @param string $new_folder
-   * @return boolean
+   * @return bool
    */
   function update_system_folder($old_folder,$new_folder)
   {
@@ -263,8 +271,8 @@ class filesystem extends db
    * Return the number of users. 
    * User info can be retrieved through db interface. 
    *
-   * @param integer $user_id
-   * @return integer number of shares
+   * @param int $user_id
+   * @return int number of shares
    */
   function get_authorized_sharers($user_id)
   {
@@ -279,9 +287,10 @@ class filesystem extends db
 
   /**
    * Make directory $path sharable by user $user_id.
-   * Return true if successful, false otherwise. 
    *
-   * return boolean
+   * @param		int		$user_id
+   * @param		string	$path
+   * @return 	bool	true if successful, false otherwise. 
    */
   function add_share($user_id, $path)
   {
@@ -326,7 +335,8 @@ class filesystem extends db
 
   /**
    * Make directory $path unsharable.
-   * Return true if successful, false otherwise. 
+   * @param		string	$path	
+   * @return	bool	true if successful, false otherwise. 
    */
   function delete_share($path)
   {
@@ -353,7 +363,9 @@ class filesystem extends db
 
   /**
    * Rename/Move a shared directory from $old_path to $new_path.
-   * Return true if successful, false otherwise. 
+   * @param		string	$old_path
+   * @param		string	$new_path
+   * @return 	bool	true if successful, false otherwise. 
    */
   function update_share($old_path, $new_path)
   {
@@ -374,7 +386,8 @@ class filesystem extends db
   /**
    * Check if folder $path is sharable or not.
    * A folder is sharable if it's in fsShares table. For checking if the parent directory is sharable, use find_share() instead.
-   * Return the fsShares record sharable, false otherwise. 
+   * @param		string	$path
+   * @return	mixed	the fsShares record sharable, false otherwise. 
    */
   function get_share($path)
   {
@@ -390,7 +403,8 @@ class filesystem extends db
 
   /**
    * Check if folder $path or its parent is sharable.
-   * Return the shared folder (which is in fsShares), false otherwise. 
+   * @param		string	$path
+   * @return	mixed	the shared folder (which is in fsShares), false otherwise. 
    */
   function find_share($path)
   {
@@ -416,7 +430,9 @@ class filesystem extends db
 
   /**
    * Check if user $user_id has read/write permission on shared folder $path.
-   * Return true if successful, false otherwise. 
+   * @param		int		$user_id
+   * @param		string	$path
+   * @return	bool	true if successful, false otherwise. 
    */
   function has_read_permission2($user_id, $path)
   {
@@ -427,7 +443,9 @@ class filesystem extends db
    * Check if user $user_id has read permission on shared folder $path.
    * A folder is readable to an user if the user owns the folder, or the folder is shared to the user by another.
    * if $disable_go_permissions is true, then owner checking is ignored.
-   * Return true if successful, false otherwise. 
+   * @param		int		$user_id
+   * @param		string	$path
+   * @return true if successful, false otherwise. 
    */
   function has_read_permission($user_id, $path)
   {
@@ -457,7 +475,9 @@ class filesystem extends db
    * Check if user $user_id has write permission on shared folder $path.
    * A folder is readable to an user if the user owns the folder, or the folder is shared to the user by another.
    * if $disable_go_permissions is true, then owner checking is ignored.
-   * Return true if successful, false otherwise. 
+   * @param		int		$user_id
+   * @param		string	$path
+   * @return	bool	true if successful, false otherwise. 
    */
   function has_write_permission($user_id, $path)
   {
@@ -485,7 +505,8 @@ class filesystem extends db
 
   /**
    * Get the size of folder/file $path. If it's a folder, count the size of its files/subfolders.
-   * Return the size of $path. 
+   * @param		string	$path
+   * @return	int		the size of $path. 
    */
   function size($path)
   {
@@ -512,7 +533,9 @@ class filesystem extends db
 
   /**
    * Move file/folder $source_path to $destination_path.
-   * Return true if successful, false otherwise. 
+   * @param		string	$source_path
+   * @param		string	$destination_path
+   * @return	bool	true if successful, false otherwise. 
    */
   function move($source_path, $destination_path)
   {
@@ -599,7 +622,9 @@ class filesystem extends db
 
   /**
    * Copy file/folder $source_path to $destination_path.
-   * Return true if successful, false otherwise. 
+   * @param		string	$source_path
+   * @param		string	$destination_path
+   * @return 	bool	true if successful, false otherwise. 
    */
   function copy($source_path, $destination_path)
   {
@@ -671,7 +696,8 @@ class filesystem extends db
    * Delete file/folder $source_path to $destination_path.
    * If it's a folder, delete all its contents.
    * Write permission is needed/checked to delete.
-   * Return true if successful, false otherwise. 
+   * @param		string	$path
+   * @return	bool	true if successful, false otherwise. 
    */
   function delete($path)
   {
@@ -742,7 +768,8 @@ class filesystem extends db
 
   /**
    * Get parent folder of folder $path.
-   * Return false if unsuccessful.
+   * @param		string	$path
+   * @return	bool	false if unsuccessful.
    */
   function get_parent_path($path)
   {
@@ -764,7 +791,8 @@ class filesystem extends db
 
   /**
    * Get subfolders of folder $path (faster then get_folders_sorted)
-   * Return an folder array.
+   * @param		string	$path
+   * @return	mixed	an folder array.
    * Each element is an array ('path','name','mtime','size','type')
    * FIXME: more information about the array
    */
@@ -799,7 +827,9 @@ class filesystem extends db
   /**
    * Get common subfolders of folder $path, which is visible to user $user_id.
    * Retrieved folders may be direct children of $path or not.
-   * Return an folder array.
+   * @param		int		$user_id
+   * @param		string	$path
+   * @return	array	an folder array.
    * Each element is an array ('path','name','mtime','size','type')
    * FIXME: more information about the array
    */
@@ -843,6 +873,14 @@ class filesystem extends db
     return $folders;
   }
 
+ /**
+ * Get visible folders array
+ *
+ * @param	int		$user_id
+ * @param	string	$path
+ * @param	string	$sort_field
+ * @return	array	folder
+ */
   function get_visible_folders_array($user_id,$path,$sort_field)
   {
     global $GO_CONFIG;
@@ -898,7 +936,11 @@ class filesystem extends db
    * Get common subfolders of folder $path, which is visible to user $user_id,
    * sorted by $sort_field with $sort_direction
    * Retrieved folders may be direct children of $path or not.
-   * Return an folder array.
+   * @param		int		$user_id
+   * @param		string	$path
+   * @param		string	$sort_field
+   * @param		string	$sort_direction
+   * @return 	array	an folder array.
    * Each element is an array ('path','name','mtime','size','type')
    * FIXME: more information about the array
    */
@@ -942,7 +984,10 @@ class filesystem extends db
    * Get subfolders of folder $path sorted by $sort_field with $sort_direction
    * returns all subfolders of a folder sorted based on the result of a function
    * passed that is performed on the pathname. (For example filesize();)
-   * Return an folder array.
+   * @param		string	$path
+   * @param		string	$sort_field
+   * @param		string	$sort_direction
+   * @return	array	an folder array.
    * Each element is an array ('path','name','mtime','size','type')
    * FIXME: more information about the array
    */
@@ -1016,7 +1061,9 @@ class filesystem extends db
 
   /**
    * Get files/subfolders of folder $path (faster then get_files_sorted)
-   * Return an file array.
+   * @param		string	$path
+   * @param		bool	$move
+   * @return 	array	an file array.
    * Each element is an array ('path','name','mtime','size','type')
    * FIXME: more information about the array
    */
@@ -1061,7 +1108,10 @@ class filesystem extends db
    * Get files/subfolders of folder $path sorted by $sort_field with sort order $sort_direction
    * returns all subfolders of a folder sorted based on the result of a function
    * passed that is performed on the pathname. (For example filesize();)
-   * Return an file array.
+   * @param		string	$path	
+   * @param		string	$sort_field
+   * @param		string	$sort_direction
+   * @return 	array	an file array.
    * Each element is an array ('path','name','mtime','size','type')
    * FIXME: more information about the array
    */
@@ -1180,7 +1230,8 @@ class filesystem extends db
   }
 
   /**
-   * delete home folder of user $user_id and his/her shares
+   * Delete home folder of user $user_id and his/her shares
+   * @param	int	$user_id
    */
   function delete_user($user_id)
   {
@@ -1194,8 +1245,9 @@ class filesystem extends db
 
   /**
    * Make $path system folder.
-   * $feedback is the error message when things go wrong.
-   * return true if successful, false otherwise.
+   * @param		string		$path		path of file   
+   * @param		string		$feedback	is the error message when things go wrong.
+   * @return	bool		true if successful, false otherwise.
    */
   function add_system_folder($path,&$feedback)
   {
@@ -1216,8 +1268,9 @@ class filesystem extends db
 
   /**
    * Removed system folder attribute from folder $path.
-   * $msg is the error message when things go wrong.
-   * return true if successful, false otherwise.
+   * @param		string	$path	path of file
+   * @param		string	$msg	is the error message when things go wrong.
+   * @return	bool	true if successful, false otherwise.
    */
   function delete_system_folder($path,&$msg)
   {
