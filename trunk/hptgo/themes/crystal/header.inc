@@ -11,7 +11,7 @@ header('Content-Type: text/html; charset='.$charset);
 <link href="<?php echo $GO_THEME->theme_url.'style.css'; ?>" rel="stylesheet" type="text/css" />
 <link href="<?php echo $GO_THEME->theme_url.'htmlarea.css'; ?>" rel="stylesheet" type="text/css" />
 <link href="<?php echo $GO_THEME->theme_url.'calendar.css'; ?>" type="text/css" rel="stylesheet" />
-<link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" />
+<link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" type="image/x-icon" />
 <title>
 <?php
 echo $GO_CONFIG->title;

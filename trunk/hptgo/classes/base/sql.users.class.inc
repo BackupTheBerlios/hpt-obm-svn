@@ -429,6 +429,28 @@ class GO_USERS extends base_users
   {
     global $GO_LANGUAGE; 
 
+    $this->query("SELECT modules FROM users WHERE id='$user_id'");
+    $this->next_record();
+    $module_preference = $this->f('modules');
+    $user_modules_properties = explode(':',$module_preference);
+    if ($user_modules_properties[0] == '')
+    {
+      global $GO_MODULES;
+      $GO_MODULES->get_modules();
+      $modules = array();
+      while ($GO_MODULES->next_record())
+	if ($GO_SECURITY->has_permission($user_id, $GO_MODULES->f('acl_read')))
+	  $modules[] = $GO_MODULES->f('id');
+      $user_modules_properties[0] = implode(' ',$modules);
+    }
+    if ($user_modules_properties[1] == '')
+      $user_modules_properties[1] = '1';
+    $modules = explode(' ',$user_modules_properties[0]);
+    if (!in_array($start_module,$modules))
+      $modules[] = $start_module;
+    $module_preference = implode(' ',$modules).':'.$user_modules_properties[1];
+
+
     if($this->query("UPDATE users SET time_format='$time_format', ".
 	  "date_format='$date_format', ".
 	  "thousands_seperator='$thousands_seperator', ".
@@ -440,7 +462,8 @@ class GO_USERS extends base_users
 	  "start_module='$start_module', ".
 	  "theme='$theme', ".
 	  "language='$language', ".
-	  "first_weekday='$first_weekday' ".
+	  "first_weekday='$first_weekday', ".
+	  "modules='$module_preference' ".
 
 	  "WHERE id='$user_id'"))
     {

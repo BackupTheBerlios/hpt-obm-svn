@@ -524,7 +524,10 @@ class calendar extends db
 
   function insert_reminder($user_id, $event_id, $remind_time)
   {
-    return $this->query("REPLACE INTO cal_reminders (user_id, event_id, remind_time) VALUES ('$user_id', '$event_id', '$remind_time')");
+    if ($remind_time != 0 && $remind_time > get_gmt_time())
+      return $this->query("REPLACE INTO cal_reminders (user_id, event_id, remind_time) VALUES ('$user_id', '$event_id', '$remind_time')");
+    else
+      return true;
   }
 
   function update_reminder($user_id, $event_id, $remind_time)
