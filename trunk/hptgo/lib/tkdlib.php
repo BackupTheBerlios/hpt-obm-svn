@@ -9,6 +9,64 @@
    Free Software Foundation; either version 2 of the License, or (at your
    option) any later version.
  */
+	function print_config_title($page=0)
+	{
+		global $GO_SECURITY;
+		
+		$db = new db();
+		$db->query("SELECT order_fields FROM ab_config WHERE page=".$page." AND user_id='".$GO_SECURITY->user_id."'"); 
+		if ($db->next_record())
+			$order = explode(",",$db->f('order_fields'));
+
+		return $order;
+	}
+	
+	function print_config_content($order, $ab, $page)
+	{
+		global $strSexes, $GO_USERS;
+	
+		$db = new db();
+
+		for ($i=0; $i<count($order); $i++)
+		{
+			switch ($order[$i])
+			{
+				case 'email' :
+					if ($page==0)
+						echo "<td nowrap>".mail_to(empty_to_stripe($ab->f("email")),
+	    							empty_to_stripe($ab->f("email")),
+	    							'normal',
+	    							true,
+	    							$ab->f("id"))."&nbsp;</td>\n";
+					if ($page==1)
+						echo '<td>'.mail_to($ab->f('email'), $ab->f('email')).'</td>';
+					if ($page==2)
+							echo "<td>".mail_to(empty_to_stripe($GO_USERS->f("email")))."&nbsp;</td>\n";
+				break;
+				case 'sex':
+					echo '<td nowrap> '.$strSexes[$ab->f('sex')].' </td>';
+				break;
+				case 'birthday':
+				case 'relation_date':
+					$day = ($ab->f($order[$i])>0?db_date_to_date($ab->f($order[$i])):'');
+					echo '<td nowrap> '.empty_to_stripe($day).' </td>';
+				break;
+				case 'company_id':
+				case 'parent':
+					$db->query('SELECT name FROM ab_companies WHERE id = '.$ab->f($order[$i]));
+					echo '<td nowrap> '.empty_to_stripe($db->next_record()?$db->f('name'):'').' </td>';
+				break;
+				case '':break;
+				default: echo "<td nowrap> ".empty_to_stripe($ab->f($order[$i]))."&nbsp; </td>\n";
+			}
+		}
+	}
+
+	function goURL($url)
+	{
+		echo '<script language="javascript"> document.location = "'.$url.'" </script>';
+	}
+ 
 	function account_manager($acl_id)
 	{
 		global $GO_SECURITY, $GO_USERS, $strAccountManager;
@@ -36,6 +94,71 @@
 		  	}
 		}
 	}
+
+//----------------------------------- CHANGE ITEM (UP, DOWN) --------------------------------
+
+	class move_item
+	{
+		function change($a, $b)
+		{
+			return "javascript:change('$a','$b');";
+		}
+		
+		function item($id, $str, $value, $checked = false)
+		{
+			$str = '<td><div id="item'.$id.'">'.$str.'</div></td><td><input type="checkbox" id="check" name="com[]" value="'.$value.'" '.($checked?'checked':'').'><input type="hidden" id="order_all" name="order_all[]" value="'.$value.'"></td>';
+			return $str;
+		}
+	
+		function move_item()
+		{	
+			$str = <<<EOF
+				<script language="javascript">
+					function change(a, b)
+					{
+						a--;
+						b--;
+						temp = document.forms[0].order_all[a].value;
+						document.forms[0].order_all[a].value = document.forms[0].order_all[b].value;
+						document.forms[0].order_all[b].value = temp;
+					
+						temp = document.forms[0].check[a].checked;
+						document.forms[0].check[a].checked = document.forms[0].check[b].checked;
+						document.forms[0].check[b].checked = temp;
+					
+						temp = document.forms[0].check[a].value;
+						document.forms[0].check[a].value = document.forms[0].check[b].value;
+						document.forms[0].check[b].value = temp;
+
+						a = 'item' + ++a;
+						b = 'item' + ++b;
+						
+						if (document.all)
+						{
+							temp = document.all[a].innerHTML;
+							document.all[a].innerHTML = document.all[b].innerHTML;
+							document.all[b].innerHTML = temp;
+						}
+						else if (document.layers)
+						{
+							temp = document.layers[a].innerHTML;
+							document.layers[a].innerHTML = document.layers[b].innerHTML;
+							document.layers[b].innerHTML = temp;
+						}
+						else
+						{
+							temp = document.getElementById(a).innerHTML;
+							document.getElementById(a).innerHTML = document.getElementById(b).innerHTML;
+							document.getElementById(b).innerHTML = temp;
+						}
+					}
+			</script>
+EOF;
+		echo $str;
+		}
+	};
+
+//------------------------------ CALENDAR ---------------------------------
 
 	class tkdCalendar
 	{
@@ -85,4 +208,5 @@ EOF;
 			echo $str;
 		}
 	};
+	
 ?>

@@ -13,6 +13,7 @@ $cmdSave = "Lưu";
 $cmdBack = "Trở lại";
 $cmdCancel = "Ngưng";
 $cmdClose = "Đóng";
+$cmdDefault = "Mặc định";
 $cmdOk = "Đồng ý";
 $cmdDelete = "Xoá";
 $cmdNext = "Kế tiếp";

@@ -132,6 +132,20 @@ echo "<td class=\"TableHead2\"><a class=\"TableHead2\" href=\"".$_SERVER['PHP_SE
 if ($ab_settings['sort_users_field'] == "name")
         echo $image_string;
 echo "</a></td>\n";
+
+require('../../lib/tkdlib.php');
+$order = print_config_title($constContactsPage);
+
+for ($i=0; $i<count($order); $i++)
+{
+	echo "<td class=\"TableHead2\" nowrap><a class=\"TableHead2\" href=\"".$_SERVER['PHP_SELF']."?post_action=members&new_sort_field=company&new_sort_order=".$new_sort_order."\">".$strCom[$order[$i]];
+	if ($ab_settings['sort_users_field'] == $order[$i])
+        echo $image_string;
+	echo "</a></td>\n";
+}
+
+if (count($order) == 0)
+{
 echo "<td class=\"TableHead2\"><a class=\"TableHead2\" href=\"".$_SERVER['PHP_SELF']."?post_action=members&new_sort_field=email&new_sort_order=".$new_sort_order."\">".$strEmail;
 if ($ab_settings['sort_users_field'] == "email")
         echo $image_string;
@@ -140,6 +154,9 @@ echo "<td class=\"TableHead2\"><a class=\"TableHead2\" href=\"".$_SERVER['PHP_SE
 if ($ab_settings['sort_users_field'] == "company")
         echo $image_string;
 echo "</a></td>\n";
+}
+
+
 echo "<td class=\"TableHead2\">&nbsp;</td>\n";
 echo "</tr>\n";
 
@@ -151,9 +168,16 @@ while ($GO_USERS->next_record())
 
 	echo "<tr id=\"".$GO_USERS->f("id")."\" height=\"18\" class=\"Table1\">\n";
 	echo "<td width=\"16\"><input type=\"checkbox\" name=\"user[]\" value=\"".$GO_USERS->f("id")."\" onclick=\"item_click(this)\" /></td>";
-	echo "<td>".show_profile($GO_USERS->f("id"), $name)."&nbsp;</a></td>\n";
+	echo "<td nowrap> ".show_profile($GO_USERS->f("id"), $name)."</td>\n";
+
+if (count($order) == 0)
+{
 	echo "<td>".mail_to(empty_to_stripe($GO_USERS->f("email")))."&nbsp;</td>\n";
 	echo "<td>".empty_to_stripe($GO_USERS->f("company"))."&nbsp;</td>\n";
+}
+
+	print_config_content($order,$ab,$constMembersPage);
+
 	echo "<td><a href=\"contact.php?user_id=".$GO_USERS->f("id")."&return_to=".urlencode($link_back)."\" title=\"".$contacts_add_member."\"><img src=\"".$GO_THEME->images['save']."\" border=\"0\" />";
 	echo "</tr>\n";
 	echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';

@@ -37,4 +37,8 @@ if (isset($GO_HEADER['body_arguments'])) echo ' '.$GO_HEADER['body_arguments'];
 echo '><div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>';
 ?>
 
+<script language="javascript">
+	window.history.forward();
+</script>
+
 <!--Einde header-->

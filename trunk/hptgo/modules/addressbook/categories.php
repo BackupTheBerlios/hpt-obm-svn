@@ -2,10 +2,13 @@
 //$projects_module_url = isset($projects_module_url) ? $projects_module_url : $GO_MODULES->url;
 
 $trash = '<img src="'.$GO_THEME->images['delete'].'" border="0">';
+$return_to = (isset($_REQUEST['return_to']) && $_REQUEST['return_to'] != '') ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
+echo '<input type="hidden" name="return_to" value="'.$return_to.'" />';
 /*
 $cat_id = $_REQUEST['cat_id'];
 if (!isset($cat_id)) $cat_id = 0;
 */
+
 $task = $_REQUEST['task'];
 $db = new db();
 switch ($task) {

@@ -136,10 +136,25 @@ echo '</td></tr>';
 
 echo '<tr><td class="TableHead2">&nbsp;</td>';
 echo '<td class="TableHead2" width="16"><input type="checkbox" name="dummy" value="dummy" onclick="javascript:invert_selection()" /></td>';
+
 echo "<td class=\"TableHead2\" nowrap><a class=\"TableHead2\" href=\"javascript:sort('name')\">".$strName;
 if ($ab_settings['sort_contacts_field'] == "name")
 echo $image_string;
 echo "</a></td>\n";
+
+require('../../lib/tkdlib.php');
+$order = print_config_title($constContactsPage);
+
+for ($i=0; $i<count($order); $i++)
+{
+	echo "<td class=\"TableHead2\" nowrap><a class=\"TableHead2\" href=\"javascript:sort('".$order[$i]."')\">".$strCom[$order[$i]];
+	if ($ab_settings['sort_contacts_field'] == $order[$i])
+		echo $image_string;
+	echo "</a></td>\n";
+}
+
+if (count($order) == 0)
+{
 echo "<td class=\"TableHead2\" nowrap><a class=\"TableHead2\" href=\"javascript:sort('email')\">".$strEmail;
 if ($ab_settings['sort_contacts_field'] == "email")
 echo $image_string;
@@ -152,6 +167,8 @@ echo "<td class=\"TableHead2\" nowrap><a class=\"TableHead2\" href=\"javascript:
 if ($ab_settings['sort_contacts_field'] == "work_phone")
 echo $image_string;
 echo "</a></td>\n";
+}
+
 echo "</tr>\n";
 
 if(isset($groups))
@@ -160,7 +177,7 @@ if(isset($groups))
   {
     if (in_array($groups[$i]['id'], $_SESSION['contacts_expanded']))
     {
-      echo "<tr class=\"Table4\"><td><a href=\"javascript:expand_group(".$groups[$i]['id'].")\"><img src=\"".$GO_THEME->images['min_node']."\" border=\"0\" /></a></td><td><input type=\"checkbox\" name=\"dummy\" value=\"dummy\" onclick=\"javascript:select_group('".$groups[$i]['id']."')\" /></td><td colspan=\"4\">".$groups[$i]['name']."</td></tr>";
+      echo "<tr class=\"Table4\"><td><a href=\"javascript:expand_group(".$groups[$i]['id'].")\"><img src=\"".$GO_THEME->images['min_node']."\" border=\"0\" /></a></td><td><input type=\"checkbox\" name=\"dummy\" value=\"dummy\" onclick=\"javascript:select_group('".$groups[$i]['id']."')\" /></td><td colspan=\"100%\">".$groups[$i]['name']."</td></tr>";
       echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 
       if ($ab->get_contacts_group($addressbook_id, $groups[$i]['id'], $ab_settings['sort_contacts_field'], $ab_settings['sort_contacts_order']) > 0)
@@ -193,10 +210,17 @@ if(isset($groups))
 	  $name = $ab->f('last_name').' '.$middle_name.$ab->f('first_name');
 
 	  echo "<tr id=\"".$ab->f("id")."\" class=\"".$class."\"><td></td>\n";
-	  echo "<td><input id=\"".$name."\" type=\"checkbox\" onclick=\"javacript:item_click(this)\" name=\"contact[]\" value=\"".$ab->f("id")."\" ".$checked." /></td><td><a".$style." class=\"normal\" href=\"contact.php?contact_id=".$ab->f("id")."&return_to=".rawurlencode($_SERVER['REQUEST_URI'])."\" title=\"".$strShowProfile."\">".empty_to_stripe($name)."</a>&nbsp;</td>\n";
+	  echo "<td nowrap><input id=\"".$name."\" type=\"checkbox\" onclick=\"javacript:item_click(this)\" name=\"contact[]\" value=\"".$ab->f("id")."\" ".$checked." /></td><td nowrap><a".$style." class=\"normal\" href=\"contact.php?contact_id=".$ab->f("id")."&return_to=".rawurlencode($_SERVER['REQUEST_URI'])."\" title=\"".$strShowProfile."\">".empty_to_stripe($name)."</a>&nbsp;</td>\n";
+
+if (count($order) == 0)
+{
 	  echo "<td>".mail_to(empty_to_stripe($ab->f("email")), empty_to_stripe($ab->f("email")),'normal',true, $ab->f("id"))."&nbsp;</td>\n";
 	  echo "<td>".empty_to_stripe($ab->f("home_phone"))."&nbsp;</td>\n";
 	  echo "<td>".empty_to_stripe($ab->f("work_phone"))."&nbsp;</td>\n";
+}
+	  
+	  print_config_content($order,$ab, $constContactsPage);
+	  	  
 	  echo "</tr>\n";
 	  echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 	}
@@ -208,7 +232,7 @@ if(isset($groups))
       }
     }else
     {
-      echo "<tr class=\"Table4\"><td><a href=\"javascript:expand_group(".$groups[$i]['id'].")\"><img src=\"".$GO_THEME->images['plus_node']."\" border=\"0\" /></a></td><td>&nbsp;</td><td colspan=\"4\" width=\"100%\">".$groups[$i]['name']."</td></tr>";
+      echo "<tr class=\"Table4\"><td><a href=\"javascript:expand_group(".$groups[$i]['id'].")\"><img src=\"".$GO_THEME->images['plus_node']."\" border=\"0\" /></a></td><td>&nbsp;</td><td colspan=\"100%\" width=\"100%\">".$groups[$i]['name']."</td></tr>";
       echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
     }
   }
@@ -218,7 +242,7 @@ if ($group_count > 0)
 {
   if (in_array(0, $_SESSION['contacts_expanded']))
   {
-    echo "<tr class=\"Table4\"><td><a href=\"javascript:expand_group(0)\"><img src=\"".$GO_THEME->images['min_node']."\" border=\"0\" /></a><td><input type=\"checkbox\" name=\"dummy\" value=\"dummy\" onclick=\"javascript:select_group('0')\" /></td><td colspan=\"4\">".$contacts_other."</td></tr>";
+    echo "<tr class=\"Table4\"><td><a href=\"javascript:expand_group(0)\"><img src=\"".$GO_THEME->images['min_node']."\" border=\"0\" /></a><td><input type=\"checkbox\" name=\"dummy\" value=\"dummy\" onclick=\"javascript:select_group('0')\" /></td><td colspan=\"100%\">".$contacts_other."</td></tr>";
     echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 
     $ab->get_contacts_group($addressbook_id,0, $ab_settings['sort_contacts_field'], $ab_settings['sort_contacts_order']);
@@ -250,10 +274,18 @@ if ($group_count > 0)
 	$middle_name = $ab->f('middle_name') == '' ? '' : $ab->f('middle_name').' ';
 	$name = $ab->f('last_name').' '.$middle_name.$ab->f('first_name');
 	echo "<tr id=\"".$ab->f("id")."\" class=\"".$class."\"><td></td>\n";
-	echo "<td><input id=\"".addslashes($name)."\" onclick=\"javacript:item_click(this)\" type=\"checkbox\" name=\"contact[]\" value=\"".$ab->f("id")."\" ".$checked." /></td><td><a".$style." class=\"normal\" href=\"contact.php?contact_id=".$ab->f("id")."&return_to=".rawurlencode($_SERVER['REQUEST_URI'])."\" title=\"".$strShowProfile."\">".empty_to_stripe($name)."</a>&nbsp;</td>\n";
+
+	echo "<td nowrap><input id=\"".addslashes($name)."\" onclick=\"javacript:item_click(this)\" type=\"checkbox\" name=\"contact[]\" value=\"".$ab->f("id")."\" ".$checked." /></td>	<td nowrap><a".$style." class=\"normal\" href=\"contact.php?contact_id=".$ab->f("id")."&return_to=".rawurlencode($_SERVER['REQUEST_URI'])."\" title=\"".$strShowProfile."\">".empty_to_stripe($name)."</a>&nbsp;</td>\n";
+
+if (count($order) == 0)
+{
 	echo "<td>".mail_to(empty_to_stripe($ab->f("email")), empty_to_stripe($ab->f("email")),'normal',true, $ab->f("id"))."&nbsp;</td>\n";
 	echo "<td>".empty_to_stripe($ab->f("home_phone"))."&nbsp;</td>\n";
 	echo "<td>".empty_to_stripe($ab->f("work_phone"))."&nbsp;</td>\n";
+}
+
+	  print_config_content($order,$ab,$constContactsPage);
+		
 	echo "</tr>\n";
 	echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
       }
@@ -270,7 +302,7 @@ if ($group_count > 0)
     }
   }else
   {
-    echo "<tr class=\"Table4\"><td><a href=\"javascript:expand_group(0)\"><img src=\"".$GO_THEME->images['plus_node']."\" border=\"0\" /></a><td>&nbsp;</td><td colspan=\"4\" width=\"100%\">".$contacts_other."</td></tr>";
+    echo "<tr class=\"Table4\"><td><a href=\"javascript:expand_group(0)\"><img src=\"".$GO_THEME->images['plus_node']."\" border=\"0\" /></a><td>&nbsp;</td><td colspan=\"100%\" width=\"100%\">".$contacts_other."</td></tr>";
     echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
   }
 }else
@@ -303,21 +335,27 @@ if ($group_count > 0)
       $name = $ab->f('last_name').' '.$middle_name.$ab->f('first_name');
 
       echo "<tr id=\"".$ab->f("id")."\" class=\"".$class."\"><td></td>\n".
-	"<td width=\"16\"><input id=\"".addslashes($name)."\" ".
+	"<td nowrap><input id=\"".addslashes($name)."\" ".
 	"onclick=\"javacript:item_click(this)\"  type=\"checkbox\"".
 	"name=\"contact[]\" value=\"".$ab->f("id")."\" ".$checked.
-	" /></td><td><a".$style." class=\"normal\" ".
+	" /></td><td nowrap><a".$style." class=\"normal\" ".
 	"href=\"contact.php?contact_id=".$ab->f("id")."&return_to=".
 	rawurlencode($_SERVER['REQUEST_URI'])."\" title=\"".
-	$strShowProfile."\">".empty_to_stripe($name)."</a>&nbsp;</td>\n".
-	"<td>".mail_to(empty_to_stripe($ab->f("email")),
+	$strShowProfile."\">".empty_to_stripe($name)."</a>&nbsp;</td>\n";
+
+if (count($order) == 0)
+{
+	echo "<td>".mail_to(empty_to_stripe($ab->f("email")),
 	    empty_to_stripe($ab->f("email")),
 	    'normal',
 	    true,
 	    $ab->f("id"))."&nbsp;</td>\n".
-
       "<td>".empty_to_stripe($ab->f("home_phone"))."&nbsp;</td>\n".
-      "<td>".empty_to_stripe($ab->f("work_phone"))."&nbsp;</td>\n".
+      "<td>".empty_to_stripe($ab->f("work_phone"))."&nbsp;</td>\n";
+}
+
+	  print_config_content($order,$ab,$constContactsPage);
+	
       "</tr>\n";
 
       echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
@@ -346,6 +384,7 @@ if ($group_count > 0)
    }
    }*/
 echo '</table>';
+
 ?>
 <script type="text/javascript" language="javascript">
   <!--

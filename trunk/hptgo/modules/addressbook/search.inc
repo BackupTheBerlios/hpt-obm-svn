@@ -52,6 +52,7 @@
 		case 'companies':
 		  $ab_settings['search_addressbook_id'] = $_REQUEST['search_addressbook_id'];
 		  $ab_settings['search_companies_field'] = $_REQUEST['search_field'];
+		  $ab_settings['search_category'] = $_REQUEST['search_category'];
 		break;
 		
 		case 'users':
@@ -122,6 +123,14 @@
 					}
 				}
 			}
+			$db = new db();
+			$db->query("SELECT * FROM ab_categories WHERE parent_id<>0");
+			
+			$catedrop = new dropbox();
+
+			$catedrop->add_value('-1',$ab_search_all);
+			while ($db->next_record())
+				$catedrop->add_value($db->f('category_id'),$db->f('category'));
 
 		break;
 
@@ -170,7 +179,14 @@
 	}
 	echo '<td>'.$ab_search_on.'&nbsp;</td><td>';
 	$dropbox->print_dropbox('search_field', $search_field);
-	echo '</td></tr></table></tr></td>';
+	echo '</td>';
+if ($ab_settings['search_type'] == 'companies')
+{	
+	echo '<td>'.$ab_search_category.'&nbsp;</td><td>';
+	$catedrop->print_dropbox('search_category', $ab_settings['search_category']);
+	echo '</td>';
+}
+	echo '</tr></table></tr></td>';
 	?>
 	<tr>
 		<td><?php echo $ab_search_keyword; ?>:</td>
@@ -289,7 +305,7 @@ if ($task=='search' || $task == 'show_letter')
 
 		case 'companies':
 
-			$ab->search_companies($GO_SECURITY->user_id, $query, $search_field, $ab_settings['search_addressbook_id']);
+			$ab->search_companies($GO_SECURITY->user_id, $query, $search_field, $ab_settings['search_addressbook_id'], $ab_settings['search_category']);
 
 			while ($ab->next_record())
 			{

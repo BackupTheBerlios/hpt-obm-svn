@@ -76,7 +76,6 @@ if(isset($_REQUEST['calendar_view_id']))
 	$calendar_id = $cal_settings['default_cal_id'];
 }
 
-
 //if a view is given then display view. Otherwise open a calendar
 if($view_id > 0)
 {
@@ -216,6 +215,7 @@ if (!$print) {
     <td class="ModuleIcons"><a href="javascript:popup('<?php echo $GO_MODULES->url; ?>index.php?print=true&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&merged_view=<?php echo $merged_view; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>','','')" class="small"><img src="<?php echo $GO_THEME->images['cal_print']; ?>" border="0" width="32" height="32" /><br /><?php echo $cmdPrint; ?></a></td>
     </tr>
     </table>
+
     <form name="calendar_form" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
     <input type="hidden" name="task" value="<?php echo $task; ?>" />
     <input type="hidden" name="year" value="<?php echo $year; ?>" />

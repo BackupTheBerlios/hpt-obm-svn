@@ -191,7 +191,9 @@ $ab_search_for = 'Tìm';
 $ab_search_in = '&nbsp;trong&nbsp;';
 $ab_search_on = '&nbsp;theo&nbsp;';
 $ab_search_keyword = 'Chứa cụm từ';
+$ab_search_category = '&nbsp;thuộc danh mục&nbsp;';
 $ab_wildcard = '(Dùng \'%\' làm ký tự thay thế)';
+$ab_search_all = '[TẤT CẢ]';
 
 //2.03
 $ab_copy_read_acl = 'Copy quyền đọc qua sổ \'Liên hệ\' và \'Công ty\'';
@@ -229,4 +231,36 @@ $strEnglishCompanyName = "Tên tiếng Anh";
 $strRelationDate = "Ngày thiết lập quan hệ";
 $strAccountManager = "Nhân viên Phụ trách";
 $strNew = "Mới";
+
+$strConfig = "Cấu hình";
+$strModifyCategories = "Hiệu chỉnh Danh mục";
+
+$strCom['address'] = $strAddress;
+$strCom['zip'] = $strZip;
+$strCom['city'] = $strCity;
+$strCom['state'] = $strState;
+$strCom['country'] = $strCountry;
+$strCom['phone'] = $strPhone;
+$strCom['fax'] = $strFax;
+$strCom['email'] = $strEmail;
+$strCom['homepage'] = $strHomepage;
+$strCom['bank_no'] = $ab_bank_no;
+$strCom['vat_no'] = $ab_vat_no;
+$strCom['relation_date'] = $strRelationDate;
+$strCom['shortname'] = $strShortCompanyName;
+$strCom['engname'] = $strEnglishCompanyName;
+$strCom['parent'] = $strParentCompany;
+
+$strCom['initials'] = $strInitials;
+$strCom['sex'] = $strSex;
+$strCom['birthday'] = $strBirthday;
+$strCom['comment'] = $ab_comment;
+$strCom['cellular'] = $strCellular;
+$strCom['home_phone'] = $strPhone;
+$strCom['department'] = $strDepartment;
+$strCom['function'] = $strFunction;
+$strCom['work_phone'] = $strWorkphone;
+$strCom['work_fax'] = $strWorkFax;
+$strCom['company_id'] = $strCompany;
+$strCom['company'] = $strCompany;
 ?>

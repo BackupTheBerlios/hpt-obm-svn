@@ -20,6 +20,7 @@ if (isset($page_title))
         echo " - ".$page_title;
 }
 echo "</title>\r\n";
+
 if(isset($GO_HEADER['auto_refresh']))
 {
 	echo '<meta http-equiv="refresh" content="'.$GO_HEADER['auto_refresh']['interval'].';';
@@ -34,4 +35,9 @@ echo '<body ';
 if (isset($GO_HEADER['body_arguments'])) echo ' '.$GO_HEADER['body_arguments'];
 echo '><div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>';
 ?>
+
+<script language="javascript">
+	window.history.forward();
+</script>
+
 <!--Einde header-->

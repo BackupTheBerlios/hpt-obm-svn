@@ -104,7 +104,7 @@ echo '<tr><td colspan="4">';
 
 if ($ab->get_subscribed_addressbooks($GO_SECURITY->user_id) > 1)
 {
-	echo '<table border="0"><tr><td>'.$ab_addressbook.':</td><td>';
+	echo '<table border="0"><tr><td>'.$ab_addressbook.':</td><td nowrap>';
 	$subscribed_addressbooks = new dropbox();
 	while ($ab->next_record())
 	{
@@ -113,8 +113,8 @@ if ($ab->get_subscribed_addressbooks($GO_SECURITY->user_id) > 1)
 	$subscribed_addressbooks->print_dropbox('addressbook_id', $addressbook_id, 'onchange="javascript:document.forms[0].submit()"');
 	echo '&nbsp;&nbsp;&nbsp;';
 
-	echo '<input type="hidden" name="treeview" value="'.$is_treeview.'"/>';
-	echo '<a href="javascript:document.forms[0].treeview.value=\''.(1-$is_treeview).'\';document.forms[0].submit()">'.($is_treeview ? $strListView : $strTreeView).'</a>';
+	echo '<input type="hidden" name="treeview" value="'.$is_treeview.'"/></td>';
+	echo '<td nowrap><a href="javascript:document.forms[0].treeview.value=\''.(1-$is_treeview).'\';document.forms[0].submit()">'.($is_treeview ? $strListView : $strTreeView).'</a>';
 	echo '</td></tr></table>';
 }else
 {
@@ -126,22 +126,14 @@ if ($ab->get_subscribed_addressbooks($GO_SECURITY->user_id) > 1)
 $rowcount = 0;
 function print_companies($parent, $path = '', $images='', $arguments='')
 {
+	global $order;
 	global $image, $path, $GO_SECURITY, $GO_THEME,$group_folders;
 	global $addressbook_id,$ab_settings;
 	global $rowcount,$link_back,$first,$max_rows;
-	global $has_parent;
-
-	$ab = new addressbook();
-	$has_parent = array();
-	if ($parent == '')
-	{
-		$ab->query("SELECT DISTINCT a1.id AS id FROM ab_companies AS a1, ab_companies AS a2 WHERE a1.id=a2.parent");
-		while ($ab->next_record())
-			$has_parent[$ab->f('id')] = true;
-	}
 
 	$total = 0;
 
+	$ab = new addressbook();
 	$count = $ab->get_companies_by_parent($addressbook_id,$parent,$ab_settings['sort_companies_field'], $ab_settings['sort_companies_order'], $first, $max_rows);
 	$total += $count;
 	$path .= $path != '' ? ",$parent" : $parent;
@@ -165,9 +157,9 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 
 		$open = in_array($ab->f('id'), $_SESSION['expanded']);
 		$subab = new addressbook();
+		$subcount = $subab->get_count_by_parent($addressbook_id,$ab->f('id'));
 		//if ($subfolders_count > 0)
-		$yes_im_a_child = isset($has_parent[$ab->f('id')]);
-		if ($yes_im_a_child)
+		if ($subcount)
 		{
 			if ($i < ($count-1))
 			{
@@ -206,18 +198,26 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 		$short_name = /*cut_string(*/$ab->f('name')/*, 30)*/;
 
 		echo '<tr class = "'.($rowcount ++ % 2 == 0 ? "TableInside1" : "TableInside2").'"id="'.$ab->f("id").'">';
-		echo '<td width="16"><input id="'.addslashes($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
-		if ($yes_im_a_child)
+		
+//		echo '<td width="16"><input id="'.addslashes($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
+		echo '<td width="16"><input type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
+		
+		if ($subcount)
 			echo '<td><a href="javascript:document.forms[0].expand_path.value=\''.$path.','.$ab->f('id').'\';document.forms[0].submit()">'.$images.$node.'</a>';
 		else
 			echo '<td>'.$images.$node;
 
 		echo $folder_image;
-		echo '<a class="normal" href="'.$GO_MODULES->url.'company.php?company_id='.$ab->f('id').'&return_to='.rawurlencode($link_back).'">'.htmlspecialchars($ab->f('name')).'</a></td>';
+		echo '<a class="normal" href="'.$GO_MODULES->url.'company.php?company_id='.$ab->f('id').'&return_to='.rawurlencode($link_back).'">'.htmlspecialchars($ab->f('name')).' </a></td>';
+
+	if (count($order) == 0)
+	{
 		echo '<td>'.$ab->f('city').'</td>';
 		echo '<td>'.mail_to($ab->f('email'), $ab->f('email')).'</td>';
 		echo '<td><a class="normal" target="_blank" href="'.$ab->f('homepage').'">'.$ab->f('homepage').'</a></td>';
 		echo '<td>'.$ab->f('phone').'</td></tr>';
+	}
+		print_config_content($order, $ab,$constCompaniesPage);		
 
 		if ($open)
 		{
@@ -233,7 +233,7 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 
 $count = $ab->get_companies_by_parent($addressbook_id,0, $ab_settings['sort_companies_field'], $ab_settings['sort_companies_order'], $first, $max_rows);
 $str_count = $count == 1 ? $ab_companies_count_single : $ab_companies_count;
-//echo '</td><td colspan="99" class="small" align="right">'.$count.' '.$str_count.'</td></tr>';
+echo '</td><td colspan="99" class="small" align="right">'.$count.' '.$str_count.'</td></tr>';
 echo '</td><td colspan="99" class="small" align="right"></td></tr>';
 echo '<tr height="20">';
 echo '<td class="TableHead2" width="16"><input type="checkbox" name="dummy" value="dummy" onclick="javascript:invert_selection()" /></td>';
@@ -243,6 +243,21 @@ if ($ab_settings['sort_companies_field'] == 'name')
 	echo $sort_arrow;
 }
 echo '</td>';
+
+require('../../lib/tkdlib.php');
+$order = print_config_title($constCompaniesPage);
+for ($i=0; $i<count($order); $i++)
+{
+	echo '<td class="TableHead2" nowrap><a class="TableHead2" href="javascript:_sort(\'$order[$i]\',\''.$new_sort_order.'\');">'.$strCom[$order[$i]].'</a>';
+	if ($ab_settings['sort_companies_field'] == $order[$i])
+	{
+		echo $sort_arrow;
+	}
+echo '</td>';
+}
+
+if (count($order) == 0)
+{
 echo '<td class="TableHead2" nowrap><a class="TableHead2" href="javascript:_sort(\'city\',\''.$new_sort_order.'\');">'.$strCity.'</a>';
 if ($ab_settings['sort_companies_field'] == 'city')
 {
@@ -267,9 +282,12 @@ if ($ab_settings['sort_companies_field'] == 'phone')
 	echo $sort_arrow;
 }
 echo '</td>';
+}
+
 echo '</tr>';
 
 $count = print_companies(0);
+
 if ($count > 0)
 {
 	$links = '';

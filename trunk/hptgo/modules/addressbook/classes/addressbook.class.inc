@@ -335,11 +335,14 @@ class addressbook extends db
 	
   }
 
-  function search_companies($user_id, $query, $field='name', $addressbook_id=0)
+  function search_companies($user_id, $query, $field='name', $addressbook_id=0, $category=-1)
   {
     $query = str_replace('*', '%', $query);
 
     $sql = "SELECT DISTINCT ab_companies.* FROM ab_companies ";
+	
+	if ($category > -1)
+		$sql.="INNER JOIN ab_cate_companies ON ab_cate_companies.company_id = ab_companies.id ";
 
     if (strpos($field, 'ab_custom_company_fields') !== false)
     {
@@ -352,6 +355,9 @@ class addressbook extends db
     {
       $sql .=	"INNER JOIN ab_subscribed ON (ab_subscribed.addressbook_id=ab_companies.addressbook_id) WHERE ab_subscribed.user_id='$user_id' AND ";
     }
+	
+	if ($category > -1)
+		$sql.= " ab_cate_companies.category_id = '$category' AND ";
 
     $sql .= "$field LIKE '$query' ".
       "ORDER BY ab_companies.name ASC";
@@ -814,6 +820,7 @@ class addressbook extends db
       if ($count > 0)
       {
 	$this->query($sql);
+
 	return $count;
       }
       return 0;
@@ -821,6 +828,7 @@ class addressbook extends db
     }else
     {
       $this->query($sql);
+
       return $this->num_rows();
     }
   }

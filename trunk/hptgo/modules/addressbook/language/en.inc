@@ -188,10 +188,12 @@ $ab_new_mailing = 'New mailing';
 $ab_all_your_addressbooks = 'all your addressbooks';
 
 $ab_search_for = 'Search for';
-$ab_search_in = 'in';
-$ab_search_on = 'on';
+$ab_search_in = '&nbsp;in&nbsp;';
+$ab_search_on = '&nbsp;on&nbsp;';
+$ab_search_category = '&nbsp;within&nbsp;';
 $ab_search_keyword = 'Search phrase';
 $ab_wildcard = '(Use \'%\' as wildcard)';
+$ab_search_all = '[ALL]';
 
 //2.03
 $ab_copy_read_acl = 'Copy read permissions to contact and companies';
@@ -227,4 +229,36 @@ $strEnglishCompanyName = "English name";
 $strRelationDate = "Start relation date";
 $strAccountManager = "Account Manager(s)";
 $strNew = "New";
+
+$strConfig = "Config";
+$strModifyCategories = "Modify Categories";
+
+$strCom['address'] = $strAddress;
+$strCom['zip'] = $strZip;
+$strCom['city'] = $strCity;
+$strCom['state'] = $strState;
+$strCom['country'] = $strCountry;
+$strCom['phone'] = $strPhone;
+$strCom['fax'] = $strFax;
+$strCom['email'] = $strEmail;
+$strCom['homepage'] = $strHomepage;
+$strCom['bank_no'] = $ab_bank_no;
+$strCom['vat_no'] = $ab_vat_no;
+$strCom['relation_date'] = $strRelationDate;
+$strCom['shortname'] = $strShortCompanyName;
+$strCom['engname'] = $strEnglishCompanyName;
+$strCom['parent'] = $strParentCompany;
+
+$strCom['initials'] = $strInitials;
+$strCom['sex'] = $strSex;
+$strCom['birthday'] = $strBirthday;
+$strCom['comment'] = $ab_comment;
+$strCom['cellular'] = $strCellular;
+$strCom['home_phone'] = $strPhone;
+$strCom['department'] = $strDepartment;
+$strCom['function'] = $strFunction;
+$strCom['work_phone'] = $strWorkphone;
+$strCom['work_fax'] = $strWorkFax;
+$strCom['company_id'] = $strCompany;
+$strCom['company'] = $strCompany;
 ?>

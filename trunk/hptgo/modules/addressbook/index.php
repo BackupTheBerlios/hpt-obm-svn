@@ -11,6 +11,7 @@ option) any later version.
 */
 
 require("../../Group-Office.php");
+require("constants.php");
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('addressbook');
 require($GO_LANGUAGE->get_language_file('addressbook'));
@@ -83,6 +84,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 }
 
 $addressbook_id = isset($_REQUEST['addressbook_id']) ? $_REQUEST['addressbook_id'] : $ab->get_default_addressbook($GO_SECURITY->user_id);
+
+//echo "aaa==".$_REQUEST['addressbook_id']."==".$addressbook_id;
+//exit();
+
 $is_treeview = isset($_REQUEST['treeview']) ? $_REQUEST['treeview'] : '0';
 
 if (!$addressbook_id)
@@ -126,8 +131,21 @@ require($GO_THEME->theme_path."header.inc");
 	<td class="ModuleIcons">
 	<a class="small" href="addressbooks.php?return_to=<?php echo urlencode($link_back); ?>"><img src="<?php echo $GO_THEME->images['ab_addressbooks']; ?>" border="0" height="32" width="32" /><br /><?php echo $ab_addressbooks; ?></a>
 	</td>
+<?php
+switch($post_action)
+{
+	case 'browse':
+		$active_tab = 0;
+	break;
+	case 'companies';
+		$active_tab = 1;
+	break;
+	case 'members':
+		$active_tab = 2;
+}
+?>
 	<td class="ModuleIcons">
-	<a class="small" href="<?php echo $_SERVER['PHP_SELF']; ?>?post_action=categories&addressbook_id=<?php echo $addressbook_id; ?>"><img src="<?php echo $GO_THEME->images['add_category']; ?>" border="0" height="32" width="32" /><br /><?php echo $ab_new_category; ?></a>
+	<a class="small" href="<?php echo $_SERVER['PHP_SELF']; ?>?post_action=categories&addressbook_id=<?php echo $addressbook_id.(isset($active_tab)?"&active_tab=".$active_tab:""); ?><?php echo (isset($active_tab)?"&active_tab=".$active_tab:"")?>"><img src="<?php echo $GO_THEME->images['add_category']; ?>" border="0" height="32" width="32" /><br /><?php echo $strConfig; ?></a>
 	</td>
 	
 	<?php
@@ -147,7 +165,7 @@ require($GO_THEME->theme_path."header.inc");
 		echo '<td class="ModuleIcons">';
 		echo '<a class="small" href="custom_fields/"><img src="'.$GO_THEME->images['ab_custom_fields'].'" border="0" height="32" width="32" /><br />'.$ab_custom_fields.'</a></td>';
 	}
-	if ($post_action != 'members' && $post_action != 'addressbooks')
+	if ($post_action != 'members' && $post_action != 'addressbooks' && $post_action != 'categories')
 	{
 		echo '<td class="ModuleIcons">';
 		echo '<a class="small" href="javascript:confirm_delete()"><img src="'.$GO_THEME->images['delete_big'].'" border="0" height="32" width="32" /><br />'.$contacts_delete.'</a></td>';
@@ -169,10 +187,11 @@ switch($post_action)
 	break;
 	
 	case 'categories':
-		echo '<form name="projects_form" method="get" action="'.$_SERVER['PHP_SELF'].'">';
+//		echo '<form name="projects_form" method="get" action="'.$_SERVER['PHP_SELF'].'">';
 		echo '<input type="hidden" name="task" />';
-		require("categories.php");
-		echo '</form>';
+//		require("categories.php");
+		require("config.php");
+//		echo '</form>';
 	break;
 
 	case 'companies':
