@@ -247,8 +247,7 @@ for($row=0;$row<$rows;$row++)
 	echo '<td height="100%"'.$style.'>';
 	if(!$print)
 	{
-	  $current_day = date("d",time());
-	  if ($new_day >= $current_day)
+	  if ($new_date >= date('Ymd', time()))
 	  echo '<a onmouseover="javascript:glow_row(\''.$current_row.'_'.$hour_of_day.'\');" onmouseout="javascript:unglow_row(\''.$current_row.'_'.$hour_of_day.'\');" href="event.php?calendar_id='.$calendar_id.'&day='.$new_day.'&month='.$new_month.'&year='.$new_year.'&hour='.$hour_of_day.'"><img border="0" width="100%" height="12" src="'.$GO_THEME->images['blank'].'" /></a>';
 	  else
 	  echo '<a onmouseover="javascript:glow_row(\''.$current_row.'_'.$hour_of_day.'\');" onmouseout="javascript:unglow_row(\''.$current_row.'_'.$hour_of_day.'\');" href="javascript:alert(\''.$strNoPastEvent.'\')"><img border="0" width="100%" height="12" src="'.$GO_THEME->images['blank'].'" /></a>';

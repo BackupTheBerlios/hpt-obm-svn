@@ -43,22 +43,24 @@ else if ($cal_settings['show_days'] >= 7)
 }
 
 // 	Quoc sua cach tinh NgayBatDau va NgayKetThuc
-//$interval_start_time = mktime(0,0,0,$month, $day-1, $year);
-$interval_start_time = mktime(0,0,0,$month, $day, $year);
+$interval_start_time = mktime(0,0,0,$month, $day-1, $year); // old calculation
+$interval_end_time = mktime(0,0,0,$month, $day+$cal_settings['show_days']+1, $year);
+
+$interval_start_time2 = mktime(0,0,0,$month, $day, $year);
 
 //$interval_end_time = mktime(0,0,0,$month, $day+$cal_settings['show_days']+1, $year);
 if ($cal_settings['show_days'] > 29){ // Hien thi mot thang
 	// Ngay cuoi thang = ngay dau thang sau - 1
 	if ($month == 12)
-		$interval_end_time = mktime(0,0,0,12, 31, $year);
+		$interval_end_time2 = mktime(0,0,0,12, 31, $year);
 	else{
-		$interval_end_time = mktime(0,0,0,$month+1, 0, $year);
+		$interval_end_time2 = mktime(0,0,0,$month+1, 0, $year);
 	}	
 }else if ($cal_settings['show_days'] >= 2){ // hien thi theo nhieu ngay
-	$interval_end_time = mktime(0,0,0,$month, $day+$cal_settings['show_days']-1, $year);
+	$interval_end_time2 = mktime(0,0,0,$month, $day+$cal_settings['show_days']-1, $year);
 }
 else{ // hien thi mot ngay
-	$interval_end_time = $interval_start_time;
+	$interval_end_time2 = $interval_start_time2;
 }
 
 if($_SESSION['GO_SESSION']['DST'] > 0 && date('I') > 0)
@@ -94,9 +96,9 @@ if(!$print)
   }
 
   echo '</td><td><h3><a href="javascript:goto_date('.($day-$interval).', '.$month.', '.$year.');">&lt;&lt; </a>&nbsp;';
-  echo date($_SESSION['GO_SESSION']['date_format'], $interval_start_time+
+  echo date($_SESSION['GO_SESSION']['date_format'], $interval_start_time2+
       ($timezone_offset*3600)).' - '.
-      date($_SESSION['GO_SESSION']['date_format'], $interval_end_time+
+      date($_SESSION['GO_SESSION']['date_format'], $interval_end_time2+
       ($timezone_offset*3600));
   echo '&nbsp;<a href="javascript:goto_date('.($day+$interval).', '.$month.', '.$year.');">&gt;&gt;</a>';
   echo '</h3></td></tr></table>';
