@@ -21,7 +21,7 @@ $email = new email();
 
 $account = $email->get_account($_REQUEST['account_id']);
 
-if ($mail->open($account['host'], $account['type'], $account['port'], $account['username'], $GO_CRYPTO->decrypt($account['password']), $_REQUEST['mailbox']))
+if ($mail->open($account['host'], $account['type'], $account['port'], $account['username'], $GO_CRYPTO->decrypt($account['password']), $_REQUEST['mailbox'], 0, $account['use_ssl'], $account['novalidate_cert']))
 {
 	$content = $mail->get_message($_REQUEST['uid']);
 }

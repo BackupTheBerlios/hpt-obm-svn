@@ -34,6 +34,8 @@ CREATE TABLE `emAccounts` (
   `spam` varchar(100) NOT NULL default '',
   `trash` varchar(100) NOT NULL default '',
   `auto_check` enum('0','1') NOT NULL default '0',
+  `use_ssl` enum('0','1') NOT NULL default '0',
+  `novalidate_cert` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `id` (`id`),
   KEY `user_id` (`user_id`)

@@ -48,7 +48,7 @@ $part = isset($_REQUEST['part']) ? $_REQUEST['part'] : '';
 $query = isset($_REQUEST['query']) ? $_REQUEST['query'] : '';
 $account = $email->get_account($account_id);
 
-if ($account && $mail->open($account['host'], $account['type'], $account['port'],$account['username'], $GO_CRYPTO->decrypt($account['password']),$mailbox))
+if ($account && $mail->open($account['host'], $account['type'], $account['port'],$account['username'], $GO_CRYPTO->decrypt($account['password']),$mailbox, 0, $account['use_ssl'], $account['novalidate_cert']))
 {
   if ($task == 'move_mail')
   {
@@ -70,7 +70,7 @@ if ($account && $mail->open($account['host'], $account['type'], $account['port']
   }
 
   $content = $mail->get_message($uid, 'html', $part);
-  $subject = isset($content["subject"]) ? $content["subject"] : $ml_no_subject;
+  $subject = !empty($content["subject"]) ? $content["subject"] : $ml_no_subject;
 
 }else
 {
@@ -92,6 +92,11 @@ if ($content["new"] == '1')
 require($GO_THEME->theme_path."header.inc");
 
 echo '<form method="get" action="'.$_SERVER['PHP_SELF'].'" name="email_form">';
+
+
+echo '<table border="0" width="100%" height="100%"><tr><td>';
+
+
 if (!$print)
 {
   echo '<table border="0" cellspacing="0" cellpadding="0"><tr><td class="ModuleIcons">';
@@ -204,9 +209,11 @@ function get_message(uid)
 
 //-->
 </script>
-<table border="0" width="100%">
-<tr>
-<td>
+
+
+
+
+
 <table border="0" cellpadding="1" cellspacing="0" class="TableBorder" width="100%">
 <tr>
 <td>
@@ -235,7 +242,7 @@ switch ($content["priority"])
 <td><b><?php echo $ml_from; ?>:&nbsp;</b></td>
 <td>
 <?php
-echo show_profile_by_email($content['sender'], $content['from']).'&nbsp;&lt;'.$content['sender'].'&gt;';
+echo show_profile_by_email(addslashes($content['sender']), $content['from']).'&nbsp;&lt;'.$content['sender'].'&gt;';
 ?>
 </td>
 </tr>
@@ -321,7 +328,6 @@ if ($account['type'] == "imap" && !$print)
       if (!($email->f('attributes')&LATT_NOSELECT))
       {
 	$dropbox->add_value($email->f('name'), str_replace('INBOX'.$email->f('delimiter'), '', $email->f('name')));
-	//$dropbox->add_value($email->f('name'), $email->f('name'));
       }
     }
     $dropbox->print_dropbox('move_to_mailbox', $mailbox,'onchange="javascript:move_mail()"');
@@ -349,8 +355,7 @@ $attachments = "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>";
 
 for ($i=0;$i<count($parts);$i++)
 {
-
-  if ((eregi("ATTACHMENT", $parts[$i]["disposition"]) && $parts[$i]["name"] != '') || (eregi("INLINE", $parts[$i]["disposition"]) && $parts[$i]["name"] != '') || eregi("message/rfc822", $parts[$i]["mime"]))
+  if ((eregi("ATTACHMENT", $parts[$i]["disposition"]) && $parts[$i]["name"] != '') || (eregi("INLINE", $parts[$i]["disposition"]) && $parts[$i]["name"] != '') || eregi("message/rfc822", $parts[$i]["mime"]) || (eregi("APPLICATION", $parts[$i]["mime"]) && $parts[$i]["name"] != ''))
   {
 
     if ($parts[$i]["name"] == "")
@@ -368,8 +373,50 @@ for ($i=0;$i<count($parts);$i++)
       }
     }
 
+    $cal_module = $GO_MODULES->get_module('calendar');
+    if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $cal_module['acl_read']) &&
+    		!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $cal_module['acl_write']))
+    {
+    	$cal_module = false;
+    }
+    
+    $ab_module = $GO_MODULES->get_module('addressbook');
+    if(!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $ab_module['acl_read']) &&
+    		!$GO_SECURITY->has_permission($GO_SECURITY->user_id, $ab_module['acl_write']))
+    {
+    	$ab_module = false;
+    }
+
+    $extension = get_extension($parts[$i]["name"]);
+    if($extension == 'ics' && $cal_module)
+    {
+    	 $target = '_self';
+    		$link = "javascript:popup('import_ics.php?account_id=".$account['id'].
+										"&mailbox=".urlencode($mailbox)."&uid=".$uid.
+										"&part=".$parts[$i]["number"]."&transfer=".$parts[$i]["transfer"].
+										"&mime=".$parts[$i]["mime"]."&filename=".urlencode($parts[$i]["name"])."', '400','80');";
+				if($content["new"] == 1)
+				{					
+					echo '<script type="text/javascript">'.$link.'</script>';									
+				}
+
+    }elseif($extension == 'vcf' && $ab_module)
+    {
+    	 $target = '_self';
+    		$link = "javascript:popup('import_vcf.php?account_id=".$account['id'].
+										"&mailbox=".urlencode($mailbox)."&uid=".$uid.
+										"&part=".$parts[$i]["number"]."&transfer=".$parts[$i]["transfer"].
+										"&mime=".$parts[$i]["mime"]."&filename=".urlencode($parts[$i]["name"])."', '400','80');";
+				if($content["new"] == 1)
+				{					
+					echo '<script type="text/javascript">'.$link.'</script>';									
+				}
+
+    }else
+    {
     $target = '_self';
     $link = "attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&uid=".$uid."&part=".$parts[$i]["number"]."&transfer=".$parts[$i]["transfer"]."&mime=".$parts[$i]["mime"]."&filename=".urlencode($parts[$i]["name"]);
+	  }
 
     $splitter++;
     $count++;
@@ -384,12 +431,12 @@ for ($i=0;$i<count($parts);$i++)
     {
       $attachments .='<td>;</td>';
     }
+	}
     if ($splitter == 3)
     {
       $splitter = 0;
       $attachments .= "</tr><tr>";
     }
-  }
 }
 
 $attachments .= "</tr></table>";
@@ -404,9 +451,14 @@ if ($count>0)
 </td>
 </tr>
 <tr>
-<td>
-<br />
+	<td height="100%">
+	<iframe frameborder="no" src="message_body.php?account_id=<?php echo $account_id; ?>&uid=<?php echo $uid; ?>&part=<?php echo $part; ?>&mailbox=<?php echo urlencode($mailbox); ?>" height="100%" width="100%"></iframe>
+	</td>
+</tr>
+</table>
+
 <?php
+/*
 //get all text and html content
 for ($i=0;$i<sizeof($parts);$i++)
 {
@@ -414,7 +466,8 @@ for ($i=0;$i<sizeof($parts);$i++)
 
   if (($mime == "text/html") || ($mime == "text/plain") || ($mime == "text/enriched"))
   {
-    $part = $mail->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"]);
+    
+    $part = $mail->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]["charset"]);
 
     switch($mime)
     {
@@ -471,10 +524,9 @@ for ($i=0;$i<sizeof($parts);$i++)
   }
 }
 echo $texts.$images;
+*/
+
 ?>
-</td>
-</tr>
-</table>
 
 <?php
 if ($content["notification"] != '' && $content["new"] == 1)

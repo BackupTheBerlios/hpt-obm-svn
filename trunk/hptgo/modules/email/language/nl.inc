@@ -146,5 +146,9 @@ $ml_doesnt_matter = 'Maakt niet uit';
 $ml_body = 'Body';
 $ml_before = 'Ouder dan';
 $ml_since = 'Nieuwer dan';
-$ml_select_one_criteria = 'U dient tenminste één zoek criterium in te vullen of te selecteren.';
+$ml_select_one_criteria = 'U dient tenminste Ã©Ã©n zoek criterium in te vullen of te selecteren.';
+
+//2.06
+$ml_appointment = 'Dit bericht bevat een afspraak. Wilt u deze afspraak bekijken in de agenda?';
+$ml_mails_were_sent = 'e-mail berichten verzonden';
 ?>

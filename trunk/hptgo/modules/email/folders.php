@@ -32,7 +32,7 @@ $account_id = isset($_REQUEST['account_id']) ? $_REQUEST['account_id'] : 0;
 $account = $email->get_account($account_id);
 if ($account && $mail->open($account['host'], $account['type'],
 			$account['port'],$account['username'],
-			$GO_CRYPTO->decrypt($account['password'])))
+			$GO_CRYPTO->decrypt($account['password']),'INBOX', 0, $account['use_ssl'], $account['novalidate_cert']))
 {
 	if ($task == 'create_folder')
 	{

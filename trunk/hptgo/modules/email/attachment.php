@@ -23,7 +23,7 @@ $email = new email();
 
 $account = $email->get_account($_REQUEST['account_id']);
 
-if ($mail->open($account['host'], $account['type'],$account['port'],$account['username'],$GO_CRYPTO->decrypt($account['password']), $_REQUEST['mailbox']))
+if ($mail->open($account['host'], $account['type'],$account['port'],$account['username'],$GO_CRYPTO->decrypt($account['password']), $_REQUEST['mailbox'], 0, $account['use_ssl'], $account['novalidate_cert']))
 {
 	$file = $mail->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer'], $_REQUEST['mime']);
 	$mail->close();
@@ -38,8 +38,8 @@ if ($mail->open($account['host'], $account['type'],$account['port'],$account['us
 	header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
 	if ($browser['name'] == 'MSIE')
 	{
-		header('Content-Type: application/octet-stream');
-		header('Content-Disposition: inline; filename="'.$filename.'"');
+		header('Content-Type: application/download');
+		header('Content-Disposition: attachment; filename="'.$filename.'"');
 		header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
 		header('Pragma: public');
 	}else

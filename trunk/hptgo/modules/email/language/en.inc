@@ -137,4 +137,10 @@ $ml_body = 'Body';
 $ml_before = 'Older then';
 $ml_since = 'Newer then';
 $ml_select_one_criteria = 'Please select or enter at least one search criteria.';
+
+//2.06
+$ml_appointment = 'This message contains an appointment. Do you want to view this appointment in the calendar?';
+$ml_mails_were_sent = 'mail messages sent';
+$ml_novalidate_cert = 'Don\'t validate certificate';
+$ml_appointment_vcf = 'This message contains a contact address. Do you want to view this address in the addressbook?';
 ?>

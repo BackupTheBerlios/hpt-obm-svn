@@ -47,6 +47,9 @@ if ($task == 'save_account')
     $feedback = $error_missing_field;
   }else
   {
+  	$use_ssl = isset($_REQUEST['use_ssl']) ? '1' : '0';
+  	$novalidate_cert = isset($_REQUEST['novalidate_cert']) ? '1' : '0';
+  	
     $sent = $_POST['type'] == 'pop3' ? '' : smart_addslashes($_POST['sent']);
     $spam = $_POST['type'] == 'pop3' ? '' : smart_addslashes($_POST['spam']);
     $trash = $_POST['type'] == 'pop3' ? '' : smart_addslashes($_POST['trash']);
@@ -56,7 +59,7 @@ if ($task == 'save_account')
     {
       if(!$email->update_account($_POST['account_id'], $_POST['type'],
 	    smart_addslashes($_POST['host']),
-	    $_POST['port'], $mbroot,
+	    $_POST['port'], $use_ssl, $novalidate_cert, $mbroot,
 	    smart_addslashes($_POST['user']),
 	    $_POST['pass'], smart_addslashes($_POST['name']),
 	    smart_addslashes($_POST['mail_address']),
@@ -75,7 +78,7 @@ if ($task == 'save_account')
     {
       if(!$email_id = $email->add_account($GO_SECURITY->user_id, $_POST['type'],
 	    smart_addslashes($_POST['host']),
-	    $_POST['port'], $mbroot,
+	    $_POST['port'], $use_ssl, $novalidate_cert, $mbroot,
 	    smart_addslashes($_POST['user']),
 	    $_POST['pass'],
 	    smart_addslashes($_POST['name']),
@@ -119,6 +122,8 @@ if (isset($_REQUEST['account_id']) && $_SERVER['REQUEST_METHOD'] != "POST")
   $trash = $account["trash"];
   $sent = $account["sent"];
   $auto_check = $account['auto_check'] == '1' ? true : false;
+  $use_ssl = $account['use_ssl'] == '1' ? true : false;
+  $novalidate_cert = $account['novalidate_cert'] == '1' ? true : false;
 }else
 {
   $page_title=$ml_new_account;
@@ -135,6 +140,8 @@ if (isset($_REQUEST['account_id']) && $_SERVER['REQUEST_METHOD'] != "POST")
   $trash = $mbroot.$ml_trash;
   $sent = $mbroot.$ml_sent_items;
   $auto_check = isset($_REQUEST['auto_check']) ? true : false;
+  $use_ssl = isset($_REQUEST['use_ssl']) ? true : false;
+  $novalidate_cert = isset($_REQUEST['novalidate_cert']) ? true : false;
 }
 
 
@@ -180,11 +187,23 @@ function change_port()
 {
   if (document.forms[0].type.value == "imap")
   {
+  	if(document.forms[0].use_ssl.checked)
+  	{
+  	    document.forms[0].port.value = "993";
+  	}else
+  	{
     document.forms[0].port.value = "143";
+  	}
     document.forms[0].mbroot.disabled = false;
   }else
   {
+    if(document.forms[0].use_ssl.checked)
+  	{
+  	    document.forms[0].port.value = "995";
+  	}else
+  	{
     document.forms[0].port.value = "110";
+  	}
     document.forms[0].mbroot.disabled = true;
   }
 }
@@ -225,16 +244,30 @@ if ($disable_accounts)
 
     <tr><td colspan="2">&nbsp;</td></tr>
     <tr>
-    <td><?php echo $ml_type; ?>/<?php echo $ml_port; ?>:</td>
+    <td><?php echo $ml_type; ?>:</td>
     <td>
+	<table border=0><tr><td>
     <?php
     $dropbox = new dropbox();
   $dropbox->add_value('pop3','POP3');
   $dropbox->add_value('imap','IMAP');
   $dropbox->print_dropbox('type',$type,'onchange="javascript:change_port()"');
   ?>
-    &nbsp;/&nbsp;<input name="port" type="text" class="textbox" maxlength="6" size="4" value="<?php echo htmlspecialchars($port); ?>" />
+	</td><td>
+    <?php
+	  $checkbox = new checkbox('use_ssl', '1', 'SSL', $use_ssl, false, 'onclick="javascript:change_port()"');
+  ?>
+	</td><td>
+    <?php
+	  $checkbox = new checkbox('novalidate_cert', '1', $ml_novalidate_cert, $novalidate_cert);
+		?>
+	</td></tr></table>
     </td>
+    </tr>
+
+    <tr>
+    	<td><?php echo $ml_port; ?>:</td>
+    	<td><input name="port" type="text" class="textbox" maxlength="6" size="4" value="<?php echo htmlspecialchars($port); ?>" /></td>
     </tr>
 
     <tr>

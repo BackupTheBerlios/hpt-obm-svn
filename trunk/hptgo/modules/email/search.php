@@ -47,7 +47,7 @@ if ($account && $account["user_id"] != $GO_SECURITY->user_id)
 
 if (!$mail->open($account['host'], $account['type'],
       $account['port'], $account['username'], 
-      $GO_CRYPTO->decrypt($account['password']), $mailbox))
+      $GO_CRYPTO->decrypt($account['password']), $mailbox, 0, $account['use_ssl'], $account['novalidate_cert']))
 {
   echo '<p class="Error">'.$ml_connect_failed.' \''.$account['host'].'\' '.$ml_at_port.': '.$account['port'].'</p>';
   echo '<p class="Error">'.imap_last_error().'</p>';

@@ -82,13 +82,16 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
 	$mail_to = $content["reply_to"];
 	if (!stristr($subject,"Re: "))
 	  $mail_subject = "Re: ".$subject;
-	else
+	else	  
 	  $mail_subject = $subject;
       break;
 
       case "reply_all":
 	$mail_to = $content["reply_to"];
-      $mail_subject = "Re: ".$subject;
+	if (!stristr($subject,"Re: "))
+	  $mail_subject = "Re: ".$subject;
+	else	  
+	  $mail_subject = $subject;
 
       //add all recievers from this email
       if (isset($content["to"]))
@@ -144,7 +147,7 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
       {
 	if (eregi("attachment", $parts[$i]["disposition"]) && !eregi("message/RFC822", $parts[$i]["mime"]))
 	{
-	  $file = $mail->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]["mime"]);
+	  $file = $mail->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"]);
 
 	  $name = $parts[$i]['name'] != '' ? $parts[$i]['name'] : 'attach_'.$i;
 
@@ -164,7 +167,7 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
     {
       if ($parts[$i]["id"] != '')// && eregi("inline", $parts[$i]["disposition"]))
       {
-	$file = $mail->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"], $parts[$i]["mime"]);
+	$file = $mail->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"]);
 
 	$tmp_file = $GO_CONFIG->tmpdir.md5(uniqid(time()));
 
@@ -467,7 +470,13 @@ if ($sendaction == 'load_template')
     require($GO_LANGUAGE->get_language_file('addressbook'));
     if ($mailing_group_id == 0)
     {
+    	if($company_id > 0)
+    	{
+      	$template_body = $tp->replace_company_data_fields($template_body, $company_id);      	
+      }else
+      {
       $template_body = $tp->replace_data_fields($template_body, $contact_id);
+    }
     }
 
     if ($content_type=='text/HTML')
@@ -600,7 +609,7 @@ if ($module = $GO_MODULES->get_module('filesystem'))
 {
   if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read']) || $GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_write']))
   {
-    $button = new button($ml_online_files, "javascript:popup('select_file.php','600','400')", 120);
+    $button = new button($ml_online_files, "javascript:popup('select_file.php','600','400')");
   }
 }
 ?>
@@ -737,7 +746,13 @@ function send()
   if (document.sendform.sendaction.value != 'send')
   {
     <?php
-      if ($mailing_group_id == 0) echo 'if (validate()){';
+      if ($mailing_group_id == 0) 
+			{ 
+				echo 'if (validate()){';
+			}else
+			{
+				echo "document.sendform.action = '".$tp_plugin['url']."send_to_mailing_group.php';";
+			}
 	?>
 
 	  document.sendform.sendaction.value = "send";

@@ -128,7 +128,7 @@ if ($GO_MODULES->write_permissions)
 
 if ($account)
 {
-  if ($mail->open($account['host'], $account['type'], $account['port'], $account['username'], $GO_CRYPTO->decrypt($account['password']), $mailbox))
+  if ($mail->open($account['host'], $account['type'], $account['port'], $account['username'], $GO_CRYPTO->decrypt($account['password']), $mailbox, 0, $account['use_ssl'], $account['novalidate_cert']))
   {
     //block email to spam folder	
     if (isset($_REQUEST['spam_uid']) && $_REQUEST['spam_uid'] >0)

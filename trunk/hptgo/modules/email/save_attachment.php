@@ -91,7 +91,7 @@ $account = $email->get_account($_SESSION['tmp_account_id']);
 
 if (!file_exists($_SESSION['email_tmp_file']) && !is_dir($_SESSION['email_tmp_file']))
 {
-	if ($mail->open($account['host'], $account['type'],$account['port'],$account['username'],$GO_CRYPTO->decrypt($account['password']), $_REQUEST['mailbox']))
+	if ($mail->open($account['host'], $account['type'],$account['port'],$account['username'],$GO_CRYPTO->decrypt($account['password']), $_REQUEST['mailbox'], 0, $account['use_ssl'], $account['novalidate_cert']))
 	{
 		$data = $mail->view_part($_REQUEST['uid'], $_REQUEST['part'], $_REQUEST['transfer'], $_REQUEST['mime']);
 		$mail->close();

@@ -16,9 +16,9 @@ $ml_subject = "Betreff";
 $ml_filename = "Dateiname";
 $ml_total_size = "Gesamtgroesse";
 $ml_size = "Groesse";
-$ml_to_empty = "Sie haben keinen Empfänger angegeben.";
+$ml_to_empty = "Sie haben keinen EmpfÃ¤nger angegeben.";
 $ml_print = "Drucken";
-$fbNoSelect = "Sie haben keine Nachricht ausgewählt";
+$fbNoSelect = "Sie haben keine Nachricht ausgewÃ¤hlt";
 
 $ml_inbox = 'Posteingang';
 $ml_properties = 'Eigenschaften';
@@ -36,18 +36,18 @@ $ml_refresh = "Aktualisieren";
 $ml_reply = "Antworten";
 $ml_forward = "Weiterleiten";
 $ml_reply_all = "Allen Antworten";
-$ml_delete_message = "Sind Sie sicher, dass Sie diese Nachricht endgültig löschen möchten?";
+$ml_delete_message = "Sind Sie sicher, dass Sie diese Nachricht endgÃ¼ltig lÃ¶schen mÃ¶chten?";
 $ml_no_subject = "Kein Betreff";
 $ml_no_reciepent = "Ungenannter Empf&auml;nger";
 $ml_online_files = "Online-Dateien";
 $ml_send_error = "Der Email-Versand ist fehlgeschlagen.";
 
-$ml_attach_forget = "Sie haben zwar eine Datei ausgewählt, aber noch nicht angehangen.";
+$ml_attach_forget = "Sie haben zwar eine Datei ausgewÃ¤hlt, aber noch nicht angehangen.";
 $ml_messages = "Nachricht(en)";
 $ml_message = 'diese Nachricht';
 $ml_messages2 = 'Nachrichten';
 $ml_new = "Neu";
-$ml_delete_mailbox = "Sind Sie sicher, dass Sie die ausgewählten Nachrichten endgültig löschen möchten?";
+$ml_delete_mailbox = "Sind Sie sicher, dass Sie die ausgewÃ¤hlten Nachrichten endgÃ¼ltig lÃ¶schen mÃ¶chten?";
 
 $contact_profile = "Kontaktprofil";
 $ml_add_contact = "Absender zur Kontaktliste hinzuf&uuml;gen";
@@ -56,7 +56,7 @@ $strDefault = "Standard";
 $ml_edit_account = "Postfach bearbeiten";
 $ml_new_account = "Neues Postfach";
 $ml_no_messages = "Keine Nachrichten in diesem Ordner.";
-$ml_file_too_big = "Die anzuhängende Datei ist zu gross. Die maximale Grösse fuer einen Dateianhang ist: ";
+$ml_file_too_big = "Die anzuhÃ¤ngende Datei ist zu gross. Die maximale GrÃ¶sse fuer einen Dateianhang ist: ";
 $fbNoRightToOverwrite = "Die Datei existiert bereits, und Sie haben nicht die Berechtigung diese zu ueberschreiben.";
 $ml_save_attachment = "Dateianhang in Group-Office speichern.";
 $ml_folders = "Ordner";
@@ -85,7 +85,7 @@ $ml_no_folders = "Sie haben noch keine Ordner, daher ist es nicht moeglich, Filt
 $ml_unwanted = "Bitte hier klicken, wenn Nachrichten von diesem Absender unerwuenscht sind";
 $fbFolderSize = "Groesse des Ordners";
 $ml_move_up = "Priorit&auml;t anheben";
-$ml_delete_filter = "Sind Sie sicher, dass Sie diesen Filter entfernen möchten?";
+$ml_delete_filter = "Sind Sie sicher, dass Sie diesen Filter entfernen mÃ¶chten?";
 $ml_high_priority = "Diese Nachricht hat eine hohe Priorit&auml;t!";
 $ml_low_priority = "Diese Nachricht hat eine niedrige Priorit&auml;t.";
 $ml_block = "Absender blocken";
@@ -104,7 +104,7 @@ $ml_host = 'Mailserver';
 $ml_port = 'Port';
 $ml_type = 'Typ';
 $ml_servertype = 'Servertyp';
-$ml_loose_changes = 'Alle Änderungen werden verloren gehen. Sind Sie sicher?';
+$ml_loose_changes = 'Alle Ã?nderungen werden verloren gehen. Sind Sie sicher?';
 $ml_format = 'Format';
 
 $ml_markread = "gelesen";
@@ -147,4 +147,10 @@ $ml_body = 'Nachricht';
 $ml_before = '&auml;lter als';
 $ml_since = 'neuer als';
 $ml_select_one_criteria = 'Bitte wenigstens einen Suchbegriff eingeben.';
+
+//2.06
+$ml_appointment = 'Diese Nachricht enth&auml;lt einen oder mehrere Termineintr&auml;ge. M&ouml;chten Sie den Dateiinhalt im Kalender betrachten?';
+$ml_mails_were_sent = 'Die Nachrichten wurden versandt';
+$ml_novalidate_cert = 'Das Zertifikat nicht validieren';
+$ml_appointment_vcf = 'Diese Nachricht enth&auml;lt eine Kontaktadresse. M&ouml;chten Sie den Dateiinhalt im Adressbuch betrachten?';
 ?>

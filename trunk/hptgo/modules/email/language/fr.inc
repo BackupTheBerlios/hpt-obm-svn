@@ -57,7 +57,7 @@ $fbNoRightToOverwrite = "Le fichier existe déjà et vous n'avez pas les permissio
 $ml_save_attachment = "Enregistrer les pièces jointes dans Group-Office.";
 $ml_folders = "dossiers";
 $ml_select_folder = "Choisissez le dossier où Group-Office peut enregistrer les courriers envoyés ou entrez un nom ci-dessous pour créer un dossier";
-$ml_connect_failed = "Impossible de se connecter au serveur de mails :";
+$ml_connect_failed = "Impossible de se connecter au serveur de Mail :";
 $ml_at_port = "sur le port";
 $ml_solve_error = 'Cliquez sur \'Comptes\' pour corriger les réglages de votre compte ou cliquez sur \'Rafraîchir\' pour ouvrir votre compte par défaut.';
 $ml_sent_items = "Eléments envoyés";
@@ -93,7 +93,7 @@ $ml_delete_filter1 = "Supprimer le filtre";
 $ml_html_message_attached = "Les messages HTML originaux sont attachés";
 $ml_add_recievers = "Ajouter des destinataires inconnus à votre carnet d'adresse";
 $ml_no_folders = 'Vous n\'avez pas de dossier à filtrer';
-$ml_no_filters = 'You don\'t have any filters.';
+$ml_no_filters = 'Vous n\'avez aucun filtre.';
 $ml_host = 'Hôte';
 $ml_port = 'Port';
 $ml_type = 'Type';
@@ -122,9 +122,18 @@ $ml_attention= 'Attention';
 
 //2.02
 $ml_autocheck_disabled = ' n\'a pas pu être atteint. Le contrôle automatique des e-mail pour ce compte est désactivé.';
-$ml_mark = 'Mark messages...';
+$ml_mark = 'Messages marqué...';
 $ml_flag = 'diminuer';
 $ml_clearflag = 'augmenter';
 $ml_expand_all = 'développer les dossiers';
 $ml_collapse_all = 'fermer tous les dossiers';
+
+//2.05
+$ml_search = 'Chercher';
+$ml_answered = 'Répondu';
+$ml_doesnt_matter = 'Ne vous inquiétez pas';
+$ml_body = 'Body';
+$ml_before = 'Plus ancien';
+$ml_since = 'Plus récent';
+$ml_select_one_criteria = 'SVP, sélectionnez ou entrez au moin un critère de recherche';
 ?>

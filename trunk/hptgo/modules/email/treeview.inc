@@ -10,6 +10,8 @@
    option) any later version.
  */
 
+$check_all_accounts = false;
+
 $tv_image['mlastnode'] = '<img src="'.$GO_THEME->images['mlastnode'].'" border="0" height="22" width="16" align="absmiddle" />';
 $tv_image['emptylastnode'] = '<img src="'.$GO_THEME->images['emptylastnode'].'" border="0" height="22" width="16" align="absmiddle" />';
 $tv_image['plastnode'] = '<img src="'.$GO_THEME->images['plastnode'].'" border="0" height="22" width="16" align="absmiddle" />';
@@ -170,6 +172,11 @@ $_SESSION['expanded'] = set_expanded($_SESSION['expanded'], $expand_id, $folder_
 
 
 $email2 = new email();
+
+if($check_all_accounts)
+{
+	$mail2 = new imap();
+}
 $count = $email->get_accounts($GO_SECURITY->user_id);
 if ($count > 0)
 {
@@ -247,6 +254,17 @@ if ($count > 0)
     {
       echo '&nbsp;<a align="absmiddle" href="javascript:expand_all()" title="'.$ml_expand_all.'"><img src="'.$GO_THEME->images['expand_all'].'" border="0" /></a>';
       echo '&nbsp;<a align="absmiddle" href="javascript:collapse_all()" title="'.$ml_collapse_all.'"><img src="'.$GO_THEME->images['collapse_all'].'" border="0" /></a>';
+    }elseif($check_all_accounts)
+    {
+    	if ($mail2->open($email->f('host'), $email->f('type'), $email->f('port'), $email->f('username'), $GO_CRYPTO->decrypt($email->f('password')),'INBOX', 0, $email->f('use_ssl'), $email->f('novalidate_cert')))
+  		{
+	    	//check for unread mail
+			  $status = $mail2->status('INBOX');
+			  if ($status->unseen > 0)
+			  {
+			    echo '<span class="count">&nbsp;('.$status->unseen.')</span>';
+			  }
+			}
     }
 
     echo '<br />';

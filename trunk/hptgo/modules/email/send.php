@@ -40,8 +40,7 @@ if (!$ab_module || !($GO_SECURITY->has_permission($GO_SECURITY->user_id,
   $ab = new addressbook();
 }
 
-$html_mail_head = '<html><head><meta content="Group-Office '.
-									$GO_CONFIG->version.'" name="GENERATOR"></head><body>';
+$html_mail_head = '<html><head><meta http-equiv=Content-Type content="text/html; charset='.$charset.'"><meta content="Group-Office '.$GO_CONFIG->version.'" name="GENERATOR"></head><body>';
 $html_mail_foot = '</body></html>';
 
 $_SESSION['num_attach'] = isset($_SESSION['num_attach']) ? $_SESSION['num_attach'] : 0;
@@ -102,16 +101,15 @@ function add_unknown_reciepent($email, $addressbook)
 
     if ($acl_read > 0 && $acl_write > 0)
     {
-      if (!$ab->add_contact(0, $GO_SECURITY->user_id, $addressbook['id'], '', '', $email, '', '', 'M'
-	    , '', $email, "", "", "", "", "", "", "", "", "", 0, "", "",
-	    "", "", 0, '', $acl_read, $acl_write))
+      if (!$ab->add_contact(0, $GO_SECURITY->user_id, $addressbook['id'], "", "", $email, "", "", "M",
+	    "", $email, "", "", "", "", "", "", "", "", "", "", 0, "", "", "", "", 0, "", $acl_read, $acl_write))
       {
 	$GO_SECURITY->delete_acl($acl_read);
 	$GO_SECURITY->delete_acl($acl_write);
       }else
-      {
 	$GO_SECURITY->copy_acl($addressbook['acl_read'] , $acl_read);
 	$GO_SECURITY->copy_acl($addressbook['acl_write'] , $acl_write);
+      {
       }
     }
   }
@@ -135,7 +133,7 @@ switch ($sendaction)
       if ($attachments_size < $GO_CONFIG->max_attachment_size)
       {
 	$tmp_file = $GO_CONFIG->tmpdir.md5(uniqid(time()));
-	copy($_FILES['mail_att']['tmp_name'], $tmp_file);
+	move_uploaded_file($_FILES['mail_att']['tmp_name'], $tmp_file);
 	$email->register_attachment($tmp_file, basename($_FILES['mail_att']['name']), $_FILES['mail_att']['size'], $_FILES['mail_att']['type']);
       }else
       {
@@ -227,81 +225,6 @@ switch ($sendaction)
 	}
       }
     }
-
-
-    if ($mailing_group_id > 0)
-    {
-      $feedback = '';
-      $tp->get_contacts_from_mailing_group($mailing_group_id);
-      while($tp->next_record())
-      {
-	$mail->ClearAllRecipients();
-	//add the body
-	$content = $tp->replace_data_fields($mail_body, $tp->f('id'));
-	if ($html_message)
-	{
-	  $mail->Body = $html_mail_head.$content.$html_mail_foot;
-	  $h2t =& new html2text($content);
-	  $mail->AltBody  = $h2t->get_text();
-	}else
-	{
-	  $mail->Body = $content;
-	}
-
-	$mail->AddAddress($tp->f('email'));
-
-	if(!$mail->Send())
-	{
-	  $feedback .= $tp->f('email').': '.$mail->ErrorInfo.'<br />';
-	}
-      }
-
-      $tp->get_companies_from_mailing_group($mailing_group_id);
-      while($tp->next_record())
-      {
-	$mail->ClearAllRecipients();
-
-	//add the body
-	$content = $tp->replace_company_data_fields($mail_body, $tp->f('id'));
-	if ($html_message)
-	{
-	  $mail->Body = $html_mail_head.$content.$html_mail_foot;
-	  $h2t =& new html2text($content);
-	  $mail->AltBody  = $h2t->get_text();
-	}else
-	{
-	  $mail->Body = $content;
-	}
-
-	$mail->AddAddress($tp->f('email'));
-
-	if(!$mail->Send())
-	{
-	  $feedback .= $tp->f('email').': '.$mail->ErrorInfo.'<br />';
-	}
-      }
-
-      if ($feedback != '')
-      {
-	$feedback = '<p class="Error">'.$feedback.'</p>';
-      }else
-      {
-	if (isset($_SESSION['attach_array']))
-	{
-	  while($attachment = array_shift($_SESSION['attach_array']))
-	  {
-	    @unlink($attachment->tmp_file);
-	  }
-	}
-	// We need to unregister the attachments array and num_attach
-	$_SESSION['num_attach'] = 0;
-	$_SESSION['attach_array'] = array();
-
-	echo "<script type=\"text/javascript\">\r\nwindow.close();\r\n</script>\r\n";
-	exit();
-      }
-    }else
-    {
       $mail_to_array = cut_address(trim($mail_to), $charset);
       $mail_cc_array = cut_address(trim($mail_cc), $charset);
       $mail_bcc_array = cut_address(trim($mail_bcc), $charset);
@@ -377,7 +300,7 @@ switch ($sendaction)
 	  {
 	    require($GO_CONFIG->class_path."imap.class.inc");
 	    $imap_stream = new imap();
-	    if ($imap_stream->open($profile["host"], "imap", $profile["port"], $profile["username"], $GO_CRYPTO->decrypt($profile["password"]), $sent_folder))
+	    if ($imap_stream->open($profile["host"], "imap", $profile["port"], $profile["username"], $GO_CRYPTO->decrypt($profile["password"]), $sent_folder, 0, $profile['use_ssl'], $profile['novalidate_cert']))
 	    {
 
 	      if ($imap_stream->append_message($sent_folder, $mime,"\\Seen"))
@@ -415,7 +338,6 @@ switch ($sendaction)
 	}
 
       }
-    }
 
     break;
 
@@ -456,6 +378,7 @@ switch ($sendaction)
 //if a template id is given then process it
 $template_id = isset($_REQUEST['template_id']) ? $_REQUEST['template_id'] : 0;
 $contact_id = isset($_REQUEST['contact_id']) ? $_REQUEST['contact_id'] : 0;
+$company_id = isset($_REQUEST['company_id']) ? $_REQUEST['company_id'] : 0;
 
 
 if($mailing_group_id > 0 && $tp->get_contacts_from_mailing_group($mailing_group_id) == 0 && $tp->get_companies_from_mailing_group($mailing_group_id) == 0)
@@ -493,6 +416,7 @@ if ($_SERVER['REQUEST_METHOD'] != "POST" && $tp_plugin && $template_id == 0 && $
   echo '<input type="hidden" name="mail_bcc" value="'.$mail_bcc.'" />';
   echo '<input type="hidden" name="mail_from" value="'.$mail_from.'" />';
   echo '<input type="hidden" name="contact_id" value="'.$contact_id.'" />';
+  echo '<input type="hidden" name="company_id" value="'.$company_id.'" />';
   echo '<input type="hidden" name="template_id" />';
   echo '<input type="hidden" name="mailing_group_id" value="'.$mailing_group_id.'" />';
   echo '<input type="hidden" name="sendaction" value="load_template" />';

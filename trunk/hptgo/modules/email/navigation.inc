@@ -18,7 +18,7 @@ if (isset($_REQUEST['unseen_state_changed']))
 if (isset($_REQUEST['empty_mailbox']) && $_REQUEST['empty_mailbox']=='true')
 {
   $mail->sort(SORTDATE,0,true);
-  if ($mailbox == $account['trash'] || $account['type'] == 'pop3' || $account['trash'] == '')
+  if ($mailbox == $account['trash'] || $account['type'] == 'pop3')
   {
     $mail->delete($mail->sort);
     //set this var so we can check if unseen messages were deleted
@@ -33,7 +33,7 @@ if (isset($_REQUEST['empty_mailbox']) && $_REQUEST['empty_mailbox']=='true')
 if (isset($_REQUEST['delete_message_uid']) && $_REQUEST['delete_message_uid'] > 0)
 {
   $messages[] = $_REQUEST['delete_message_uid'];
-  if ($mailbox == $account['trash'] || $account['type'] == 'pop3' || $account['trash'] == '')
+  if ($mailbox == $account['trash'] || $account['type'] == 'pop3')
   {
     $mail->delete($messages);
     //set this var so we can check if unseen messages were deleted
@@ -277,7 +277,7 @@ if ($msg_count > 0)
        }*/
 
     //display message
-    $subject = $mail->f('subject') ? $mail->f('subject') : $ml_no_subject;
+    $subject = $mail->f('subject') ? (function_exists('mb_decode_mimeheader') ? mb_decode_mimeheader($mail->f('subject')) : $mail->f('subject')) : $ml_no_subject;
     $short_subject = cut_string($subject, 50);
     if ($show == "from")
     {
@@ -308,13 +308,15 @@ if ($msg_count > 0)
       $flag = '&nbsp;';
     }
 
+ $link = "message.php?account_id=".$account['id']."&uid=".$mail->f('uid')."&mailbox=".$mailbox."&first_row=".$first_row."&return_to=".urlencode($link_back);
+ 
     $messages_display .= '<tr'.$class.' id="'.$mail->f('uid').'">';
     $messages_display .= '<td nowrap><input type="checkbox" name="messages[]" value="'.$mail->f('uid').'" onclick="javascript:item_click(this);" /></td>';
     //$messages_display .= '<td nowrap>'.$priority.'&nbsp;</td>';
     $messages_display .= '<td nowrap>'.$flag.'</td>';
     //$messages_display .= '<td nowrap>'.$attachment.'&nbsp;</td>';
     $messages_display .= '<td nowrap width="20">'.$image.'</td>';
-    $link = "message.php?account_id=".$account['id']."&uid=".$mail->f('uid')."&mailbox=".$mailbox."&first_row=".$first_row."&return_to=".urlencode($link_back);
+   
     if ($show=="from")
     {
       $messages_display .= "<td nowrap><a href=\"".$link."\" title=\"".$mail->f('from')."&nbsp;&lt;".$mail->f("sender")."&gt;\">".$short_from."&nbsp;</a></td>";
@@ -323,7 +325,7 @@ if ($msg_count > 0)
       $messages_display .= "<td nowrap><a href=\"".$link."\" title=\"".$to."\">".$short_to."&nbsp;</a></td>";
     }
 
-    $messages_display .= "<td nowrap><a href=\"".$link."\" title=\"".$mail->f('subject')."\">".$short_subject."&nbsp;</a></td>";
+    $messages_display .= "<td nowrap><a href=\"".$link."\" title=\"".$subject."\">".$short_subject."&nbsp;</a></td>";
     $messages_display .= '<td nowrap>'.format_size($mail->f('size')).'&nbsp;</td>';
     $messages_display .= '<td nowrap>'.date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time($mail->f('udate'))).'</td>';
     $messages_display .= "</tr>\n";

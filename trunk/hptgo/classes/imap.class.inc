@@ -43,7 +43,7 @@ class imap
      Open connection to server and count total and new messages
    */
 
-  function open($host, $type, $port, $username, $password, $mailbox = "INBOX", $flags = 0)
+  function open($host, $type, $port, $username, $password, $mailbox = "INBOX", $flags = 0, $ssl=false, $novalidate_cert=false)
   {
     global $GO_CONFIG;
 
@@ -51,6 +51,16 @@ class imap
     $this->servertype = strtolower($type);
     $this->mailbox = imap_utf7_encode($mailbox);
     $this->connectstring = $host.":".$port."/".$this->servertype.$GO_CONFIG->email_connectstring_options;
+
+    if($ssl)
+    {
+    	$this->connectstring .= '/ssl';
+    }
+    
+    if($novalidate_cert)
+    {
+    	$this->connectstring .= '/novalidate-cert';
+    }
 
     if ($flags != 0)
     {
@@ -226,7 +236,8 @@ class imap
       $this->message["flagged"] = $overview->flagged;
       $this->message["size"] = $overview->size;
       $this->message["answered"] = $overview->answered;
-      $this->message['new'] = (($overview->recent==1 || $overview->seen==0) && $this->is_imap()) ? true : false;
+      //$this->message['new'] = (($overview->recent==1 || $overview->seen==0) && $this->is_imap()) ? true : false;
+      $this->message['new'] = ($overview->seen==0 && $this->is_imap()) ? true : false;
 
       if ($get_to_addresses)
       {
@@ -409,6 +420,7 @@ function mail_fetchparts($msgNo) {
       $headerinfo = imap_header($this->conn, $this->message['number']);
 
       $this->message["udate"] = $headerinfo->udate;
+      /*
       if ((($headerinfo->Unseen == 'U') || ($headerinfo->Recent == 'N')) && $this->is_imap())
       {
 	$this->message["new"] = "1";
@@ -416,7 +428,10 @@ function mail_fetchparts($msgNo) {
       {
 	$this->message["new"] = "0";
       }
+      */
 
+      $this->message['new'] = ($headerinfo->Unseen == 'U' && $this->is_imap()) ? true : false;
+      
       $tmp = $headerinfo->from;
       $this->message["sender"] = $tmp[0]->mailbox.'@'.$tmp[0]->host;
       $this->message["from"] = $this->message["sender"];
@@ -736,6 +751,21 @@ function mail_fetchparts($msgNo) {
 		$header[$line_parts[0]] = $line_parts[1];
 	}
       }
+
+      $charset = '';
+      if($mimeobj->ifparameters)
+      {
+      	for ($x=0;$x<count($mimeobj->parameters);$x++)
+			  {
+					$param = $mimeobj->parameters[$x];
+					if ((strtolower($param->attribute) == 'charset') && ($param->value != ''))
+					{
+					  $charset = $param->value;
+					  break;
+					}
+				}
+      }
+      
       $bytes = isset($mimeobj->bytes) ? $mimeobj->bytes : 0;
       $tmp = Array(
 	  'number' => $section,
@@ -934,7 +964,7 @@ function delete($messages)
   @imap_expunge($this->conn);
 }
 
-function view_part($uid, $part_no, $transfer)
+function view_part($uid, $part_no, $transfer, $part_charset='')
 {
   $text = imap_fetchbody($this->conn, $uid, $part_no, FT_UID);
   if ($transfer == 'BASE64')

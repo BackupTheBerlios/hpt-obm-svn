@@ -66,7 +66,7 @@ class email extends db
     }		
   }
 
-  function add_account($user_id, $type, $host, $port, $mbroot, $username, $password, $name, $email, $signature, $sent, $spam, $trash, $auto_check=0)
+  function add_account($user_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $sent, $spam, $trash, $auto_check=0)
   {
     global $GO_CONFIG;
 
@@ -75,15 +75,23 @@ class email extends db
     require_once($GO_CONFIG->class_path."imap.class.inc");
 
     $mail= new imap();
-    if ($mail->open($host, $type, $port, $username, $password))
+    if (!$mail->open($host, $type, $port, $username, $password, "INBOX", 0, $use_ssl, $novalidate_cert))
+    {
+	    $this->last_error = "<p class=\"Error\">".imap_last_error()."</p>";
+      return false;
+    }else
     {
       if (!$mbroot = $mail->check_mbroot($mbroot))
       {
 	$mbroot = '';
       }
 
-      $next_id = $this->nextid("emAccounts");
-      if ($next_id > 0)
+      $account_id  = $this->nextid("emAccounts");
+      if (!$account_id)
+      {
+      	$this->last_error = "<p class=\"Error\">".$strSaveError."</p>";
+      	return false;
+      }else
       {
 	if ($this->get_accounts($user_id) == 0)
 	{
@@ -93,14 +101,13 @@ class email extends db
 	  $default="0";
 	}
 
-	$sql  = "INSERT INTO emAccounts (id, user_id, type, host, port, mbroot, username, password, name, email, signature, standard, auto_check) ";
-	$sql .= "VALUES ('$next_id', '$user_id', '$type', '$host', '$port', '$mbroot', '$username', '".$GO_CRYPTO->encrypt($password)."', '$name', '$email', '$signature','$default' , '$auto_check')";
-	$this->query($sql);
-	$account_id = $next_id;
-      }
-
-
-      if ($account_id)
+				$sql  = "INSERT INTO emAccounts (id, user_id, type, host, port, use_ssl, novalidate_cert, mbroot, username, password, name, email, signature, standard, auto_check) ";
+				$sql .= "VALUES ('$account_id', '$user_id', '$type', '$host', '$port', '$use_ssl', '$novalidate_cert', '$mbroot', '$username', '".$GO_CRYPTO->encrypt($password)."', '$name', '$email', '$signature','$default' , '$auto_check')";
+				if(!$this->query($sql))
+				{
+					$this->last_error = "<p class=\"Error\">".$strSaveError."</p>";
+      		return false;
+				}else
       {
 	if ($type=='imap')
 	{
@@ -191,36 +198,27 @@ class email extends db
 	  $mailboxes =  $mail->get_mailboxes($mbroot);
 	  $subscribed =  $mail->get_subscribed($mbroot);
 	  $this->synchronise($account_id, $mailboxes, $subscribed);
-
-	  $mail->close();
 	}
+			  	$mail->close();
 	return $account_id;
-      }else
-      {
-	$this->last_error = "<p class=\"Error\">".$strSaveError."</p>";
-	return false;
       }
-    }else
-    {
-      $this->last_error = "<p class=\"Error\">".imap_last_error()."</p>";
-      return false;
     }
   }
-
+  }
 
   function disable_auto_check($account_id)
   {
     return $this->query("UPDATE emAccounts SET auto_check='0' WHERE id='$account_id'");
   }
 
-  function update_account($account_id, $type, $host, $port, $mbroot, $username, $password, $name, $email, $signature, $sent, $spam, $trash, $auto_check=0)
+  function update_account($account_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $sent, $spam, $trash, $auto_check=0)
   {
     global $GO_CONFIG, $GO_CRYPTO;
 
     require_once($GO_CONFIG->class_path."imap.class.inc");
     $mail= new imap();
 
-    if ($mail->open($host, $type, $port, $username, $password))
+    if ($mail->open($host, $type, $port, $username, $password, "INBOX", 0, $use_ssl, $novalidate_cert))
     {
       if (!$mbroot = $mail->check_mbroot($mbroot))
       {
@@ -228,6 +226,7 @@ class email extends db
       }
 
       $sql  = "UPDATE emAccounts SET type='$type', host='$host', port='$port'".
+      ", use_ssl='$use_ssl', novalidate_cert='$novalidate_cert'".
 	", mbroot='$mbroot', username='$username', password='".
 	",".$GO_CRYPTO->encrypt($password)."', name='$name', email='$email'".
 	", signature='$signature', auto_check='$auto_check' WHERE ".

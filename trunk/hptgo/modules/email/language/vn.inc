@@ -140,4 +140,10 @@ $ml_select_one_criteria = 'Hãy chọn hoặc nhập vào ít nhất một thôn
 
 $cmdNext = 'Tin kế';
 $cmdPrevious = 'Tin trước';
+
+//2.06
+$ml_appointment = 'Thư này có chứa cuộc hẹn. Bạn có muốn xem cuộc hẹn này trong lịch không?';
+$ml_mails_were_sent = 'thư đã gửi';
+$ml_novalidate_cert = 'Không xác minh chứng nhận';
+$ml_appointment_vcf = 'Thư này chứa địa chỉ liên hệ. Bạn có muốn xem địa chỉ này trong sổ địa chỉ không?';
 ?>
