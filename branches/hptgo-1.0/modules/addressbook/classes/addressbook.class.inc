@@ -324,8 +324,11 @@ class addressbook extends db
       $sql .=	"INNER JOIN ab_subscribed ON (ab_subscribed.addressbook_id=ab_contacts.addressbook_id) WHERE ab_subscribed.user_id='$user_id' AND ";
     }
 
-    $sql .= "$field LIKE '$query' ".
-      "ORDER BY ab_contacts.first_name ASC, ab_contacts.last_name ASC";
+    $sql .= "($field LIKE '$query' ";
+    // Additional Vietnamese glyphs
+    if ($query == 'Đ%')
+      $sql .= " OR $field LIKE 'đ%' ";
+    $sql .=  ") ORDER BY ab_contacts.first_name ASC, ab_contacts.last_name ASC";
     $this->query($sql);
     return $this->num_rows();
   }
@@ -359,8 +362,11 @@ class addressbook extends db
 	if ($category > -1)
 		$sql.= " ab_cate_companies.category_id = '$category' AND ";
 
-    $sql .= "$field LIKE '$query' ".
-      "ORDER BY ab_companies.name ASC";
+    $sql .= "($field LIKE '$query' ";
+    // Additional Vietnamese glyphs
+    if ($query == 'Đ%')
+      $sql .= " OR $field LIKE 'đ%' ";
+    $sql .=  ") ORDER BY ab_companies.name ASC";
     $this->query($sql);
     return $this->num_rows();
   }
