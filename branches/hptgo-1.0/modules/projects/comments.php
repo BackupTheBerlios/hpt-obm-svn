@@ -33,7 +33,7 @@ while ($data) {
   }
   $data = strtok("\xFF");
 }
-echo '</td></tr></table>';
+echo '</table></td></tr>';
 echo '</table>';
 
 unset($_SESSION['GO_SESSION']['task_comments']);
