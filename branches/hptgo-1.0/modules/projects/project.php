@@ -250,13 +250,15 @@ switch ($task)
     $tid = 1;
     $max_task_id = $_REQUEST["max_task_id"];
     while ($tid <= $max_task_id) {
-      $tpid = $_REQUEST["task_$tid"];
+      if (isset($_REQUEST["task_$tid"]))
+        $tpid = $_REQUEST["task_$tid"];
       if (!isset($tpid)) {
         $tid = $tid + 1;
         continue;
       }
 
-      $tid_time = $_REQUEST["task_time_$tid"];
+      if (isset($_REQUEST["task_time_$tid"]))
+        $tid_time = $_REQUEST["task_time_$tid"];
       if (!isset($tid_time) || $tid_time == 0)
         $tid_time = '';
       else
@@ -799,7 +801,7 @@ function is_valid_date(date_field_to_validate, date)
 require($GO_THEME->theme_path."footer.inc");
 function notify_relevant_members($project_id,$task_id,$person_id,$assigned = true)
 {
-      global $GO_CONFIG;
+      global $GO_CONFIG,$php_mailer_lang;
       
       $db = new db();
       $sql = "SELECT users.* FROM".
@@ -847,7 +849,7 @@ function notify_relevant_members($project_id,$task_id,$person_id,$assigned = tru
   	  'WHERE id="'.$project_id.'" ');
         $db->next_record();
 
-        $task_url = $GO_CONFIG->full_url.'modules/projects/project.php?task=show_task_status&project_id='.$project_id.'&task_id='.$task_id.'&task_status='.$status;
+        $task_url = $GO_CONFIG->full_url.'modules/projects/project.php?task=show_task_status&project_id='.$project_id.'&task_id='.$task_id.'&task_status='.(isset($status) ? $status : '');
         $project_url = $GO_CONFIG->full_url.'modules/projects/project.php?project_id='.$project_id;
 
 
@@ -864,7 +866,7 @@ function notify_relevant_members($project_id,$task_id,$person_id,$assigned = tru
 
         $mail->Body = $mail_body;
         $mail->ClearAllRecipients();
-        if ($status == TASK_DONE)
+        if (isset($status) && $status == TASK_DONE)
           $db->query('SELECT users.* '.
             'FROM users,pmProjects '.
   	    'WHERE users.id=pmProjects.user_id '.

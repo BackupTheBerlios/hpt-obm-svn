@@ -504,7 +504,7 @@ class project_task extends db {
     echo '<tr>';
     echo '<td align="center">'.$this->id.'</td>';
     echo '<td>'.$this->name.'</td>';
-    echo '<td>'.$member_list[$this->person_id].'</td>';
+    echo '<td>'.(isset($member_list) && is_array($member_list) ? $member_list[$this->person_id] : '&nbsp;').'</td>';
     list($pids, $tips) = $this->get_pid_tips();
     echo '<td>'.$tips.$pids.'</td>';
     echo '<td>'.$this->days.'</td>';

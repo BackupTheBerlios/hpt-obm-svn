@@ -102,7 +102,7 @@ $count = $db->num_rows();
 $catalog = new dropbox();
 $catalog_name = '';
 while ($db->next_record()) {
-  if ($cat_id == 0) $cat_id = $db->f('id');
+  if (!isset($cat_id) || $cat_id == 0) $cat_id = $db->f('id');
   $catalog->add_value($db->f('id'), $db->f('name'));
   if ($cat_id == $db->f('id'))
     $catalog_name = $db->f('name');
