@@ -215,6 +215,7 @@ $cal_view_merged = 'merged';
 $cal_view_emerged = 'emerged';
 
 $strNoPastEvent= 'You are not allowed to add an event in the past';
+$strNotAddEvent= 'You do not have permission to add an event in this view';
 $subjectEventInvitation = '[Calendar] You are invited to event %s';
 
 $sc_subscribed = 'Subscribed';

@@ -2,6 +2,18 @@
 
 $cal_index = isset($cal_index) ? $cal_index : 0;
 
+$event_addable = true;
+if ($view_id > 0) {
+  $calendars = $cal->get_view_calendars($view_id);
+  $event_addable = false;
+  foreach ($calendars as $c) {
+    if ($GO_SECURITY->has_permission($GO_SECURITY->user_id,$c['acl_write'])) {
+      $event_addable = true;
+      break;
+    }
+  }
+}
+
 $events = $cal->get_events_in_array($calendar_id, $view_id, 0, 0, 
   $interval_start_time, $interval_end_time, 
   $day, $month, $year, 
@@ -246,10 +258,13 @@ for($row=0;$row<$rows;$row++)
 	}
 	if(!$print)
 	{
-	  if ($new_date > date('Ymd', time()) || ($new_date == date('Ymd', time()) && $hour_of_day >= date('H',time()))) {
-	    echo '<td onmouseover="javascript:glow_row(\''.$current_row.'_'.$hour_of_day.'\');" onmouseout="javascript:unglow_row(\''.$current_row.'_'.$hour_of_day.'\');" onclick="document.location=\'event.php?calendar_id='.$calendar_id.'&day='.$new_day.'&month='.$new_month.'&year='.$new_year.'&hour='.$hour_of_day.((strpos($calendar_view_id,"view:") === 0 && $merged_view) ? '&merged_view='.substr($calendar_view_id,strlen("view:")) : '').'\'"" height="100%"'.$style.'>&nbsp;';
+	  if ($event_addable) {
+	    if ($new_date > date('Ymd', time()) || ($new_date == date('Ymd', time()) && $hour_of_day >= date('H',time()))) {
+	      echo '<td onmouseover="javascript:glow_row(\''.$current_row.'_'.$hour_of_day.'\');" onmouseout="javascript:unglow_row(\''.$current_row.'_'.$hour_of_day.'\');" onclick="document.location=\'event.php?calendar_id='.$calendar_id.'&day='.$new_day.'&month='.$new_month.'&year='.$new_year.'&hour='.$hour_of_day.((strpos($calendar_view_id,"view:") === 0 && $merged_view) ? '&merged_view='.substr($calendar_view_id,strlen("view:")) : '').'\'" height="100%"'.$style.'>&nbsp;';
+	    } else
+	      echo '<td onmouseover="javascript:glow_row(\''.$current_row.'_'.$hour_of_day.'\');" onmouseout="javascript:unglow_row(\''.$current_row.'_'.$hour_of_day.'\');" onclick="alert(\''.$strNoPastEvent.'\')" height="100%"'.$style.'>&nbsp;';
 	  } else
-	    echo '<td onmouseover="javascript:glow_row(\''.$current_row.'_'.$hour_of_day.'\');" onmouseout="javascript:unglow_row(\''.$current_row.'_'.$hour_of_day.'\');" onclick="alert(\''.$strNoPastEvent.'\')" height="100%"'.$style.'>&nbsp;';
+	    echo '<td onmouseover="javascript:glow_row(\''.$current_row.'_'.$hour_of_day.'\');" onmouseout="javascript:unglow_row(\''.$current_row.'_'.$hour_of_day.'\');" onclick="alert(\''.$strNotAddEvent.'\')" height="100%"'.$style.'>&nbsp;';
 	}
 
       }

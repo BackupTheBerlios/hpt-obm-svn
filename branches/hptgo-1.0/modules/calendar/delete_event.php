@@ -25,9 +25,10 @@ $calendar_id = isset($_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : $cal
 $event_id = isset($_REQUEST['event_id']) ? $_REQUEST['event_id'] : 0;
 $calendar = $cal->get_calendar($calendar_id);
 $event = $cal->get_event($_REQUEST['event_id']);
-if ($calendar && $event)
-{
+if ($calendar)
 	$calendar['write_permission'] = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']);
+if ($event)
+{
 	$event['write_permission'] = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $event['acl_write']);
 }else
 {
