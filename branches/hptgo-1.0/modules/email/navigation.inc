@@ -317,13 +317,13 @@ if ($msg_count > 0)
     $link = "message.php?account_id=".$account['id']."&uid=".$mail->f('uid')."&mailbox=".$mailbox."&first_row=".$first_row."&return_to=".urlencode($link_back);
     if ($show=="from")
     {
-      $messages_display .= "<td nowrap><a href=\"".$link."\" title=\"".$mail->f('from')."&nbsp;&lt;".$mail->f("sender")."&gt;\">".$short_from."&nbsp;</a></td>";
+      $messages_display .= "<td nowrap><a href=\"".$link."\" title=\"".htmlspecialchars($mail->f('from'))."&nbsp;&lt;".htmlspecialchars($mail->f("sender"))."&gt;\">".htmlspecialchars($short_from)."&nbsp;</a></td>";
     }else
     {
-      $messages_display .= "<td nowrap><a href=\"".$link."\" title=\"".$to."\">".$short_to."&nbsp;</a></td>";
+      $messages_display .= "<td nowrap><a href=\"".$link."\" title=\"".htmlspecialchars($to)."\">".htmlspecialchars($short_to)."&nbsp;</a></td>";
     }
 
-    $messages_display .= "<td nowrap><a href=\"".$link."\" title=\"".$mail->f('subject')."\">".$short_subject."&nbsp;</a></td>";
+    $messages_display .= "<td nowrap><a href=\"".$link."\" title=\"".htmlspecialchars($mail->f('subject'))."\">".htmlspecialchars($short_subject)."&nbsp;</a></td>";
     $messages_display .= '<td nowrap>'.format_size($mail->f('size')).'&nbsp;</td>';
     $messages_display .= '<td nowrap>'.date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time($mail->f('udate'))).'</td>';
     $messages_display .= "</tr>\n";
