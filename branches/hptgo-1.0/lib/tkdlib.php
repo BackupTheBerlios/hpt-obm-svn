@@ -164,7 +164,7 @@
  
 	function account_manager($acl_id)
 	{
-		global $GO_SECURITY, $GO_USERS, $strAccountManager;
+		global $GO_SECURITY, $GO_USERS, $strAccountManager,$read_only;
 		  		
 		$disabled = $read_only ? 'disabled' : '';
 
