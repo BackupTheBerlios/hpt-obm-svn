@@ -1,0 +1,90 @@
+// I18N constants
+
+// LANG: "en", ENCODING: UTF-8 | ISO-8859-1
+// Author: Mihai Bazon, http://dynarch.com/mishoo
+
+// FOR TRANSLATORS:
+//
+//   1. PLEASE PUT YOUR CONTACT INFO IN THE ABOVE LINE
+//      (at least a valid email address)
+//
+//   2. PLEASE TRY TO USE UTF-8 FOR ENCODING;
+//      (if this is not possible, please include a comment
+//       that states what encoding is necessary.)
+
+TableOperations.I18N = {
+	"Align":					  "Aligner",
+	"All four sides":				  "Touts les cotés",
+	"Background":					  "Arrière plan",
+	"Baseline":                                       "Point de départ",
+	"Border":					  "Coté",
+	"Borders":					  "Cotés",
+	"Bottom":                                         "Boutom",
+	"CSS Style":					  "Style [CSS]",
+	"Caption":					  "Légende",
+	"Cell Properties":                                "Propertés cellule",
+	"Center":					  "Centrer",
+	"Char":                                           "Charactère",
+	"Collapsed borders":                              "Reduire les bords",
+	"Color":					  "Couleur",
+	"Description":					  "Description",
+	"FG Color":					  "FG Couleur",
+	"Float":                                          "Flotter",
+	"Frames":					  "Encadrement",
+	"Height":                                         "Height",
+	"How many columns would you like to merge?":      "Combien de colonnes souhaitez-voust fusionner ?",
+	"How many rows would you like to merge?":         "Combien de lignes souhaitez-voust fusionner ?",
+	"Image URL":					  "Image URL",
+	"Justify":                                        "Justifier",
+	"Layout":					  "Plan",
+	"Left":						  "Gauche",
+	"Margin":                                         "Marge",
+	"Middle":                                         "Milieu",
+	"No rules":					  "No rules",
+	"No sides":					  "Pas de coté",
+	"None":                                           "Aucun",
+	"Padding":					  "Rembourrage",
+	"Please click into some cell":                    "Merci de cliquer dans une cellule",
+	"Right":					  "Doite",
+	"Row Properties":                                 "Propriété de la ranger",
+	"Rules will appear between all rows and columns": "Rules will appear between all rows and columns",
+	"Rules will appear between columns only":	  "Rules will appear between columns only",
+	"Rules will appear between rows only":		  "Rules will appear between rows only",
+	"Rules":					  "Rules",
+	"Spacing and padding":                            "Spacing and padding",
+	"Spacing":					  "Spacing",
+	"Summary":					  "Summary",
+	"TO-cell-delete":				  "Delete cell",
+	"TO-cell-insert-after":				  "Insert cell after",
+	"TO-cell-insert-before":			  "Insert cell before",
+	"TO-cell-merge":				  "Merge cells",
+	"TO-cell-prop":					  "Cell properties",
+	"TO-cell-split":				  "Split cell",
+	"TO-col-delete":				  "Delete column",
+	"TO-col-insert-after":				  "Insert column after",
+	"TO-col-insert-before":				  "Insert column before",
+	"TO-col-split":					  "Split column",
+	"TO-row-delete":				  "Delete row",
+	"TO-row-insert-above":				  "Insert row before",
+	"TO-row-insert-under":				  "Insert row after",
+	"TO-row-prop":					  "Row properties",
+	"TO-row-split":					  "Split row",
+	"TO-table-prop":				  "Table properties",
+	"Table Properties":				  "Table Properties",
+	"Text align":                                     "Text align",
+	"The bottom side only":				  "The bottom side only",
+	"The left-hand side only":			  "The left-hand side only",
+	"The right and left sides only":		  "The right and left sides only",
+	"The right-hand side only":			  "The right-hand side only",
+	"The top and bottom sides only":		  "The top and bottom sides only",
+	"The top side only":				  "The top side only",
+	"Top":                                            "Top",	
+	"Unset color":                                    "Unset color",
+	"Vertical align":                                 "Vertical align",
+	"Width":					  "Width",
+	"not-del-last-cell":				  "HTMLArea cowardly refuses to delete the last cell in row.",
+	"not-del-last-col":				  "HTMLArea cowardly refuses to delete the last column in table.",
+	"not-del-last-row":				  "HTMLArea cowardly refuses to delete the last row in table.",
+	"percent":					  "percent",
+	"pixels":					  "pixels"
+};
