@@ -195,7 +195,7 @@ $search_on_modified_later_check = isset($_REQUEST['search_on_modified_later']) ?
 
 				while($result = array_shift($results))
 				{
-					if (!is_dir($result['path']))
+					if (!$fs->chroot_is_dir($result['path']))
 					{
 						$extension = get_extension($result['name']);
 						echo '<tr height="18"><td width="16"><img width="16" height="16" border="0" src="'.$GO_CONFIG->control_url.'icon.php?extension='.$extension.'" /></td>';
@@ -207,7 +207,7 @@ $search_on_modified_later_check = isset($_REQUEST['search_on_modified_later']) ?
 					}
 					$location = dirname($result['path']);
 
-					echo '<td nowrap>&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($location).'">'.str_replace($GO_CONFIG->file_storage_path,$GO_CONFIG->slash,$location).'</a></td></tr>';
+					echo '<td nowrap>&nbsp;<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($location).'">'.$location.'</a></td></tr>';
 					echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 				}
 				echo '<tr><td colspan="99" class="small" height="18">&nbsp;'.$count.' '.$fbItems.'</td></tr>';

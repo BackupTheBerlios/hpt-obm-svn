@@ -32,7 +32,7 @@ if (is_group_folder($group_folders, $path) || $fs->has_read_permission($GO_SECUR
 	$browser = detect_browser();
 
 	header('Content-Type: '.$type['mime']);
-	header('Content-Length: '.filesize($path));
+	header('Content-Length: '.$fs->chroot_filesize($path));
 	header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
 	if ($browser['name'] == 'MSIE')
 	{

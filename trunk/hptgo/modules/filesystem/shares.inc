@@ -36,14 +36,14 @@ option) any later version.
 
 			while($fs->next_record())
 			{
-				if (file_exists($fs->f('path')))
+				if ($fs->chroot_file_exists($fs->f('path')))
 				{
 					if ($fs->is_common_folder($fs->f('path')))
 					{
 						$count --;
 						continue;
 					}
-					$display_path = '/'.str_replace($GO_CONFIG->file_storage_path,'',$fs->f('path'));
+					$display_path = $fs->f('path');
 					echo '<tr><td><img width="16" height="16" border="0" src="'.$GO_THEME->images['folder'].'" /></td>';
 					echo '<td><a href="'.$_SERVER['PHP_SELF'].'?task=properties&path='.urlencode($fs->f('path')).'">'.htmlspecialchars($display_path).'</a></td>';
 					echo "<td><a href='javascript:div_confirm_action(\"".$_SERVER['PHP_SELF']."?task=shares&path=".urlencode($path)."&delete_share=".urlencode($fs->f('path'))."\",\"".div_confirm_id($strDeletePrefix."'".$display_path."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$display_path."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td></tr>\n";

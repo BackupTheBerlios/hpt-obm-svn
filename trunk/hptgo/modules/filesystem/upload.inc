@@ -22,7 +22,7 @@ $tabtable->print_head();
 ?>
 <tr>
 	<?php
-    if (!(strpos($path,$GO_CONFIG->file_storage_path.'projects/') === 0))
+    if (!(strpos($path,'/projects/') === 0))
       echo '<td><h3>'.$fbPath.': '.$page_title.'</3><br /><br />'.$fbFiles.':<br/><br/>';
 	?>
 	<input type="file" name="file[]" maxlength="100" class="textbox" size="70" /><br />

@@ -257,7 +257,7 @@ print_filesystem(array($folder),'',$arguments,$image['vertline']);
 //echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($home_path).$arguments.'">'.$image['user'].'home</a><br />';
 //$mynode = $open ? $image['mnode'] : $image['pnode'];
 $folder = array();
-$folder['path'] = $GO_CONFIG->file_storage_path.'common';
+$folder['path'] = '/common';
 $folder['name'] = basename($folder['path']);
 $folder['parent'] = '';
 
@@ -274,7 +274,7 @@ $my_folders = $fs->get_visible_folders($GO_SECURITY->user_id,$folder['path']);
 if (count($my_folders) > 0 || $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
   $has_children = true;
   echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//workspace'.$arguments.'">'.($has_children ? ($is_expanded ? $image['mnode'] : $image['pnode']) : $image['emptynode']).'</a>';
-  echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.($from_root ? $GO_CONFIG->file_storage_path.'common' : urlencode($path)).$arguments.'">'.$image['group'].$fbWorkspace.'</a><br />';
+  echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.($from_root ? '/common' : urlencode($path)).$arguments.'">'.$image['group'].$fbWorkspace.'</a><br />';
 } else {
   echo ($has_children ? ($is_expanded ? $image['mnode'] : $image['pnode']) : $image['emptynode']);
   echo $image['group_disable'].'<font color="#cccccc">'.$fbWorkspace.'</font><br />';
@@ -294,6 +294,7 @@ $users_array = array();
 
 foreach ( $fs->get_my_shares() as $sharer )
 {
+  echo $fs->f('path');
 	$GO_USERS->get_user( $sharer );
 
 	if ($GO_USERS->f('id') != $GO_SECURITY->user_id)
@@ -321,9 +322,9 @@ foreach ( $fs->get_my_shares() as $sharer )
 					continue;
 				}
 
-				if (file_exists($fs->f('path')))
+				if ($fs->chroot_file_exists($fs->f('path')))
 				{
-					if (is_dir($fs->f('path')))
+					if ($fs->chroot_is_dir($fs->f('path')))
 					{
 						$is_sub_dir = isset($last_folder) ? $fs->is_sub_dir($fs->f('path'), $last_folder) : false;
 

@@ -29,6 +29,11 @@ class filesystem extends db
 */
   var $action_result = false;
 
+/**
+* @var	string	the root dir
+*/
+  var $root = '';
+
   /**
    * Get filesystem settings from fs_settings.
    *
@@ -93,8 +98,12 @@ class filesystem extends db
    */
   function filesystem($disable_go_permissions=false)
   {
+    global $GO_CONFIG;
     $this->db();
     $this->disable_go_permissions = $disable_go_permissions;
+    $this->root = $GO_CONFIG->file_storage_path;
+    while ($this->root[strlen($this->root)-1] == '/')
+      $this->root = substr($this->root,0,strlen($this->root)-1);
   }
 
   /**
@@ -108,9 +117,12 @@ class filesystem extends db
   {
     global $GO_CONFIG, $GO_USERS;
 
+    if ($this->root != $GO_CONFIG->file_storage_path)
+      return false;
+
     if ($user = $GO_USERS->get_user($user_id))
     {
-      $home_path = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
+      $home_path = '/users/'.$user['username'];
 
       if (dirname($path).basename($path) == dirname($home_path).basename($home_path))
       {
@@ -131,16 +143,19 @@ class filesystem extends db
   {
     global $GO_CONFIG, $GO_USERS;
 
+    if ($this->root != $GO_CONFIG->file_storage_path)
+      return false;
+
     if ($user = $GO_USERS->get_user($user_id))
     {
-      $home_path = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
+      $home_path = '/users/'.$user['username'];
       if (strpos($path, $home_path) === 0)
       {
 	return true;
       }
     }
 
-    $home_path = $GO_CONFIG->file_storage_path.'projects/';
+    $home_path = '/projects/';
     global $GO_MODULES,$GO_SECURITY;
     $project = $GO_MODULES->get_module('projects');
     if ($project && ereg('^'.$home_path.'/*([0-9]*)/([0-9]*)/*',$path,$matches)) {
@@ -177,7 +192,11 @@ class filesystem extends db
   function is_common_folder($folder)
   {
     global $GO_CONFIG,$GO_SECURITY;
-    $home_path = $GO_CONFIG->file_storage_path.'common';
+
+    if ($this->root != $GO_CONFIG->file_storage_path)
+      return false;
+
+    $home_path = '/common';
     $ret = substr($folder,0,strlen($home_path)) == $home_path;
     /*
     if ($ret &&
@@ -201,7 +220,11 @@ class filesystem extends db
   function is_system_folder($folder)
   {
     global $GO_CONFIG;
-    if ($GO_CONFIG->file_storage_path.'common' == $folder)
+
+    if ($this->root != $GO_CONFIG->file_storage_path)
+      return false;
+
+    if ('/common' == $folder)
       return true;
     $db = new db();
     return $db->query("SELECT * FROM fsSystemFolders WHERE path='".$folder."'") && $db->num_rows();
@@ -415,7 +438,7 @@ class filesystem extends db
     {
       global $GO_CONFIG;
       $parent = dirname($path);
-      if ($parent == $GO_CONFIG->file_storage_path || $parent == '' || $parent == '.' || $parent == $GO_CONFIG->slash)
+      if ($parent == '/' || $parent == '' || $parent == '.' || $parent == $GO_CONFIG->slash)
       {
 	return false;
       }else
@@ -451,7 +474,7 @@ class filesystem extends db
   {
     if ($this->disable_go_permissions || $this->is_owner($user_id, $path))
     {
-      return is_readable($path);
+      return $this->chroot_is_readable($path);
     }else
     {
       if ($share = $this->find_share($path))
@@ -459,13 +482,13 @@ class filesystem extends db
 	global $GO_SECURITY;
 	if($GO_SECURITY->has_permission($user_id, $share['acl_read']))
 	{
-	  return is_readable($path);
+	  return $this->chroot_is_readable($path);
 	}
       }
       global $GO_CONFIG;
       if (strpos($path, $GO_CONFIG->tmpdir) === 0)
       {
-	return is_readable($path);
+	return $this->chroot_is_readable($path);
       }
     }
     return false;
@@ -483,7 +506,7 @@ class filesystem extends db
   {
     if ($this->disable_go_permissions || $this->is_owner($user_id, $path))
     {
-      return is_writable($path);
+      return $this->chroot_is_writable($path);
     }else
     {
       global $GO_SECURITY;
@@ -491,13 +514,13 @@ class filesystem extends db
       {
 	if($GO_SECURITY->has_permission($user_id, $share['acl_write']))
 	{
-	  return is_writable($path);
+	  return $this->chroot_is_writable($path);
 	}
       }
       global $GO_CONFIG;
       if (strpos($path, $GO_CONFIG->tmpdir) === 0)
       {
-	return is_writable($path);
+	return $this->chroot_is_writable($path);
       }
     }
     return false;
@@ -510,7 +533,7 @@ class filesystem extends db
    */
   function size($path)
   {
-    if (is_dir($path))
+    if ($this->chroot_is_dir($path))
     {
       $size = 0;
       $children = $this->get_folders($path);
@@ -527,7 +550,7 @@ class filesystem extends db
       return $size;
     }else
     {
-      return filesize($path);
+      return $this->chroot_filesize($path);
     }
   }
 
@@ -552,11 +575,11 @@ class filesystem extends db
       return true;
     }else
     {
-      if (is_dir($source_path))
+      if ($this->chroot_is_dir($source_path))
       {
-	if (!file_exists($destination_path))
+	if (!$this->chroot_file_exists($destination_path))
 	{
-	  if (!mkdir($destination_path, $GO_CONFIG->create_mode))
+	  if (!$this->chroot_mkdir($destination_path, $GO_CONFIG->create_mode))
 	  {
 	    return false;
 	  }else
@@ -605,16 +628,16 @@ class filesystem extends db
 	  `$cmd`;
 	  return true;
 	} else {
-	  return rmdir($source_path);
+	  return $this->chroot_rmdir($source_path);
 	}
       }else
       {
 	//rename fails when moving accross partitions
 	//return rename($source_path, $destination_path);
-	if (copy($source_path, $destination_path))
+	if ($this->chroot_copy($source_path, $destination_path))
 	{
 
-	  return unlink($source_path);
+	  return $this->chroot_unlink($source_path);
 	}
       }
     }
@@ -629,7 +652,7 @@ class filesystem extends db
   function copy($source_path, $destination_path)
   {
     global $GO_CONFIG;
-    //do not copy into own path
+    //do not $this->chroot_copy into own path
     if (strpos($destination_path, $source_path) === 0)
     {
       // TODO add translation
@@ -637,11 +660,11 @@ class filesystem extends db
       return false;
     }else
     {
-      if (is_dir($source_path))
+      if ($this->chroot_is_dir($source_path))
       {
-	if (!file_exists($destination_path))
+	if (!$this->chroot_file_exists($destination_path))
 	{
-	  if (!mkdir($destination_path, $GO_CONFIG->create_mode))
+	  if (!$this->chroot_mkdir($destination_path, $GO_CONFIG->create_mode))
 	  {
 	    // TODO add translation
 	    $this->action_result = "unable to create destination path";
@@ -651,7 +674,7 @@ class filesystem extends db
 	$files = $this->get_files($source_path);
 	while ($file = array_shift($files))
 	{
-	  if(!$this->copy($file['path'], $destination_path.'/'.$file['name']))
+	  if(!$this->chroot_copy($file['path'], $destination_path.'/'.$file['name']))
 	  {
 	    // this->action_result is set by the call itself.
 	    return false;
@@ -660,7 +683,7 @@ class filesystem extends db
 	$children = $this->get_folders($source_path);
 	while ($child = array_shift($children))
 	{
-	  if (!$this->copy($child['path'], $destination_path.'/'.$child['name']))
+	  if (!$this->chroot_copy($child['path'], $destination_path.'/'.$child['name']))
 	  {
 	    // this->action_result is set by the call itself.
 	    return false;
@@ -673,21 +696,21 @@ class filesystem extends db
 	// No directory. Check free space in destination_path.
 	if ( $GO_CONFIG->user_quota != 0 ) {
 	  // get file size of $source_path
-	  filesize( $source_path );
+	  $this->chroot_filesize( $source_path );
 	  // extract user-home-path from destination_path
 	  if ( strstr( $destination_path, $GO_CONFIG->file_storage_path ) ) {
 	    $dest = substr( $destination_path, strlen( $GO_CONFIG->file_storage_path ) );
 	    $dest = substr( $dest, 0, strpos( $dest, "/" ) );
 	    exec( "du ".$GO_CONFIG->file_storage_path.$dest." -s", $retval );
 	    list($usedspace) = sscanf( $retval[0], "%d");
-	    if ( ( $usedspace*1024 + filesize( $source_path ) ) >= $GO_CONFIG->user_quota*1024 ) {
+	    if ( ( $usedspace*1024 + $this->chroot_filesize( $source_path ) ) >= $GO_CONFIG->user_quota*1024 ) {
 	      // TODO add translation
 	      $this->action_result = "not enough space (over quota)";
 	      return false;
 	    }
 	  }
 	}
-	return copy($source_path, $destination_path);
+	return $this->chroot_copy($source_path, $destination_path);
       }
     }
   }
@@ -702,7 +725,7 @@ class filesystem extends db
   function delete($path)
   {
     global $GO_SECURITY;
-    if (is_dir($path))
+    if ($this->chroot_is_dir($path))
     {
       if ($this->is_system_folder($path) &&
 	  !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
@@ -748,7 +771,7 @@ class filesystem extends db
 	  `$cmd`;
 	}
 
-	return @rmdir($path);
+	return @$this->chroot_rmdir($path);
       }else
       {
 	return false;
@@ -758,7 +781,7 @@ class filesystem extends db
       if ($this->disable_go_permissions || 
      	 $this->has_write_permission($GO_SECURITY->user_id, $path))
       {
-	return @unlink($path);
+	return @$this->chroot_unlink($path);
       }else
       {
 	return false;
@@ -803,19 +826,19 @@ class filesystem extends db
     if (substr($path, -1) != $slash) $path .= $slash;
 
     $folders = array();
-    if($dir = opendir($path))
+    if($dir = $this->chroot_opendir($path))
     {
       while($item=readdir($dir))
       {
 	$folder_path = $path.$item;
-	if (is_dir($folder_path) && $item != "." && $item != ".." &&
+	if ($this->chroot_is_dir($folder_path) && $item != "." && $item != ".." &&
 	  $item != $GO_CONFIG->name_of_sharedir && !(strpos($item,".") === 0) )
 	{
 	  $folder['path'] = $folder_path;
 	  $folder['name'] = basename($folder_path);
-	  $folder['mtime'] = filemtime($folder_path);
-	  $folder['size'] = filesize($folder_path);
-	  $folder['type'] = filetype($folder_path);
+	  $folder['mtime'] = $this->chroot_filemtime($folder_path);
+	  $folder['size'] = $this->chroot_filesize($folder_path);
+	  $folder['type'] = $this->chroot_filetype($folder_path);
 	  $folders[] = $folder;
 	}
       }
@@ -840,12 +863,12 @@ class filesystem extends db
     if (substr($path, -1) != $slash) $path .= $slash;
 
     $folders = array();
-    if($dir = opendir($path))
+    if($dir = $this->chroot_opendir($path))
     {
       while($item=readdir($dir))
       {
 	$folder_path = $path.$item;
-	if (is_dir($folder_path) && $item != "." && $item != ".." &&
+	if ($this->chroot_is_dir($folder_path) && $item != "." && $item != ".." &&
 	  $item != $GO_CONFIG->name_of_sharedir && !(strpos($item,".") === 0) )
 	{
 	  if ($this->has_read_permission2($user_id,$folder_path))
@@ -853,9 +876,9 @@ class filesystem extends db
 	    //echo "Got $folder_path<br/>\n";
 	    $folder['path'] = $folder_path;
 	    $folder['name'] = basename($folder_path);
-	    $folder['mtime'] = filemtime($folder_path);
-	    $folder['size'] = filesize($folder_path);
-	    $folder['type'] = filetype($folder_path);
+	    $folder['mtime'] = $this->chroot_filemtime($folder_path);
+	    $folder['size'] = $this->chroot_filesize($folder_path);
+	    $folder['type'] = $this->chroot_filetype($folder_path);
 	    $folders[] = $folder;
 	  }
 	  else
@@ -888,12 +911,12 @@ class filesystem extends db
     if (substr($path, -1) != $slash) $path .= $slash;
 
     $folders = array();
-    if($dir = opendir($path))
+    if($dir = $this->chroot_opendir($path))
     {
       while($item=readdir($dir))
       {
 	$folder_path = $path.$item;
-	if (is_dir($folder_path) && $item != "." && $item != ".." &&
+	if ($this->chroot_is_dir($folder_path) && $item != "." && $item != ".." &&
 	  $item != $GO_CONFIG->name_of_sharedir && !(strpos($item,".") === 0) )
 	{
 	  if ($this->has_read_permission2($user_id,$folder_path))
@@ -970,9 +993,9 @@ class filesystem extends db
       $folder = array();
       $folder['path'] = $item;
       $folder['name'] = basename($item);
-      $folder['mtime'] = filemtime($item);
-      $folder['size'] = filesize($item);
-      $folder['type'] = filetype($item);
+      $folder['mtime'] = $this->chroot_filemtime($item);
+      $folder['size'] = $this->chroot_filesize($item);
+      $folder['type'] = $this->chroot_filetype($item);
       if(isset($url))
 	$folder['url'] = $url.$folder['name'];
       $folders[] = $folder;
@@ -983,7 +1006,7 @@ class filesystem extends db
   /**
    * Get subfolders of folder $path sorted by $sort_field with $sort_direction
    * returns all subfolders of a folder sorted based on the result of a function
-   * passed that is performed on the pathname. (For example filesize();)
+   * passed that is performed on the pathname. (For example $this->chroot_filesize();)
    * @param		string	$path
    * @param		string	$sort_field
    * @param		string	$sort_direction
@@ -1006,17 +1029,17 @@ class filesystem extends db
       }
     }
     $sort_field = function_exists($sort_field) ? $sort_field : 'basename';
-    if (is_dir($path))
+    if ($this->chroot_is_dir($path))
     {
       $sorted_list = array();
 
-      if(@$dir = opendir($path))
+      if(@$dir = $this->chroot_opendir($path))
       {
 	while($item=readdir($dir))
 	{
 	  $folder_path = $path.$item;
 
-	  if (is_dir($folder_path) && $item != "." && $item != ".." &&
+	  if ($this->chroot_is_dir($folder_path) && $item != "." && $item != ".." &&
 	    $item != $GO_CONFIG->name_of_sharedir && !(strpos($item,".")===0) )
 	  {
 	    $key_id = 0;
@@ -1045,9 +1068,9 @@ class filesystem extends db
 	  $folder = array();
 	  $folder['path'] = $item;
 	  $folder['name'] = basename($item);
-	  $folder['mtime'] = filemtime($item);
-	  $folder['size'] = filesize($item);
-	  $folder['type'] = filetype($item);
+	  $folder['mtime'] = $this->chroot_filemtime($item);
+	  $folder['size'] = $this->chroot_filesize($item);
+	  $folder['type'] = $this->chroot_filetype($item);
 	  if(isset($url))
 	  {
 	    $folder['url'] = $url.$folder['name'];
@@ -1073,28 +1096,28 @@ class filesystem extends db
     $slash = stristr(PHP_OS, 'Windows') ? '\\' : '/';
     if (substr($path, -1) != $slash) $path .= $slash;
     $files = array();
-    if($dir = @opendir($path))
+    if($dir = @$this->chroot_opendir($path))
     {
       while($item=readdir($dir))
       {
 	$file_path = $path.$item;
-	if (!is_dir($file_path) && $move) {
+	if (!$this->chroot_is_dir($file_path) && $move) {
 	  $file['path'] = $file_path;
 	  $file['name'] = basename($file_path);
-	  $file['size'] = filesize($file_path);
-	  $file['mtime'] = filemtime($file_path);
-	  $file['type'] = get_mime_type($file_path);
+	  $file['size'] = $this->chroot_filesize($file_path);
+	  $file['mtime'] = $this->chroot_filemtime($file_path);
+	  $file['type'] = $this->chroot_get_mime_type($file_path);
 
 	  $files[] = $file;
 	}
-	if (!is_dir($file_path) && !$move &&
+	if (!$this->chroot_is_dir($file_path) && !$move &&
 	  $item != $GO_CONFIG->name_of_sharedir && !(strpos($item,".") === 0) )
 	{
 	  $file['path'] = $file_path;
 	  $file['name'] = basename($file_path);
-	  $file['size'] = filesize($file_path);
-	  $file['mtime'] = filemtime($file_path);
-	  $file['type'] = get_mime_type($file_path);
+	  $file['size'] = $this->chroot_filesize($file_path);
+	  $file['mtime'] = $this->chroot_filemtime($file_path);
+	  $file['type'] = $this->chroot_get_mime_type($file_path);
 
 	  $files[] = $file;
 	}
@@ -1107,7 +1130,7 @@ class filesystem extends db
   /**
    * Get files/subfolders of folder $path sorted by $sort_field with sort order $sort_direction
    * returns all subfolders of a folder sorted based on the result of a function
-   * passed that is performed on the pathname. (For example filesize();)
+   * passed that is performed on the pathname. (For example $this->chroot_filesize();)
    * @param		string	$path	
    * @param		string	$sort_field
    * @param		string	$sort_direction
@@ -1132,16 +1155,16 @@ class filesystem extends db
       }
     }
     $sort_field = function_exists($sort_field) ? $sort_field : 'basename';
-    if (is_dir($path))
+    if ($this->chroot_is_dir($path))
     {
       $sorted_list = array();
 
-      if($dir = @opendir($path))
+      if($dir = @$this->chroot_opendir($path))
       {
 	while($item=readdir($dir))
 	{
 	  $file = $path.$item;
-	  if (!is_dir($file) &&
+	  if (!$this->chroot_is_dir($file) &&
 	    $item != $GO_CONFIG->name_of_sharedir && !(strpos($item,".") === 0))
 	  {
 	    $key_id = 0;
@@ -1170,9 +1193,9 @@ class filesystem extends db
 	  $file = array();
 	  $file['path'] = $item;
 	  $file['name'] = basename($item);
-	  $file['mtime'] = filemtime($item);
-	  $file['size'] = filesize($item);
-	  $file['type'] = get_mime_type($item);
+	  $file['mtime'] = $this->chroot_filemtime($item);
+	  $file['size'] = $this->chroot_filesize($item);
+	  $file['type'] = $this->chroot_get_mime_type($item);
 
 	  if(isset($url))
 	  {
@@ -1208,9 +1231,9 @@ class filesystem extends db
     }
     $folder['path'] = $path;
     $folder['name'] = basename($path);
-    $folder['mtime'] = filemtime($path);
-    $folder['size'] = filesize($path);
-    $folder['type'] = filetype($path);
+    $folder['mtime'] = $this->chroot_filemtime($path);
+    $folder['size'] = $this->chroot_filesize($path);
+    $folder['type'] = $this->chroot_filetype($path);
 
     if (stristr(basename($path), $keyword) && $modified_later_then < $folder['mtime'] && $modified_earlier_then > $folder['mtime'])
     {
@@ -1253,7 +1276,7 @@ class filesystem extends db
   {
     global $GO_CONFIG;
     $parent = dirname($path);
-    if ($path != $GO_CONFIG->file_storage_path.'common' &&
+    if ($path != '/common' &&
 	!$this->is_system_folder($parent))
     {
       global $strParentMustBeSystemFolder;
@@ -1288,4 +1311,91 @@ class filesystem extends db
     @$db->query("DELETE FROM fsSystemFolders WHERE path='$path'");
     return true;
   }
+
+
+  function chroot_file_exists($path)
+  {
+    return file_exists($this->root.$path);
+  }
+
+  function chroot_is_writable($dir)
+  {
+    return is_writable($this->root.$dir);
+  }
+
+  function chroot_is_readable($dir)
+  {
+    return is_readable($this->root.$dir);
+  }
+
+  function chroot_is_dir($dir)
+  {
+    return is_dir($this->root.$dir);
+  }
+
+  function chroot_mkdir($dir,$mode)
+  {
+    return mkdir($this->root.$dir,$mode);
+  }
+
+  function chroot_rmdir($dir)
+  {
+    return rmdir($this->root.$dir);
+  }
+
+  function chroot_filesize($path)
+  {
+    return filesize($this->root.$path);
+  }
+
+  function chroot_copy_r2($p1,$p2)
+  {
+    return copy($this->root.$p1,$p2);
+  }
+
+  function chroot_copy_r1($p1,$p2)
+  {
+    return copy($p1,$this->root.$p2);
+  }
+
+  function chroot_copy($p1,$p2)
+  {
+    return copy($this->root.$p1,$this->root.$p2);
+  }
+
+  function chroot_unlink($path)
+  {
+    return unlink($this->root.$path);
+  }
+
+  function chroot_fileatime($p)
+  {
+    return fileatime($this->root.$p);
+  }
+
+  function chroot_filectime($p)
+  {
+    return filectime($this->root.$p);
+  }
+
+  function chroot_filemtime($p)
+  {
+    return filemtime($this->root.$p);
+  }
+
+  function chroot_filetype($p)
+  {
+    return filetype($this->root.$p);
+  }
+
+  function chroot_opendir($d)
+  {
+    return opendir($this->root.$d);
+  }
+
+  function chroot_get_mime_type($path)
+  {
+    return get_mime_type($this->root.$path);
+  }
+
 }

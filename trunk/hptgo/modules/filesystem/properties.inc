@@ -19,7 +19,7 @@ $share = $fs->find_share($path);
 //do not let user share it's home folder or modify the name!
 $write_perms = ($fs->has_write_permission($GO_SECURITY->user_id, $path) && !$fs->is_home_path($GO_SECURITY->user_id, $path));
 //do not let user rename common folder too!
-$write_perms &= $path != $GO_CONFIG->file_storage_path.'common';
+$write_perms &= $path != '/common';
 
 $return_to = $_SERVER['PHP_SELF'].'?path='.$return_to_path;
 $link_back = $_SERVER['REQUEST_URI'];
@@ -107,13 +107,7 @@ switch($tabtable->get_active_tab_id())
 	</td>
 	<td>
 	<?php
-	if (dirname($GO_CONFIG->file_storage_path).$GO_CONFIG->slash.basename($GO_CONFIG->file_storage_path) == $location)
-	{
-	  echo $GO_CONFIG->slash;
-	}else
-	{
-	  echo str_replace($GO_CONFIG->file_storage_path,$GO_CONFIG->slash,$location);
-	}
+	  echo $location;
 	?>
 	  </td>
 	  </tr>
@@ -129,7 +123,7 @@ switch($tabtable->get_active_tab_id())
 	  <tr>
 	  <td valign="top">
 	  <?php
-	  if (is_dir($path))
+	  if ($fs->chroot_is_dir($path))
 	  {
 	    echo '<img border="0" width="16" height="16" src="'.$GO_THEME->images['folder'].'" />';
 	    echo '&nbsp;</td><td valign="top">';
@@ -153,7 +147,7 @@ switch($tabtable->get_active_tab_id())
 		  <tr>
 		  <td><?php echo $strSize; ?>:</td>
 		  <td><?php
-		  if (is_dir($path) && !isset($_REQUEST['calc_size']))
+		  if ($fs->chroot_is_dir($path) && !isset($_REQUEST['calc_size']))
 		  {
 		  echo '<a href="'.$_SERVER['PHP_SELF'].'?task=properties&path='.$urlencoded_path.'&calc_size=true" class="normal">'.$fs_calculate_folder_size.'</a>';
 		  }else
@@ -170,7 +164,7 @@ switch($tabtable->get_active_tab_id())
 		<?php echo $strCreated; ?>:
 		</td>
 		<td>
-		<?php echo date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time(filectime($path))); ?>
+		<?php echo date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time($fs->chroot_filectime($path))); ?>
 		</td>
 		</tr>
 		<tr>
@@ -178,7 +172,7 @@ switch($tabtable->get_active_tab_id())
 		<?php echo $strAccessed; ?>:
 		</td>
 		<td>
-		<?php echo date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time(fileatime($path))); ?>
+		<?php echo date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time($fs->chroot_fileatime($path))); ?>
 		</td>
 		</tr>
 		<tr>
@@ -186,18 +180,18 @@ switch($tabtable->get_active_tab_id())
 		<?php echo $strModified; ?>:
 		</td>
 		<td>
-		<?php echo date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time(filemtime($path))); ?>
+		<?php echo date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], get_time($fs->chroot_filemtime($path))); ?>
 		</td>
 		</tr>
 		<?php
-		if (is_dir($path))
+		if ($fs->chroot_is_dir($path))
 		{
 		  echo '<tr><td colspan="2"><hr /></td></tr>';
 		  $disabled = ($fs->is_owner($GO_SECURITY->user_id, $path) && $write_perms) ? false : true;
 
 		  if ($fs->is_common_folder($path) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
 		  {
-		    if ($path != $GO_CONFIG->file_storage_path.'common')
+		    if ($path != '/common')
 		    {
 		      echo '<tr><td colspan="2">';
 		      $checkbox = new checkbox('share_folder', $path, $fs_set_permissions, $share, $disabled);
@@ -210,7 +204,7 @@ switch($tabtable->get_active_tab_id())
 		      {
 			$fs3 = new filesystem();
 			$share = $fs3->find_share($path);
-			$display_path = htmlspecialchars(str_replace($GO_CONFIG->file_storage_path,$GO_CONFIG->slash,$share['path']));
+			$display_path = htmlspecialchars($share['path']);
 			echo '<tr><td colspan="2">';
 			echo "$strUsePermissionsOf:&nbsp; ".$display_path;
 			echo '</td></tr>';

@@ -55,13 +55,15 @@ $GO_MULTI_SELECT = isset($GO_MULTI_SELECT) ? $GO_MULTI_SELECT : true;
 
 $target_frame = isset($target_frame) ? $target_frame : '_self';
 
+require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+$fs = new filesystem();
 //set path to browse
-$home_path = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'];
+$home_path = '/users/'.$_SESSION['GO_SESSION']['username'];
 if (!isset($_SESSION['GO_FILESYSTEM_PATH']))
 {
-  if (file_exists($home_path) || 
-    ((file_exists($GO_CONFIG->file_storage_path.'users/') || mkdir($GO_CONFIG->file_storage_path.'users/')) &&
-     mkdir($home_path)))
+  if ($fs->chroot_file_exists($home_path) || 
+    (($fs->chroot_file_exists('/users/') || $fs->chroot_mkdir('/users/')) &&
+     $fs->chroot_mkdir($home_path)))
   {
     $_SESSION['GO_FILESYSTEM_PATH'] = $home_path;
   }else
@@ -75,9 +77,7 @@ $urlencoded_path = urlencode($path);
 $return_to_path = isset($_REQUEST['return_to_path']) ? smartstrip($_REQUEST['return_to_path']) : $path;
 
 //create filesystem and filetypes object
-require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 require_once($GO_CONFIG->class_path.'filetypes.class.inc');
-$fs = new filesystem();
 $filetypes = new filetypes();
 
 $fs_settings = $fs->get_settings($GO_SECURITY->user_id);
@@ -139,7 +139,7 @@ switch ($task)
 	      $filetypes->add_type($extension, $_FILES['file']['type'][$i]);
 	    }
 
-	    if($fs->copy($_FILES['file']['tmp_name'][$i], $GO_CONFIG->tmpdir.'/'.$_FILES['file']['name'][$i]))
+	    if(copy($_FILES['file']['tmp_name'][$i], $GO_CONFIG->tmpdir.'/'.$_FILES['file']['name'][$i]))
 	    {
 	      $_SESSION['copy_files'][] = $GO_CONFIG->tmpdir.'/'.$_FILES['file']['name'][$i];
 	    }
@@ -153,13 +153,13 @@ switch ($task)
 	  {
 	    $popup_feedback .= access_denied_box($path);
 	    break;
-	  }elseif(file_exists($new_path))
+	  }elseif($fs->chroot_file_exists($new_path))
 	  {
 	    if ($overwrite_destination_path == $new_path && $overwrite_all != 'true')
 	    {
 	      if ($overwrite == "true")
 	      {
-		$fs->copy($file, $new_path);
+		$fs->chroot_copy_r1($file, $new_path);
 	      }
 	    }else
 	    {
@@ -171,7 +171,7 @@ switch ($task)
 	    }
 	  }else
 	  {
-	    $fs->copy($file, $path.'/'.basename($file));
+	    $fs->chroot_copy_r1($file, $path.'/'.basename($file));
 	  }
 	}
       }else
@@ -209,7 +209,7 @@ switch ($task)
 	{
 	  $popup_feedback .= access_denied_box($path);
 	  break;
-	}elseif(file_exists($path.'/'.basename($file)))
+	}elseif($fs->chroot_file_exists($path.'/'.basename($file)))
 	{
 	  if ($overwrite_destination_path == $path.'/'.basename($file) || $overwrite_all == 'true')
 	  {
@@ -243,7 +243,7 @@ switch ($task)
 	{
 	  $popup_feedback .= access_denied_box($path);
 	  break;
-	}elseif(file_exists($path.'/'.basename($file)))
+	}elseif($fs->chroot_file_exists($path.'/'.basename($file)))
 	{
 	  if ($overwrite_destination_path == $path.'/'.basename($file) || $overwrite_all == 'true')
 	  {
@@ -277,7 +277,7 @@ switch ($task)
 	{
 	  $popup_feedback .= access_denied_box($path);
 	  break;
-	}elseif(file_exists($path.'/'.basename($folder)))
+	}elseif($fs->chroot_file_exists($path.'/'.basename($folder)))
 	{
 	  if ($overwrite_destination_path == $path.'/'.basename($folder) || $overwrite_all == 'true')
 	  {
@@ -311,7 +311,7 @@ switch ($task)
 	{
 	  $popup_feedback .= access_denied_box($folder);
 	  break;
-	}elseif(file_exists($path.'/'.basename($folder)))
+	}elseif($fs->chroot_file_exists($path.'/'.basename($folder)))
 	{
 	  if ($overwrite_destination_path == $path.'/'.basename($folder) || $overwrite_all == 'true')
 	  {
@@ -392,7 +392,7 @@ switch ($task)
 	  $new_path = $location.'/'.$name.$_POST['extension'];
 	  if($name.$_POST['extension'] != basename($path))
 	  {
-	    if (file_exists($new_path))
+	    if ($fs->chroot_file_exists($new_path))
 	    {
 	      $feedback = '<p class="Error">'.$fbNameExists.'</p>';
 	    }else
@@ -493,7 +493,7 @@ switch ($task)
     break;
 }
 
-$page_title = htmlspecialchars(str_replace($GO_CONFIG->file_storage_path,$GO_CONFIG->slash,$path));
+$page_title = htmlspecialchars($path);
 
 require($GO_THEME->theme_path.'header.inc');
 
@@ -519,7 +519,7 @@ switch ($task)
 	if ($fs->has_read_permission2($GO_SECURITY->user_id, $file))
 	{
 		$tmp_file = $GO_CONFIG->tmpdir.md5(uniqid(time()));
-		if (copy($file, $tmp_file))
+		if ($fs->chroot_copy_r2($file, $tmp_file))
 		{
 		  $filename = basename($file);
 		  $extension = get_extension($filename);
@@ -528,7 +528,7 @@ switch ($task)
 		    $type = $filetypes->add_type($extension);
 		  }
 	
-		  $email->register_attachment($tmp_file, $filename, filesize($file), $type['mime']);
+		  $email->register_attachment($tmp_file, $filename, $fs->chroot_filesize($file), $type['mime']);
 		}
 	}else
 	{
@@ -589,11 +589,11 @@ switch ($task)
       {
 	$feedback = '<p class="Error">'.$invalid_chars .': " & ? / \</p>';
 	require('new_folder.inc');
-      }elseif(file_exists($path.'/'.$name))
+      }elseif($fs->chroot_file_exists($path.'/'.$name))
       {
 	$feedback = '<p class="Error">'.$fbFolderExists.'</p>';
 	require('new_folder.inc');
-      }elseif(!@mkdir($path.'/'.$name, $GO_CONFIG->create_mode))
+      }elseif(!@$fs->chroot_mkdir($path.'/'.$name, $GO_CONFIG->create_mode))
       {
 	$feedback = '<p class="Error">'.$strSaveError.'</p>';
 	require('new_folder.inc');
