@@ -29,6 +29,20 @@ while ($projects->next_record()) {
     $projects->f('last_name') . $middle_name . $projects->f('first_name');
 }
 
+$monitor_ids = array();
+$project_acl_read = $project['acl_read'];
+$projects->query("SELECT DISTINCT id as user_id, last_name, middle_name, first_name".
+                 " FROM acl, users, users_groups ".
+                 "WHERE acl.acl_id=$project_acl_read".
+                 " AND ((acl.user_id=users.id AND acl.group_id=0) OR (acl.user_id=0 AND users.id=users_groups.user_id AND users_groups.group_id=acl.group_id))");
+while ($projects->next_record()) {
+  $middle_name = $projects->f('middle_name');
+  if (isset($middle_name))
+    $middle_name = ' '.$middle_name.' ';
+  $monitors[$projects->f('user_id')] =
+    $projects->f('last_name') . $middle_name . $projects->f('first_name');
+}
+
 $tasks = load_project_task($projects, $project_id);
 
 if ($task != 'show_task_gantt') {
