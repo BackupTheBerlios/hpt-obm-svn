@@ -103,7 +103,7 @@ if ($count > 0)
 		$name = isset($lang_modules[$res[$i]]) ? $lang_modules[$res[$i]] : $res[$i];
 		if ( isset($name) )
 		{
-			$icon = isset($GO_THEME->images[$res[$i]]) ? $GO_THEME->images[$res[$i]] : $GO_THEME->images['unknown'];
+			$icon = isset($GO_THEME->images['mod_'.$res[$i]]) ? $GO_THEME->images['mod_'.$res[$i]] : $GO_THEME->images['unknown'];
 			if ($value > 1)		
 			{
 				echo '<td>'.($value==2?$move_space:'<a href="'.$mi->change($value-1,$value-2).'">'.$move_task_up.'</a>').' <a href="'.$mi->change($value-1,$value).'">'.$move_task_dn.'</a></td>';			
