@@ -10,6 +10,8 @@ function highlight($word, $s)
 	foreach ($s as $w)
 		if ($w == $word)
 			$text .= $w.' ';
+		elseif (strchr($w, '_') !== false)
+			$text .= str_replace('_', ' ', $w).' ';
 		else {
 			$ww = $w;
 			$ln = strlen($w);
@@ -27,6 +29,9 @@ function highlight($word, $s)
 		}
 	return $text;
 }
+
+$phonetic_open = '<DIV STYLE="font-family: Arial Unicode MS, Arial, Times New Roman">';
+$phonetic_close = '</DIV>';
 
 function show_contents($word, $contents)
 {
@@ -74,12 +79,29 @@ function show_contents($word, $contents)
 				$data .= '</UL>';
 				if ($session != S_IDIOM) {
 					$session = S_IDIOM;
-					$data .= '<H3>Idioms</H3><OL>';
+					$data .= '<H3>* thành ngữ</H3><OL>';
 				}
 				$data .= '<LI>'.highlight($word, substr($c, 1)).'<UL>';
 				break;
 			default:
-				$data .= $c . '<BR>';
+				$c = trim($c);
+				if ($c != '') {
+					if ($c[0] == '/') {
+						global $phonetic_open, $phonetic_close;
+
+						$data .= $phonetic_open.'[ '.strtok($c,'/').' ]'.$phonetic_close.'<BR>';
+						$tail = strtok('');
+						if (isset($tail) && $tail != '') {
+							$c = strtok($tail, ":");
+							if (isset($c) && $c != '') {
+								$data .= '<H3>* '.$c.'</H3>';
+								$other = $phonetic_open.strtok('/');
+								$other .= '&nbsp;&nbsp;&nbsp;[ '.strtok('/').' ]'.$phonetic_close;
+								$data .= '<BLOCKQUOTE>'.$other.'</BLOCKQUOTE>';
+							}
+						}
+					}
+				}
 		}
 	}
 	$data .= '</UL>';
@@ -93,22 +115,24 @@ $GO_SECURITY->authenticate();
 
 $GO_MODULES->authenticate('vdict');
 require($GO_THEME->theme_path."header.inc");
+require('db/ev.php');
 
 $word = $_REQUEST['word'];
 
 if (isset($word)) {
-	$dict = dba_open("ev.db3", "r", "db4");
+	$dict = dba_open('db/'.$dict_dbname, "r", $dict_dbtype);
 	if ($dict === false)
 		echo "tiêu\n";
 	else {
 		$word = strtolower($word);
 		$tail = substr($word, -2);
 		$len = strlen($word);
-		if ($tail == "'s" || $tail == "'d")
+		if ($word != $tail && ($tail == "'s" || $tail == "'d"))
 			$word = substr($word, 0, $len - 2);
 		else {
 			$tail = substr($word, -3);
-			if ($tail == "'ve" || $tail == "'ll" || $tail == "'re" || $tail == "'em")
+			if ($word != $tail &&
+				($tail == "'ve" || $tail == "'ll" || $tail == "'re" || $tail == "'em"))
 				$word = substr($word, 0, $len - 3);
 		}
 
@@ -130,12 +154,12 @@ if (isset($word)) {
 ?>
 <script language="JavaScript">
 <!--
-var frm = window.parent.document.forms[0];
+var word_field = window.parent.document.getElementById("word");
 
 function show_word(w)
 {
-	frm.word.value = w;
-	frm.submit();
+	word_field.value = w;
+	location.href = "contents.php?word=" + w;
 }
 //-->
 </script>

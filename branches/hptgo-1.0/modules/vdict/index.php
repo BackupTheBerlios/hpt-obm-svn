@@ -11,60 +11,131 @@ $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('vdict');
 
 require($GO_THEME->theme_path."header.inc");
+require('db/ev.php');
 
 $tabtable = new tabtable('Dictionary', 'Dictionary', '100%', '400');
-$tabtable->add_tab('ev', 'English-Vietnamese');
-
+$tabtable->add_tab($dict_id, $dict_description);
 $tabtable->print_head();
-$word = $_REQUEST['word'];
-$wlist = $_SESSION['GO_SESSION']['wordlist'];
-if (isset($wlist)) {
-	for ($i = count($wlist) - 1; $i >= 0; $i--)
-		if ($wlist[$i] == $word) {
-			unset($wlist[$i]);
-			break;
-		}
-	if (count($wlist) >= 23)
-		array_pop($wlist);
-	array_unshift($wlist, $word);
-}
-else {
-	$wlist[] = $word;
-}
-$_SESSION['GO_SESSION']['wordlist'] = $wlist;
 
-echo '<form name="events" method="post" action="'.$_SERVER['PHP_SELF'].'">';
+$wtabtable = new tabtable('wlist_table', 'Word', '200', '300', '30', '', false, 'left', 'top', '', 'vertical');
 echo '<table border="0" cellspacing="0" cellpadding="4">';
 // Left panel
 echo '<tr><td>';
-echo '<table border="0" cellspacing="4" cellpadding="0">';
-echo '<tr><td>Word:</td><td>';
-echo '<input type="text" class="textbox" name="word" value="'.$word.'">';
-echo '</td></tr>';
-echo '<tr><td colspan="2">';
-$wordlist = new dropbox();
-if (isset($wlist)) {
-	foreach ($wlist as $w)
-		$wordlist->add_value($w, $w);
+echo '<table border="0" cellspacing="0" cellpadding="0">';
+echo '<tr><td>';
+foreach ($dict_dbhash as $label => $file)
+	$wtabtable->add_tab($file, $label);
+$active_tab = isset($_REQUEST['active_tab']) ? $_REQUEST['active_tab'] : null;
+if (isset($active_tab))
+	$wtabtable->set_active_tab($active_tab);
+$wtabtable->print_head();
+echo '<table border="0" cellspacing="0" cellpadding="4">';
+echo '<tr><td>';
+echo '<input id="word" type="text" class="textbox" name="word" value="" style="width:160" onchange="word_lookup()">';
+echo '</td></tr><tr><td>';
+echo '<select name="list" class="textbox" id="wordlist" onchange="change_word(this)" ondblclick="show_word(this)" multiple="true" size="23" style="width:160">';
+$fp = fopen('db/'.$wtabtable->get_active_tab_id(), "r");
+while (!feof($fp)) {
+	$w = fgets($fp, 512);
+	echo '<option>'.$w.'</option>';
 }
-$wordlist->print_dropbox('list', $word, 'onchange="change_word(this.value)" ondblclick="javascript:frm.submit()"', true, 23, 180);
+fclose($fp);
+echo '</select></td></tr></table>';
+$wtabtable->print_foot();
 echo '</td></tr>';
 echo '</table>';
 echo '</td>';
 // Right panel
 echo '<td width="100%" height="100%">';
-echo '<iframe src="contents.php'.(isset($word) ? '?word='.$word : '').'" height="100%" width="100%" class="textbox"></iframe>';
+echo '<iframe src="contents.php" height="100%" width="100%" class="textbox"></iframe>';
 echo '</td></tr>';
 echo '</table>';
-echo '</form>';
 ?>
 <script language="JavaScript">
 <!--
-var frm = document.forms[0];
+var agent = navigator.userAgent.toLowerCase();
+var is_ie = ((agent.indexOf("msie") != -1) && (agent.indexOf("opera") == -1));
+var word_field = document.getElementById("word");
+var word_list = document.getElementById("wordlist");
 
-function change_word(w)
+word_field.focus();
+
+function change_word(sel)
 {
-	frm.word.value = w;
+	if (is_ie) sel = word_list;
+	word_field.value = sel.options[sel.selectedIndex].text;
+}
+
+function show_word(sel)
+{
+	if (is_ie) sel = word_list;
+	frames[0].location.href = "contents.php?word=" +
+		sel.options[sel.selectedIndex].text;
+}
+
+word_field.onkeypress = function ref_word(e)
+{
+	if (is_ie) e = window.event;
+	if (e.keyCode == 13)
+		frames[0].location.href = "contents.php?word=" + word_field.value;
+	else {
+		/* TODO:
+		   lookup and set word position
+		*/
+	}
+}
+
+var cur_word = '';
+var cur_index = 0;
+
+function word_lookup()
+{
+	w = word_field.value;
+	if (cur_word == '') {
+		l = 0;
+		r = word_list.options.length - 1;
+	}
+	else
+	if (cur_word > w) {
+		l = 0;
+		r = cur_index;
+	}
+	else {
+		l = cur_index;
+		r = word_list.options.length - 1;
+	}
+
+	while (true) {
+		if (r - l < 2) {
+			if (word_list.selectedIndex >= 0)
+				word_list.options[word_list.selectedIndex].selected = false;
+			if (w > word_list.options[l].text) {
+				word_list.selectedIndex = cur_index = r;
+				word_list.options[r].selectedIndex = r;
+				word_list.options[r].selected = true;
+			}
+			else {
+				word_list.selectedIndex = cur_index = l;
+				word_list.options[l].selectedIndex = l;
+				word_list.options[l].selected = true;
+			}
+			break;
+		}
+		m = (l + r) >> 1;
+		if (w == word_list.options[m].text) {
+			if (word_list.selectedIndex >= 0)
+				word_list.options[word_list.selectedIndex].selected = false;
+			word_list.selectedIndex = cur_index = m;
+			word_list.options[m].selectedIndex = m;
+			word_list.options[m].selected = true;
+			break;
+		}
+		else
+		if (w < word_list.options[m].text)
+			r = m;
+		else
+			l = m;
+	}
 }
 //-->
 </script>
