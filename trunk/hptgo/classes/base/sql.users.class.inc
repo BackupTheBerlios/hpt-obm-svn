@@ -49,8 +49,11 @@ class GO_USERS extends base_users
     $sql = "SELECT DISTINCT users.* FROM users, users_groups INNER ".
       "JOIN acl ON users.acl_id= acl.acl_id WHERE ".
       "((acl.group_id = users_groups.group_id AND users_groups.user_id = ".
-      $user_id.") OR (acl.user_id = ".$user_id." )) AND $field LIKE '".
-      smart_addslashes($query)."' ORDER BY first_name ASC, last_name ASC";
+      $user_id.") OR (acl.user_id = ".$user_id." )) AND ($field LIKE '".smart_addslashes($query)."' ";
+    // Additional Vietnamese glyphs
+    if ($query == 'Đ%')
+      $sql .= " OR $field LIKE 'đ%' ";
+    $sql .= ") ORDER BY first_name ASC, last_name ASC";
     if ($offset != 0)
       $sql .= " LIMIT $start, $offset";
 

@@ -11,6 +11,7 @@
 	<a href="javascript:letter_click('B')">B</a>&nbsp;&nbsp;
 	<a href="javascript:letter_click('C')">C</a>&nbsp;&nbsp;
 	<a href="javascript:letter_click('D')">D</a>&nbsp;&nbsp;
+	<a href="javascript:letter_click('Đ')">Đ</a>&nbsp;&nbsp;
 	<a href="javascript:letter_click('E')">E</a>&nbsp;&nbsp;
 	<a href="javascript:letter_click('F')">F</a>&nbsp;&nbsp;
 	<a href="javascript:letter_click('G')">G</a>&nbsp;&nbsp;
