@@ -37,13 +37,22 @@ switch ($task) {
     mkdir("$rootdir/setup");
     mkdir("$rootdir/setup/sql");
     mkdir("$rootdir/src");
-    mkdir("$rootdir/fs");
-    if (function_exists("module_backup")) {
+    mkdir("$rootdir/files");
+    if (isset($_REQUEST['backup_db']) &&
+        $_REQUEST['backup_db'] == 'yes' &&
+	function_exists("module_backup")) {
       module_backup("$rootdir/database.sql"); // should check for errors
     }
     copy($module['path']."/module.info","$rootdir/module.info");
-    if (function_exists("module_fs_backup")) {
-      module_fs_backup("$rootdir/fs");
+    if (isset($_REQUEST['backup_files']) &&
+        $_REQUEST['backup_files'] == 'yes' &&
+	function_exists("module_fs_backup")) {
+      module_fs_backup("$rootdir/files");
+    }
+
+    if (isset($_REQUEST['backup_src']) &&
+        $_REQUEST['backup_src'] == 'yes') {
+      copy_folder($module['path'],"$rootdir/src");
     }
     copy($module['path']."/sql/$module_id.install.sql","$rootdir/setup/sql/$module_id.install.sql");
     copy($module['path']."/sql/$module_id.uninstall.sql","$rootdir/setup/sql/$module_id.uninstall.sql");
@@ -51,6 +60,7 @@ switch ($task) {
     require($GO_CONFIG->class_path.'pclzip.class.inc');
     $zip = new PclZip("{$GO_CONFIG->tmpdir}$module_id.zip");
     $zip->create(array($rootdir), PCLZIP_OPT_REMOVE_PATH, $rootdir);
+    delete_folder($rootdir);
 
     $browser = detect_browser();
     //header('Content-Type: '.$type['mime']);
@@ -75,6 +85,7 @@ switch ($task) {
 	print fread($fd, 32768);
     }
     fclose($fd);
+    @unlink($GO_CONFIG->tmpdir.$module_id.'.zip');
     exit;
     break;
 }
@@ -155,4 +166,49 @@ $tabtable->print_foot();
 </form>
 <?php
 require($GO_THEME->theme_path."footer.inc");
+
+function delete_folder($folder)
+{
+	$dir = @opendir($folder);
+	while ($item = readdir($dir))
+	{
+		if (is_dir("$folder/$item"))
+		{
+			if ($item != '.' && $item != '..')
+				delete_folder("$folder/$item");
+		}
+		else
+			@unlink("$folder/$item");
+	}
+	closedir($dir);
+	@rmdir($folder);
+}
+
+function copy_folder($source_path, $destination_path)
+{
+	if (!file_exists($destination_path))
+	{
+		global $GO_CONFIG;
+		if (!mkdir($destination_path, $GO_CONFIG->create_mode))
+		{
+			return false;
+		}
+	}
+
+	$dir = opendir($source_path);
+	while ($item = readdir($dir))
+	{
+		$newspath = "$source_path/$item";
+		$newdpath = "$destination_path/$item";
+		if (is_dir($newspath))
+		{
+			if ($item != '.' && $item != '..')
+				copy_folder($newspath,$newdpath);
+		}
+		else
+			copy($newspath,$newdpath);
+	}
+	closedir($dir);
+	return true;
+}
 ?>

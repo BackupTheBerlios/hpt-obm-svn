@@ -1,11 +1,11 @@
 <?php
 echo '<b>Backup</b><br/><br/>';
 echo '&nbsp;&nbsp;';
-new checkbox('a','b','Backup database');echo '<br/>';
+new checkbox('backup_db','yes','Backup database',true);echo '<br/>';
 echo '&nbsp;&nbsp;';
-new checkbox('a','b','Backup filesystem');echo '<br/>';
+new checkbox('backup_files','yes','Backup filesystem',true);echo '<br/>';
 echo '&nbsp;&nbsp;';
-new checkbox('a','b','Backup source code');echo '<br/>';
+new checkbox('backup_src','yes','Backup source code');echo '<br/>';
 echo '<br/>&nbsp;&nbsp;';
 new button('Backup',"javascript:backup();");
 echo '<br/>';
