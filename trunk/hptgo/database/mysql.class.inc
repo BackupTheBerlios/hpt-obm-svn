@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Session Management for PHP3
  *
  * Copyright (c) 1998-2000 NetUSE AG
@@ -9,37 +9,142 @@
  */
 
 class db {
-
-  /* public: connection parameters */
+  /**
+  *	Host name or database server name 
+  *
+  * @access public
+  */
   var $Host     = "";
+  
+  /**
+  * Database name 
+  * 
+  * @access public
+  */
   var $Database = "";
+
+  /**
+  * User name - used to connect database server 
+  *
+  * @access public
+  */
   var $User     = "";
+  
+  /**
+  * Password connecting
+  *
+  * @access public
+  */
   var $Password = "";
 
-  /* public: configuration parameters */
+  /** 
+  * Configuration parameter
+  *
+  * Set to 1 for automatic mysql_free_result()
+  *
+  * @access public
+  */
   var $Auto_Free     = 0;     ## Set to 1 for automatic mysql_free_result()
+
+  /** 
+  * Configuration parameter 
+  *
+  * Set to 1 for debugging messages
+  * 
+  * @access public
+  *
+  */
   var $Debug         = 0;     ## Set to 1 for debugging messages.
+
+  /** 
+   * Configuration parameter
+   * 
+   * <b>$Halt_On_Error</b> = 
+   *
+   * <pre>	= <i>"yes"</i>: 	(halt with message)</pre>
+   *
+   * <pre>	= <i>"no"</i>:		(ignore errors quietly)</pre>
+   *
+   * <pre>	= <i>"report"</i>:	(ignore errror, but spit a warning)</pre>
+   *
+   * @access public
+   */
   var $Halt_On_Error = "yes"; ## "yes" (halt with message), "no" (ignore errors quietly), "report" (ignore errror, but spit a warning)
+  
+  /** 
+   * Configuration parameter
+   *
+   * @access public 
+   */
   var $Seq_Table     = "db_sequence";
 
-  /* public: result array and current row number */
+  /**
+   * Result array and current row number 
+   *
+   * @access public
+   */
   var $Record   = array();
+  
+  /**
+   *	Storing a record in a recordset
+   *
+   * @access public
+   */
   var $Row;
 
-  /* public: current error number and error text */
+  /** 
+   * Current error number
+   *
+   * @access public
+   */
   var $Errno    = 0;
+  
+  /**
+   * Current error text
+   * 
+   * @access public
+   */
   var $Error    = "";
 
-  /* public: this is an api revision, not a CVS revision. */
+  /** 
+   * Database type 
+   *
+   * @access public
+   */
   var $type     = "mysql";
+  
+  /**
+   * Revision
+   *
+   * @access public
+   */
   var $revision = "1.2";
 
-  /* private: link and query handles */
+  /**
+   * Link identifier 
+   *
+   * The positive number is returned by <i> mysql_pconnect() </i> or <i> mysql_connect() </i> functions
+   *
+   * @access private 
+   */
   var $Link_ID  = 0;
-  var $Query_ID = 0;
+  
+  /**
+   * Result identifier
+   *
+   * @access private
+   *
+   * The positive number is returned by <i> mysql_query() </i> function
+   */
+   $Query_ID = 0;
 
-
-
+  /**
+   * The class constructor
+   *
+   * @access public
+   * @param string $query
+   * @return mixed true on success, PEAR_Error on failure
+   */
   /* public: constructor */
   function db($query = "") {
 	  global $GO_CONFIG;
@@ -50,15 +155,36 @@ class db {
       $this->query($query);
   }
 
-  /* public: some trivial reporting */
+  /**
+   * Return current Link_ID
+   *
+   * @access public
+   * @return int true on success, false on failure
+   */
   function link_id() {
     return $this->Link_ID;
   }
 
+  /**
+   * Return current Query_ID
+   *
+   * @access public
+   * @return int positive on success, false on failure
+   */
   function query_id() {
     return $this->Query_ID;
   }
-
+  
+  /**
+   * Connecting database
+   *
+   * @access public
+   * @param string $Database
+   * @param string $Host
+   * @param string $User
+   * @param string $Password
+   * @return mixed true on success, PEAR_Error on failure
+   */
   /* public: connection management */
   function connect($Database = "", $Host = "", $User = "", $Password = "") {
     /* Handle defaults */
@@ -89,12 +215,24 @@ class db {
     return $this->Link_ID;
   }
 
+  /**
+   * Free all associated data in memory
+   *
+   * @access public
+   */
   /* public: discard the query result */
   function free() {
       @mysql_free_result($this->Query_ID);
       $this->Query_ID = 0;
   }
 
+  /**
+   * Execute a query
+   *
+   * @access public
+   * @param string $Query_String 
+   * @return int positive value (result identifier) on success, 0 on failure
+   */
   /* public: perform a query */
   function query($Query_String) {
     /* No empty queries, please, since PHP4 chokes on them. */
@@ -129,6 +267,10 @@ class db {
     return $this->Query_ID;
   }
 
+  /**
+   * Return next record in the current recordset
+   * @return mixed array (next record) on success, 0 on failure
+   */
   /* public: walk result set */
   function next_record() {
     if (!$this->Query_ID) {
@@ -148,8 +290,18 @@ class db {
     return $stat;
   }
 
+  /**
+   * Set the internal row pointer to $pos 
+   * 
+   * If $pos is valid, go to $pos record
+   *
+   * Else go to the end record
+   * @access public
+   * @param mixed $pos
+   * @return int 1 on success, 0 on failure
+   */
   /* public: position in result set */
-  function seek($pos = 0) {
+  function seek($pos=0) {
     $status = @mysql_data_seek($this->Query_ID, $pos);
     if ($status)
       $this->Row = $pos;
@@ -167,7 +319,14 @@ class db {
 
     return 1;
   }
-
+  /**
+   * Locking a table or some tables in the current database
+   *
+   * @access public
+   * @param mixed $table
+   * @param string $mode
+   * @return int positive value (result identifier) on success, 0 on failure
+   */
   /* public: table locking */
   function lock($table, $mode="write") {
     $this->connect();
@@ -192,7 +351,11 @@ class db {
     }
     return $res;
   }
-
+  /**
+   * Unlock all tables in the current database
+   * @access public
+   * @return int positive value (result identifier) on success, 0 on failure
+   */
   function unlock() {
     $this->connect();
 
