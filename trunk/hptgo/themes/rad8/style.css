@@ -1,17 +1,7 @@
 .cal_todos{
-	background-color: #eee;
-	
-	border-style: solid;
-		
-	border-left-color: #333;
-	border-bottom-color: #bbb;
-        border-top-color: #444;
-	border-right-color: #bbb;
+	background-color: #fff;
+	border: 0px groove #666;
 
-        border-left-width: 2px;
-	border-bottom-width: 2px;
-	border-top-width: 2px;
-	border-right-width: 2px;
 }
 a.todo:visited, a.todo:link, a.todo:active {
 	font-family: tahoma, arial, helvetica, sans-serif;
@@ -132,8 +122,6 @@ a.ActiveModuleIcon:link, a.ActiveModuleIcon:visited, a.ActiveModuleIcon:active {
 	font-weight: normal;
 	background-color: #fff;
 	padding: 0px;
-	border-top: 0px solid #8b1b2b;
-	border-bottom: 0px solid #8b1b2b;
 	text-align: right;
 }
 
@@ -144,7 +132,6 @@ a.HeaderBar:link, a.HeaderBar:visited, a.HeaderBar:active {
 	font-style: normal;
 	font-weight: normal;
 	text-decoration: none;
-	border: 0;
 	padding: 0px;
 }
 
@@ -160,8 +147,6 @@ a.HeaderBar:hover {
 	font-weight: normal;
 	background: url(images/menu/footer_bg.gif);
 	padding: 0;
-	border-bottom: 0px solid #8b1b2b;
-	border-top: 0px solid #8b1b2b;
 	height: 26px;
 	/*padding-right: 5px;
 	padding-left: 5px; */
@@ -174,7 +159,6 @@ a.FooterBar:link, a.FooterBar:visited, a.FooterBar:active {
 	font-style: normal;
 	font-weight: normal;
 	text-decoration: none;
-	border: 0;
 	padding: 2px;
 	padding-right: 5px;
 	padding-left: 5px;
@@ -185,35 +169,7 @@ a.FooterBar:hover {
 	text-decoration: underline;
 }
 
-.LeftBar {
-	font-family: tahoma, arial, helvetica, sans-serif;
-	font-size: 11px;
-	font-weight: normal;
-	background-color: #ffafbf;
-	padding: 0;
-	border-left: 1px solid #8b1b2b;
-	border-right: 2px solid #8b1b2b;
-	text-align: center;
-}
-
-a.LeftBar:link, a.LeftBar:visited, a.LeftBar:active {
-	color: #000000;
-	font-family: tahoma, arial, helvetica, sans-serif;
-	font-size: 11px;
-	font-style: normal;
-	font-weight: normal;
-	text-decoration: none;
-	border: 0;
-	padding: 2px;
-}
-
-a.LeftBar:hover {
-	color: #a83546;
-	text-decoration: underline;
-}
-
-#tabtable
-{
+#tabtable {
 	background-color: #fff;
 	font-family: tahoma, arial, helvetica, sans-serif;
 	font-size: 12px;
@@ -228,7 +184,6 @@ a.LeftBar:hover {
 	padding: 2px;
         font-weight: bold;
         color: #333;
-        border: 0px;
         border-bottom: 2px solid #8b1b2b;
         text-align: left;
 }
@@ -244,13 +199,11 @@ a.LeftBar:hover {
 	text-decoration: none;
 	color: #0896b5;
 	text-align: center;
-
 }
 
 .Tab {	
 	background-color: #bbb;
 	border-right: 1px solid #ddd;
-	border-left: 0px solid #bbb;
 	border-bottom:2px solid #ddd;
 	border-top:2px inset #eee;
 	text-align: center;
@@ -262,7 +215,6 @@ a.Tab:link, a.Tab:visited, a.Tab:active {
 	font-style: normal;
 	font-weight: normal;
 	text-decoration: none;
-	border: 0;
 	text-align: center;
 }
 a.Tab:hover {
@@ -271,11 +223,9 @@ a.Tab:hover {
 }
 .TabBackground {
 	background-color: #aaa;
-        border-bottom: 0px solid #aaa;
 }
-.TabSpan {	
+.TabSpan {	/*Span-Tab style at end-right Horizontal-TabMenu*/
 	background-color: #bbb;
-	border-left: 0px solid #bbb;
 	border-bottom:2px solid #ddd;
 	border-top:2px inset #eee;
 	text-align: center;
@@ -297,7 +247,6 @@ a.Tab:hover {
 .TabVert {	
 	background-color: #bbb;
 	border-right: 2px solid #ddd;
-	border-left: 0px solid #ddd;
 	border-bottom:1px solid #ddd;
 	padding: 2px;
 }
@@ -308,17 +257,13 @@ a.TabVert:link, a.TabVert:visited, a.TabVert:active {
 	font-style: normal;
 	font-weight: normal;
 	text-decoration: none;
-	border: 0;
-
 }
 .TabBackgroundVert {
 	background-color: #fff;
-	border-bottom: 0px solid #fff;
 }
-.TabVertSpan {	
+.TabVertSpan {	/*Span-Tab style at end-bottom Vertical-TabMenu*/
 	background-color: #bbb;
 	border-right: 2px solid #ddd;
-	border-left: 0px solid #ddd;
 	padding: 2px;
 }
 
@@ -340,7 +285,7 @@ a.TabVert:link, a.TabVert:visited, a.TabVert:active {
 }
 
 #cal{
-	border: 0px solid #666666;
+	border: 4px ridge #666;
 	border-collapse: collapse;
 	margin: 0px;
 	padding: 0px;
@@ -348,23 +293,15 @@ a.TabVert:link, a.TabVert:visited, a.TabVert:active {
 #cal td {
 	vertical-align: top;
 	border-collapse: collapse;
-	border: 1px solid #666666;
+	border: 2px groove #666;
 	margin: 0px;
 	padding: 0px;
 	vertical-align: top;
 }
-.cal_title{
-	background-color: #eee;
-	color: #000;
-	padding: 4px !important;
-	font-weight: bold;
-	font-size: 14px;
-	border-bottom: 2px solid #8b1b2b;
-}
 #cal th {
 	vertical-align: top;
 	border-collapse: collapse;
-	border: 1px solid #666666;
+	border: 2px groove #666;
 	padding: 0px;
 	margin: 5px;
 	vertical-align: top;
@@ -373,7 +310,6 @@ a.TabVert:link, a.TabVert:visited, a.TabVert:active {
 	text-align: center;
 	font-weight: normal;
 }
-
 #cal_event{
 	border-collapse: collapse;
 	border: 0px;
@@ -381,7 +317,6 @@ a.TabVert:link, a.TabVert:visited, a.TabVert:active {
 	margin: 0px;
 	vertical-align: top;
 }
-
 #cal_event td{
 	border: 0px;
 	padding: 2px;
@@ -390,9 +325,17 @@ a.TabVert:link, a.TabVert:visited, a.TabVert:active {
 	font-family: tahoma, arial, helvetica, sans-serif;
 	font-size: 10px;
 }
-
 #cal_all_day_events{
 	background-color: #FFFFCC;
+}
+
+.cal_title{
+	background-color: #eee;
+	color: #000;
+	padding: 4px !important;
+	font-weight: bold;
+	font-size: 14px;
+	border-bottom: 2px solid #8b1b2b;
 }
 
 .cal_hour {
@@ -749,8 +692,6 @@ a.Holiday, a.Holiday:visited, a.Holiday:active {
 	background-color: #a8c9f5;
 	border: 2px groove #a8c9f5;
 
-
-	
 	font-family: tahoma, arial, helvetica, sans-serif;
 	font-size: 12px;
 	font-weight: normal;
@@ -759,8 +700,6 @@ a.Holiday, a.Holiday:visited, a.Holiday:active {
 .button_mo{
 	background-color: #48a9f5;
 	border: 2px groove #48a9f5;
-	
-	border-width: 2px;
 	
 	font-family: tahoma, arial, helvetica, sans-serif;
 	font-size: 12px;
