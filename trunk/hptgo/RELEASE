@@ -15,7 +15,7 @@ Late tired and a rushy release leaded stupid mistakes.
 Just typo's in the sql updates and forgot to remove some files made
 2.03 to a disaster I think. 
 
-!!!IMPORTANT!!!
+!!!IMPORTANT!!!!
 If you already installed the first 2.03 then delete all files except for
 Group-Office.php and replace all other by the files from this package.
 
