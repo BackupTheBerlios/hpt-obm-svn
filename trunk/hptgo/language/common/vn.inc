@@ -255,6 +255,7 @@ $lang_modules['notes'] = "Ghi chú";
 $lang_modules['bookmarks'] = "Bảng đánh dấu";
 $lang_modules['summary'] = "Tóm lược";
 $lang_modules['todos'] = "Công việc";
+$lang_modules['products'] = "Bán hàng";
 $strInvalidEmail = "Email sai";
 $add_group_showall = 'Hiện mọi nhóm';
 $add_group_showauth = 'Hiện những nhóm có tham gia';

@@ -9,6 +9,58 @@
    Free Software Foundation; either version 2 of the License, or (at your
    option) any later version.
  */
+ 	function initTyping($root_path)
+	{
+		$str = '<script language="javascript" src="'.$root_path.'lib/vietuni.js"></script>'.
+			   '<script language="javascript">'.
+				 	'initTypingForm();'.
+					'setTypingMode(2);'.
+				'</script>';
+		echo $str;
+	}
+	
+function checkFile($userfile, $maxsize)
+{
+		$mimetypes = array(
+			"image/x-png" 			=> 1, 
+		    "video/vivo"			=> 1, 
+		    "video/x-msvideo" 		=> 1, 
+		    "audio/x-pn-realaudio"	=> 1, 
+		    "image/gif" 	    	=> 1, 
+		    "video/mpeg"		    => 1, 
+		    "image/ico"				=> 1, 
+		    "image/x-MS-bmp"		=> 1, 
+		    "image/tiff" 			=> 1, 
+		    "video/quicktime" 		=> 1, 
+		    "image/jpeg" 			=> 1, 
+		    "image/pjpeg" 			=> 1);
+
+		if ((empty($userfile['name'])) || ($userfile['name'] == "none"))
+			return false;
+
+		if (($userfile['size'] == 0) || ($userfile['size'] > $maxsize))
+			return false;
+			
+		//if (!isset($mimetypes[$userfile['type']]))		
+			//return false;		
+			
+		return true;
+}
+	
+function uploadFile($userfile, $maxsize, $upload_dir)
+{		
+	if (!checkFile($userfile, $maxsize))
+		return false;
+
+	$tmp_dir = $userfile['tmp_name'];
+	$name = $upload_dir."/".$userfile['name'];
+	
+	if (!@move_uploaded_file($tmp_dir, $name))
+		return false;
+
+	return true;	
+}
+	
 	function get_today()
 	{
 		$local_time = get_time();
@@ -179,6 +231,170 @@
 		  	}
 		}
 	}
+	
+//----------------------------- CHOICE LIST ----------------------------------------------------	
+	
+class choice_list
+{
+	var $text1;
+	var $value1;
+	var $text2;
+	var $value2;
+	var $num;
+	var $name;
+	var $form_name;
+
+	function choice_list()
+	{	
+		$this->num=0;
+		$str = '<script language="javascript">
+	function move(select1,select2)
+	{
+		if (select1.selectedIndex>-1)
+		{
+			select2.options[select2.options.length] = new Option(select1.options[select1.selectedIndex].text,select1.options[select1.selectedIndex].value);
+			select1.options[select1.selectedIndex] = null;
+		}
+	}
+
+	function move_all(select1,select2)
+	{
+		len = select1.length;
+		for (i=0; i<len; i++)
+		{
+			select2.options[select2.options.length] = new Option(select1.options[0].text,select1.options[0].value);
+			select1.options[0] = null;
+		}
+	}
+	
+/*	function move_value(value)
+	{
+		len ='.$select2.'.length; 
+		for (i=0; i<len; i++)
+		{
+			alert(i+"-"+'.$select2.'.length);
+			'.$select2.'.options[0] = null;
+		}
+			
+		for (i=0; i<value.length; i++)
+		{
+			for (j=0; j<$select1.length; j++)
+				if ($select1.options[j].value == value[i]) 
+				{
+					select2.options[select2.options.length] = new Option(select1.options[0].text,select1.options[0].value);
+				}
+		}
+	}*/
+	</script>';
+
+		echo $str;
+	}
+	
+	function clear($list_num = 0)
+	{
+		if ($list_num == 1 || $list_num == 0)
+		{
+			unset($this->text1);
+			unset($this->value1);
+		}
+		if ($list_num == 2 || $list_num == 0)
+		{
+			unset($this->text2);
+			unset($this->value2);
+		}
+	}
+
+	function add_option($text,$value,$to_list=false)
+	{
+		if ($to_list)
+		{
+			$this->text2[] = $text;
+			$this->value2[] = $value;
+		}
+		else
+		{
+			$this->text1[] = $text;
+			$this->value1[] = $value;
+		}
+		
+	}
+	
+	function print_choice_list($form_name, $name, $width='100pt', $size = '6')
+	{
+		$this->form_name = $form_name;
+		$this->name[] = $name;
+		$this->num = count($this->name);
+		$str = '
+  <table width="1%"  border="0" cellspacing="0" cellpadding="3">
+    <tr>
+      <td width="1%">
+	  	<select id="sl1'.$this->num.'" name="sl1'.$this->num.'[]" size="'.$size.'" class="textbox" style="width:'.$width.'">';
+		
+		for ($i=0; $i<count($this->text1); $i++)
+        	$str .= '<option value="'.$this->value1[$i].'">'.$this->text1[$i].'</option>';
+		
+		$select1 = 'document.'.$form_name.'.sl1'.$this->num;
+		$select2 = 'document.'.$form_name.'.'.$name;
+
+      	$str .= '
+		</select>
+	  </td>
+      <td width="1%">
+	  	<table width="1%"  border="0" cellspacing="0" cellpadding="1">
+		<tr><td align="center">
+	  		<input type="button" class="button" name="Button0'.$this->num.'" value=">>" onClick="move_all('.$select1.','.$select2.')">
+		</td></tr>
+		<tr><td align="center">
+	  		<input type="button" class="button" name="Button1'.$this->num.'" value=" > " onClick="move('.$select1.','.$select2.')">
+		</td></tr>
+		<tr><td align="center">
+      		<input type="button" class="button" name="Button2'.$this->num.'" value=" < " onClick="move('.$select2.','.$select1.')">
+		</td></tr>
+		<tr><td align="center">
+	  		<input type="button" class="button" name="Button3'.$this->num.'" value="<<" onClick="move_all('.$select2.','.$select1.')">
+		</td></tr>
+		</table>
+	  </td>
+      <td width="1%">
+	  	<select id="'.$name.'" name="'.$name.'[]" size="'.$size.'" class="textbox" style="width:'.$width.'" multiple>';
+		
+		for ($i=0; $i<count($this->text2); $i++)
+        	$str .= '<option value="'.$this->value2[$i].'">'.$this->text2[$i].'</option>';
+
+		$str .='
+      	</select>
+	  </td>
+    </tr>
+  </table>';
+
+		echo $str;
+	}
+	
+	function select_all()
+	{
+		$str = '<script language="javascript">
+			function selectall()
+			{';
+			
+		for ($i=0; $i<count($this->name); $i++)
+		{
+			$select2 = 'document.'.$this->form_name.'.'.$this->name[$i];
+				$str .= 'for (i=0; i<'.$select2.'.options.length;i++)
+				'.$select2.'.options[i].selected=true;';
+		}
+		
+		$str .= '
+			}
+		</script>';
+		
+		echo $str;
+	}
+	
+	function onSubmit_event()
+	{
+		return "selectall();";
+	}
+}
 
 //----------------------------------- CHANGE ITEM (UP, DOWN) --------------------------------
 
