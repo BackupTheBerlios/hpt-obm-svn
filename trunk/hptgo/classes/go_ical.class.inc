@@ -8,16 +8,40 @@ This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
 Free Software Foundation; either version 2 of the License, or (at your
 option) any later version.
+*/
 
-TODO: Attendee and VTODO support
+/**
+* TODO: Attendee and VTODO support
+* @author	Merijn Schering <mschering@intermesh.nl>
+* @version	1.0 Release date: 14 March 2004
+* @package	go_ical
 */
 class go_ical extends calendar
 {
+	/**
+	* Calendar properties
+	* @var string
+	*/
 	var $calendar_properties = '';
+	/**
+	* Events
+	* @var array
+	*/
 	var $events = array();
+	/**
+	* DateTime format
+	* @var string
+	*/
 	var $datetime_format = 'Ymd\THis\Z';
+	/**
+	* Date format
+	* @var string
+	*/
 	var $date_format = 'Ymd';
 
+	/**
+	* Constructor
+	*/
 	function go_ical()
 	{
 		$this->db();
@@ -28,6 +52,10 @@ class go_ical extends calendar
 			"METHOD\r\n :PUBLISH\r\n";
 	}
 
+	/**
+	* Convert events array to string
+	* @return	string
+	*/
 	function export()
 	{
 		$ics = '';
@@ -38,12 +66,22 @@ class go_ical extends calendar
 		return $ics;
 	}
 
+	/**
+	* Export a event by event ID
+	* @param	int	$event_id	Event ID
+	* @return	string
+	*/
 	function export_event($event_id)
 	{
 		$this->add_event($this->get_event($event_id));
 		return $this->export();
 	}
 
+	/**
+	* Export all event of a calendar by calendar ID
+	* @param	int	$calendar_id	Calendar ID
+	* @return	string
+	*/
 	function export_calendar($calendar_id)
 	{
 		$this->get_events($calendar_id);
@@ -55,6 +93,11 @@ class go_ical extends calendar
 		return $this->export();
 	}
 
+	/**
+	* Convert a string to RFC2445 format string
+	* @param	string	$string		Source string
+	* @return	string	RFC2445 format string
+	*/
 	function rfc2445_convert($string)
 	{
 		//TODO: is there a better way? preg_replace?
@@ -66,6 +109,11 @@ class go_ical extends calendar
 		return $string;
 	}
 
+	/**
+	* Add a event
+	* @param	array	$event	String array
+	* @return	bool	true if success, otherwise false
+	*/
 	function add_event($event)
 	{
 		$ical_event = "BEGIN:VCALENDAR\r\n".
