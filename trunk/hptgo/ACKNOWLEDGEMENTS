@@ -9,5 +9,7 @@ There is also other programs/libraries used by HPT-OBM:
  - phpmailer: http://phpmailer.sourceforge.net/
  - fpdf: http://www.fpdf.org
  - convertcharset: http://www.mikkom.pl
+ - DotML: http://www.martin-loetzsch.de/DOTML/
+ - GraphViz: http://www.graphviz.org/
 
 [1] http://www.group-office.com

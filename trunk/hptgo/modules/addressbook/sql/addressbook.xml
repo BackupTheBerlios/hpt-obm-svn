@@ -283,13 +283,13 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 			<descr>Users be able to read this contact</descr>
-			<link table="users" field="id"/>
+			<link table="acl" field="acl_id"/>
 		</field>
 		<field name="acl_write" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 			<descr>Users be able to read and edit this contact</descr>
-			<link table="users" field="id"/>
+			<link table="acl" field="acl_id"/>
 		</field>
 		<descr>Contact information</descr>
 	</table>
@@ -626,11 +626,14 @@
 		<field name="user_id" size="11" type="I">
 			<PRIMARY/>
 			<descr>Associated user</descr>
+			<link table="users" field="id"/>
 		</field>
 		<field name="order_fields" size="11" type="X">
+			<descr>Displayable columns in order, separated by comma.</descr>
 		</field>
 		<field name="order_all" size="11" type="X">
+			<descr>Displayable columns in order, separated by comma.</descr>
 		</field>
-		<descr>FIXME</descr>
+		<descr>Used to store which columns are displayed in company view, contact view, user view... and columns order.</descr>
 	</table>
 </schema>

@@ -5,14 +5,14 @@
 <module name="Addressbook" href="../../modules/addressbook/sql/addressbook.xml"/>
 <module name="Bookmark" href="../../modules/bookmarks/sql/bookmarks.xml"/>
 <module name="Calendar" href="../../modules/calendar/sql/calendar.xml"/>
-<module name="Content Management System" href="../../modules/cms/sql/cms.xml"/>
+<!-- module name="Content Management System" href="../../modules/cms/sql/cms.xml"/ -->
 <module name="Email" href="../../modules/email/sql/email.xml"/>
-<module name="Example" href="../../modules/example/sql/example.xml"/>
+<!-- module name="Example" href="../../modules/example/sql/example.xml"/ -->
 <module name="File System" href="../../modules/filesystem/sql/filesystem.xml"/>
 <module name="Note" href="../../modules/notes/sql/notes.xml"/>
-<module name="OpenTTS" href="../../modules/opentts/sql/opentts.xml"/>
+<!-- module name="OpenTTS" href="../../modules/opentts/sql/opentts.xml"/ -->
 <module name="Sales" href="../../modules/products/sql/products.xml"/>
 <module name="Project" href="../../modules/projects/sql/projects.xml"/>
 <module name="Summary" href="../../modules/summary/sql/summary.xml"/>
-<module name="Wiki" href="../../modules/wiki/sql/wiki.xml"/>
+<!-- module name="Wiki" href="../../modules/wiki/sql/wiki.xml"/ -->
 </modules>
