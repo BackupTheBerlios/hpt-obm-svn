@@ -1213,7 +1213,7 @@ switch($tabtable->get_active_tab_id())
 	  $first_writable_cal = $cal->f('id');
 	}
 	$dropbox->add_value($cal->f('id'), $cal->f('name'));
-	if (isset($marked_calendars) &&
+	if (isset($marked_calendars) && is_array($marked_calendars) &&
 	    in_array($cal->f('id'),$marked_calendars))
 	{
 	  $event['calendars'][] = $cal->f('id');
