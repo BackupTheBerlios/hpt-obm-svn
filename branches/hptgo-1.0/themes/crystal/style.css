@@ -158,6 +158,11 @@ a.Tab:link, a.Tab:visited, a.Tab:active {
 	background-color: #FFF7EB;
         border-bottom: 1px solid #666666;	
 }
+.TabSpan {	
+	background-color: #FFF7EB;
+	border-right: 0px solid #666666;
+	text-align: center;
+}
 
 .ActiveTabVert{
 	background-color: #CCCCCC;
@@ -189,6 +194,11 @@ a.TabVert:link, a.TabVert:visited, a.TabVert:active {
 .TabBackgroundVert {
 	background-color: #FFF7EB;
 	border-right: 1px solid #666666;
+}
+.TabVertSpan {	
+	background-color: #FFF7EB;
+	border-bottom: 0px solid #666666;
+	padding: 2px;
 }
 
 

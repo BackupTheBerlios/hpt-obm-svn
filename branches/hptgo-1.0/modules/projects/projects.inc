@@ -125,7 +125,7 @@ $contacts_module = $GO_MODULES->get_module('addressbook');
 $has_contacts_module = ($contacts_module && ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $contacts_module['acl_read']) || $GO_SECURITY->has_permission($GO_SECURITY->user_id, $contacts_module['acl_write'])));
 
 echo '<tr height="20">';
-echo '<td class="TableHead2" width="16"></td>';
+echo '<td class="TableHead2" width="16">&nbsp;</td>';
 echo '<td class="TableHead2" width="100" nowrap><a class="TableHead2" href="javascript:_sort(\'name\',\''.$new_pr_sort_order.'\');">'.$strName.'</a>';
 if ($pm_settings['sort_field'] == 'name')
 {
@@ -167,7 +167,7 @@ if ($has_contacts_module && $contact_id == 0)
 {
   echo '<td class="TableHead2">'.$pm_client.'</td>';
 }
-echo '<td class="TableHead2" colspan="3"></td></tr>';
+echo '<td class="TableHead2" colspan="3">&nbsp;</td></tr>';
 
 
 if ($count > 0)

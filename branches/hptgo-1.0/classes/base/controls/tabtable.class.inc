@@ -134,8 +134,8 @@ class tabtable
     $remaining_width= $this->width - ($tab_count * $this->tabwidth);
     if ($tab_count > 0)
     {
-      echo '<tr><td class="'.$this->css_tab_background.'" valign="top">';
-      echo '<table border="0" cellpadding="0" cellspacing="0">';
+      echo '<tr height="100%"><td class="'.$this->css_tab_background.'" valign="top">';
+      echo '<table border="0" cellpadding="0" cellspacing="0" height="100%">';
       if ($this->tab_direction == 'horizontal')
       {
 	echo '<tr>';
@@ -165,6 +165,13 @@ class tabtable
 	  echo '</tr>';
 	}
       }
+	if ($this->tab_direction == 'vertical')
+	{
+	  echo '<tr height="100%"><td class="TabVertSpan" width="100%" nowrap>&nbsp;</td></tr>';
+	}else
+	{
+	  echo '<td class="TabSpan" width="100%" nowrap>&nbsp;</td>';
+	}
       if ($this->tab_direction == 'horizontal')
       {
 	echo '</tr>';

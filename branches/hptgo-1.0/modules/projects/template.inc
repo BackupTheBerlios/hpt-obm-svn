@@ -315,12 +315,12 @@ $task_insert =
   '</td>'.
   '</tr>';
 
-echo '<tr class="TableHead2" height="20">';
-echo '<td align="center" width="20">#</td>';
-echo '<td width="320" colspan="30" nowrap>'.$pm_task_name.'</td>';
-echo '<td nowrap colspan="30">'.$pm_task_predecessors.'</td>';
-echo '<td nowrap colspan="9">&nbsp;'.$pm_task_time.'&nbsp;</td>';
-echo '<td nowrap colspan="2">&nbsp;</td>';
+echo '<tr height="20">';
+echo '<td class="TableHead2" align="center" width="20">#</td>';
+echo '<td class="TableHead2" width="320" colspan="30" nowrap>'.$pm_task_name.'</td>';
+echo '<td class="TableHead2" nowrap colspan="30">'.$pm_task_predecessors.'</td>';
+echo '<td class="TableHead2" nowrap colspan="9">&nbsp;'.$pm_task_time.'&nbsp;</td>';
+echo '<td class="TableHead2" nowrap colspan="2">&nbsp;</td>';
 echo '</tr>';
 
 if ($count > 0) {
