@@ -260,6 +260,95 @@ class imap
     }
   }
 
+function mail_fetchpart($parts, $part) {
+ 
+  $partNos = explode(".", $part);
+ 
+  $currentPart = $parts;
+  while(list ($key, $val) = each($partNos)) {
+    $currentPart = $currentPart[$val];
+  }
+ 
+  if ($currentPart != "")
+    return $currentPart;
+  else
+    return false;
+}
+
+// splits a message given in the body if it is
+// a mulitpart mime message and returns the parts,
+// if no parts are found, returns false
+function mail_mimesplit($header, $body) {
+  $parts = array();
+ 
+  $PN_EREG_BOUNDARY = "Content-Type:(.*)boundary=\"([^\"]+)\"";
+
+  if (eregi ($PN_EREG_BOUNDARY, $header, $regs)) {
+    $boundary = $regs[2];
+
+    $delimiterReg = "([^\r\n]*)$boundary([^\r\n]*)";
+    if (eregi ($delimiterReg, $body, $results)) {
+      $delimiter = $results[0];
+      $parts = explode($delimiter, $body);
+      $parts = array_slice ($parts, 1, -1);
+    }
+    return $parts;
+  } else {
+    return false;
+  }   
+}
+
+// returns an array with all parts that are
+// subparts of the given part
+// if no subparts are found, return the body of
+// the current part
+function mail_mimesub($part) {
+  $i = 1;
+  $headDelimiter = "\r\n\r\n";
+  $delLength = strlen($headDelimiter);
+
+  // get head & body of the current part
+  $endOfHead = strpos( $part, $headDelimiter);
+  $head = substr($part, 0, $endOfHead);
+  $body = substr($part, $endOfHead + $delLength, strlen($part));
+ 
+  // check whether it is a message according to rfc822
+  if (stristr($head, "Content-Type: message/rfc822")) {
+    $part = substr($part, $endOfHead + $delLength, strlen($part));
+    $returnParts[1] = $this->mail_mimesub($part);
+    return $returnParts;
+  // if no message, get subparts and call function recursively
+  } elseif ($subParts = $this->mail_mimesplit($head, $body)) {
+    // got more subparts
+    while (list ($key, $val) = each($subParts)) {
+      $returnParts[$i] = $this->mail_mimesub($val);
+      $i++;
+    }           
+    return $returnParts;
+  } else {
+    return $head;
+  }
+}
+
+// get an array with the bodies all parts of an email
+// the structure of the array corresponds to the
+// structure that is available with imap_fetchstructure
+function mail_fetchparts($msgNo) {
+  $parts = array();
+  $header = imap_fetchheader($this->conn,$msgNo,FT_UID);
+  $body = imap_body($this->conn,$msgNo,FT_UID);
+  $i = 1;
+  
+  if ($newParts = $this->mail_mimesplit($header, $body)) {
+    while (list ($key, $val) = each($newParts)) {
+      $parts[$i] = $this->mail_mimesub($val);
+      $i++;               
+    }
+  } else {
+    $parts[$i] = $body;
+  }
+  return $parts;
+}
 
   /*
      return an array with all message info.
@@ -428,7 +517,8 @@ class imap
 	$structure = imap_bodystruct($this->conn, $this->message['number'], $part);
       }
       $this->mail["parts"] = array();
-      $this->get_parts($structure, $preferred_type);
+      $headers = $this->mail_fetchparts($uid);
+      $this->get_parts($structure, $preferred_type,0,$headers);
 
       //$this->print_structure($structure);
 
@@ -454,8 +544,9 @@ class imap
      private function to get all the parts from a message.
    */
 
-  function get_parts($mimeobj,$preferred_type = "html", $section = 0)
+  function get_parts($mimeobj,$preferred_type = "html", $section = 0,$headers)
   {
+
     if (isset($mimeobj->type))
     {
       $type = $this->get_mime_type($mimeobj->type);
@@ -548,7 +639,7 @@ class imap
 	  }
 	}
 
-	$this->get_parts($mimeobj->parts[$x],$preferred_type, $nsection);
+	$this->get_parts($mimeobj->parts[$x],$preferred_type, $nsection,$headers);
 
 	if ($mimeobj->subtype == "ALTERNATIVE" && $preferred_type == "plain") $x++;
 
@@ -565,6 +656,34 @@ class imap
 
     if ($type != "multipart" && $full_mime_type)
     {
+      // try to get content-disposition header
+      $header = $this->mail_fetchpart($headers,$section);
+      if ($header != '')
+      {
+	$header = strtolower($header);
+	$lines = explode("\r\n",$header);
+	$newlines = array();
+	$i = 0;
+	foreach ($lines as $line)
+	{
+		if (!eregi("^[^ :]*:",$line) && $i > 0)
+			$newlines[count($newlines)-1] .= " ".$line;
+		else
+		{
+			if (eregi("[a-z]",$line))
+				$newlines[] = $line;
+		}
+		$i ++;
+	}
+	unset($header);
+	unset($lines);
+	$header = array();
+	foreach ($newlines as $line)
+	{
+		$line_parts = explode(":",$line);
+		$header[$line_parts[0]] = $line_parts[1];
+	}
+      }
       if (eregi('message', $full_mime_type))
       {
 	$section++;
@@ -579,6 +698,9 @@ class imap
 	  'disposition' => $mimeobj->ifdisposition ? $mimeobj->disposition : '',
 	  'size' => $bytes
 	  );
+
+      if ($tmp['disposition'] == '' && isset($header['content-disposition']))
+	$tmp['disposition'] = $header['content-disposition'];
 
       array_unshift($this->message["parts"], $tmp);
     }
