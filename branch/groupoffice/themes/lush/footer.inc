@@ -1,5 +1,0 @@
-
-<!--Start Footer-->
-
-</body>
-</html>

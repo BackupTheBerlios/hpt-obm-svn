@@ -1,3 +1,0 @@
-#!/bin/sh
-cd ..
-find . -name "$1.inc" | xargs tar -czf GO-LANG-$1.tar.gz
