@@ -125,15 +125,19 @@ while($bookmarks->next_record())
 	$title = '<table border="0" width="100%" height="22" class="TableHead" cellpadding="0" '.
 					 ' cellspacing="0"><td width="100%">'.htmlspecialchars($bookmarks->f('name')).'</td>';
 
+
 	if ($catagory_write)
 	{
 			$title .= '<td width="16"><a href="bookmark.php?catagory_id='.
 					$bookmarks->f('id').'"><img src="'.
-					$GO_THEME->images['bm_add_bookmark'].'" border="0"></a></td>'.
-
+					$GO_THEME->images['bm_add_bookmark'].'" border="0"></a></td>';
+	}
+	$title .=
 					'<td width="16"><a class="normal" href="catagory.php?catagory_id='.
 							$bookmarks->f("id").'"><img src="'.$GO_THEME->images['edit'].
 							'" border="0"></a></td>';
+	if ($catagory_write)
+	{
 			if ($GO_SECURITY->user_id == $bookmarks->f('user_id'))
 			{
 				$title .=
@@ -144,7 +148,7 @@ while($bookmarks->next_record())
 					htmlspecialchars($bookmarks->f('name'))."'\"><img src=\"".$GO_THEME->images['delete'].
 					"\" border=\"0\"></a></td>";
 			}
-		}
+	}
 
 		$title .=	'</tr></table>';
 
