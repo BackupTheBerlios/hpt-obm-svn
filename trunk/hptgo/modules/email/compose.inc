@@ -831,10 +831,16 @@ $button = new button($ml_attachment, 'javascript:show_attach()');
     <tr bgcolor="white">
     <td colspan="3" nowrap>
       <table border="0" cellpadding="3" cellspacing="0" width="100%">
-      <tr><td align="center">
-      <?php
-      $button = new button($ml_attach, 'javascript:attach()');
-      echo '&nbsp;&nbsp;';
+      <tr>
+	  <td width="1%">&nbsp;</td>
+	  <td style="position:relative" width="105px">
+<?php
+	require("../../lib/tkdlib.php");
+	print_input_file('send_form','mail_att',$ml_attach,'button','button_mo','onChange="javascript:attach()"');
+?>
+	</td>
+	<td>
+<?php	
       if ($module = $GO_MODULES->get_module('filesystem'))
       {
         if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read']) ||
@@ -845,9 +851,6 @@ $button = new button($ml_attachment, 'javascript:show_attach()');
         }
       }
       ?>
-      </td></tr>
-      <tr><td align="center">
-      <input class="textbox" type="file" name="mail_att" maxlength="200" size="22" value="" />
       </td></tr>
       </table>
     </td>

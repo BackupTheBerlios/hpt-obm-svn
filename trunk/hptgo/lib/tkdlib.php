@@ -9,6 +9,77 @@
    Free Software Foundation; either version 2 of the License, or (at your
    option) any later version.
  */
+
+	function print_input_file($frm, $name,$value,$class,$mo_class,$attributes='',$width='')
+	{
+		$button = "document.$frm.".$name."_button";
+		$str =
+			'&nbsp;<span style="position:relative">
+				<input type="button" id="'.$name.'_button" name="'.$name.'_button" value="'.$value.'" class="'.$class.'" style="position:absolute;top:0px;left:0px;width:'.(empty($width)?'105':$width).'px;">
+
+				<script language="javascript">
+					var button = document.getElementById("'.$name.'_button");
+				</script>
+				
+				<input type="file" id="'.$name.'" name="'.$name.'" style="position:absolute;top:0px;left:0px;width:0px;-moz-opacity:.40;filter:alpha(opacity:40);opacity:.40;" size="1" '.$attributes.' onmouseover="javascript:button.className=\''.$mo_class.'\';" onmouseout="javascript:button.className=\''.$class.'\';">
+			</span>
+			<script language="javascript">
+			 	if (!document.all) button.style.marginTop = "-1px";
+			</script>';
+  		echo $str;
+	}
+ 
+ 	function AddToME($ME,$str)
+	{
+		if ($ME[strlen($ME)-1]!="?" || $ME[strlen($ME)-1]!="&")
+			return $ME."&".$str;
+		else
+			return $ME.$str;
+	}
+	
+	function PageNumber($sumrow,$maxrow,$maxpage,&$curpage,$ME,&$strCurPage,$strPrev,$strNext)
+	{
+		if ($maxrow>0)
+		{	
+			$sumpage=(int)($sumrow/$maxrow)+(($sumrow%$maxrow==0)?0:1);
+			if ($sumpage>1)
+			{
+				$str="";
+				if ($curpage=="" || $curpage<1) $curpage=1;
+				if ($curpage>$sumpage) $curpage=$sumpage;
+
+				$sumseg=(int)($sumpage/$maxpage)+(($sumpage%$maxpage==0)?0:1);
+				$seg=(int)(($curpage-1)/$maxpage);
+
+				$min=($sumpage<($seg*$maxpage+$maxpage)?$sumpage:($seg*$maxpage+$maxpage));
+
+				for ($i=$seg*$maxpage+1; $i<=$min; $i++)
+				{
+					if ($i==$curpage)
+						$str.="<b><i>$i</i></b>";
+					else
+						$str.="<a href=".AddToME($ME,"curpage=$i").">$i</a>";
+
+					if ($i!=($sumpage<($seg*$maxpage+$maxpage)?$sumpage:($seg*$maxpage+$maxpage)))
+						$str.="&nbsp;";
+				}
+				
+				if ($seg>0)
+				{
+					$st=AddToME($ME,"curpage=".($seg*$maxpage));
+					$str="<a href=".$st." style=text-decoration:none><< $strPrev</a>&nbsp;&nbsp;".$str;
+				}
+				if ($seg<$sumseg-1)
+				{
+					$st=AddToME($ME,"curpage=".($seg*$maxpage+$maxpage+1));
+					$str.="&nbsp;&nbsp;<a href=".$st." style=text-decoration:none>$strNext >></a>";
+				}
+				$strCurPage="Trang ".$curpage."/".$sumpage;
+				return $str;
+			}
+		}
+	}
+ 
  	function initTyping($root_path)
 	{
 		$str = '<script language="javascript" src="'.$root_path.'lib/vietuni.js"></script>'.
