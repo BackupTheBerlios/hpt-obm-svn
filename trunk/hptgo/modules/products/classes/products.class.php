@@ -347,7 +347,7 @@
 		
 		function get_buy_products($in_clause)
 		{
-			$sql = "SELECT product_id, product_name, price
+			$sql = "SELECT *
 					FROM sc_products
 					WHERE product_id IN (".$in_clause.")";
 			if ($this->query($sql)) return true;

@@ -67,4 +67,5 @@
 	
 	$sc_buy = 'Buy';
 	$sc_buy_all = 'Buy all';
+	$sc_export = 'Export';
 ?>

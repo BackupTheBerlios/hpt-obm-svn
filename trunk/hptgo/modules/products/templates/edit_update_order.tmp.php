@@ -1,3 +1,4 @@
+<?php $excel_processor_url = "http://172.16.32.245:8081/subscribe/{$order['order_number']}+1";?>
 <?php $ab->enable_contact_selector(); ?>
 <form name="frmOrder" method="post" action="">
 	<input name="task" type="hidden">
@@ -204,6 +205,8 @@
 
 	echo '&nbsp;&nbsp;';
 	$button = new button($cmdClose, "document.location = 'index.php'");
+	echo '&nbsp;&nbsp;';
+	$button = new button($sc_export, "document.location = '$excel_processor_url'");
 
 ?>
 

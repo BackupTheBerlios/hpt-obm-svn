@@ -68,4 +68,5 @@ require($GO_LANGUAGE->get_fallback_language_file('products'));
 	
 	$sc_buy = 'Mua';
 	$sc_buy_all = 'Mua tất cả';	
+	$sc_export = 'Xuất';
 ?>
