@@ -1,0 +1,7 @@
+<?php
+$module['squirrelmail']['description'] = 'This module is based on squirrelmail. See http://www.squirrelmail.org for more details';
+$module['squirrelmail']['version'] = '0.1';
+$module['squirrelmail']['release_date'] = '2004-10-27';
+$module['squirrelmail']['status'] = 'Unstable';
+$module['squirrelmail']['authors'][] = array('name'=>'Nguyễn Thái Ngọc Duy', 'email'=>'duyntn@hptvietnam.com.vn');
+?>
