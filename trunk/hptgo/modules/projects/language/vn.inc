@@ -142,5 +142,14 @@ $strWriteRights = 'Thành viên';
 $acl_control_auth_groups = 'Nhóm tham gia';
 $acl_control_auth_users = 'Người tham gia';
 
-$strStatusChangeConfirm = 'Bạn đã thay đổi trạng thái công việc. Trưởng dự án sẽ được thông báo bằng email mỗi khi trạng thái công việc được thay đổi. Bạn có chắc muốn thay đổi trạng thái công việc hay không?';
+$strStatusChangeConfirm = 'Bạn đã thay đổi trạng thái công việc sang %s. Trưởng dự án sẽ được thông báo bằng email về thay đổi này. Bạn có chắc muốn thay đổi trạng thái công việc hay không?';
+$mailTaskStatusChangedToDone  = '<html><body>Bạn được yêu cầu kiểm tra và duyệt một công việc đã hoàn tất:<br/><br/>Tên dự án: %s<br/>Mô tả dự án: %s<br/>Tên công việc: %s<br/><br/>Vui lòng nhấn <a href="%s>vào đây</a> hoặc vào phần quản lý dự án để biết thêm thông tin chi tiết.</body></html>';
+$mailTaskStatusChangedToOngoing  = '<html><body>Một công việc thuộc trách nhiệm của bạn đã chuyển sang trạng thái %s:<br/><br/>Tên dự án: %s<br/>Mô tả dự án: %s<br/>Tên công việc: %s<br/>Số ngày: %s<br/><br/>Vui lòng nhấn <a href="%s>vào đây</a> hoặc vào phần quản lý dự án để biết thêm thông tin chi tiết.</body></html>';
+$subjectTaskStatusChanged = '[Projects] Trạng thái công việc %s (dự án %s) đã chuyển sang %s';
+$subjectTaskAssigneeChanged = '[Projects] Thay đổi người thực hiện công việc %s (dự án %s)';
+//$strStatusChangeConfirm = ;
+$mailTaskStatusChanged  = '<html><body>Công việc "<a href="%s">%s</a>" thuộc dự án "<a href="%s">%s</a>" đã thay đổi trạng thái từ %s sang %s.</body></html>';
+$subjectTaskStatusChanged = '[Projects] Trạng thái công việc %s (dự án %s) đã thay đổi sang %s';
+$mailTaskAssigneeLeft = '<html><body>Công việc bạn đang thực hiện đã được chuyển sang người khác: <br/><br/>Tên dự án: %s<br/>Mô tả dự án: %s<br/>Tên công việc: %s</body></html>';
+$mailTaskAssigneeJoined = '<html><body>You are assigned to a task: <br/><br/>Project name: %s<br/>Project description: %s<br/>Task name: %s<br/>Days: %s<br/><br/>Please click <a href="%s">here</a> or go to the project section for more information.</body></html>';
 ?>

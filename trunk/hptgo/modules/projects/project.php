@@ -256,9 +256,18 @@ switch ($task)
           error_log("GO: Create $task_folder error");
       }
 
+      $projects->query("SELECT * FROM task ".
+                       "WHERE task_id=$tid AND task_project_id=$project_id");
+      $projects->next_record();
+      $old_person_id = $projects->f('task_person_id');
+
       $projects->query("UPDATE task SET task_person_id=$tpid $tid_time ".
                        "WHERE task_id=$tid AND task_project_id=$project_id");
 
+      if ($tpid != $old_person_id) {
+      notify_relevant_members($project_id,$tid,$tpid,true);
+      notify_relevant_members($project_id,$tid,$old_person_id,false);
+      }
       // Write
       $acl_write_pfolder = $GO_SECURITY->get_acl_id("write: $task_folder");
       if (!$acl_write_pfolder)
@@ -778,4 +787,91 @@ function is_valid_date(date_field_to_validate, date)
 </script>
 <?php
 require($GO_THEME->theme_path."footer.inc");
+function notify_relevant_members($project_id,$task_id,$person_id,$assigned = true)
+{
+      global $GO_CONFIG;
+      
+      $db = new db();
+      $sql = "SELECT users.* FROM".
+        " users LEFT JOIN users_groups ON (users.id = users_groups.user_id)".
+        " WHERE users_groups.group_id='".$GO_CONFIG->group_root."'";
+      if ($db->query($sql) && $db->num_rows() && $db->next_record()) {
+        require_once($GO_CONFIG->class_path."phpmailer/class.phpmailer.php");
+        require_once($GO_CONFIG->class_path."phpmailer/class.smtp.php");
+        $mail = new PHPMailer();
+        $mail->PluginDir = $GO_CONFIG->class_path.'phpmailer/';
+        $mail->SetLanguage($php_mailer_lang, $GO_CONFIG->class_path.'phpmailer/language/');
+
+        switch($GO_CONFIG->mailer) {
+          case 'smtp':
+            $mail->Host = $GO_CONFIG->smtp_server;
+            $mail->Port = $GO_CONFIG->smtp_port;
+            $mail->IsSMTP();			  
+            break;			
+          case 'qmail':
+            $mail->IsQmail();
+            break;			
+          case 'sendmail':
+            $mail->IsSendmail();
+            break;
+          case 'mail':
+            $mail->IsMail();
+            break;
+        }
+
+        $mail->Sender   = $db->f('email');
+        $mail->From     = $db->f('email');
+        $mail->FromName = $GO_CONFIG->title;
+        $mail->AddReplyTo($db->f('email'),$GO_CONFIG->title);
+        $mail->WordWrap = 50;
+        $mail->IsHTML(true);
+
+        $db->query("SELECT * FROM task WHERE task_id=".$task_id." AND task_project_id=".$project_id);
+        $db->next_record();
+        $task_name = $db->f('task_name');
+        $task_person_id = $db->f('task_person_id');
+	$task_duration = $db->f('task_time');
+
+        $db->query('SELECT * '.
+          'FROM pmProjects '.
+  	  'WHERE id="'.$project_id.'" ');
+        $db->next_record();
+
+        $task_url = $GO_CONFIG->full_url.'modules/projects/project.php?task=show_task_status&project_id='.$project_id.'&task_id='.$task_id.'&task_status='.$status;
+        $project_url = $GO_CONFIG->full_url.'modules/projects/project.php?project_id='.$project_id;
+
+
+        global $pm_task_status_values;
+        $new_status = $pm_task_status_values[$status];
+        $project_name = $db->f('name');
+	$project_description = $db->f('description');
+        global $subjectTaskAssigneeChanged,$mailTaskAssigneeLeft,$mailTaskAssigneeJoined;
+        $mail->Subject = sprintf($subjectTaskAssigneeChanged,$task_name,$project_name);
+	if ($assigned)
+          $mail_body  = sprintf($mailTaskAssigneeJoined,$project_name,$project_description,$task_name,$task_duration,$project_url);
+	else
+          $mail_body  = sprintf($mailTaskAssigneeLeft,$project_name,$project_description,$task_name);
+
+        $mail->Body = $mail_body;
+        $mail->ClearAllRecipients();
+        if ($status == TASK_DONE)
+          $db->query('SELECT users.* '.
+            'FROM users,pmProjects '.
+  	    'WHERE users.id=pmProjects.user_id '.
+  	    'AND pmProjects.id="'.$project_id.'"');
+        else
+          $db->query('SELECT * '.
+            'FROM users '.
+  	    'WHERE id="'.$task_person_id.'"');
+        $db->next_record();
+        $mail->AddAddress($db->f('email'));
+
+        // HACK: For some reasons, admin@hptvietnam.com.vn is not accepted by mail.hptvietnam.com.vn :(
+        $mail->From = $db->f('email');
+        $mail->Sender = $db->f('email');
+
+        if (!$mail->Send()) echo "Failed: ".$mail->ErrorInfo;
+        //$mail->Send();
+      }
+}
 ?>

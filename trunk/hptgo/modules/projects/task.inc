@@ -187,11 +187,12 @@ function show_planned_eslapsed_times() {
 
 ?>
 
-<script type="text/javascript" langauge="javascript">
+<script type="text/javascript" language="javascript">
 function _save_task(action_type)
 {
-  if (document.projects_form.task_status.value == document.projects_form.saved_task_status.value ||
-    confirm("<?php echo smart_addslashes($strStatusChangeConfirm); ?>"))
+  if (action_type != 'status' ||
+    (document.projects_form.task_status.value == document.projects_form.saved_task_status.value ||
+      (document.projects_form.task_status.value != <?php echo TASK_DONE; ?> || confirm("<?php echo smart_addslashes($strStatusChangeConfirm); ?>"))))
   {
     document.projects_form.task.value='save_task_'+action_type;
     document.projects_form.target = '_self';

@@ -139,5 +139,11 @@ $pm_AddTemplate = 'Add process template:';
 
 $strReadRights = 'Monitors';
 $strWriteRights = 'Members';
-$strStatusChangeConfirm = 'You have changed task status. Everytime task status is changed, the project manager will be notified by email. Are you sure you want to change the task status?';
+$strStatusChangeConfirm = 'You have changed task status to done. Everytime task status is changed to done, the project manager will be notified by email. Are you sure you want to change the task status?';
+$mailTaskStatusChangedToDone  = '<html><body>You are requested to check and approve a done task:<br/><br/>Project name: %s<br/>Project description: %s<br/>Task name: %s<br/><br/>Please click <a href="%s>here</a> or go to the project section for more information.</body></html>';
+$mailTaskStatusChangedToOngoing  = '<html><body>A task which you are assigned is changed to status %s:<br/><br/>Project name: %s<br/>Project description: %s<br/>Task name: %s<br/>Days: %s<br/><br/>Please click <a href="%s>here</a> or go to the project section for more information.</body></html>';
+$subjectTaskStatusChanged = '[Projects] Status of task %s (project %s) has changed to %s';
+$subjectTaskAssigneeChanged = '[Projects] Task responsibility has changed (task %s - project %s)';
+$mailTaskAssigneeLeft = '<html><body>Công việc bạn đang thực hiện đã được chuyển sang người khác: <br/><br/>Tên dự án: %s<br/>Mô tả dự án: %s<br/>Tên công việc: %s</body></html>';
+$mailTaskAssigneeJoined  = '<html><body>Bạn được chọn thực hiện công việc:<br/><br/>Project name: %s<br/>Project description: %s<br/>Task name: %s<br/>Days: %s<br/><br/>Please click <a href="%s>here</a> or go to the project section for more information.</body></html>';
 ?>
