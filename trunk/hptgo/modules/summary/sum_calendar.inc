@@ -90,7 +90,7 @@ $timezone_offset = $_SESSION['GO_SESSION']['timezone']+$dst_offset;
 	    $first = false;
 	  }else
 	  {
-	    $title .= ' ,';
+	    $title .= ', ';
 	  }
 	  $title .= htmlspecialchars($cal->f('name'));
 	}
@@ -140,7 +140,7 @@ $timezone_offset = $_SESSION['GO_SESSION']['timezone']+$dst_offset;
 	      $first = false;
 	    }else
 	    {
-	      $title .= ' ,';
+	      $title .= ', ';
 	    }
 	    $title .= htmlspecialchars($cal->f('name'));
 	  }

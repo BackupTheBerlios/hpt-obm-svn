@@ -128,7 +128,7 @@ for($row=0;$row<$rows;$row++)
 		$first = false;
 	      }else
 	      {
-		$title .= ' ,';
+		$title .= ', ';
 	      }						  
 	      $title .= htmlspecialchars($cal->f('name'));  
 	    }
@@ -209,7 +209,7 @@ for($row=0;$row<$rows;$row++)
 		$first = false;
 	      }else
 	      {
-		$title .= ' ,';
+		$title .= ', ';
 	      }						  
 	      $title .= htmlspecialchars($cal->f('name'));  
 	    }

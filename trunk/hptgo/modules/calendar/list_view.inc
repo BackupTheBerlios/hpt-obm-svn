@@ -124,7 +124,7 @@ if (count($events) > 0)
 	    $first = false;
 	  }else
 	  {
-	    $title .= ' ,';
+	    $title .= ', ';
 	  }
 	  $title .= htmlspecialchars($cal->f('name'));
 	}
