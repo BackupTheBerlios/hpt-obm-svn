@@ -130,7 +130,8 @@ CREATE TABLE `cal_reminders` (
   `user_id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
   `remind_time` int(11) NOT NULL default '0',
-  KEY `user_id` (`user_id`),
+  PRIMARY KEY  (`user_id`,`event_id`,`remind_time`),
+ KEY `user_id` (`user_id`),
   KEY `remind_time` (`remind_time`)
 ) TYPE=MyISAM;
 
