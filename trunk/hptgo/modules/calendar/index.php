@@ -257,7 +257,8 @@ if (!$print) {
     
     if(isset($view) && $view)
     {
-      echo '<tr><td><h3>'.$title.'</h3></td><td>';
+//      echo '<tr><td><h3>'.$title.'</h3></td><td>';
+      echo '<tr><td><h3></h3></td><td>';	  
 	  $calendars = $cal->get_view_calendars($view_id);
 	  if(count($calendars) > 1)
 	  {
