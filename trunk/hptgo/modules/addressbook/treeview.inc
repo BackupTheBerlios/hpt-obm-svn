@@ -274,11 +274,11 @@ if ($count > 0)
 			$previous_start = $first-$max_rows;
 			if ($first != 0)
 			{
-				$links .= '<a href="javascript:change_list(0, '.$max_rows.');">&lt&lt</a>&nbsp;';
+				$links .= '<a href="javascript:change_list(0, '.$max_rows.');">&lt;&lt;</a>&nbsp;';
 				$links .= '<a href="javascript:change_list('.$previous_start.', '.$max_rows.');">'.$cmdPrevious.'</a>&nbsp;';
 			}else
 			{
-				$links .= '<font color="#cccccc">&lt&lt '.$cmdPrevious.'</font>&nbsp;';
+				$links .= '<font color="#cccccc">&lt;&lt; '.$cmdPrevious.'</font>&nbsp;';
 			}
 
 			$start = ($first-(($max_links/2)*$max_rows));
@@ -321,10 +321,10 @@ if ($count > 0)
 			if ($count > $next_start)
 			{
 				$links .= '<a href="javascript:change_list('.$next_start.', '.$max_rows.');">'.$cmdNext.'</a>&nbsp;';
-				$links .= '<a href="javascript:change_list('.$last_page.', '.$max_rows.');">&gt&gt</a>';
+				$links .= '<a href="javascript:change_list('.$last_page.', '.$max_rows.');">&gt;&gt;</a>';
 			}else
 			{
-				$links .= '<font color="#cccccc">'.$cmdNext.' &gt&gt</font>';
+				$links .= '<font color="#cccccc">'.$cmdNext.' &gt;&gt;</font>';
 			}
 			$links .= '</td><td align="right"><a class="normal" href="javascript:change_list(0, 0);">'.$cmdShowAll.'</a></td></tr></table>';
 
