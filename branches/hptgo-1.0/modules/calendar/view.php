@@ -226,7 +226,7 @@ if (isset($feedback))
 		}
 		if ($has_write_permission) {
 			echo '<tr><td>';
-			$checkbox = new checkbox('calendars[]', $cal->f('id'), htmlspecialchars($cal->f('name')), $check);
+			$checkbox = new checkbox('calendars[]', $cal->f('id'), $cal->f('name'), $check);
 			echo '</td><td>'.show_profile($cal->f('user_id')).'</td></tr>';
 		} else {
 			if ($check) {

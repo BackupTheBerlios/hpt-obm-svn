@@ -125,7 +125,7 @@ class acl
       {
 	$middle_name = $GO_USERS->f('middle_name') == '' ? '' : $GO_USERS->f('middle_name').' ';
 	$name = $GO_USERS->f('last_name').' '.$middle_name.$GO_USERS->f('first_name');
-	echo '<option value="'.$GO_USERS->f('id').'">'.$name.'</option>';
+	echo '<option value="'.$GO_USERS->f('id').'">'.htmlspecialchars($name).'</option>';
       }
       echo '</select>';
       echo '<table><tr><td>';
@@ -206,7 +206,7 @@ class acl
       $GO_GROUPS->get_authorised_groups($GO_SECURITY->user_id);
     while ($GO_GROUPS->next_record())
     {
-      echo '<option value="'.$GO_GROUPS->f('id').'">'.$GO_GROUPS->f('name').'</option>';
+      echo '<option value="'.$GO_GROUPS->f('id').'">'.htmlspecialchars($GO_GROUPS->f('name')).'</option>';
     }
     echo '</select>';
     echo '<table><tr><td>';
@@ -262,7 +262,7 @@ class acl
 	    ($GO_SECURITY->f("id") != $GO_SECURITY->group_id))
 	{
 	  echo '<option value="'.$GO_SECURITY->f('id').'">'.
-	    $GO_SECURITY->f('name').'</option>';
+	    htmlspecialchars($GO_SECURITY->f('name')).'</option>';
 	}
       } else
       {
@@ -275,7 +275,7 @@ class acl
 		f('group_id')))
 	  {
 	    echo '<option value="'.$GO_SECURITY->f('group_id').
-	      '">'.$profile["name"].'</option>';
+	      '">'.htmlspecialchars($profile["name"]).'</option>';
 	  }
 	}
       }
@@ -311,7 +311,7 @@ class acl
 	  '' : $profile["middle_name"].' ';
       $name = $profile["last_name"].' '.$middle_name.$profile["first_name"];
       echo '<option value="'.$GO_SECURITY->f('user_id').'">'
-	.$name.'</option>';
+	.htmlspecialchars($name).'</option>';
 	  }
 	  }
 	  echo '</select>';

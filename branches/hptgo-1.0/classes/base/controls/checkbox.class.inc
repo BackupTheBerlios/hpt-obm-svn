@@ -24,10 +24,10 @@ class checkbox
     {
       if ($disabled)
       {
-	echo $checkbox.'<span style="color: #7d7d7d">'.$text.'</span>';
+	echo $checkbox.'<span style="color: #7d7d7d">'.htmlspecialchars($text).'</span>';
       }else
       {
-	echo $checkbox.'<a href="javascript:check_checkbox(\''.$id.'\')">'.$text.'</a>';
+	echo $checkbox.'<a href="javascript:check_checkbox(\''.$id.'\')">'.htmlspecialchars($text).'</a>';
       }
     }else
     {

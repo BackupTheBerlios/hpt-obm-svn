@@ -27,7 +27,7 @@ $link_back = $_SERVER['REQUEST_URI'];
 echo '<input type="hidden" name="task" value="properties" />';
 echo '<input type="hidden" name="close" value="false" />';
 
-$tabtable = new tabtable('properties_tab', $strProperties.' - '.htmlspecialchars(basename($path)), '400', '400', '120', '', true);
+$tabtable = new tabtable('properties_tab', $strProperties.' - '.(basename($path)), '400', '400', '120', '', true);
 $tabtable->add_tab('properties', $fbGeneral);
 
 if ($share)

@@ -122,7 +122,7 @@ class dropbox
 	  }
 	}
 	echo '>';
-	echo $this->text[$i];
+	echo htmlspecialchars($this->text[$i]);
 	echo '</option>';
       }
     }
