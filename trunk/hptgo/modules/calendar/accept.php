@@ -10,7 +10,7 @@ Free Software Foundation; either version 2 of the License, or (at your
 option) any later version.
 */
 
-
+//date('Ymd', time())
 require("../../Group-Office.php");
 
 if($calendar_module = $GO_MODULES->get_module('calendar'))
@@ -19,6 +19,10 @@ if($calendar_module = $GO_MODULES->get_module('calendar'))
 }
 $cal = new calendar();
 require($GO_LANGUAGE->get_language_file('calendar'));
+
+//echo '1=='.$_REQUEST['event_id'];
+$getevent=$cal->get_event($_REQUEST['event_id']);
+//echo '2=='.$getevent['end_time'].'-->'.time();
 
 if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
@@ -42,6 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 			}
 		}
 		require($GO_THEME->theme_path.'header.inc');
+		
+		require('../../lib/tkdlib.php');
+		if ( $getevent['end_time']<=time() )
+			alert($sc_no_ok_in_past);
+
 		echo '<table border="0" cellpadding="10" cellspacing="0"><tr><td><h1>'.$sc_accept_title.'</h1>';
 		echo $sc_accept_confirm;
 
@@ -68,6 +77,10 @@ if ($event && $_REQUEST['email'] != '')
 		if ($calendar_module && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar_module['acl_read']) || $GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar_module['acl_write']))
 		{
 			require($GO_THEME->theme_path.'header.inc');
+
+			require('../../lib/tkdlib.php');
+			if ( $getevent['end_time']<=time() )
+					alert($sc_no_ok_in_past);
 
 			echo '<table border="0" cellpadding="10" cellspacing="0"><tr><td><h1>'.$sc_accept_title.'</h1></td></tr><tr><td>';
 
@@ -145,6 +158,11 @@ if ($event && $_REQUEST['email'] != '')
 		}else
 		{
 			require($GO_THEME->theme_path.'header.inc');
+			
+			require('../../lib/tkdlib.php');
+			if ( $getevent['end_time']<=time() )
+				alert($sc_no_ok_in_past);
+
 			echo '<table border="0"  cellspacing="0"><tr><td><h1>'.$sc_accept_title.'</h1>';
 			if ($cal->set_event_status($event_id,'1', $email))
 			{
@@ -154,6 +172,11 @@ if ($event && $_REQUEST['email'] != '')
 	}else
 	{
 		require($GO_THEME->theme_path.'header.inc');
+		
+		require('../../lib/tkdlib.php');
+		if ( $getevent['end_time']<=time() )
+			alert($sc_no_ok_in_past);
+		
 		echo '<table border="0"  cellspacing="0"><tr><td><h1>'.$sc_accept_title.'</h1>';
 		if ($cal->set_event_status($_REQUEST['event_id'],'1', $_REQUEST['email']))
 		{
@@ -163,6 +186,10 @@ if ($event && $_REQUEST['email'] != '')
 }else
 {
 	require($GO_THEME->theme_path.'header.inc');
+	
+	require('../../lib/tkdlib.php');
+	if ( $getevent['end_time']<=time() )
+		alert($sc_no_ok_in_past);
 
 	echo '<table border="0" cellspacing="0"><tr><td class="Error"><h1>'.$sc_accept_title.'</h1>';
 

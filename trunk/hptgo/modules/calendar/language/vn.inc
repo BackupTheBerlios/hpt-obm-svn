@@ -217,4 +217,6 @@ $subjectEventInvitation = '[Calendar] Bạn được mời tham dự sự kiện
 
 $sc_subscribed = 'Chọn';
 $sc_choice_calendar_msg = 'Bạn phải chọn ít nhất 1 lịch công tác !';
+
+$sc_no_ok_in_past = 'Sự kiện này đã qua';
 ?>
