@@ -104,8 +104,8 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
       {
 	for ($i=0;$i<sizeof($content["to"]);$i++)
 	{
-	  $lt = strpos($content["to"][$i], "&lt") + 4;
-	  $gt = strpos($content["to"][$i], "&gt");
+	  $lt = strpos($content["to"][$i], "<") + 1;
+	  $gt = strpos($content["to"][$i], ">");
 
 	  $length = $gt-$lt;
 
@@ -122,8 +122,8 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
       {
 	for ($i=0;$i<sizeof($content["cc"]);$i++)
 	{
-	  $lt = strpos($content["cc"][$i], "&lt") + 4;
-	  $gt = strpos($content["cc"][$i], "&gt");
+	  $lt = strpos($content["cc"][$i], "<") + 1;
+	  $gt = strpos($content["cc"][$i], ">");
 
 	  $length = $gt-$lt;
 
@@ -293,8 +293,8 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
 	{
 	  for ($i=0;$i<sizeof($content["to"]);$i++)
 	  {
-	    $lt = strpos($content["to"][$i], "&lt") + 4;
-	    $gt = strpos($content["to"][$i], "&gt");
+	    $lt = strpos($content["to"][$i], "<") + 1;
+	    $gt = strpos($content["to"][$i], ">");
 
 	    $length = $gt-$lt;
 
@@ -324,8 +324,8 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
 	$om_to = '';
 	for ($i=0;$i<sizeof($content["to"]);$i++)
 	{
-	  $lt = strpos($content["to"][$i], "&lt") + 4;
-	  $gt = strpos($content["to"][$i], "&gt");
+	  $lt = strpos($content["to"][$i], "<") + 1;
+	  $gt = strpos($content["to"][$i], ">");
 
 	  $length = $gt-$lt;
 
