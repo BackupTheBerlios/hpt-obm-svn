@@ -11,6 +11,7 @@
  */
 
 require('Group-Office.php');
+header('Content-Type: text/html; charset='.$charset);
 $GO_SECURITY->authenticate();
 ?>
 <html>
@@ -31,6 +32,7 @@ function popup(url,w,h,target)
 </script>
 <title><?php echo $GO_CONFIG->title; ?>
 </title>
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>">
 <?php
 echo '<meta http-equiv="refresh" content="'.$GO_CONFIG->refresh_rate.';url='.$_SERVER['PHP_SELF'].'">';
 
@@ -117,6 +119,22 @@ if ($email_module && ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $email
     echo '<script language="javascript" type="text/javascript">popup("'.$email_module['url'].'notify.php", "400", "120", "email_notify");</script>';
   }
 }
+
+$msg_module = $GO_MODULES->get_module('messages');
+if ($msg_module) {
+  $db = new db();
+  $db->query("SELECT messages_messages.* FROM messages_new,messages_messages WHERE messages_messages.user_id='".$GO_SECURITY->user_id."' AND messages_new.id=messages_messages.id ORDER BY messages_messages.ctime DESC");
+  if ($db->next_record()) {
+    $msg = cut_string($db->f('text'),100);
+    $msg = str_replace("\"","\\\"",$msg);
+    $msg = str_replace("\n",' ',$msg);
+    $msg = str_replace("\r",' ',$msg);
+    $id = $db->f('id');
+    echo '<script language="javascript">parent.header.SetStatus("Message: '.$msg.'");</script>';
+    $db->query("DELETE FROM messages_new WHERE id='$id'");
+  }
+}
+
 ?>
 </head>
 <body>

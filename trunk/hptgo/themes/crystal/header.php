@@ -5,6 +5,7 @@ $GO_SECURITY->authenticate();
 ?>
 <html>
 <head>
+<script language="JavaScript" type="text/javascript" src="<?php echo $GO_CONFIG->host; ?>javascript/remind.js"></script>
 <script language="javascript" type="text/javascript" src="<?php echo $GO_CONFIG->host; ?>javascript/common.js"></script>
 <title><?php echo $GO_CONFIG->title; ?>
 </title>
@@ -15,8 +16,10 @@ $GO_SECURITY->authenticate();
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="23">
 <tr>
-	<td class="HeaderBar" align="left" nowrap>&nbsp;&nbsp;<img src="<?php echo $GO_THEME->images['small_user_icon']; ?>" border="0" height="16" width="16" align="middle"/>&nbsp;<b><?php echo htmlspecialchars($_SESSION['GO_SESSION']['name']); ?></b></td>
-	<td class="HeaderBar" align="right" width="100%">
+	<td class="HeaderBar" align="left" nowrap>&nbsp;&nbsp;</td>
+	<td id="user_area" class="HeaderBar" align="left" nowrap><img src="<?php echo $GO_THEME->images['small_user_icon']; ?>" border="0" height="16" width="16" align="middle"/>&nbsp;<b><?php echo htmlspecialchars($_SESSION['GO_SESSION']['name']); ?></b></td>
+<td  class="HeaderBar" nowrap id="notification_area">&nbsp;</td>
+	<td class="HeaderBar" align="right" width="100%" nowrap>
 
 			<a class="HeaderBar" href="<?php echo $GO_CONFIG->host; ?>configuration/" target="main">
 			<img src="<?php echo $GO_THEME->images['configuration']; ?>" width="16" height="16" border="0" align="absmiddle" />
