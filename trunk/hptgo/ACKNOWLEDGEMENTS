@@ -1,0 +1,13 @@
+HPT-OBM is based on Group-Office community[1].
+There is also other programs/libraries used by HPT-OBM:
+ - ADODB: http://adodb.sourceforge.net
+ - HTMLArea: http://www.interactivetools.com/
+ - JSCalendar: http://dynarch.com/mishoo/calendar.epl
+ - KHTML2: http://www.interakt.ro/products/KTML/
+ - Overlib: http://www.bosrup.com/web/overlib/
+ - phpvnconv: http://linux.nguyendai.org/phpvnconv/
+ - phpmailer: http://phpmailer.sourceforge.net/
+ - fpdf: http://www.fpdf.org
+ - convertcharset: http://www.mikkom.pl
+
+[1] http://www.group-office.com
