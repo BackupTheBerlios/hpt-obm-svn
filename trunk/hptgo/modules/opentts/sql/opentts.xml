@@ -1,0 +1,309 @@
+<?xml version="1.0"?>
+<schema version="0.2">
+	<table name="tts_activities">
+		<field name="activity_name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="activity_id" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="tts_categories">
+		<field name="category_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="category_name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="tts_colors_tables">
+		<field name="clr_tbl_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="fnt_clr" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="bck_clr" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="tts_config">
+		<field name="varname" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="definition" type="X">
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="tts_groups">
+		<field name="permissions" type="C">
+		</field>
+		<field name="group_name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="description" type="C">
+		</field>
+		<field name="gid" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="tts_groups_members">
+		<field name="uid" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="uid_default" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="gid" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="tts_menu">
+		<field name="link" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="menu_id" type="I">
+			<NOTNULL/>
+		</field>
+		<field name="file" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="title" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="image" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="tts_permissions">
+		<field name="action_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="description" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="gid" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="tts_permissions_users">
+		<field name="uid" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="action_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="tts_priorities">
+		<field name="select_id" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="priority_name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="priority_id" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="tts_projects">
+		<field name="project_description" type="C">
+		</field>
+		<field name="privacy" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="project_name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="project_id" type="I">
+			<PRIMARY/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="tts_stages">
+		<field name="stage_name" type="C">
+			<NOTNULL/>
+			<DEFAULT value="undefined"/>
+		</field>
+		<field name="stage_id" type="L">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="tts_status">
+		<field name="show_by_default" type="L">
+		</field>
+		<field name="status_name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="status_id" type="I">
+			<NOTNULL/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="tts_tasks">
+		<field name="comment" type="X">
+		</field>
+		<field name="email_agent" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="post_date" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="email_issuer" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="sender_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="ticket_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="task_id" type="I">
+			<NOTNULL/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="tts_tickets">
+		<field name="ticket_number" type="I">
+			<NOTNULL/>
+		</field>
+		<field name="t_comments" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="acl_write" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="t_stage" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="t_category" type="L">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<field name="t_email" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="t_assigned" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="t_priority" type="L">
+			<NOTNULL/>
+			<DEFAULT value="1"/>
+		</field>
+		<field name="project_id" type="I">
+		</field>
+		<field name="transac_id" type="C">
+		</field>
+		<field name="acl_read" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="activity_id" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="t_status" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="change_date" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="t_subject" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="due_date" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="end_date" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="t_sms" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="post_date" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="t_description" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="complete" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="t_from" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<descr></descr>
+	</table>
+
+</schema>

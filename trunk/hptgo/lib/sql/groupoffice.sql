@@ -93,7 +93,8 @@ CREATE TABLE `groups` (
 	 `name` varchar(50) NOT NULL default '', 
 	`user_id` int(11) NOT NULL default '0', 
 	`leader_id` int(11) NOT NULL default '0', 
-	PRIMARY KEY (`id`), KEY `id` (`id`) 
+	PRIMARY KEY (`id`),
+	KEY `id` (`id`) 
 ) TYPE=MyISAM; 
 
 # --------------------------------------------------------

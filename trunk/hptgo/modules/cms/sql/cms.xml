@@ -1,0 +1,390 @@
+<?xml version="1.0"?>
+<schema version="0.2">
+	<table name="cms_files">
+		<field name="priority" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="extension" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="mtime" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="content" type="B">
+			<NOTNULL/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="description" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="size" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="keywords" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="hot_item" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="title" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="folder_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cms_folders">
+		<field name="priority" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="disabled" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="mtime" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="disable_multipage" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="parent_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cms_search_files">
+		<field name="search_word_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="file_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cms_search_words">
+		<field name="site_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="search_word" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cms_settings">
+		<field name="sort_order" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="sort_field" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cms_sites">
+		<field name="acl_read" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="publish_path" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="template_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="acl_write" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="root_folder_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="description" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="display_type" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="keywords" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="domain" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="publish_style" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cms_subscribed">
+		<field name="site_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cms_template_files">
+		<field name="extension" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="template_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="mtime" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="content" type="B">
+			<NOTNULL/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="size" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cms_template_items">
+		<field name="template_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="content" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="main" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cms_templates">
+		<field name="acl_read" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="additional_style" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="restrict_editor" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="style" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="acl_write" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="root_folder_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="qn_actions">
+		<field name="send_to_viewer" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="extension" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="next_action_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="content" type="B">
+			<NOTNULL/>
+		</field>
+		<field name="text" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="questionnaire_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="type" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="max_length" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="qn_answers">
+		<field name="next_action_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="action_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="text" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="type" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="qn_emails">
+		<field name="content" type="B">
+			<NOTNULL/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="action_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="type" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="qn_questionnaires">
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="site_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="start_action_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+</schema>

@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<schema version="0.2">
+	<table name="wiki_interwiki">
+		<field name="url" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="where_defined" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="prefix" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="wiki_links">
+		<field name="link" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="count" type="I">
+		</field>
+		<field name="page" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="wiki_pages">
+		<field name="supercede" type="T">
+			<NOTNULL/>
+		</field>
+		<field name="time" type="T">
+			<NOTNULL/>
+		</field>
+		<field name="version" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="author" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="username" type="C">
+		</field>
+		<field name="body" type="X">
+		</field>
+		<field name="comment" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="title" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="mutable" type="C">
+			<NOTNULL/>
+			<DEFAULT value="on"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="wiki_rate">
+		<field name="time" type="T">
+			<NOTNULL/>
+		</field>
+		<field name="ip" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="searchLimit" type="I">
+		</field>
+		<field name="editLimit" type="I">
+		</field>
+		<field name="viewLimit" type="I">
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="wiki_remote_pages">
+		<field name="page" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="site" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="wiki_sisterwiki">
+		<field name="where_defined" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="url" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="prefix" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<descr></descr>
+	</table>
+
+</schema>

@@ -238,7 +238,8 @@ CREATE TABLE `ab_subscribed` (
   `user_id` int(11) NOT NULL default '0',
   `addressbook_id` int(11) NOT NULL default '0',
   `standard` enum('0','1') NOT NULL default '0',
-PRIMARY KEY  (`user_id`,`addressbook_id`),  KEY `user_id` (`user_id`,`addressbook_id`,`standard`),
+  PRIMARY KEY  (`user_id`,`addressbook_id`),
+  KEY `user_id` (`user_id`,`addressbook_id`,`standard`),
   KEY `addressbook_id` (`addressbook_id`)
 ) TYPE=MyISAM;
 

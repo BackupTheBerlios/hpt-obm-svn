@@ -1,0 +1,401 @@
+<?xml version="1.0"?>
+<schema version="0.2">
+	<table name="cal_calendars">
+		<field name="acl_read" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="start_hour" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="acl_write" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="end_hour" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cal_events">
+		<field name="all_day_event" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="wed" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="acl_write" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="end_time" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="tue" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="repeat_end_time" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="mon" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="contact_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="repeat_every" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="ctime" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="acl_read" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="fri" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="location" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="repeat_type" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="mtime" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="start_time" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="background" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="reminder" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="description" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="repeat_forever" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="sun" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="month_time" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="sat" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="thu" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cal_events_calendars">
+		<field name="event_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="calendar_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cal_holidays">
+		<field name="date" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="region" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="calendar_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cal_participants">
+		<field name="event_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="status" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="email" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cal_reminders">
+		<field name="event_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="remind_time" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cal_settings">
+		<field name="show_todos" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="default_view_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="default_cal_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="hide_completed_todos" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="show_days" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cal_todos">
+		<field name="priority" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="status" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="res_user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="due_time" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="remind_style" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="completion_time" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="contact_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="remind_time" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="ctime" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="location" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="mtime" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="background" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="start_time" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="description" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cal_views">
+		<field name="standard" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="acl_write" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="end_hour" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="start_hour" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="acl_read" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="type" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cal_views_calendars">
+		<field name="view_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="calendar_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cal_config">
+		<field name="calendar_id" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="user_id" type="I">
+			<PRIMARY/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="cal_view_subscriptions">
+		<field name="view_id" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="user_id" type="I">
+			<PRIMARY/>
+		</field>
+		<descr></descr>
+	</table>
+
+</schema>

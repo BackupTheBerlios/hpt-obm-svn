@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+<schema version="0.2">
+	<table name="emAccounts">
+		<field name="auto_check" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="standard" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="mbroot" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="email" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="spam" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="password" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="sent" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="novalidate_cert" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="port" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="host" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="username" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="draft" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="use_ssl" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="trash" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="signature" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="type" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="emFilters">
+		<field name="priority" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="keyword" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="folder" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="field" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="account_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="emFolders">
+		<field name="parent_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="delimiter" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="account_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="subscribed" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="attributes" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="em_settings">
+		<field name="sort_order" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="sort_field" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="send_format" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="user_id" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<descr></descr>
+	</table>
+
+</schema>

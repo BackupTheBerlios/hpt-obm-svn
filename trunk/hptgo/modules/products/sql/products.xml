@@ -1,0 +1,140 @@
+<?xml version="1.0"?>
+<schema version="0.2">
+	<table name="sc_attach_categories">
+		<field name="name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="id" type="I">
+			<PRIMARY/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="sc_attachments">
+		<field name="product_id" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="attach_cate_id" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="attach_id" type="I">
+			<PRIMARY/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="sc_cate_products">
+		<field name="category_id" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="product_id" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="be_attachment" type="L">
+			<PRIMARY/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="sc_categories">
+		<field name="category_id" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="category_name" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="parent_id" type="I">
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="sc_order_detail">
+		<field name="order_number" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="product_id" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="quantity" type="I">
+		</field>
+		<field name="attach_cate_id" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="price" type="F">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="discount" type="I">
+		</field>
+		<field name="attach_id" type="I">
+			<PRIMARY/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="sc_orders">
+		<field name="seller" type="I">
+		</field>
+		<field name="sale_date" type="D">
+		</field>
+		<field name="order_number" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="valid_date" type="D">
+			<NOTNULL/>
+			<DEFAULT value="0000-00-00"/>
+		</field>
+		<field name="attn" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="phone" type="C">
+		</field>
+		<field name="fax" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="company" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="sc_products">
+		<field name="VAT" type="F">
+		</field>
+		<field name="warranty_info" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="description" type="X">
+		</field>
+		<field name="part_number" type="C">
+		</field>
+		<field name="product_id" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="price" type="F">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="product_name" type="C">
+		</field>
+		<descr></descr>
+	</table>
+
+	<table name="sc_templates">
+		<field name="category_id" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="attach_cate_id" type="I">
+			<PRIMARY/>
+		</field>
+		<descr></descr>
+	</table>
+
+</schema>
