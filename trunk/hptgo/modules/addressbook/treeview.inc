@@ -117,6 +117,8 @@ if ($ab->get_subscribed_addressbooks($GO_SECURITY->user_id) > 1)
 	echo '</td></tr></table>';
 }else
 {
+	echo '<input type="hidden" name="treeview" value="'.$is_treeview.'"/>';
+	echo '<a href="javascript:document.forms[0].treeview.value=\''.(1-$is_treeview).'\';document.forms[0].submit()">'.($is_treeview ? $strListView : $strTreeView).'</a>';
 	echo '<input type="hidden" name="addressbook_id" value="'.$addressbook_id.'" />';
 }
 
