@@ -518,7 +518,7 @@ switch($tabtable->get_active_tab_id())
       }
       $db = new db();
       if ($project_id <= 0) {
-        $db->query('SELECT * FROM pmCatalog');
+        $db->query('SELECT DISTINCT pmCatalog.* FROM pmCatalog,task_templates WHERE pmCatalog.id=task_templates.cat_id');
         $catalog = new dropbox();
         $cat_id = $_REQUEST['catalog'];
         while ($db->next_record()) {
