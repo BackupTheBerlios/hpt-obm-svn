@@ -230,15 +230,17 @@ switch ($task)
     $project = $projects->get_project($project_id);
     $responsible_user_id = $project['res_user_id'];
     $user = $GO_USERS->get_user($responsible_user_id);
-    $project_folder = $GO_CONFIG->file_storage_path . 'projects/';
-    if (!file_exists($project_folder) && !mkdir($project_folder)) {
+    require_once($GO_CONFIG->class_path.'filesystem.class.inc');
+    $fs = new filesystem();
+    $project_folder = '/projects/';
+    if (!$fs->chroot_file_exists($project_folder) && !$fs->chroot_mkdir($project_folder)) {
       error_log("GO: Create $project_folder error");
       unset($project_folder);
     }
     else {
       $project_folder = $project_folder . "$project_id";
-      if (!file_exists($project_folder)) {
-        if (!mkdir($project_folder)) {
+      if (!$fs->chroot_file_exists($project_folder)) {
+        if (!$fs->chroot_mkdir($project_folder)) {
           error_log("GO: Create $project_folder error");
           unset($project_folder);
         }
@@ -266,7 +268,7 @@ switch ($task)
 
       $task_folder = "$project_folder/$tid";
       if ($is_new_project) {
-        if (!mkdir($task_folder))
+        if (!$fs->chroot_mkdir($task_folder))
           error_log("GO: Create $task_folder error");
       }
 

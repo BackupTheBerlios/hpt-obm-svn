@@ -26,7 +26,7 @@ if (isset($_REQUEST['delete_project_id']) && $_REQUEST['delete_project_id'] > 0)
       $GO_SECURITY->delete_acl($project['acl_write']);
       $GO_SECURITY->delete_acl($project['acl_read']);
       $projects->query("DELETE FROM task WHERE task_project_id=$pid");
-      $project_folder = $GO_CONFIG->file_storage_path. 'projects/' . $pid;
+      $project_folder = '/projects/' . $pid;
       require_once($GO_CONFIG->class_path.'filesystem.class.inc');
       $fs = new filesystem();
       $fs->delete($project_folder);

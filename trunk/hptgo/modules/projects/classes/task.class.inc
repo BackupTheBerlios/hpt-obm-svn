@@ -241,7 +241,7 @@ class project_task extends db {
     $this->is_monitor = isset($monitors) && is_array($monitors) ? in_array($GO_SECURITY->user_id, array_keys($monitors)) : false;
     $this->is_passed = $this->status <= TASK_DONE;
 
-    $this->doc_path = $GO_CONFIG->file_storage_path . 'projects/' .
+    $this->doc_path = '/projects/' .
       $this->project_id . '/' . $this->id;
     $this->doc_url = $_SERVER['PHP_SELF'].'?task=show_task_doc'.
              '&project_id='.$this->project_id.

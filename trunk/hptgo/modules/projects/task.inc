@@ -179,7 +179,7 @@ if ($task != 'show_task_gantt') {
   }
 }
 
-$_SESSION['GO_FILESYSTEM_PATH'] = $GO_CONFIG->file_storage_path.'users/'.
+$_SESSION['GO_FILESYSTEM_PATH'] = '/users/'.
                                   $_SESSION['GO_SESSION']['username'];
 if ($task != 'show_task_gantt')
 {
