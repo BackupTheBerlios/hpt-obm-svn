@@ -78,13 +78,22 @@ CREATE TABLE `filetypes` (
 #
 
 DROP TABLE IF EXISTS `groups`;
-CREATE TABLE `groups` (
-  `id` int(11) NOT NULL default '0',
-  `name` varchar(50) NOT NULL default '',
-  `user_id` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`id`),
-  KEY `id` (`id`)
-) TYPE=MyISAM;
+#CREATE TABLE `groups` (
+#  `id` int(11) NOT NULL default '0',
+#  `name` varchar(50) NOT NULL default '',
+#  `user_id` int(11) NOT NULL default '0',
+	
+#  PRIMARY KEY  (`id`),
+#  KEY `id` (`id`)
+#) TYPE=MyISAM;
+
+CREATE TABLE `groups` ( 
+	`id` int(11) NOT NULL default '0',
+	 `name` varchar(50) NOT NULL default '', 
+	`user_id` int(11) NOT NULL default '0', 
+	`leader_id` int(11) NOT NULL default '0', 
+	PRIMARY KEY (`id`), KEY `id` (`id`) 
+) TYPE=MyISAM; 
 
 # --------------------------------------------------------
 
