@@ -15,6 +15,7 @@ class acl
   var $form_name;
   var $acl_id;
   var $read_only;
+  var $group_detail;
   var $selected_groups_name;
   var $selected_users_name;
   var $ACL;
@@ -37,6 +38,7 @@ class acl
       $this->acl_id = $acl_id;
       //$this->read_only = $read_only == 'true' ? true : false;
       $this->read_only = !$this->ACL->user_owns_acl($GO_SECURITY->user_id, $acl_id);
+      $this->group_detail = isset($_POST['groupdetail']) ? $_POST['groupdetail'] : '0';
       $this->form_name = 'acl_control_'.$acl_id;
       $this->selected_groups_name = "selected_groups_".$acl_id;
       $this->selected_users_name = "selected_users_".$acl_id;
@@ -269,6 +271,7 @@ class acl
       ' class="textbox" '.$disabled.'>';
 
     $this->ACL->get_groups_in_acl($this->acl_id);
+    $group_db = new GO_GROUPS();
 
     while ($this->ACL->next_record())
       // echo '<option value="'.$this->ACL->f('id').'">'
@@ -281,6 +284,7 @@ class acl
 	{
 	  echo '<option value="'.$this->ACL->f('id').'">'.
 	    htmlspecialchars($this->ACL->f('name')).'</option>';
+	  $group_id = $this->ACL->f('id');
 	}
       } else
       {
@@ -294,9 +298,22 @@ class acl
 	  {
 	    echo '<option value="'.$this->ACL->f('group_id').
 	      '">'.htmlspecialchars($profile["name"]).'</option>';
+	    $group_id = $this->ACL->f('group_id');
 	  }
 	}
       }
+
+      if (isset($group_id) && $this->group_detail == '1')
+      {
+	$group_db->get_users_in_group($group_id);
+	while ($group_db->next_record())
+	{
+	  $name = $group_db->f('last_name') .' '. $group_db->f('middle_name') .' '. $group_db->f('first_name');
+	  echo '<option disabled>&nbsp;&nbsp;'.htmlspecialchars($name).'</option>';
+	}
+      }
+      //$this->ACL->get_groups_in_acl_with_users($this->acl_id);
+
     }
     echo '</select>';
 
@@ -349,6 +366,7 @@ class acl
   /** 
    * Print list of users in acl (test mode). That is, print all authorised users.
    */
+   /* -- comment since it's not been used anymore
   function test_mode_print_users_in_acl()
   {
     global $GO_SECURITY, $GO_USERS, $cmdAdd, $cmdDelete;
@@ -369,6 +387,7 @@ class acl
     }
     echo '</select>';
   }
+  */
   /**
    * Print the ACL form.
    */
@@ -397,24 +416,35 @@ class acl
 		  document.'.$this->form_name.'.task.value="delete_users";
 		  document.'.$this->form_name.'.submit();
 		}
+		function group_detail_toggle()
+		{
+		  document.'.$this->form_name.'.groupdetail.value= (document.'.$this->form_name.'.groupdetail.value == "1" ? "0" : "1");
+		  document.'.$this->form_name.'.submit();
+		}
+
 		</script>
 		  ';
-    global $acl_control_auth_groups, $acl_control_auth_users,$acl_all_auth_users;
+    global $acl_control_auth_groups, $acl_control_auth_users;
+    global $acl_control_auth_groups_detail_on,$acl_control_auth_groups_detail_off;
     echo '<form name="'.$this->form_name.'" method="post" action="'.$_SERVER['PHP_SELF'].'">';
     echo '<input type="hidden" name="task" value="" />';
     echo '<input type="hidden" name="acl_id" value="'.$this->acl_id.'" />';
     echo '<input type="hidden" name="acl_table" value="'.$this->ACL->acl_table.'" />';
     echo '<input type="hidden" name="read_only" value="'.$this->read_only.'" />';
+    echo '<input type="hidden" name="groupdetail" value="'.$this->group_detail.'" />';
     echo '<table border="0" cellspacing="0" cellpadding="0">';
-    echo '<tr><td><h3>'.$acl_control_auth_users.'</h3></td><td width="20">&nbsp;</td>';
-    echo '<td><h3>'.$acl_control_auth_groups.'</h3></td><td width="20">&nbsp;</td>';
-    echo '<td><h3>'.$acl_all_auth_users.'</td></tr>';
+    echo '<tr><td><b>'.$acl_control_auth_users.'</b></td><td width="20">&nbsp;</td>';
+    echo '<td><b>'.$acl_control_auth_groups.'</b>&nbsp;<a href="javascript:group_detail_toggle()">'.($this->group_detail == '1' ? $acl_control_auth_groups_detail_off : $acl_control_auth_groups_detail_on).'</a></td><td width="20">&nbsp;</td>';
+//    echo '<td><h3>'.$acl_all_auth_users.'</td></tr>';
+    echo '</tr>';
     echo '<tr><td>';
     $this->print_users_in_acl();
     echo '</td><td width="20">&nbsp;</td><td>';
     $this->print_groups_in_acl();
+/*
     echo '</td><td width="20">&nbsp;</td><td valign="top">';
     $this->test_mode_print_users_in_acl();
+*/
     echo '</td></tr>';
     echo '</table>';
     /*
