@@ -51,6 +51,10 @@ $link_back = (isset($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? $
 			<td width="100%"><?php echo empty_to_stripe($profile["last_name"]); ?></td>
 		</tr>
 		<tr>
+			<td align="right" nowrap><i><?php echo $strMiddleName; ?>:</i>&nbsp;</td>
+			<td width="100%"><?php echo empty_to_stripe($profile["middle_name"]); ?></td>
+		</tr>
+		<tr>
 			<td align="right" nowrap><i><?php echo $strFirstName; ?>:</i>&nbsp;</td>
 			<td width="100%"><?php echo empty_to_stripe($profile["first_name"]); ?></td>
 		</tr>
