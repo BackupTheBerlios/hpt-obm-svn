@@ -18,3 +18,4 @@ DROP TABLE IF EXISTS `tp_templates`;
 DROP TABLE IF EXISTS `ab_cate_companies`;
 DROP TABLE IF EXISTS `ab_categories`;
 DROP TABLE IF EXISTS `ab_new_companies`;
+DROP TABLE IF EXISTS `ab_config`;

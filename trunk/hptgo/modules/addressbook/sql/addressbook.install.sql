@@ -346,3 +346,10 @@ CREATE TABLE ab_new_companies (
   PRIMARY KEY  (addressbook_id,company_id)
 ) TYPE=MyISAM;
 
+CREATE TABLE ab_config (
+page varchar(30) NOT NULL default '0',
+user_id int(11) unsigned NOT NULL default '0',
+order_fields text,
+order_all text,
+PRIMARY KEY (page,user_id)
+) TYPE=MyISAM;
