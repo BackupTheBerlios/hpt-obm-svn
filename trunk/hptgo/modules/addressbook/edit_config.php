@@ -5,8 +5,8 @@
    Free Software Foundation; either version 2 of the License, or (at your
    option) any later version.
  */
-	$task = $_REQUEST['task'];
-	$page = $_REQUEST['active_tab'];
+	$task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
+	$page = isset($_REQUEST['active_tab']) ? $_REQUEST['active_tab'] : 0;
 
 	$user = $GO_SECURITY->user_id;
 
@@ -17,7 +17,7 @@
 		case $constCompaniesPage:$res = $db->metadata("ab_companies",false); break;
 		case $constMembersPage:$res = $db->metadata("users",false); break;
 		default:
-			$page = $$constContactsPage;		
+			$page = $constContactsPage;		
 			$res = $db->metadata("ab_contacts",false); 
 	}
 	
@@ -114,7 +114,7 @@ $mi = new move_item();
 
 $value = 1;
 
-if (count($order_all) > 0)
+if (isset($order_all) && count($order_all) > 0)
 {
 	$iorder = 0;
 	for ($i = 0; $i < count($order_all); $i++)
@@ -130,7 +130,7 @@ if (count($order_all) > 0)
 			echo '<tr>';
     		echo '<td align="center"><b>'.$value.'</b></td>';
 
-			if ($order_all[$i] == $com[$iorder])
+			if (isset($com[$iorder]) && $order_all[$i] == $com[$iorder])
 			{
 				echo $mi->item($value, $strCom[$order_all[$i]], $order_all[$i], true);
 				$iorder++;

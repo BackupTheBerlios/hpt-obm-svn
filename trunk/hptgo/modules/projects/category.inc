@@ -20,10 +20,9 @@ if (!$GO_MODULES->write_permissions) {
 
 $trash = '<img src="'.$GO_THEME->images['delete'].'" border="0">';
 $editor = '<img src="'.$GO_THEME->images['edit'].'" border="0">';
-$cat_id = $_REQUEST['cat_id'];
-if (!isset($cat_id)) $cat_id = 0;
+if (isset($_REQUEST['cat_id'])) $cat_id = $_REQUEST['cat_id'];
 
-$task = $_REQUEST['task'];
+if (isset($_REQUEST['task'])) $task = $_REQUEST['task'];
 $db = new db();
 
 switch ($task) {
@@ -103,7 +102,7 @@ $count = $db->num_rows();
 $catalog = new dropbox();
 $catalog_name = '';
 while ($db->next_record()) {
-  if ($cat_id == 0) $cat_id = $db->f('id');
+  if (!isset($cat_id) || $cat_id == 0) $cat_id = $db->f('id');
   $catalog->add_value($db->f('id'), $db->f('name'));
   if ($cat_id == $db->f('id'))
     $catalog_name = $db->f('name');
@@ -200,7 +199,7 @@ echo '<tr><td>&nbsp;</td><td colspan="99">'.$pm_status_done.'</td></tr>';
 echo $spliter_line;
 echo '<tr><td>&nbsp;</td><td colspan="99">'.$pm_status_drop.'</td></tr>';
 echo $spliter_line;
-echo '<input type="hidden" name="last_value" value="'.($value+1).'" />';
+echo '<input type="hidden" name="last_value" value="'.((isset($value) ? $value : 0)+1).'" />';
 echo '</table></td></tr></table>';
 echo '<input id="status_edit" type="text" class="textbox" '.
      'style="position: absolute; visibility: hidden; display: none; width: 300px;" '.

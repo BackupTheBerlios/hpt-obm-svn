@@ -427,7 +427,7 @@ class db {
    * @return mixed
    */
   function f($Name) {
-    return $this->Record[$Name];
+    return isset($this->Record[$Name]) ? $this->Record[$Name] : null;
   }
 
   /**
@@ -436,7 +436,7 @@ class db {
    * @param string $Name
    */
   function p($Name) {
-    print $this->Record[$Name];
+    print isset($this->Record[$Name]) ? $this->Record[$Name] : '';
   }
 
   /**

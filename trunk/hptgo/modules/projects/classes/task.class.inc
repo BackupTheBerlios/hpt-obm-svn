@@ -10,10 +10,10 @@
    option) any later version.
  */
 
-define(TASK_WAITING, 3);
-define(TASK_ONGOING, 2);
-define(TASK_DONE,    1);
-define(TASK_BYPASS,  0);
+define('TASK_WAITING', 3);
+define('TASK_ONGOING', 2);
+define('TASK_DONE',    1);
+define('TASK_BYPASS',  0);
 
 $today = 0;
 $max_task_id = 0;
@@ -321,8 +321,12 @@ class project_task extends db {
       echo '<td>'.$progress.'</td>';
       if ($this->status == TASK_ONGOING)
         echo "<td><b>".$pm_task_status_values[$this->status]."</b></td>";
-      else
-        echo "<td>".$pm_task_status_values[$this->status]."</td>";
+      else {
+        if (isset($pm_task_status_values[$this->status]))
+          echo "<td>".$pm_task_status_values[$this->status]."</td>";
+	else
+          echo "<td>&nbsp;</td>";
+      }
     }
     echo '<td align="center">'.($this->approved ? '<img border="0" src="'.$GO_THEME->images['checked'].'"/>' : '&nbsp;').'</td>';
     $url = $this->doc_url.'&return_to='.rawurlencode($return_to).'&return_to2='.rawurlencode($link_back);
@@ -500,7 +504,7 @@ class project_task extends db {
     echo '<tr>';
     echo '<td align="center">'.$this->id.'</td>';
     echo '<td>'.$this->name.'</td>';
-    echo '<td>'.$member_list[$this->person_id].'</td>';
+    echo '<td>'.(isset($member_list) && is_array($member_list) ? $member_list[$this->person_id] : '&nbsp;').'</td>';
     list($pids, $tips) = $this->get_pid_tips();
     echo '<td>'.$tips.$pids.'</td>';
     echo '<td>'.$this->days.'</td>';

@@ -989,8 +989,8 @@ function view_part($uid, $part_no, $transfer, $part_charset='')
   if ($transfer == 'BASE64')
     $str = imap_base64($text);
   elseif($transfer == 'QUOTED-PRINTABLE') {
-    $patterns = array("/=20\r\n/", "/=3D/", "/=\r\n/", "/\r\n/");
-    $replaces = array(' ', '=', '', ' ');
+    $patterns = array("/=20\r\n/", "/=3D/", "/=\r\n/");
+    $replaces = array(' ', '=', '');
     $text = preg_replace ($patterns, $replaces, $text);
     $patterns = array("/=([0-9A-F]{2})(=[0-9A-F]{2})*/");
     $text = preg_replace_callback ($patterns, "quoted_to_ncr", $text);

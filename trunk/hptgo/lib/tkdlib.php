@@ -302,10 +302,11 @@
 		
 		$db = new db();
 		$db->query("SELECT order_fields FROM ab_config WHERE page=".$page." AND user_id='".$GO_SECURITY->user_id."'"); 
-		if ($db->next_record())
+		if ($db->next_record()) {
 			$order = explode(",",$db->f('order_fields'));
-
-		return $order;
+			return $order;
+		}
+		return array();
 	}
 
 /**
@@ -349,7 +350,7 @@
 				break;
 				case 'company_id':
 				case 'parent':
-					$db->query('SELECT name FROM ab_companies WHERE id = '.$ab->f($order[$i]));
+					$db->query('SELECT name FROM ab_companies WHERE id = '.(int)$ab->f($order[$i]));
 					echo '<td nowrap> '.empty_to_stripe($db->next_record()?$db->f('name'):'').' </td>';
 				break;
 				case '':break;
@@ -393,7 +394,7 @@
 */	
 	function account_manager($acl_id)
 	{
-		global $GO_SECURITY, $GO_USERS, $strAccountManager;
+		global $GO_SECURITY, $GO_USERS, $strAccountManager,$read_only;
 		  		
 		$disabled = $read_only ? 'disabled' : '';
 

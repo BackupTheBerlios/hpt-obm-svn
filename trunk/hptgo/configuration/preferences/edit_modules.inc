@@ -11,7 +11,8 @@
  */
 
 $task = $_REQUEST['task'];
-$page = $_REQUEST['active_tab'];
+if (isset($_REQUEST['active_tab']))
+  $page = $_REQUEST['active_tab'];
 
 $user = $GO_SECURITY->user_id;
 
@@ -20,7 +21,7 @@ $db = new db();
 switch ($task) {
 	case 'save':
 		$com = $_REQUEST['com'];
-		$show_text = $_REQUEST['show_text'] == '1' ? '1' : '0';
+		$show_text = isset($_REQUEST['show_text']) && $_REQUEST['show_text'] == '1' ? '1' : '0';
 
 		if ($_REQUEST['com'] > 0) {
 			$com = $_REQUEST['com'];
@@ -70,10 +71,10 @@ if ($com_string == '') {
 
 echo '<table border="0" cellspacing="0" cellpadding="1" width="100%">';
 echo '<input type="hidden" name="id" value="0" />';
-echo '<input type="hidden" name="addressbook_id" value="'.$_REQUEST['addressbook_id'].'" />';
-echo '<input type="hidden" name="treeview" value="'.$_REQUEST['treeview'].'" />';
-echo '<input type="hidden" name="first" value="'.$_REQUEST['first'].'" />';
-echo '<input type="hidden" name="max_rows" value="'.$_REQUEST['max_rows'].'" />';
+echo '<input type="hidden" name="addressbook_id" value="'.(isset($_REQUEST['addressbook_id']) ? $_REQUEST['addressbook_id'] : '').'" />';
+echo '<input type="hidden" name="treeview" value="'.(isset($_REQUEST['treeview']) ? $_REQUEST['treeview'] : '').'" />';
+echo '<input type="hidden" name="first" value="'.(isset($_REQUEST['first']) ? $_REQUEST['first'] : '').'" />';
+echo '<input type="hidden" name="max_rows" value="'.(isset($_REQUEST['max_rows']) ? $_REQUEST['max_rows'] : '').'" />';
 echo '<tr><td>';
 echo '<table border="0" cellpadding="2" cellspacing="0">';
 echo '<tr><td>&nbsp;</td></tr>';
@@ -88,7 +89,7 @@ $move_space = '<img src="'.$GO_THEME->images['task_space'].'" border="0" width="
 $spliter = '<tr><td colspan="100" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 
 echo '<tr class="TableHead2" height="20">';
-echo '<td width="340" colspan="99" nowrap>'.$ab_category_name.'</td></tr>';
+echo '<td width="340" colspan="99" nowrap>'.$pref_module_name.'</td></tr>';
 
 require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 $mi = new move_item();

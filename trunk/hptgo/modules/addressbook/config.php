@@ -20,7 +20,7 @@
 	if ($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
 		$tabtable->add_tab("categories.php",$strModifyCategories);
 	
-	$tabtable->set_active_tab( empty($_REQUEST['active_tab'])?0:$_REQUEST['config'] );
+	$tabtable->set_active_tab( empty($_REQUEST['active_tab'])?0:(isset($_REQUEST['config']) ? $_REQUEST['config'] : null) );
 
 	$tabtable->print_head();
 	require($tabtable->get_active_tab_id());

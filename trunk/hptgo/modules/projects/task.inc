@@ -46,7 +46,8 @@ while ($projects->next_record()) {
 $tasks = load_project_task($projects, $project_id);
 
 if ($task != 'show_task_gantt') {
-  $task_status = $_GET['task_status'];
+  if (isset($_GET['task_status']))
+    $task_status = $_GET['task_status'];
   $save_type = isset($task_status) ? "status" : "list";
 
   echo '<input type="hidden" name="max_task_id" value="'.$max_task_id.'">';
@@ -153,7 +154,7 @@ echo '<tr><td colspan="2">&nbsp;</td></tr><tr><td>';
 
 if ($task != 'show_task_gantt') {
   if ($stask->project_status!=STATUS_DROP) {
-    if ($task_status != 'show_doc') {
+    if (!isset($task_status) || $task_status != 'show_doc') {
       if ((isset($task_status) && !$stask->approved) ||
          ($stask->is_manager && (!isset($task_status) ||
          ($task_status != TASK_DONE && !$stask->approved))))
@@ -233,6 +234,11 @@ function show_planned_eslapsed_times() {
       $delay_days = "$pm_remain: ".$d." $pm_days";
   }
 
+  // NOTE: i haven't seen $predict_delay_days defined anywhere,
+  // so set it empty to avoid php notices
+  $predict_delay_days = '';
+
+  
   if (!$project_done) {
     $real_stop_date = $tasks[$last_task_id]->find_stop_date();
     if ($real_stop_date > $plan_days) {

@@ -20,12 +20,11 @@ $showasgraph = isset($_REQUEST['show_as']) && (int)$_REQUEST['show_as'] != 0 ? 1
 
 $trash = '<img src="'.$GO_THEME->images['delete'].'" border="0">';
 $editor = '<img src="'.$GO_THEME->images['edit'].'" border="0">';
-$cat_id = $_REQUEST['cat_id'];
-if (!isset($cat_id)) $cat_id = 0;
-$template_id = $_REQUEST['template_id'];
-if (!isset($template_id)) $template_id = 0;
+$cat_id = isset($_REQUEST['cat_id']) ? $_REQUEST['cat_id'] : 0;
+$template_id = isset($_REQUEST['template_id']) ? $_REQUEST['template_id'] : 0;
 
-$task = $_REQUEST['task'];
+if (isset($_REQUEST['task']))
+  $task = $_REQUEST['task'];
 $db = new db();
 
 function reformat_predecessors($task_predecessors)
@@ -271,7 +270,7 @@ echo '<tr><td>&nbsp;</td>'.
      '<a href="javascript:add_template()" class="normal">'.$pm_new_template.'</a></td>'.
      '</tr>';
 echo '<tr><td align="right" nowrap>'.$pm_process_template.':</td><td>';
-echo '<input type="hidden" name="template_name" value="'.$template_name.'" />';
+echo '<input type="hidden" name="template_name" value="'.(isset($template_name) ? $template_name : '').'" />';
 $template->print_dropbox('template_id', $template_id,
     'onchange="javascript:frm.submit()"', false, '10', '200');
 echo '</td><td width="60">'.
@@ -470,11 +469,11 @@ else {
   echo '<tr><td>&nbsp;</td>'.$spliter_line.'</tr>';
 }
 }
-echo '<input type="hidden" name="last_value" value="'.($max_id+1).'" />';
+echo '<input type="hidden" name="last_value" value="'.((isset($max_id) ? $max_id : 0) + 1).'" />';
 echo '<input type="hidden" name="task_value" value="0" />';
 echo '<input type="hidden" name="task_change" value="0" />';
 echo '</table></td></tr></table>';
-echo $task_list;
+if (isset($task_list)) echo $task_list;
 echo '<input id="task_edit" type="text" class="textbox" '.
      'style="position: absolute; visibility: hidden; display: none; width: 280px;" '.
      'name="task_name" value="" maxlength="255" />';
@@ -497,8 +496,8 @@ var task_row_spliter = null;
 var task_action = null;
 var task_list = null;
 
-var idlist = new Array(<?php echo $idlist;?>);
-var nolist = new Array(<?php echo $nolist;?>);
+var idlist = new Array(<?php echo isset($idlist) ? $idlist : '';?>);
+var nolist = new Array(<?php echo isset($nolist) ? $nolist : '';?>);
 
 // Set Netscape up to run the "captureMousePosition" function whenever
 // the mouse is moved. For Internet Explorer and Netscape 6, you can capture
