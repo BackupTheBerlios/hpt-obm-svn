@@ -33,6 +33,7 @@ class tabtable
   var $css_table = 'tabtable';
   var $css_tab_background = 'TabBackground';
   var $css_tab_background_vert = 'TabBackgroundVert';
+  var $html_title = false;
 
   //constructor sets basic propertiesz
   function tabtable($id, $title='', $width='', $height='', $tabwidth='120', $arguments='', $submit_form=false, $align='left', $valign='top', $form_name='forms[0]', $tab_direction='horizontal', $right_title = '')
@@ -120,7 +121,7 @@ class tabtable
 				'<td colspan="100">'.
 					'<table width="100%" border="0" cellspacing="0" cellpadding="0">'.
 						'<tr>'.
-    						'<th width="99%" nowrap>'.htmlspecialchars($this->title).'</th>'.
+    						'<th width="99%" nowrap>'.$this->html_title ? $this->title : htmlspecialchars($this->title).'</th>'.
     						'<th width="1%" nowrap>'.htmlspecialchars($this->right_title).'&nbsp;</th>'.
 						'</tr>'.
 					'</table>'.

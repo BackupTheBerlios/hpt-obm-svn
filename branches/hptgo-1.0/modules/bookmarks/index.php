@@ -121,7 +121,7 @@ while($bookmarks->next_record())
 	echo '<td valign="top" width="33%">';
 
 	$title = '<table border="0" width="100%" height="22" class="TableHead" cellpadding="0" '.
-					 ' cellspacing="0"><td width="100%">'.$bookmarks->f('name').'</td>';
+					 ' cellspacing="0"><td width="100%">'.htmlspecialchars($bookmarks->f('name')).'</td>';
 
 	if ($catagory_write)
 	{
@@ -135,7 +135,7 @@ while($bookmarks->next_record())
 
 					"<td width=\"16\"><a href='javascript:div_confirm_action(\"".
 					$_SERVER['PHP_SELF']."?delete_catagory=".$bookmarks->f('id').
-					"\",\"".div_confirm_id($strDeletePrefix."'".addslashes($bookmarks->f('name')).
+					"\",\"".div_confirm_id($strDeletePrefix."'".$bookmarks->f('name').
 					"' ".$bm_and_all_contents." ".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".
 					htmlspecialchars($bookmarks->f('name'))."'\"><img src=\"".$GO_THEME->images['delete'].
 					"\" border=\"0\"></a></td>";
@@ -144,6 +144,7 @@ while($bookmarks->next_record())
 		$title .=	'</tr></table>';
 
 	$tabtable = new tabtable('tab_'.$bookmarks->f('id'), $title, '100%', '0', '120', '');
+	$tabtable->html_title = true;
 	$tabtable->print_head();
 
 	if ($bookmark_count = $bookmarks2->get_bookmarks($GO_SECURITY->user_id, $bookmarks->f('id')))
@@ -158,7 +159,7 @@ while($bookmarks->next_record())
 			{
 				echo	'<td><input type="checkbox" name="bookmarks[]" value="'.
 							$bookmarks2->f('id') .'" id="'.
-							htmlspecialchars($bookmarks2->f('name')).'" /></td>';
+							div_confirm_id($bookmarks2->f('name')).'" /></td>';
 			}else
 			{
 				echo '<td>&nbsp;</td>';
@@ -216,6 +217,7 @@ if ($catagory_count > 0)
 	$title .=	'</tr></table>';
 
 	$tabtable = new tabtable('tab_0', $title, '100%', '', '120', '');
+	$tabtable->html_title = true;
 }else
 {
 	$tabtable = new tabtable('tab_0', $lang_modules['bookmarks'], '100%', '', '120', '');
@@ -234,7 +236,7 @@ if ($bookmark_count = $bookmarks->get_bookmarks($GO_SECURITY->user_id, 0))
 		echo '<tr>';
 		if ($bookmark_write)
 		{
-			echo	'<td><input type="checkbox" name="bookmarks[]" value="'.$bookmarks->f('id') .'" id="'.htmlspecialchars($bookmarks->f('name')).'" /></td>';
+			echo	'<td><input type="checkbox" name="bookmarks[]" value="'.$bookmarks->f('id') .'" id="'.div_confirm_id($bookmarks->f('name')).'" /></td>';
 		}else
 		{
 			echo '<td>&nbsp;</td>';
@@ -304,7 +306,7 @@ function confirm_delete()
 		break;
 
 		case 1:
-			if (confirm("<?php echo $strDeletePrefix; ?> '"+name+"' <?php echo $strDeleteSuffix; ?>"))
+			if (confirm("<?php echo $strDeletePrefix; ?> '"+div_confirm_text(name)+"' <?php echo $strDeleteSuffix; ?>"))
 			{
 				document.forms[0].task.value="delete";
 				document.forms[0].submit();
