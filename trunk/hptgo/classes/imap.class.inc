@@ -440,7 +440,10 @@ function mail_fetchparts($msgNo) {
       if (isset($headerinfo->Subject))
       {
 	$tmp = imap_mime_header_decode($headerinfo->Subject);
-	$this->message["subject"] = isset($tmp[0]->text) ? $tmp[0]->text : '';
+	$this->message["subject"] = '';
+	foreach ($tmp as $t)
+	  if (isset($t->text))
+	    $this->message['subject'] .= $t->text;
       }
 
       if (isset($headerinfo->to))
