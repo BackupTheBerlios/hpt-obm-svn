@@ -10,8 +10,8 @@ $sc_location = "Địa điểm";
 
 $month_times[0] = "Đầu tiên";
 $month_times[1] = "Thứ nhì";
-$month_times[2] = "Thứ hai";
-$month_times[3] = "Thứ ba";
+$month_times[2] = "Thứ ba";
+$month_times[3] = "Thứ tư";
 
 $sc_new_app = "Thêm sự kiện";
 $sc_calendars = "Lịch công tác";
