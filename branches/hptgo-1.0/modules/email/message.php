@@ -407,6 +407,7 @@ if ($count>0)
 <td>
 <br />
 <?php
+require_once("smileys.php");
 //get all text and html content
 for ($i=0;$i<sizeof($parts);$i++)
 {
@@ -430,6 +431,8 @@ for ($i=0;$i<sizeof($parts);$i++)
 	$part = enriched_to_html($part);
 	break;
     }
+
+    $part = preg_replace_callback ($smiley_patterns, "smiley_symbols_to_images", $part);
 
     if ($parts[$i]["name"] != '')
     {
