@@ -37,7 +37,7 @@ switch ($task)
   case 'delete_view':
     $view = $cal->get_view($_POST['delete_view_id']);
 
-    if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $view['acl_write']))
+    if($GO_SECURITY->user_id == $view['user_id'])
     {
       if ($cal->delete_view($_POST['delete_cview_id']))
       {
