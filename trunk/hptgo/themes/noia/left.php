@@ -65,7 +65,7 @@ function Bold_Text(id)
 		foreach ($module_list as $module)
 		{
 			if (!isset($modules[$module_map[$module]]))
-				continue
+				continue;
 			$module = $modules[$module_map[$module]];
 			echo "\n<!-- ".$module['id']." -->\n";
 			if ($module['enable'] && 
