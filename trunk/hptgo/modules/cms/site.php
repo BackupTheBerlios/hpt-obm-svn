@@ -384,7 +384,7 @@ switch($tabtable->get_active_tab_id())
   case 'write_permissions':
     echo '<table border="0" cellpadding="10" cellspacing="0"><tr><td>';
     $read_only = ($site['user_id'] == $GO_SECURITY->user_id) ? false : true;
-    print_acl($site["acl_write"], $read_only);
+    print_acl($site["acl_write"]);
     echo '</td></tr></table><br />';
     $button = new button($cmdClose, "javascript:document.location='".$return_to."';");
     break;
@@ -392,7 +392,7 @@ switch($tabtable->get_active_tab_id())
   case 'read_permissions':
     echo '<table border="0" cellpadding="10" cellspacing="0"><tr><td>';
     $read_only = ($site['user_id'] == $GO_SECURITY->user_id) ? false : true;
-    print_acl($site["acl_read"], $read_only);
+    print_acl($site["acl_read"]);
     echo '</td></tr></table><br />';
     $button = new button($cmdClose, "javascript:document.location='".$return_to."';");
     break;

@@ -107,7 +107,7 @@ switch($task)
 		echo '<a href="javascript:document.forms[0].task.value=\'add_user\';document.forms[0].submit();" class="normal">'.$ac_add_user.'</a><br /><br />';
 		echo $privacy_text."<br /><br />";
 
-		print_acl($profile['acl_id'], false);
+		print_acl($profile['acl_id']);
 		echo '<br />';
 		$button = new button($cmdClose, "javascript:document.location='".$return_to ."'");
 	break;

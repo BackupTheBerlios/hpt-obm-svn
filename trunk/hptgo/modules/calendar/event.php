@@ -970,7 +970,7 @@ switch($tabtable->get_active_tab_id())
     break;
   case 'read_permissions':
     $read_only = ($event['user_id'] == $GO_SECURITY->user_id) ? false : true;
-    print_acl($event['acl_read'], $read_only);
+    print_acl($event['acl_read']);
     echo '<br /><br />';
     echo '&nbsp;&nbsp;&nbsp;&nbsp;';
     $button = new button($cmdCancel,"javascript:document.location='".$return_to."'");
@@ -978,7 +978,7 @@ switch($tabtable->get_active_tab_id())
 
   case 'write_permissions':
     $read_only = ($event['user_id'] == $GO_SECURITY->user_id) ? false : true;
-    print_acl($event['acl_write'], $read_only);
+    print_acl($event['acl_write']);
     echo '<br /><br />';
     echo '&nbsp;&nbsp;&nbsp;&nbsp;';
     $button = new button($cmdCancel,"javascript:document.location='".$return_to."'");

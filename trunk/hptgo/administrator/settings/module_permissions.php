@@ -61,7 +61,7 @@ require($GO_THEME->theme_path."header.inc");
 <tr>
 <td>
 <?php
-print_acl($acl_id, false);
+print_acl($acl_id);
 ?>
 </td>
 </tr>
