@@ -8,38 +8,69 @@ This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
 Free Software Foundation; either version 2 of the License, or (at your
 option) any later version.
+*/
 
-builds an array from an ics file:
-
-Example:
-
-SUMMARY:Event summary
-$this->events[$n]['SUMMARY']['value'] = 'Event summary';
-
-RRULE:FREQ=YEARLY;INTERVAL=1;BYMONTH=3
-$this->events[$n]['RRULE']['value'] = 'FREQ=YEARLY;INTERVAL=1;BYMONTH=3';
-
-You can parse the rrule with parse_rrule() into:
-
-$rrule = $this->parse_rrule('FREQ=YEARLY;INTERVAL=1;BYMONTH=3');
-$rrule['FREQ'] = 'YEARLY';
-$rrule['INTERVAL'] = '1';
-$rrule['BYMONTH'] = '3';
-
-DTSTART;VALUE=DATE:20040303
-$this->events[$n]['DTSTART']['params']['VALUE'] = 'DATE';
-$this->events[$n]['DTSTART']['value'] = '20040303';
+/**
+* Builds an array from an ics file:
+*
+* Example:
+* 
+* SUMMARY:Event summary
+* $this->events[$n]['SUMMARY']['value'] = 'Event summary';
+* 
+* RRULE:FREQ=YEARLY;INTERVAL=1;BYMONTH=3
+* $this->events[$n]['RRULE']['value'] = 'FREQ=YEARLY;INTERVAL=1;BYMONTH=3';
+* 
+* You can parse the rrule with parse_rrule() into:
+*
+* $rrule = $this->parse_rrule('FREQ=YEARLY;INTERVAL=1;BYMONTH=3');
+* $rrule['FREQ'] = 'YEARLY';
+* $rrule['INTERVAL'] = '1';
+* $rrule['BYMONTH'] = '3';
+* 
+* DTSTART;VALUE=DATE:20040303
+* $this->events[$n]['DTSTART']['params']['VALUE'] = 'DATE';
+* $this->events[$n]['DTSTART']['value'] = '20040303';
 */
 class ical2array
 {
+	/**
+	* Event array
+	* @var	array
+	*/
 	var $events = array();
+	/**
+	* Todo array
+	* @var	array
+	*/
 	var $todos = array();
 
+	/**
+	* Event array
+	* @var	array
+	*/
 	var $event = array();
+	/**
+	* Object name
+	* @var	string
+	*/
 	var $object_name;
+	/**
+	* Param name
+	* @var	string
+	*/
 	var $param_name;
+	/**
+	* Buffer
+	* @var char
+	*/
 	var $buffer;
 
+	/**
+	* Parse file
+	* @param	string	$ical_file
+	* @return	array	event array
+	*/
 	function parse_file($ical_file)
 	{
 		$in_event = false;
