@@ -20,11 +20,21 @@ if (isset($feedback))
 
 echo '<h1>'.$menu_modules.'</h1>'.$admin_modules_text.'<br /><br />';
 
-echo '<table width="100%"><tr><td valign="top">';
-echo '<table border="0"><tr><td class="TableHead2" colspan="2">'.$mod_available.'</td></tr>';
+echo '<table border="0" cellspacing="0">'.
+	'<tr><td class="TableHead2">'.$mod_installed.'</td>'.
+	'<td class="TableHead2">'.'Version'.'</td>'.
+	'<td class="TableHead2">'.'Description'.'</td>'.
+	'<td class="TableHead2"><input type="checkbox" onclick="javascript:invert_selection(\'enable\')" />Enable</td>'.
+	'<td class="TableHead2"><input type="checkbox" onclick="javascript:invert_selection(\'install\')" />Install</td>'.
+	'<td class="TableHead2"><input type="checkbox" onclick="javascript:invert_selection(\'uninstall\')" />Uninstall</td>'.
+	'<td class="TableHead2">&nbsp;</td></tr>';
 
 $column_count = 0;
 
+$installed_modules = $GO_MODULES->get_modules_with_locations();
+$installed_module_count = count($installed_modules);
+foreach ($installed_modules as $id => $module)
+$installed_modules_map[$module['id']] = $id;
 $modules = $fs->get_folders($GO_CONFIG->module_path);
 $module_count = count($modules);
 while($module = array_shift($modules))
@@ -62,28 +72,20 @@ while($module = array_shift($modules))
 		echo '<tr>';
 		
 		$GO_THEME->images[$module['name']] = isset($GO_THEME->images['mod_'.$module['name']]) ? $GO_THEME->images['mod_'.$module['name']] : $GO_THEME->images['unknown'];
-		echo '<td><a href="#" '.$overlib->print_overlib(htmlspecialchars($tooltip)).'><img style="margin-right: 5px;" src="'.$GO_THEME->images[$module['name']].'" border="0" width="32" height="32" align="absmiddle" />'.$lang_var.'</a></td><td align="right">';
-
-		$button = new button($cmdInstall, "javascript:install('".$module['name']."', '".trim($version)."', '');");
-
-		echo '</td></tr>';
-		echo '<tr><td height="1" colspan="3"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
+		echo '<td><a href="module.php?module_id='.$module['name'].'&return_to='.$link_back.'" ><img style="margin-right: 5px;" src="'.$GO_THEME->images[$module['name']].'" border="0" width="32" height="32" align="absmiddle" />'.$lang_var.'</a></td><td>'.$module_info['version'].'</td><td '.$overlib->print_overlib(htmlspecialchars($tooltip)).'>'.cut_string(htmlspecialchars($module_info['description']),60).'</td><td>';
+	//echo '<input type="checkbox" id="enable_'.$module['name'].'" name="enable[]" value="'.$module['name'].'" checked />';
+	echo '-';
+	echo '</td><td>';
+	echo '<input type="checkbox" id="install_'.$module['name'].'" name="install[]" value="'.$module['name'].'"/>';
+	echo'</td><td>-</td>';
+		echo '</tr>';
+		echo '<tr><td height="1" colspan="100"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 	}
-}
-echo '</table>';
-
-echo '</td><td valign="top">';
-
-echo '<table border="0" cellspacing="0">'.
-	'<tr><td class="TableHead2">'.$mod_installed.'</td>'.
-	'<td class="TableHead2">&nbsp;</td></tr>';
-
-$column_count = 0;
-
-$modules = $GO_MODULES->get_modules_with_locations();
-$module_count = count($modules);
-while($module = array_shift($modules))
+	else
+	{
+	if (isset($installed_modules_map[$module['name']]))
 {		
+	$module = $installed_modules[$installed_modules_map[$module['name']]];
 	$lang_var = isset($lang_modules[$module['id']]) ? $lang_modules[$module['id']] : $module['id'];
 
 
@@ -113,42 +115,87 @@ while($module = array_shift($modules))
 	$GO_THEME->images[$module['id']] = isset($GO_THEME->images['mod_'.$module['id']]) ? $GO_THEME->images['mod_'.$module['id']] : $GO_THEME->images['unknown'];
 
 	
-	echo '<td><a href="#" '.$overlib->print_overlib(htmlspecialchars($tooltip)).'>'.
+	echo '<td><a href="module.php?module_id='.$module['id'].'&return_to='.$link_back.'">'.
 				'<img style="margin-right: 5px;" src="'.$GO_THEME->images[$module['id']].'" border="0" width="32" height="32" align="absmiddle" />'.$lang_var.'</a></td>'.
-  '<td align="right">';
-
-
-	$button = new button($strPermissions, "javascript:popup('module_permissions.php?module_id=".
-				urlencode($module['id'])."','450','450')");
-	echo '&nbsp;&nbsp;';
-	$button = new button($cmdUninstall, "javascript:uninstall('".$module['id']."', '".$lang_var."');");
-	
+		'<td>'.(htmlspecialchars($module_info['version'])).'</td>'.
+		'<td '.$overlib->print_overlib(htmlspecialchars($tooltip)).'>'.cut_string(htmlspecialchars($module_info['description']),60).'</td>'.
+  '<td>';
+	echo '<input type="checkbox" id="enable_'.$module['id'].'" name="enable[]" value="'.$module['id'].'" '.($module['enable'] ? 'checked' : '').'/>';
+  echo '</td><td>-</td><td>';
+	echo '<input type="checkbox" id="uninstall_'.$module['id'].'" name="uninstall[]" value="'.$module['id'].'" />';
 	echo '</td></tr>';
-	echo '<tr><td height="1" colspan="3"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
+	echo '<tr><td height="1" colspan="100"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 
 }
+	}
+}
+
+
+$column_count = 0;
+
 echo '</table>';
 
 echo '</td></tr></table>';
-
+echo '<br/>';
+$button = new button($cmdSave, "javascript:process()");
+echo '&nbsp;&nbsp;';
 $button = new button($cmdClose, "javascript:document.location='".$return_to ."'");
 ?>
 <script type="text/javascript">
-function uninstall(module_id, module_name)
+function process()
 {
-	if (confirm("<?php echo $strConfirmUninstallPrefix; ?> '"+module_name+"' <?php echo $strConfirmUninstallSuffix; ?>"))
+	s = 'install';
+	installs = new Array();
+	install_count = 0;
+	for (var i=0;i<document.forms[0].elements.length;i++)
 	{
-		document.forms[0].task.value = 'uninstall';
-		document.forms[0].module_id.value = module_id;	
+		if(document.forms[0].elements[i].type == 'checkbox' &&
+		document.forms[0].elements[i].checked &&
+		document.forms[0].elements[i].id.substr(0,s.length) == s)
+			installs[install_count++] = document.forms[0].elements[i].value;
+	}
+	
+	s = 'uninstall';
+	uninstalls = new Array();
+	uninstall_count = 0;
+	for (var i=0;i<document.forms[0].elements.length;i++)
+	{
+		if(document.forms[0].elements[i].type == 'checkbox' &&
+		document.forms[0].elements[i].checked &&
+		document.forms[0].elements[i].id.substr(0,s.length) == s)
+			uninstalls[uninstall_count++] = document.forms[0].elements[i].value;
+	}
+
+	msg = '';
+	if (install_count)
+	{
+		msg = msg + 'You are about to install: '+installs;
+		msg = msg + '\n';
+	}
+
+	if (uninstall_count)
+	{
+		msg = msg + 'You are about to uninstall: '+uninstalls;
+	}
+	if (msg == '' ||
+		confirm(msg+'\nIs it ok?'))
+	{
+		document.forms[0].task.value='process';
 		document.forms[0].submit();
 	}
 }
 
-function install(module_id, version)
+function invert_selection(s)
 {
-	document.forms[0].version.value = version;
-	document.forms[0].task.value = 'install';
-	document.forms[0].module_id.value = module_id;	
-	document.forms[0].submit();
+	for (var i=0;i<document.forms[0].elements.length;i++)
+	{
+		if(document.forms[0].elements[i].type == 'checkbox' &&
+		//document.forms[0].elements[i].name == s)
+		document.forms[0].elements[i].id.substr(0,s.length) == s)
+		{
+			document.forms[0].elements[i].checked = !(document.forms[0].elements[i].checked);
+		}
+	}
 }
+
 </script>
