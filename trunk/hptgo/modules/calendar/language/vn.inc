@@ -52,7 +52,7 @@ $sc_accept_question = 'Bạn có đồng ý và lên lịch cho việc này?';
 $sc_accept = 'đồng ý';
 $sc_decline = 'từ chối';
 
-$sc_notime = 'Thời gian không phù hợp';
+$sc_notime = 'Không sử dụng thời gian';
 $sc_noend = 'Không có ngày kết thúc.';
 
 $sc_never_happens = 'Dữ liệu không phù hợp! Sự kiện này không bao giờ xảy ra.';
