@@ -105,6 +105,7 @@ if ($calendar_id > 0)
 {
 	$calendar = $cal->get_calendar($calendar_id);
 	$title = $calendar['name'];
+	$has_write_permission = $GO_SECURITY->has_permission($GO_SECURITY->user_id,$calendar['acl_write']);
 }else
 {
 	$calendar['start_hour'] = isset($_POST['calendar_start_hour']) ? $_POST['calendar_start_hour'] : '07';
@@ -118,7 +119,8 @@ if ($calendar_id > 0)
 {
 	$tabtable->add_tab('calendar', $strProperties);
 	$tabtable->add_tab('holidays', $sc_holidays);
-	$tabtable->add_tab('import', $cal_import);
+	if ($has_write_permission)
+		$tabtable->add_tab('import', $cal_import);
 	$tabtable->add_tab('read_permissions', $strReadRights);
 	$tabtable->add_tab('write_permissions', $strWriteRights);
 }
@@ -177,7 +179,12 @@ switch($tabtable->get_active_tab_id())
 		<?php echo $strName; ?>:
 		</td>
 		<td>
+		<?php if ($has_write_permission) { ?>	
 		<input type="text" class="textbox" name="name" maxlength="100" size="50" value="<?php echo htmlspecialchars($calendar['name']); ?>" />
+		<?php } else { 
+			echo htmlspecialchars($calendar['name']);
+		}
+		?>
 		</td>
 	</tr>
 	<tr>
@@ -186,30 +193,40 @@ switch($tabtable->get_active_tab_id())
 		</td>
 		<td>
 		<?php
-		$dropbox = new dropbox();
-		$dropbox->add_arrays($hours, $hours);
-		$dropbox->print_dropbox('calendar_start_hour', $calendar['start_hour']);
+		if ($has_write_permission) {
+			$dropbox = new dropbox();
+			$dropbox->add_arrays($hours, $hours);
+			$dropbox->print_dropbox('calendar_start_hour', $calendar['start_hour']);
+		} else {
+			echo $calendar['start_hour'];
+		}
 		?>
 		&nbsp;<?php echo $sc_to; ?>&nbsp;
 		<?php
-		$dropbox = new dropbox();
-		$dropbox->add_arrays($hours, $hours);
-		$dropbox->print_dropbox('calendar_end_hour', $calendar['end_hour']);
+		if ($has_write_permission) {
+			$dropbox = new dropbox();
+			$dropbox->add_arrays($hours, $hours);
+			$dropbox->print_dropbox('calendar_end_hour', $calendar['end_hour']);
+		} else {
+			echo $calendar['end_hour'];
+		}
 		?>
 		</td>
 	</tr>
 	<tr>
 		<td colspan="2">
 			<?php
-			$button = new button($cmdOk,"javascript:document.forms[0].close.value='true';document.forms[0].task.value='save';document.forms[0].submit()");
-			echo '&nbsp;&nbsp;';
-			$button = new button($cmdApply,"javascript:document.forms[0].task.value='save';document.forms[0].submit()");
+			if ($has_write_permission) {
+				$button = new button($cmdOk,"javascript:document.forms[0].close.value='true';document.forms[0].task.value='save';document.forms[0].submit()");
+				echo '&nbsp;&nbsp;';
+				$button = new button($cmdApply,"javascript:document.forms[0].task.value='save';document.forms[0].submit()");
+				echo '&nbsp;&nbsp;';
+			}
 			if ($calendar_id > 0)
 			{
-				echo '&nbsp;&nbsp;';
 				$button = new button($cal_export, "document.location='export.php?calendar_id=$calendar_id';");
+				echo '&nbsp;&nbsp;';
 			}
-			echo '&nbsp;&nbsp;';
 			$button = new button($cmdClose,"javascript:document.location='".$return_to."'");
 			?>
 		</td>
