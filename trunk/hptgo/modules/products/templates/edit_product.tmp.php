@@ -36,14 +36,6 @@
     	<td width="1%" align="right" nowrap><?php echo $sc_category?> : &nbsp;</td>
 	    <td>
 <?php
-/*	  <tr>
-    	<td width="1%" align="right" nowrap><?php echo $sc_image?> : &nbsp;</td>
-	    <td>
-			<input type="hidden" name="oldimage" value="<?php echo $image?>">
-			<input type="file" name="image" class="textbox" onChange="frmProduct.img.src = this.value; oldimage.value = '##change##'">
-		</td>
-	  </tr>*/
-
 	$catedrop->print_dropbox('category_id',$category_id, 'onChange=click_but(document.frmProduct,"'.$change_case.'","")');
 ?>		
 		</td>
@@ -63,6 +55,7 @@ if (!$is_attachment)
 {
 	$pro2 = new products();
 	$pro2->get_attach_categories($category_id,true);
+
 	while ($pro2->next_record())
 	{
 ?>

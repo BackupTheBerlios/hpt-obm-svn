@@ -133,15 +133,20 @@
 			{
 				$pro->get_categories(-2);
 				$first = true;
+				$hasa = false;
 				while($pro->next_record())
 				{
-					if (first && !isset($category_id))
+					if (first) //&& !isset($category_id))
 					{
-						$category_id = $pro->f('category_id');
+						$first_cate_id = $pro->f('category_id');
+//						$category_id = $pro->f('category_id');
 						$first = false;
 					}
+					if ($category_id == $pro->f('category_id')) $hasa = true;
+						
 					$catedrop->add_value($pro->f('category_id'),$pro->f('category_name'));
 				}
+				if (!$hasa) $category_id = $first_cate_id;
 			}
 			$pro->get_attach_categories();
 			

@@ -169,7 +169,7 @@
 			return false;
 		}
 		
-//The methods for products		
+//The methods for products
 		function get_cate_for_product($id)
 		{
 			$sql = "SELECT * 
@@ -347,7 +347,7 @@
 		
 		function get_buy_products($in_clause)
 		{
-			$sql = "SELECT *
+			$sql = "SELECT product_id, product_name, price, VAT
 					FROM sc_products
 					WHERE product_id IN (".$in_clause.")";
 			if ($this->query($sql)) return true;
@@ -356,7 +356,7 @@
 		
 		function get_order_product($product_id)
 		{
-			$sql = "SELECT *, att.product_name as attachment_name, att.product_id as attachment_id, att.price as attachment_price
+			$sql = "SELECT *, att.product_name as attachment_name, att.product_id as attachment_id, att.price as attachment_price, att.VAT as attachment_VAT
 					FROM sc_attachments a
 						INNER JOIN sc_attach_categories ac ON a.attach_cate_id = ac.id
 						INNER JOIN sc_products p ON p.product_id = a.product_id
@@ -381,27 +381,27 @@
 			return substr($list, 1);
 		}
 //This methods for order
-		function add_order($seller, $order_number, $company, $attn, $phone, $fax, $sale_date, $valid_date, $product_id, $attach_cate_id, $attach_id, $quantity, $price)
+		function add_order($seller, $order_number, $company, $attn, $cc, $subject, $phone, $fax, $sale_date, $valid_date, $priceadjustment, $product_id, $attach_cate_id, $attach_id, $quantity, $price, $VAT, $incdecprice)
 		{
 			$sql = "SELECT order_number
 					FROM sc_orders 
 					WHERE order_number = '".$order_number."'";
 			if (!$this->query($sql) || $this->num_rows() > 0) return false;
 
-			$sql = "INSERT INTO sc_orders(seller, order_number, company, attn, sale_date, valid_date, phone, fax)
-					VALUES ('$seller', '$order_number', '$company', '$attn', '$sale_date', '$valid_date', '$phone', '$fax')";
+			$sql = "INSERT INTO sc_orders(seller, order_number, company, attn, sale_date, valid_date, phone, fax, cc, subject, priceadjustment)
+					VALUES ('$seller', '$order_number', '$company', '$attn', '$sale_date', '$valid_date', '$phone', '$fax','$cc', '$subject', '$priceadjustment')";
 			if (!$this->query($sql)) return false;
 			
 			for ($i=0; $i<count($product_id); $i++)
 			{
-				$sql = "INSERT INTO sc_order_detail(order_number, product_id, attach_cate_id, attach_id, quantity, price)
-						VALUES ('".$order_number."', '".$product_id[$i]."', '".$attach_cate_id[$i]."', '".$attach_id[$i]."','".$quantity[$i]."','".$price[$i]."')";
+				$sql = "INSERT INTO sc_order_detail(order_number, product_id, attach_cate_id, attach_id, quantity, price, discount, VAT)
+						VALUES ('".$order_number."', '".$product_id[$i]."', '".$attach_cate_id[$i]."', '".$attach_id[$i]."','".$quantity[$i]."','".$price[$i]."','".$incdecprice[$i]."','".$VAT[$i]."')";
 				if (!$this->query($sql)) return false;				
 			}
 			return true;
 		}		
 		
-		function update_order($seller, $order_number, $company, $attn, $phone, $fax, $sale_date, $valid_date, $product_id, $attach_cate_id, $attach_id, $quantity, $price)
+		function update_order($seller, $order_number, $company, $attn, $cc, $subject, $phone, $fax, $sale_date, $valid_date, $priceadjustment, $product_id, $attach_cate_id, $attach_id, $quantity, $price, $VAT, $incdecprice)
 		{
 			$sql = "SELECT order_number
 					FROM sc_orders 
@@ -415,7 +415,10 @@
 						sale_date='$sale_date', 
 						valid_date='$valid_date', 
 						phone='$phone', 
-						fax='$fax'
+						fax='$fax',
+						cc = '$cc',
+						subject = '$subject',
+						priceadjustment = '$priceadjustment'
 					WHERE order_number = '$order_number'";
 			if (!$this->query($sql)) return false;
 			
@@ -425,8 +428,8 @@
 								
 			for ($i=0; $i<count($product_id); $i++)
 			{
-				$sql = "INSERT INTO sc_order_detail(order_number, product_id, attach_cate_id, attach_id, quantity, price)
-						VALUES ('".$order_number."', '".$product_id[$i]."', '".$attach_cate_id[$i]."', '".$attach_id[$i]."','".$quantity[$i]."','".$price[$i]."')";
+				$sql = "INSERT INTO sc_order_detail(order_number, product_id, attach_cate_id, attach_id, quantity, price, discount, VAT)
+						VALUES ('".$order_number."', '".$product_id[$i]."', '".$attach_cate_id[$i]."', '".$attach_id[$i]."','".$quantity[$i]."','".$price[$i]."','".$incdecprice[$i]."','".$VAT[$i]."')";
 				if (!$this->query($sql)) return false;				
 			}
 			return true;
@@ -491,6 +494,9 @@
 				$order['fax'] = $this->f('fax');
 				$order['sale_date'] = $this->f('sale_date');
 				$order['valid_date'] = $this->f('valid_date');
+				$order['cc'] = $this->f('cc');
+				$order['subject'] = $this->f('subject');
+				$order['priceadjustment'] = $this->f('priceadjustment');
 			}
 
 			$sql = "SELECT od.*, p.product_name
