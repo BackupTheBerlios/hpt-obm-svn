@@ -105,10 +105,11 @@
 		
 		$db = new db();
 		$db->query("SELECT order_fields FROM ab_config WHERE page=".$page." AND user_id='".$GO_SECURITY->user_id."'"); 
-		if ($db->next_record())
+		if ($db->next_record()) {
 			$order = explode(",",$db->f('order_fields'));
-
-		return $order;
+			return $order;
+		}
+		return array();
 	}
 	
 	function print_config_content($order, $ab, $page)
