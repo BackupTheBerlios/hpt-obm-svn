@@ -1,13 +1,4 @@
 <?php
-/*
-   This program is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation; either version 2 of the License, or (at your
-   option) any later version.
- */
-?>
-<br />
-<?php
 if ($task == 'authorize')
 {
 	if ($profile)
@@ -20,7 +11,7 @@ if ($task == 'authorize')
 			$user_name = $middle_name.$user['last_name'];
 
 			$middle_name = $profile['middle_name'] == '' ? '' : $profile['middle_name'].' ';
-			$profile_name = $profile['last_name'].' '.$middle_name.$profile['first_name'];
+			$profile_name = $profile['first_name'].' '.$middle_name.$profile['last_name'];
 
 			$mail_body .= $ac_salutation.' '.$sir_madam[$user['sex']].' '.$user_name.',<br /><br />';
 			$mail_body .= $profile_name.' '.$ac_request_auth.'<br /><br />';
@@ -108,8 +99,8 @@ switch($task)
 		echo $privacy_text."<br /><br />";
 
 		print_acl($profile['acl_id']);
-		echo '<br />';
-		$button = new button($cmdClose, "javascript:document.location='".$return_to ."'");
+		//echo '<br />';
+		//$button = new button($cmdClose, "javascript:document.location='".$return_to ."'");
 	break;
 }
 ?>

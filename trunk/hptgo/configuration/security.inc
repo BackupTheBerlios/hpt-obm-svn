@@ -1,15 +1,7 @@
-<?php
-/*
-   This program is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation; either version 2 of the License, or (at your
-   option) any later version.
- */
-?>
 <table border="0" class="normal" cellpadding="2" cellspacing="0">
 <tr>
         <td colspan="2">
-        <br><?php if (isset($feedback)) echo $feedback; ?>
+        <?php if (isset($feedback)) echo $feedback; ?>
         <?php echo $security_text; ?><br><br>
         </td>
 </tr>
@@ -63,11 +55,13 @@ if (isset($val->error["newpass2"]))
 </tr>
 <tr height="25">
 	<td colspan="99"><?php
-	$button = new button($cmdOk, "javascript:_save('change_password', 'true')");
+	/*$button = new button($cmdOk, "javascript:_save('change_password', 'true')");
 	echo '&nbsp;&nbsp;';
 	$button = new button($cmdApply, "javascript:_save('change_password', 'false')");
 	echo '&nbsp;&nbsp;';
-	$button = new button($cmdClose, "javascript:document.location='".$return_to ."'");
+	$button = new button($cmdClose, "javascript:document.location='".$return_to ."'");*/
+	
+	$button = new button($cmdSave, "javascript:_save('change_password', 'false')");
 	?></td>
 </tr>
 </table>

@@ -15,12 +15,9 @@ if (!$profile)
 	echo "<p class=\"Error\">".$strDataError."</p>";
 }
 ?>
-
 <table border="0" cellpadding="2" cellspacing="0">
-
 <tr heigth="25">
 	<td colspan="2"><?php if (isset($feedback)) echo $feedback; ?>
-	<br />
 	<?php echo $acProfileText; ?><br /><br />
 	</td>
 </tr>
@@ -231,7 +228,7 @@ if (!$profile)
 <tr heigth="25">
 	<td colspan="2">
 	<?php
-	$button = new button($cmdOk, "javascript:_save('save_profile', 'true')");
+	/*$button = new button($cmdOk, "javascript:_save('save_profile', 'true')");
 	if ($_SESSION['GO_SESSION']['first_name'] != '' && $_SESSION['GO_SESSION']['last_name'] != '' && $_SESSION['GO_SESSION']['email'] != '')
 	{
 		echo '&nbsp;&nbsp;';
@@ -241,7 +238,13 @@ if (!$profile)
 	}else
 	{
 		echo '<input type="hidden" name="load_frames" value="true" />';
+	}*/
+	if ($_SESSION['GO_SESSION']['first_name'] == '' || $_SESSION['GO_SESSION']['last_name'] == '' || $_SESSION['GO_SESSION']['email'] == '')
+	{
+		echo '<input type="hidden" name="load_frames" value="true" />';
 	}
+	$button = new button($cmdSave, "javascript:_save('save_profile', 'false')");
+	
 	?></td>
 </tr>
 </table>

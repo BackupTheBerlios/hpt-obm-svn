@@ -16,11 +16,11 @@ option) any later version.
 </tr>
 <tr>
         <td><?php echo $ac_registration_time; ?>:</td>
-        <td><?php echo date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $profile['registration_time']+($_SESSION['GO_SESSION']['timezone']*3600)); ?></td>
+        <td><?php echo date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], gmt_to_local_time($profile['registration_time'])); ?></td>
 </tr>
 <tr>
         <td><?php echo $ac_lastlogin; ?>:</td>
-        <td><?php echo date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $_SESSION['GO_SESSION']['lastlogin']+($_SESSION['GO_SESSION']['timezone']*3600)); ?></td>
+        <td><?php echo date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'],  gmt_to_local_time($_SESSION['GO_SESSION']['lastlogin'])); ?></td>
 </tr>
 <tr>
         <td><?php echo $ac_logins; ?>:</td>
