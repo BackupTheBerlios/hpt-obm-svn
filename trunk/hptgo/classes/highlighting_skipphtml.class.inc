@@ -1,48 +1,63 @@
 <?php
-/* Highlighting skipps html -highlighting_skipphtml.php-
-
-   This class can be used to highlight words in a html text.
-   Matches in the html tags will be skipped.
-
-   Example:
-   ereg_replace('image','<b>image</b>','<img src="image.gif">image.gif');
-   will give you:
-   <img src="<b>image</b>.gif"><b>image</b>.gif
-   using this class you will get:
-   <img src="image.gif"><b>image</b>.gif
-
-   see also example.php
-
-   Version 0.1
-   Last change: 2003/05/23
-   copyrigth 2002 Email Communications, http://www.emailcommunications.nl/
-   written by Bas Jobsen (bas@startpunt.cc)
-
-   This program is free software; you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation; either version 2, or (at your option)
-   any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program; if not, write to the Free Software Foundation,
-   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+/**
+*  Highlighting skipps html -highlighting_skipphtml.php-
+*
+*   This class can be used to highlight words in a html text.
+*   Matches in the html tags will be skipped.
+*
+*   Example:
+*   ereg_replace('image','<b>image</b>','<img src="image.gif">image.gif');
+*   will give you:
+*   <img src="<b>image</b>.gif"><b>image</b>.gif
+*   using this class you will get:
+*   <img src="image.gif"><b>image</b>.gif
+*
+*   see also example.php
+*
+*   @version 0.1
+*   Last change: 2003/05/23
+*   copyrigth 2002 Email Communications, http://www.emailcommunications.nl/
+*   @author written by Bas Jobsen (bas@startpunt.cc)
+*
+*   This program is free software; you can redistribute it and/or modify
+*   it under the terms of the GNU General Public License as published by
+*   the Free Software Foundation; either version 2, or (at your option)
+*   any later version.
+*
+*   This program is distributed in the hope that it will be useful,
+*   but WITHOUT ANY WARRANTY; without even the implied warranty of
+*   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+*   GNU General Public License for more details.
+*
+*   You should have received a copy of the GNU General Public License
+*   along with this program; if not, write to the Free Software Foundation,
+*   Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
-
 
 class highlighting_skipphtml
 {
+	/**
+	* Hightlighting number counter
+	* @var	int
+	*/
     var $counter;
 
+	/**
+	* Constructor
+	*/
     function highlighting_skipphtml()
     {
     	$this->counter=0;
     }
 
+	/**
+	* Highlight a string
+	* @param	array	$words
+	* @param	string	$string
+	* @param	string	$open	HTML open tag
+	* @param	string	$close	HTML close tag
+	* @param	bool	$doublecheck
+	*/
 	function highlight($words,&$string,$open='<b>',$close='</b>',$doublecheck=0)
 	{
 		if(is_array($words))
@@ -64,6 +79,15 @@ class highlighting_skipphtml
 		}
 	}
 
+	/**
+	* Do Highlight a string
+	* @param	array	$words
+	* @param	string	$string
+	* @param	string	$open	HTML open tag
+	* @param	string	$close	HTML close tag
+	* @param	bool	$doublecheck
+	* @return	string	Hightlight string
+	*/
 	function dohighlight($words,$string,$open='<b>',$close='</b>',$doublecheck=0)
 	{
 		$this->highlight($words,$string,$open,$close,$doublecheck);
