@@ -240,7 +240,7 @@ if (!$print) {
       #$dropbox->add_sql_data("cal","id","name");
       while($cal->next_record())
       {
-      	$dropbox->add_value('calendar:'.$cal->f('id'), $cal->f('name'));
+      	$dropbox->add_value('calendar:'.$cal->f('id'), cut_string($cal->f('name'),20));
       }
       
       if($cal->get_views($GO_SECURITY->user_id))
@@ -249,7 +249,7 @@ if (!$print) {
 	      #$dropbox->add_value('','----- '.$cal_views.' -----');
 	      while($cal->next_record())
 	      {
-	      	$dropbox->add_value('view:'.$cal->f('id'), $cal->f('name'));
+	      	$dropbox->add_value('view:'.$cal->f('id'), cut_string($cal->f('name'),20));
 	      }		    
 	    }
       $dropbox->print_dropbox("calendar_view_id", $calendar_view_id, 'onchange="javascript:change_calendar()"');
