@@ -12,6 +12,7 @@ $cmdSave = "Save";
 $cmdBack = "Back";
 $cmdCancel = "Cancel";
 $cmdClose = "Close";
+$cmdDefault = "Default";
 $cmdOk = "Ok";
 $cmdDelete = "Delete";
 $cmdNext = "Next";
