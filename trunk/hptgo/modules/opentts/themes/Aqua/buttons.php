@@ -14,16 +14,18 @@ function draw_extra_button(){
 }
 
 function show_hidden(){
-	global $_SESSION,$GO_LANGUAGE;
+	global $_SESSION,$GO_LANGUAGE,$_POST;
 	require($GO_LANGUAGE->get_language_file('opentts'));
 	$returntd = "<td  class=\"ModuleIcons\"><form name=form_hidden method=POST action='my_tickets.php'>";
 	$returntd .= "<input type=hidden name=\"hidden_box\" value='on' valign=center>";
-	if (isset($_SESSION['search_hidden'])){
-        	$hidden_check='checked';
+	if (isset($_POST['hidden_box'])){
+		$hidden_check=($_POST['show_hidden']=='on') ? 'checked' : '';
+	}elseif (isset($_SESSION['show_hidden'])){
+        	$hidden_check=($_SESSION['show_hidden']=='on') ? 'checked'  : '' ;
 	}else{
         	$hidden_check='';
 	}
-	$returntd .= "<input type=checkbox name=\"search_hidden\" $hidden_check onClick='document.form_hidden.submit()'><img src=\"images/blank.png\" border=\"0\" height=\"32\" width=\"1\" valign=center><br>$helpdesk_show_hidden</form></td>";
+	$returntd .= "<input type=checkbox name=\"show_hidden\" $hidden_check onClick='document.form_hidden.submit()'><img src=\"images/blank.png\" border=\"0\" height=\"32\" width=\"1\" valign=center><br>$helpdesk_show_hidden</form></td>";
 	return $returntd;
 }
 ?>

@@ -35,6 +35,9 @@ $tabtable = new tabtable('newticket_tabtable', $helpdesk_title_queries , '100%',
 $tabtable->print_head();
 if (Security::is_action_allowed("query_search")){
 $strtosearch=isset($_POST['strtosearch']) ? $_POST['strtosearch'] : '';
+if (isset($_SESSION['show_hidden'])){
+		$show_hidden=$_SESSION['show_hidden'];
+}
 echo Search::show_search();
 	if (isset($_POST['action'])){
 		$submit=$_POST['action'];

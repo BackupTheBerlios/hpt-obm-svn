@@ -53,11 +53,16 @@ if (isset($_GET['orderby'])){
 }
 /*
 */
+if (isset($_SESSION['show_hidden'])){
+		$show_hidden=$_SESSION['show_hidden'];
+}
 if (isset($_POST['hidden_box'])){
-	if (isset($_POST['search_hidden'])){
-		$_SESSION['search_hidden']=$_POST['search_hidden'];
+	if ($_POST['show_hidden']=='on'){
+		$_SESSION['show_hidden']=$_POST['show_hidden'];
+		$show_hidden=$_POST['show_hidden'];
 	}else{
-		session_unregister('search_hidden');
+		session_unregister('show_hidden');
+		$show_hidden='';
 	}
 }
 

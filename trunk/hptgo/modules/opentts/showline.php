@@ -26,8 +26,30 @@ $GO_MODULES->authenticate('opentts');
 //The JSCalendar control requires a header too:
 $datepicker = new date_picker();
 $GO_HEADER['head'] = $datepicker->get_header();
+$hours = array("00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23");
+$mins = array("00","05","10","15","20","25","30","35","40","45","50","55");
+$javascript=<<<EOF
+<script type="text/javascript" language="javascript">
 
+		function update_end_hour(start_hour)
+		{
+		  if (start_hour == 24)
+		  {
+		    document.change_status.end_date_h.value='01';
+		  }else
+		  {
+		    start_hour = parseInt(start_hour)+1
+		      if (start_hour < 10)
+		      {
+			start_hour = "0"+start_hour;
+		      }
+		    document.change_status.end_date_h.value= start_hour;
+		  }
+		}
 
+</script>
+
+EOF;
 
 //set the page title for the header file
 $page_title = "Opentts";
@@ -43,6 +65,22 @@ echo '<input type="hidden" name="Ticket_Number" value="'.$Ticket_Number.'" />';
 global $name;
 $textmenu=menu("Show_Tickets",'');
 eval($textmenu);
+//
+// take ownership
+if (isset($_GET['take_ownership'])){
+	$query="select * from acl_items  where id='".Security::sqlsecure($_GET['acl_write'])."' and description='ticket write'";
+	$mydb= new db($query);
+	if ($mydb->next_record()){
+		$query="select * from acl where acl_id='".Security::sqlsecure($_GET['acl_write'])."' and user_id='".whoami()."'";
+		$mydb= new db($query);
+		if (!$mydb->next_record()){
+			$query="insert into acl (acl_id,user_id) values ('".Security::sqlsecure($_GET['acl_write'])."','".whoami()."')";
+			$mydb= new db($query);
+		}
+	}
+
+}
+//
 $return_to = isset($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
 $link_back = isset($_REQUEST['link_back']) ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
 $ticket['acl_read']= get_cross_value("{$prefix}{$hlpdsk_prefix}_tickets","acl_read"," where Ticket_Number='".Security::sqlsecure($Ticket_Number)."'");
@@ -80,6 +118,11 @@ switch ($tabtable->get_active_tab_id())
     echo '<br />';
     $button = new button($cmdClose, "javascript:document.location='".$return_to."';");
     }
+    $cmdTakeOwnership='Take Ownership';
+     if (Security::is_action_allowed('take_ownership')){
+     	$button = new button($cmdTakeOwnership,"javascript:document.location='".$return_to."&take_ownership=yes&acl_write=$acl_write';");
+	}
+
     break;
   case 'show_tasks':
 	if($acl_read>0 and $acl_write>0) showtasks();
@@ -151,7 +194,7 @@ function show_new_task($ticket_number){
 
 
 function showrecords(){
-global $Ticket_Number,$name,$tts,$prefix,$hlpdsk_prefix,$hlpdsk_theme,$nuke_user_table,$nuke_user_last_name_fieldname,$nuke_username_fieldname,
+global $Ticket_Number,$name,$tts,$prefix,$hlpdsk_prefix,$hlpdsk_theme,$nuke_user_table,$nuke_user_last_name_fieldname,$nuke_username_fieldname,$hours,$mins,$javascript,
 $nuke_user_id_fieldname,$nuke_user_first_name_fieldname,$datepicker,$cmdOk,$cmdReset,$GO_SECURITY,$acl_read,$acl_write,$GO_LANGUAGE;
 require($GO_LANGUAGE->get_language_file('opentts'));
 $acl_read=get_cross_value("{$prefix}{$hlpdsk_prefix}_tickets",'acl_read',"where ticket_number='$Ticket_Number'");
@@ -177,7 +220,7 @@ while ($tts->next_record()):
 		$t_priority=$tts->f('t_priority');
 		$t_subject=htmlspecialchars($tts->f('t_subject'));
 		$t_description=htmlspecialchars($tts->f('t_description'));
-		$t_description=str_replace("\n"," <br> ",$t_description);
+		#$t_description=str_replace("\n"," <br> ",$t_description);
 		$t_assigned=$tts->f('t_assigned');
 		$t_email=$tts->f('t_email');
 		$t_sms=$tts->f('t_sms');
@@ -187,14 +230,16 @@ while ($tts->next_record()):
 		$project_id=$tts->f('project_id');
 $due_date=date("Y/m/d H:i",$due_date);
 $end_date=date("Y/m/d H:i",$end_date);
+$action_changes=$javascript;
 if ($t_sms=="on") $t_sms=" CHECKED";
 if ($t_email=="on") $t_email=" CHECKED";
 if ($GO_SECURITY->user_in_acl(whoami(), $acl_write)){
 $button = new button();
-$action_changes=$button->get_button($cmdOk, "javascript:document.change_status.submit()");
+
+$action_changes.=$button->get_button($cmdOk, "javascript:document.change_status.submit()");
 $action_changes.=$button->get_button($cmdReset, "javascript:document.change_status.reset()");
 }else{
-$action_changes='';
+$action_changes.='';
 }
 $action_changes.="</form></center>";
 $tts_lang_ticket_number="Ticket Number:";
@@ -264,53 +309,12 @@ if (Security::is_action_allowed("change_end_date",0,$acl_write)){
         $end_date_i=date("i",$time);
 	$today=date($_SESSION['GO_SESSION']['date_format'],$time);
         $end_date=$datepicker->get_date_picker('end_date_d_m_y',$_SESSION['GO_SESSION']['date_format'], $today);
-        $end_date.="<td><select name=\"end_date_h\" class=textbox>";
-$options="
-<option value=\"00\">00</option>
-<option value=\"01\">01</option>
-<option value=\"02\">02</option>
-<option value=\"03\">03</option>
-<option value=\"04\">04</option>
-<option value=\"05\">05</option>
-<option value=\"06\">06</option>
-<option value=\"07\">07</option>
-<option value=\"08\">08</option>
-<option value=\"09\">09</option>
-<option value=\"10\">10</option>
-<option value=\"11\">11</option>
-<option value=\"12\">12</option>
-<option value=\"13\">13</option>
-<option value=\"14\">14</option>
-<option value=\"15\">15</option>
-<option value=\"16\">16</option>
-<option value=\"17\">17</option>
-
-<option value=\"18\">18</option>
-<option value=\"19\">19</option>
-<option value=\"20\">20</option>
-<option value=\"21\">21</option>
-<option value=\"22\">22</option>
-<option value=\"23\">23</option>
-</select>";
-$end_date.=select_option($end_date_h,$options);
-        $end_date.=":<select name=\"end_date_i\"  class=textbox>";
-$options="
-<option value=\"00\">00</option>
-<option value=\"05\">05</option>
-<option value=\"10\">10</option>
-<option value=\"15\">15</option>
-<option value=\"20\">20</option>
-<option value=\"25\">25</option>
-<option value=\"30\">30</option>
-<option value=\"35\">35</option>
-<option value=\"40\">40</option>
-
-<option value=\"45\">45</option>
-<option value=\"50\">50</option>
-<option value=\"55\">55</option>
-</select>";
-$end_date.=select_option($end_date_i,$options);
-
+$dropbox = new dropbox();
+$dropbox->add_arrays($hours, $hours);
+$end_date.='<td>' . $dropbox->get_dropbox("end_date_h",$end_date_h);
+$dropbox = new dropbox();
+$dropbox->add_arrays($mins, $mins);
+$end_date.=':' . $dropbox->get_dropbox("end_date_i",$end_date_i);
 
         $tts_lang_end_date_value="$end_date&nbsp;";
 }else{
@@ -328,54 +332,13 @@ if (Security::is_action_allowed("change_due_date",0,$acl_write)){
 	$due_date_h=date("H",$time);
 	$due_date_i=date("i",$time);
 	$today=date($_SESSION['GO_SESSION']['date_format'],$time);
-        $due_date=$datepicker->get_date_picker('due_date_d_m_y',$_SESSION['GO_SESSION']['date_format'], $today);
-        $due_date.="<td><select name=\"due_date_h\"  class=textbox>";
-$options="
-<option value=\"00\">00</option>
-<option value=\"01\">01</option>
-<option value=\"02\">02</option>
-<option value=\"03\">03</option>
-<option value=\"04\">04</option>
-<option value=\"05\">05</option>
-<option value=\"06\">06</option>
-<option value=\"07\">07</option>
-<option value=\"08\">08</option>
-<option value=\"09\">09</option>
-<option value=\"10\">10</option>
-<option value=\"11\">11</option>
-<option value=\"12\">12</option>
-<option value=\"13\">13</option>
-<option value=\"14\">14</option>
-<option value=\"15\">15</option>
-<option value=\"16\">16</option>
-<option value=\"17\">17</option>
-
-<option value=\"18\">18</option>
-<option value=\"19\">19</option>
-<option value=\"20\">20</option>
-<option value=\"21\">21</option>
-<option value=\"22\">22</option>
-<option value=\"23\">23</option>
-</select>";
-$due_date.=select_option($due_date_h,$options);
-        $due_date.=":<select name=\"due_date_i\" class=textbox>";
-$options="
-<option value=\"00\">00</option>
-<option value=\"05\">05</option>
-<option value=\"10\">10</option>
-<option value=\"15\">15</option>
-<option value=\"20\">20</option>
-<option value=\"25\">25</option>
-<option value=\"30\">30</option>
-<option value=\"35\">35</option>
-<option value=\"40\">40</option>
-
-<option value=\"45\">45</option>
-<option value=\"50\">50</option>
-<option value=\"55\">55</option>
-</select>";
-$due_date.=select_option($due_date_i,$options);
-
+        $due_date=$datepicker->get_date_picker('due_date_d_m_y',$_SESSION['GO_SESSION']['date_format'], $today, '', '', 'onchange="javascript:document.change_status.end_date_d_m_y.value=this.value;"');
+$dropbox = new dropbox();
+$dropbox->add_arrays($hours, $hours);
+$due_date.='<td>' . $dropbox->get_dropbox("due_date_h",$due_date_h, 'onchange="javascript:update_end_hour(this.value);"');
+$dropbox = new dropbox();
+$dropbox->add_arrays($mins, $mins);
+$due_date.=':' . $dropbox->get_dropbox("due_date_i",$due_date_i, 'onchange="javascript:update_end_min(this.value);"');
 	$tts_lang_due_date_value="$due_date&nbsp;";
 }else{
 	$tts_lang_due_date_value="{$tts_lang_due_date}$due_date";

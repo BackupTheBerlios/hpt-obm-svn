@@ -68,9 +68,6 @@ class Search{
 		."<INPUT type=\"text\" name=strtosearch value=\"".Security::htmlsecure($strtosearch)."\" size=60 class=textbox><br>";
 		$response.= "</td></tr>";
 		$response.= "<tr><td>";
-		$response.= "$helpdesk_show_hidden<input type=checkbox name=\"search_hidden\" checked>";
-		$response.= "</td></tr>";
-		$response.= "<tr><td>";
 		$query="select status_id,status_name,show_by_default from {$prefix}{$hlpdsk_prefix}_status";
 		$tts->query($query);
 		$colbreak=0;
@@ -108,10 +105,10 @@ class Search{
 		global $agent,$t_showall,$search,$strtosearch,$orderby, 
 			$name,$tts,$prefix,$hlpdsk_prefix,$limit,$limit_rows,
 			$search_status,$submit,$temptime,$hlpdsk_theme,$field,
-			$filter,$shadow_dark,$shadow_light,$shadow_hidden,$filter_field,
-			$filter_value,$search_hidden,$GO_LANGUAGE,
+			$filter,$shadow_dark,$shadow_light,$show_hidden,$filter_field,
+			$filter_value,$show_hidden,$GO_LANGUAGE,
 			$nuke_user_table,$nuke_user_last_name_fieldname,$nuke_username_fieldname,
-			$nuke_user_id_fieldname,$nuke_user_first_name_fieldname;
+			$nuke_user_id_fieldname,$nuke_user_first_name_fieldname,$_SESSION;
 		require($GO_LANGUAGE->get_language_file('opentts'));
 		if ($filter==1){
                         $alert_note="FILTER ON -- <a href='my_tickets.php?submit=clear_filters'>CLEAR FILTER</a><br>";
@@ -131,7 +128,7 @@ class Search{
 		$querytotal= $response_raw[0]['querytotal'];
 
 		$querytext= $response_raw[0]['querytext'];
-		if (Security::is_action_allowed('view_query',whoami())) $response.= Security::htmlsecure($querytext)."</TD>"; else $response.= Security::htmlsecure($strtosearch)."</TD>";
+		if (Security::is_action_allowed('view_query')) $response.= Security::htmlsecure($querytext)."</TD>"; else $response.= Security::htmlsecure($strtosearch)."</TD>";
 
 		$color="ffeeee";
 		$recordcount=$response_raw[0]['recordcount'];
@@ -262,7 +259,7 @@ class Search{
 	}
 
 	function querydb($extra_condition=""){
-		global $agent,$t_showall,$search,$strtosearch,$orderby, $name,$tts,$prefix,$hlpdsk_prefix,$limit,$limit_rows,$search_status,$submit,$temptime,$hlpdsk_theme,$field,$filter_field,$filter_value,$search_hidden,$hidden_check,$GO_SECURITY;
+		global $agent,$t_showall,$search,$strtosearch,$orderby, $name,$tts,$prefix,$hlpdsk_prefix,$limit,$limit_rows,$search_status,$submit,$temptime,$hlpdsk_theme,$field,$filter_field,$filter_value,$show_hidden,$hidden_check,$GO_SECURITY;
 		$querytext="select  *  from {$prefix}{$hlpdsk_prefix}_tickets ";
 		if ($limit=="") $limit=0;
 		if ($limit_rows=="") $limit_rows=-1;
@@ -293,7 +290,7 @@ class Search{
 			if(trim($search_condition)<>"")
 				$query_condition .=" and (". str_replace(" "," or ",trim ($search_condition)).")";
 		}
-		if ($hidden_check=='checked') { ; } else $query_condition .=" and t_stage=1 ";
+		if ($show_hidden=='on') { ; } else $query_condition .=" and t_stage=1 ";
 			
 		if ($strtosearch){ 
 			$search_uid=Security::get_uid("$strtosearch");
