@@ -44,6 +44,19 @@ class base_security extends db
   var $logged_in = false;
 
 	/**
+	* The base name of acl tables. The table names would be {acl_table}
+	* and {acl_table}_items.
+	* Default value is "acl" to keep compatibility.
+	* This variable should be set (if needed) right after object
+ 	* initialization and never change it anymore.
+	*
+	* @var     string
+	* @access  private
+	*/ 
+  var $acl_table = "acl";
+
+
+	/**
 	* Constructor. Initialised database connection and user ID
 	*
 	* @access public
@@ -133,10 +146,10 @@ class base_security extends db
     {
       $user_id = $this->user_id;
     }
-    $id = $this->nextid("acl_items");
+    $id = $this->nextid("{$this->acl_table}_items");
     if ($id > 0)
     {
-      $this->query("INSERT INTO acl_items (id, description, user_id) ".
+      $this->query("INSERT INTO {$this->acl_table}_items (id, description, user_id) ".
 										"VALUES ('$id', '$description', '$user_id')");
       return $id;
     }else
@@ -155,7 +168,7 @@ class base_security extends db
 	*/
   function user_owns_acl($user_id, $acl_id)
   {
-    $this->query("SELECT user_id FROM acl_items WHERE id='$acl_id'");
+    $this->query("SELECT user_id FROM {$this->acl_table}_items WHERE id='$acl_id'");
     if ($this->next_record())
     {
       if ($user_id == $this->f('user_id'))
@@ -178,9 +191,9 @@ class base_security extends db
 	*/
   function delete_acl($acl_id)
   {
-    if($this->query("DELETE FROM acl WHERE acl_id='$acl_id'"))
+    if($this->query("DELETE FROM {$this->acl_table} WHERE acl_id='$acl_id'"))
     {
-    	return $this->query("DELETE FROM acl_items WHERE id='$acl_id'");
+    	return $this->query("DELETE FROM {$this->acl_table}_items WHERE id='$acl_id'");
     }
     return false;
   }
@@ -195,7 +208,7 @@ class base_security extends db
 	*/
   function add_user_to_acl($user_id,$acl_id)
   {
-    return $this->query("INSERT INTO acl (acl_id,user_id) ".
+    return $this->query("INSERT INTO {$this->acl_table} (acl_id,user_id) ".
 												"VALUES ('$acl_id','$user_id')");
   }
   
@@ -209,7 +222,7 @@ class base_security extends db
 	*/
   function delete_user_from_acl($user_id, $acl_id)
   {
-    $sql = "DELETE FROM acl WHERE user_id='$user_id' AND acl_id='$acl_id'";
+    $sql = "DELETE FROM {$this->acl_table} WHERE user_id='$user_id' AND acl_id='$acl_id'";
     return $this->query($sql);
   }
 
@@ -223,7 +236,7 @@ class base_security extends db
 	*/
   function add_group_to_acl($group_id,$acl_id)
   {
-    return $this->query("INSERT INTO acl (acl_id,group_id) ".
+    return $this->query("INSERT INTO {$this->acl_table} (acl_id,group_id) ".
 												"VALUES ('$acl_id','$group_id')");
   }
   
@@ -237,7 +250,7 @@ class base_security extends db
 	*/
   function delete_group_from_acl($group_id, $acl_id)
   {
-    $sql = "DELETE FROM acl WHERE group_id='$group_id' AND acl_id='$acl_id'";
+    $sql = "DELETE FROM {$this->acl_table} WHERE group_id='$group_id' AND acl_id='$acl_id'";
     return $this->query($sql);
   }
 
@@ -250,7 +263,7 @@ class base_security extends db
 	*/
   function clear_acl($acl_id)
   {
-    return $this->query("DELETE FROM acl WHERE acl_id='$acl_id'");
+    return $this->query("DELETE FROM {$this->acl_table} WHERE acl_id='$acl_id'");
   }
   
 	/**
@@ -263,7 +276,7 @@ class base_security extends db
 	*/
   function set_acl_owner($acl_id, $user_id)
   {
-    return $this->query("UPDATE acl_items SET user_id='$user_id' WHERE id='$acl_id'");
+    return $this->query("UPDATE {$this->acl_table}_items SET user_id='$user_id' WHERE id='$acl_id'");
   }
 
 	/**
@@ -290,8 +303,8 @@ class base_security extends db
   {
     global $GO_CONFIG, $auth_sources;
 
-    $sql = "SELECT groups.* FROM groups INNER JOIN acl ON".
-      " acl.group_id=groups.id WHERE acl.acl_id='$acl_id'".
+    $sql = "SELECT groups.* FROM groups INNER JOIN {$this->acl_table} ON".
+      " {$this->acl_table}.group_id=groups.id WHERE {$this->acl_table}.acl_id='$acl_id'".
       " ORDER BY groups.name";
     $this->query($sql);
     return $this->num_rows();
@@ -306,7 +319,7 @@ class base_security extends db
 	*/
   function get_users_in_acl($acl_id)
   {
-    $sql = "SELECT user_id FROM acl WHERE acl_id='$acl_id'";
+    $sql = "SELECT user_id FROM {$this->acl_table} WHERE acl_id='$acl_id'";
     $this->query($sql);
     return $this->num_rows();    
   }
@@ -321,7 +334,7 @@ class base_security extends db
 	*/
   function user_in_acl($user_id, $acl_id)
   {
-    $sql = "SELECT user_id FROM acl WHERE acl_id='$acl_id' AND".
+    $sql = "SELECT user_id FROM {$this->acl_table} WHERE acl_id='$acl_id' AND".
       " user_id='$user_id'";
     $this->query($sql);
     if ($this->num_rows() > 0)
@@ -343,7 +356,7 @@ class base_security extends db
 	*/
   function group_in_acl($group_id, $acl_id)
   {
-    $sql = "SELECT group_id FROM acl WHERE acl_id='$acl_id' AND group_id='$group_id'";
+    $sql = "SELECT group_id FROM {$this->acl_table} WHERE acl_id='$acl_id' AND group_id='$group_id'";
     $this->query($sql);
     if ($this->num_rows() > 0)
     {
@@ -363,7 +376,7 @@ class base_security extends db
 	*/
   function get_acl_id($description)
   {
-    $sql = "SELECT id FROM acl_items WHERE description='$description'";
+    $sql = "SELECT id FROM {$this->acl_table}_items WHERE description='$description'";
     $this->query($sql);
     if ($this->next_record())
     {
@@ -386,7 +399,7 @@ class base_security extends db
 
     $this->clear_acl($dAcl);
 
-    $sql = "SELECT * FROM acl WHERE acl_id='$sAcl'";
+    $sql = "SELECT * FROM {$this->acl_table} WHERE acl_id='$sAcl'";
 
     $security = new GO_SECURITY();
     $this->query($sql);
@@ -435,7 +448,7 @@ class base_security extends db
 	
   function delete_user($user_id)
   {
-    $sql = "DELETE FROM acl WHERE user_id='$user_id'";
+    $sql = "DELETE FROM {$this->acl_table} WHERE user_id='$user_id'";
     return $this->query($sql);
   }
 
@@ -448,7 +461,7 @@ class base_security extends db
 	*/
   function delete_group($group_id)
   {
-    $sql = "DELETE FROM acl WHERE group_id='$group_id'";
+    $sql = "DELETE FROM {$this->acl_table} WHERE group_id='$group_id'";
     return $this->query($sql);
   }
 }

@@ -25,10 +25,10 @@ class GO_SECURITY extends base_security
 
     if ($user_id > 0 && $acl_id > 0)
     {
-      $sql = "SELECT acl.acl_id FROM acl, users_groups WHERE".
-	" acl.acl_id='$acl_id' AND (acl.user_id='$user_id' OR".
-	" (acl.group_id=users_groups.group_id AND".
-	" users_groups.user_id='$user_id')) GROUP BY acl.acl_id";
+      $sql = "SELECT {$this->acl_table}.acl_id FROM {$this->acl_table}, users_groups WHERE".
+	" {$this->acl_table}.acl_id='$acl_id' AND ({$this->acl_table}.user_id='$user_id' OR".
+	" ({$this->acl_table}.group_id=users_groups.group_id AND".
+	" users_groups.user_id='$user_id')) GROUP BY {$this->acl_table}.acl_id";
       $this->query($sql);
 
       if ($this->num_rows() > 0)
