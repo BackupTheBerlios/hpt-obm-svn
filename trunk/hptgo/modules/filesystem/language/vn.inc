@@ -78,4 +78,6 @@ $strChildMustNotBeSystemFolder = "Thư mục con phải không là thư mục h�
 $fbWorkspace = "Thư mục làm việc";
 $fs_set_permissions = 'Điều chỉnh quyền truy cập';
 $strUsePermissionsOf = 'Quyền truy cập giống với';
+$fbGroupFolders = 'Thư mục nhóm';
+$fbMyDocuments = 'Cá nhân';
 ?>
