@@ -13,10 +13,20 @@
 require_once($GO_CONFIG->class_path.'base/crypto.class.inc');
 $GO_CRYPTO = new GO_CRYPTO();
 
+/**
+* Email class. Used to manage email accounts.
+*/
 class email extends db
 {
   var $last_error;
 
+  /**
+   * Get account record of a user.
+   *
+   * @param int $user_id
+   * @access public
+   * @return bool
+   */
   function get_accounts($user_id)
   {
     $sql = "SELECT * FROM emAccounts WHERE user_id='$user_id' ORDER BY standard DESC";
@@ -24,6 +34,13 @@ class email extends db
     return $this->num_rows($result);
   }
 
+  /**
+   * Re-encrypt email passwords of a user.
+   *
+   * @param int $user_id
+   * @param string $old_password The old "seed" password, used to encrypt the old email passwords
+   * @param string $new_password The new "seed" password, used to encrypt the email passwords
+   */
   function re_encrypt_email($user_id, $old_password, $new_password)
   {
     global $GO_CRYPTO;
@@ -41,18 +58,38 @@ class email extends db
     }
   }
 
+  /**
+   * Save sort settings of a user.
+   *
+   * @param int $user_id
+   * @param string $sort_field sort field
+   * @param string $sort_order sort order ('ASC' or 'DESC')
+   */
   function set_sorting($user_id, $sort_field, $sort_order)
   {
     $sql = "UPDATE em_settings SET sort_field='$sort_field' , sort_order='$sort_order' WHERE user_id='$user_id'";
     return $this->query($sql);
   }
 
+  /**
+   * Save send format of a user.
+   *
+   * @param int $user_id
+   * @param string $send_format sort order ('text/HTML' or 'text/PLAIN')
+   */
   function save_send_format($user_id, $send_format)
   {
     $sql = "UPDATE em_settings SET send_format='$send_format'  WHERE user_id='$user_id'";
     return $this->query($sql);
   }
 
+  /**
+   * Get saved sort settings of a user.
+   * If there is not saved settings, then create a new one automatically
+   *
+   * @param int $user_id
+   * @return array a record of em_settings table corresponding to the user
+   */
   function get_settings($user_id)
   {
     $this->query("SELECT * FROM em_settings WHERE user_id='$user_id'");
@@ -66,6 +103,28 @@ class email extends db
     }		
   }
 
+  /**
+   * Add new email account.
+   *
+   * @param int $user_id
+   * @param string $type either 'pop3' or 'imap'
+   * @param string $host mail server hostname
+   * @param int $port mail port
+   * @param mixed $use_ssl Use SSL or not (imaps and pops method)
+   * @param mixed $novalidate_cert If true, don't validate certification
+   * @param mixed $mbroot Mailbox root
+   * @param string $username
+   * @param string $password
+   * @param string $name
+   * @param string $email
+   * @param string $signature
+   * @param string $sent Sent mailbox name
+   * @param string $spam Spam mailbox name
+   * @param string $trash Trash mailbox name
+   * @param string $draft Draft mailbox name
+   * @param bool $auto_check
+   * @return bool
+   */
   function add_account($user_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $sent, $spam, $trash, $draft,$auto_check=0)
   {
     global $GO_CONFIG;
@@ -227,11 +286,38 @@ class email extends db
   }
   }
 
+  /**
+   * Disable mail auto-checking feature for an account.
+   *
+   * @param int $account_id
+   */
   function disable_auto_check($account_id)
   {
     return $this->query("UPDATE emAccounts SET auto_check='0' WHERE id='$account_id'");
   }
 
+  /**
+   * Update an email account.
+   *
+   * @param int $account_id The account that is to be updated.
+   * @param string $type either 'pop3' or 'imap'
+   * @param string $host mail server hostname
+   * @param int $port mail port
+   * @param mixed $use_ssl Use SSL or not (imaps and pops method)
+   * @param mixed $novalidate_cert If true, don't validate certification
+   * @param mixed $mbroot Mailbox root
+   * @param string $username
+   * @param string $password
+   * @param string $name
+   * @param string $email
+   * @param string $signature
+   * @param string $sent Sent mailbox name
+   * @param string $spam Spam mailbox name
+   * @param string $trash Trash mailbox name
+   * @param string $draft Draft mailbox name
+   * @param bool $auto_check
+   * @return bool
+   */
   function update_account($account_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $sent, $spam, $trash, $draft, $auto_check=0)
   {
     global $GO_CONFIG, $GO_CRYPTO;
@@ -364,6 +450,14 @@ class email extends db
     return false;
   }
 
+  /**
+   * Change password for an email account.
+   *
+   * @param string $host mail server host name of the account
+   * @param string $username username of the account
+   * @param string $password the new password
+   * @return bool
+   */
   function update_password($host, $username, $password)
   {
     global  $GO_CRYPTO;
@@ -372,6 +466,16 @@ class email extends db
     return $this->query($sql);
   }
 
+  /**
+   * Update mail account folder information.
+   *
+   * @param int $account_id
+   * @param string $sent The new Sent mailbox name
+   * @param string $spam The new Spam mailbox name
+   * @param string $trash The new Trash mailbox name
+   * @param string $draft The new Draft mailbox name
+   * @return bool
+   */
   function update_folders($account_id, $sent, $spam, $trash, $draft)
   {
     $sql = "UPDATE emAccounts SET sent='$sent', spam=".
@@ -380,6 +484,12 @@ class email extends db
     return $this->query($sql);
   }
 
+  /**
+   * Get an account info.
+   *
+   * @param int $id The account id. If $id is zero, then the default account of the current user will be used
+   * @return array an emAccounts record or false
+   */
   function get_account($id = 0)
   {
     if ($id == 0)
@@ -401,6 +511,12 @@ class email extends db
     }
   }
 
+  /**
+   * Check if the account is a default account.
+   *
+   * @param int $id Account id
+   * @return bool
+   */
   function is_default_account($id)
   {
     $sql = "SELECT * FROM emAccounts WHERE id='$id' AND standard='1'";
@@ -414,6 +530,14 @@ class email extends db
     }
   }
 
+  /**
+   * Delete an account.
+   * If it's a default account, then another account will be chosen default account instead.
+   *
+   * @param int $user_id
+   * @param int $id Account id
+   * @return bool
+   */
   function delete_account($user_id, $id)
   {
     $default = $this->is_default_account($id);
@@ -435,6 +559,12 @@ class email extends db
     return true;
   }
 
+  /**
+   * Set an account as default account for a user.
+   *
+   * @param int $account_id
+   * @param int $user_id
+   */
   function set_as_default($account_id, $user_id)
   {
     $sql = "UPDATE emAccounts SET standard='0' WHERE user_id='$user_id'".
@@ -443,11 +573,14 @@ class email extends db
     $sql = "UPDATE emAccounts SET standard='1' WHERE id='$account_id'";
     $this->query($sql);
   }
-  /*
-     gets the subfolder of a folder id. Account id is only usefull for the root
-     level where all folders have parent 0
-   */
 
+  /**
+   * gets the subfolder of a folder id. Account id is only usefull for the root
+   * level where all folders have parent 0
+   *
+   * @param int $account_id
+   * @param int $folder_id
+   */
   function get_folders($account_id, $folder_id=-1)
   {
     $sql = "SELECT * FROM emFolders WHERE account_id='$account_id' AND ".
@@ -463,6 +596,14 @@ class email extends db
     return $this->num_rows();
   }
 
+  /**
+   * Get all (subscribed) folders of a account.
+   * If $subscribed_only is true, then only subscribed accounts are gotten.
+   *
+   * @param int $account_id
+   * @param bool $subscribed_only
+   * @return int the number of fetched records. Records can be accessed through db interface.
+   */
   function get_all_folders($account_id, $subscribed_only=false)
   {
     if ($subscribed_only)
@@ -479,6 +620,17 @@ class email extends db
   }
 
 
+  /**
+   * Add new mail folder.
+   *
+   * @param int $account_id
+   * @param string $name
+   * @param int $parent_id
+   * @param bool $subscribed
+   * @param string $delimiter
+   * @param int $attributes
+   * @return the folder id or false
+   */
   function add_folder($account_id, $name, $parent_id=0, $subscribed=1,
       $delimiter='/', $attributes=0)
   {
@@ -496,6 +648,14 @@ class email extends db
     }
     return false;
   }
+
+  /**
+   * Rename a mail folder.
+   *
+   * @param int $account_id
+   * @param string $old_name old mail folder name
+   * @param strign $new_name new mail folder name
+   */
   function rename_folder($account_id, $old_name, $new_name)
   {
     $sql = "UPDATE emFolders SET name='$new_name' WHERE".
@@ -510,6 +670,15 @@ class email extends db
 
   }
 
+  /**
+   * Update a mail folder.
+   *
+   * @param int $folder_id
+   * @param int $parent_id
+   * @param bool $subscribed
+   * @param int $attributes
+   * @return bool
+   */
   function update_folder($folder_id, $parent_id, $subscribed, $attributes)
   {
     $sql = "UPDATE emFolders SET subscribed='$subscribed', ".
@@ -519,6 +688,12 @@ class email extends db
     $this->query($sql);
   }
 
+  /**
+   * Delete a mail folder.
+   *
+   * @param int $account_id
+   * @param string $name mail folder name
+   */
   function delete_folder($account_id, $name)
   {
     $sql = "DELETE FROM emFolders WHERE account_id='$account_id' ".
@@ -529,6 +704,14 @@ class email extends db
       "AND folder='$name'";
     $this->query($sql);
   }
+
+  /**
+   * Check if a mail folder exists. If it is, return the folder id
+   *
+   * @param int $account_id
+   * @param string $name
+   * @param int folder id or false
+   */
   function folder_exists($account_id, $name)
   {
     $sql = "SELECT id FROM emFolders WHERE name='$name' AND ">
@@ -543,6 +726,13 @@ class email extends db
     }
   }
 
+  /**
+   * Get folder info.
+   *
+   * @param int $account_id
+   * @param string $name folder name
+   * @return array the record or false
+   */
   function get_folder($account_id, $name)
   {
     $sql = "SELECT * FROM emFolders WHERE name='$name' AND ".
@@ -550,27 +740,46 @@ class email extends db
     $this->query($sql);
     if ($this->next_record())
     {
-      return $this->Record;;
+      return $this->Record;
     }else
     {
       return false;
     }
   }
 
+  /**
+   * Subscribe a mail folder.
+   *
+   * @param int $account_id
+   * @param string $name folder name
+   * @return bool
+   */
   function subscribe($account_id, $name)
   {
     return $this->query("UPDATE emFolders SET subscribed='1' ".
 	"WHERE account_id='$account_id' AND name='$name'");
   }
 
+  /**
+   * Unsubscribe a mail folder.
+   *
+   * @param int $account_id
+   * @param string $name folder name
+   * @return bool
+   */
   function unsubscribe($account_id, $name)
   {
     return $this->query("UPDATE emFolders SET subscribed='0' ".
 	"WHERE account_id='$account_id' AND name='$name'");
   }
 
-  /*
-     Gets the parent_id from a folder path
+  /**
+   *  Gets the parent_id from a folder path
+   *
+   * @param int $account_id
+   * @param string $path
+   * @param string $delimiter
+   * @return parent folder id (zero if it doesn't have parent folder) or false
    */
   function get_parent_id($account_id, $path, $delimiter)
   {
@@ -589,8 +798,12 @@ class email extends db
 
   }
 
-  /*
-     IMAP function to synchronise Group-Office folders with the IMAP server
+  /**
+   *  IMAP function to synchronise Group-Office folders with the IMAP server
+   *
+   * @param int $account_id
+   * @param array $mailboxes
+   * @param array $subscribed
    */
   function synchronise($account_id,$mailboxes, $subscribed)
   {
@@ -642,6 +855,12 @@ class email extends db
     }
   }
 
+  /**
+   * Get filters of an account.
+   *
+   * @param int $account_id
+   * @return int number of record. emFilters record can be accessed through db interface.
+   */
   function get_filters($account_id)
   {
     $sql = "SELECT * FROM emFilters WHERE account_id='$account_id' ".
@@ -650,6 +869,15 @@ class email extends db
     return $this->num_rows();
   }
 
+  /**
+   * Add a mail filter
+   *
+   * @param int $account_id
+   * @param string $field
+   * @param string $keyword
+   * @param string $folder
+   * @return bool
+   */
   function add_filter($account_id, $field, $keyword, $folder)
   {
     $next_id = $this->nextid("emFilters");
@@ -666,6 +894,14 @@ class email extends db
     }
   }
 
+  /**
+   * Update a filter.
+   *
+   * @param int $id filter id
+   * @param string $field
+   * @param string $keyword
+   * @param string $folder
+   */
   function update_filter($id, $field, $keyword, $folder)
   {
     $sql = "UPDATE emFilters SET field='$field', keyword='$keyword', ".
@@ -673,12 +909,28 @@ class email extends db
     $this->query($sql);
   }
 
+  /**
+   * Delete a filter
+   *
+   * @param int $id filter id
+   */
   function delete_filter($id)
   {
     $sql = "DELETE FROM emFilters WHERE id='$id'";
     $this->query($sql);
   }
 
+  /**
+   * Update filter priority
+   * Set the priority of filter $move_up_id with $move_up_pr.
+   * The same for $move_dn_id
+   * If $move_up_pr is equal $move_dn_pr, then increase $move_up_pr
+   *
+   * @param $move_up_id
+   * @param $move_dn_id
+   * @param $move_up_pr
+   * @param $move_dn_pr
+   */
   function move_up($move_up_id, $move_dn_id, $move_up_pr, $move_dn_pr)
   {
     if ($move_up_pr == $move_dn_pr)
@@ -691,6 +943,11 @@ class email extends db
     $this->query($sql);
   }
 
+  /**
+   * Delete accounts of a user
+   *
+   * @param int $user_id
+   */
   function delete_user($user_id)
   {
     $del = new email;
