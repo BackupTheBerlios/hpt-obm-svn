@@ -254,4 +254,6 @@ $lang_modules['vdict'] = "Dictionary";
 $lang_modules['todos'] = "Tasks";
 
 $strInvalidEmail = "Invalid email";
+$add_group_showall = 'Show all groups';
+$add_group_showauth = 'Show authorised groups';
 ?>
