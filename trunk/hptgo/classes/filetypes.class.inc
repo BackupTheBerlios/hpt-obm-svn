@@ -9,6 +9,10 @@ under the terms of the GNU General Public License as published by the
 Free Software Foundation; either version 2 of the License, or (at your
 option) any later version.
 */
+
+/**
+ * Used to maintain table filetypes (MIME types)
+ */
 class filetypes extends db
 {
 	function filetypes()
@@ -16,6 +20,11 @@ class filetypes extends db
 		$this->db();
 	}
 
+	/**
+	 * Add a new type with extension $extension and optionally mime type $mime, friendly name $friendly, icon $icon
+	 * Missing information will be filled by default values
+	 * Return array ('extension','mime','friendly') (and 'image' (icon) if $return_image is true)
+	 */
 	function add_type($extension, $mime='', $friendly='', $icon='',$return_image=false)
 	{
 		global $GO_CONFIG;
@@ -58,6 +67,11 @@ class filetypes extends db
 		return false;
 	}
 
+	/**
+	 * return file info corresponding to extension $extension.
+	 * Information may be retrieved through db interface.
+	 * return true if successful, false otherwise.
+	 */
 	function get_type($extension, $return_image=false)
 	{
 		$extension = substr($extension, 0, 10);
@@ -73,6 +87,10 @@ class filetypes extends db
 		return false;
 	}
 
+	/**
+	 * return $offset file types, starting from $first.
+	 * return total number of file types.
+	 */
 	function get_filetypes($first=0, $offset=0)
 	{
 		$sql = "SELECT * FROM filetypes ORDER BY extension ASC";
@@ -97,6 +115,10 @@ class filetypes extends db
 		}
 	}
 
+	/**
+	 * Change friendly name/icon of filetype $extension.
+	 * return true if successful, false otherwise.
+	 */
 	function update_filetype($extension, $friendly, $icon='')
 	{
 		if ($icon != '' && $data = addslashes(fread(fopen($icon, "r"), filesize($icon))))
@@ -109,12 +131,20 @@ class filetypes extends db
 		return $this->query($sql);
 	}
 
+	/**
+	 * Delete filetype $extension.
+	 * return true if successful, false otherwise.
+	 */
 	function delete_type($extension)
 	{
 		$sql = "DELETE FROM filetypes WHERE extension='$extension'";
 		return $this->query($sql);
 	}
 
+	/**
+	 * Get filetype $extension from mimetype file $GO_CONFIG->mime_types_file.
+	 * return correspoding mime type, application/octet-stream if not found.
+	 */
 	function get_mime_type($extension)
 	{
 		global $GO_CONFIG;
@@ -137,6 +167,9 @@ class filetypes extends db
 		return 'application/OCTET-STREAM';
 	}
 
+	/**
+	 * Get extension of filename $filename.
+	 */
 	function get_extension($filename)
 	{
 		if ($filename{0} == '.')
@@ -147,6 +180,9 @@ class filetypes extends db
 		return $regs[1];
 	}
 
+	/**
+	 * Get mime extension of mime type $mime.
+	 */
 	function get_mime_extension($mime)
 	{
 		$sql = "SELECT extension FROM filetypes WHERE mime='$mime'";

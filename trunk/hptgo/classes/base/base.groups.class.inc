@@ -25,12 +25,12 @@
 
 class base_groups extends db
 {
-	/**
-	* Constructor. Does nothing
-	*
-	* @access public
-	* @return void
-	*/
+  /**
+   * Constructor. Does nothing
+   *
+   * @access public
+   * @return void
+   */
   function base_groups()
   {
     $this->db();    

@@ -12,13 +12,13 @@ option) any later version.
 
 class GO_THEME
 {
-	var $theme;
-	var $default_theme;
-	var $image_url;
-	var $theme_path;
-	var $theme_url;
-	var $stylesheet;
-	var $path_to_themes;
+	var $theme; // theme name
+	var $default_theme; // default theme
+	var $image_url; // theme image url
+	var $theme_path; // theme image path
+	var $theme_url; // them url
+	var $stylesheet; // stylesheet url
+	var $path_to_themes; // theme path
 	var $images = array();
 	var $sounds = array();
 

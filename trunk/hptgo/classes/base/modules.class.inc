@@ -25,6 +25,11 @@ class GO_MODULES extends db
     $this->db();
   }
   
+  /**
+   * Get information of module $module_id
+   * return an array of module info
+   * return false otherwise
+   */
   function get_module_info($module_id)
   {
   	global $GO_CONFIG;
@@ -42,6 +47,11 @@ class GO_MODULES extends db
   	return false;  	
   }
   
+  /**
+   * Check if the current user has permission to access (read/write) module $module_id
+   * redirect to error_docs/403.php when failed
+   * return true if succesful.
+   */
   function authenticate($module_id, $admin=false)
   {
     global $GO_CONFIG, $GO_SECURITY;
@@ -76,6 +86,10 @@ class GO_MODULES extends db
     }
   }
 
+  /**
+   * Check if the current user has permission to read module $module_id
+   * return true if succesful, false otherwise.
+   */
   function has_read_permission($user_id, $module_id)
   {
     global $GO_SECURITY;
@@ -91,6 +105,10 @@ class GO_MODULES extends db
   }
 
 
+  /**
+   * Check if the current user has permission to write module $module_id
+   * return true if succesful, false otherwise.
+   */
   function has_write_permission($user_id, $module_id)
   {
     global $GO_SECURITY;
@@ -98,6 +116,10 @@ class GO_MODULES extends db
     return $GO_SECURITY->has_permission($user_id, $module['acl_write']);
   }
 
+  /**
+   * Return the record of module $module_id from table modules
+   * return false otherwise.
+   */
   function get_module($module_id)
   {
     global $GO_CONFIG;
@@ -117,6 +139,10 @@ class GO_MODULES extends db
     }
   }
 
+  /**
+   * Add new module named $module_id with version $version and acl_{read,write} to system.
+   * return true if successful, false otherwise.
+   */
   function add_module($module_id, $version, $acl_read, $acl_write)
   {
     global $GO_CONFIG; 
@@ -143,6 +169,10 @@ class GO_MODULES extends db
     return false;
   }
 
+  /**
+   * Remove a module from named $module_id from system.
+   * return true if successful, false otherwise.
+   */
   function delete_module($module_id)
   {
     global $GO_SECURITY, $GO_CONFIG;
@@ -170,6 +200,10 @@ class GO_MODULES extends db
     return false;
   }
 
+  /**
+   * Get all modules (accessed through db interface).
+   * return the number of installed modules.
+   */
   function get_modules()
   {
     $sql = "SELECT * FROM modules ORDER BY id ASC";
@@ -177,6 +211,11 @@ class GO_MODULES extends db
     return $this->num_rows();
   }
 
+  /**
+   * Get all modules (accessed through db interface).
+   * This function is similiar to get_modules() with additional field (full_url, url, path, class_path)
+   * return the array of modules.
+   */
   function get_modules_with_locations()
   {
     global $GO_CONFIG;
@@ -195,6 +234,11 @@ class GO_MODULES extends db
     return $modules;
   }
 
+  /**
+   * Get plugin information.
+   * Plugins reside in $GO_CONFIG->full_url/modules/module-name/plugin-name
+   * Return plugin (an array of ('id','path','class_path','full_url','url') if successful, false otherwise.
+   */
   function get_plugin($plugin_id, $module_id='')
   {
     global $GO_CONFIG;

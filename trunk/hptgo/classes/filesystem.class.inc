@@ -10,12 +10,21 @@
    option) any later version.
  */
 
+/**
+ * Class filesystem is used by module filesystem and other modules to provide
+ * a filesystem interface.
+ */
 class filesystem extends db
 {
   var $search_results = array();
   var $disable_go_permissions = false;
   var $action_result = false;
 
+  /**
+   * Get filesystem settings from fs_settings.
+   *
+   * @param $user_id
+   */
   function get_settings($user_id)
   {
     $this->query("SELECT * FROM fs_settings WHERE user_id='$user_id'");
@@ -29,6 +38,14 @@ class filesystem extends db
       return $this->get_settings($user_id);
     }		
   }
+
+  /**
+   * Set filesystem sort setting.
+   *
+   * @param $user_id
+   *        $sort_field sort field
+   *        $sort_order sort order
+   */
   function set_sorting($user_id, $sort_field, $sort_order)
   {
     $sql = "UPDATE fs_settings SET sort_field='$sort_field' , 
@@ -36,6 +53,13 @@ class filesystem extends db
     return $this->query($sql);
   }
 
+  /**
+   * Check if $sub_path is a subdirectory of $parent_path.
+   * Return true if it is, false otherwise.
+   *
+   * @param $sub_path
+   *        $parent_path 
+   */
   function is_sub_dir($sub_path, $parent_path)
   {
     if (strpos($sub_path, $parent_path) === false)
@@ -51,12 +75,21 @@ class filesystem extends db
     return true;
   }
 
+  /**
+   * Filesystem class constructor.
+   *
+   * @param $disable_go_permissions ignore checking go permissions
+   *
+   */
   function filesystem($disable_go_permissions=false)
   {
     $this->db();
     $this->disable_go_permissions = $disable_go_permissions;
   }
 
+  /**
+   * Check if $path is the home directory of user $user_id.
+   */
   function is_home_path($user_id, $path)
   {
     global $GO_CONFIG, $GO_USERS;
@@ -73,6 +106,9 @@ class filesystem extends db
     return false;
   }
 
+  /**
+   * Check if $path is owned by user $user_id.
+   */
   function is_owner($user_id, $path)
   {
     global $GO_CONFIG, $GO_USERS;
@@ -113,6 +149,9 @@ class filesystem extends db
     return false;
   }
 
+  /**
+   * Check if $folder is a common folder.
+   */
   function is_common_folder($folder)
   {
     global $GO_CONFIG,$GO_SECURITY;
@@ -131,6 +170,9 @@ class filesystem extends db
     return $ret;
   }
 
+  /**
+   * Check if $folder is a system folder.
+   */
   function is_system_folder($folder)
   {
     global $GO_CONFIG;
@@ -140,6 +182,9 @@ class filesystem extends db
     return $db->query("SELECT * FROM fsSystemFolders WHERE path='".$folder."'") && $db->num_rows();
   }
 
+  /**
+   * Rename/Move a system folder from $old_folder to $new_path.
+   */
   function update_system_folder($old_folder,$new_folder)
   {
     $db = new db();
@@ -149,6 +194,11 @@ class filesystem extends db
       return $db->query("DELETE FROM fsSystemFolders WHERE path='".$old_folder."'");
   }
 
+  /**
+   * Get all shares of user $user_id.
+   * Return the number of shares. 
+   * Share information can be retrieved through db interface (table fsShares).
+   */
   function get_shares($user_id)
   {
     //ORDER BY PATH important so higher order shares come first
@@ -157,6 +207,10 @@ class filesystem extends db
     return $this->num_rows();
   }
 
+  /**
+   * Get all users who share files to me.
+   * Return an array of user_id. 
+   */
   function get_my_shares()
   {
     global $GO_SECURITY;
@@ -179,6 +233,11 @@ class filesystem extends db
     return $list;
   }
 
+  /**
+   * Get all users who share files to user $user_id.
+   * Return the number of users. 
+   * User info can be retrieved through db interface. 
+   */
   function get_authorized_sharers($user_id)
   {
     global $GO_SECURITY;
@@ -190,6 +249,10 @@ class filesystem extends db
     return $this->num_rows();
   }
 
+  /**
+   * Make directory $path sharable by user $user_id.
+   * Return true if successful, false otherwise. 
+   */
   function add_share($user_id, $path)
   {
     $path = addslashes($path);
@@ -231,6 +294,10 @@ class filesystem extends db
     return false;
   }
 
+  /**
+   * Make directory $path unsharable.
+   * Return true if successful, false otherwise. 
+   */
   function delete_share($path)
   {
     if ($share = $this->get_share($path))
@@ -254,6 +321,10 @@ class filesystem extends db
     return false;
   }
 
+  /**
+   * Rename/Move a shared directory from $old_path to $new_path.
+   * Return true if successful, false otherwise. 
+   */
   function update_share($old_path, $new_path)
   {
     $new_path = addslashes($new_path);
@@ -270,6 +341,11 @@ class filesystem extends db
     return $this->query($sql);
   }
 
+  /**
+   * Check if folder $path is sharable or not.
+   * A folder is sharable if it's in fsShares table. For checking if the parent directory is sharable, use find_share() instead.
+   * Return the fsShares record sharable, false otherwise. 
+   */
   function get_share($path)
   {
     $path = addslashes($path);
@@ -282,6 +358,10 @@ class filesystem extends db
     return false;
   }
 
+  /**
+   * Check if folder $path or its parent is sharable.
+   * Return the shared folder (which is in fsShares), false otherwise. 
+   */
   function find_share($path)
   {
     if ($share = $this->get_share($path))
@@ -304,11 +384,21 @@ class filesystem extends db
     }
   }
 
+  /**
+   * Check if user $user_id has read/write permission on shared folder $path.
+   * Return true if successful, false otherwise. 
+   */
   function has_read_permission2($user_id, $path)
   {
     return $this->has_read_permission($user_id,$path) || $this->has_write_permission($user_id,$path);
   }
 
+  /**
+   * Check if user $user_id has read permission on shared folder $path.
+   * A folder is readable to an user if the user owns the folder, or the folder is shared to the user by another.
+   * if $disable_go_permissions is true, then owner checking is ignored.
+   * Return true if successful, false otherwise. 
+   */
   function has_read_permission($user_id, $path)
   {
     if ($this->disable_go_permissions || $this->is_owner($user_id, $path))
@@ -333,6 +423,12 @@ class filesystem extends db
     return false;
   }
 
+  /**
+   * Check if user $user_id has write permission on shared folder $path.
+   * A folder is readable to an user if the user owns the folder, or the folder is shared to the user by another.
+   * if $disable_go_permissions is true, then owner checking is ignored.
+   * Return true if successful, false otherwise. 
+   */
   function has_write_permission($user_id, $path)
   {
     if ($this->disable_go_permissions || $this->is_owner($user_id, $path))
@@ -357,6 +453,10 @@ class filesystem extends db
     return false;
   }
 
+  /**
+   * Get the size of folder/file $path. If it's a folder, count the size of its files/subfolders.
+   * Return the size of $path. 
+   */
   function size($path)
   {
     if (is_dir($path))
@@ -380,6 +480,10 @@ class filesystem extends db
     }
   }
 
+  /**
+   * Move file/folder $source_path to $destination_path.
+   * Return true if successful, false otherwise. 
+   */
   function move($source_path, $destination_path)
   {
     global $GO_CONFIG;
@@ -463,6 +567,10 @@ class filesystem extends db
     }
   }
 
+  /**
+   * Copy file/folder $source_path to $destination_path.
+   * Return true if successful, false otherwise. 
+   */
   function copy($source_path, $destination_path)
   {
     global $GO_CONFIG;
@@ -529,6 +637,12 @@ class filesystem extends db
     }
   }
 
+  /**
+   * Delete file/folder $source_path to $destination_path.
+   * If it's a folder, delete all its contents.
+   * Write permission is needed/checked to delete.
+   * Return true if successful, false otherwise. 
+   */
   function delete($path)
   {
     global $GO_SECURITY;
@@ -596,6 +710,10 @@ class filesystem extends db
     }
   }
 
+  /**
+   * Get parent folder of folder $path.
+   * Return false if unsuccessful.
+   */
   function get_parent_path($path)
   {
     $last_folder_pos = strrpos($path, '/');
@@ -614,7 +732,12 @@ class filesystem extends db
     }
   }
 
-  //faster then get_folders_sorted
+  /**
+   * Get subfolders of folder $path (faster then get_folders_sorted)
+   * Return an folder array.
+   * Each element is an array ('path','name','mtime','size','type')
+   * FIXME: more information about the array
+   */
   function get_folders($path)
   {
     global $GO_CONFIG;
@@ -643,6 +766,13 @@ class filesystem extends db
     return $folders;
   }
 
+  /**
+   * Get common subfolders of folder $path, which is visible to user $user_id.
+   * Retrieved folders may be direct children of $path or not.
+   * Return an folder array.
+   * Each element is an array ('path','name','mtime','size','type')
+   * FIXME: more information about the array
+   */
   function get_visible_folders($user_id,$path)
   {
     global $GO_CONFIG;
@@ -683,8 +813,14 @@ class filesystem extends db
     return $folders;
   }
 
-#returns all subfolders of a folder sorted based on the result of a function
-#passed that is performed on the pathname. (For example filesize();)
+  /**
+   * Get subfolders of folder $path sorted by $sort_field with $sort_direction
+   * returns all subfolders of a folder sorted based on the result of a function
+   * passed that is performed on the pathname. (For example filesize();)
+   * Return an folder array.
+   * Each element is an array ('path','name','mtime','size','type')
+   * FIXME: more information about the array
+   */
   function get_folders_sorted($path,$sort_field='basename',$sort_direction='ASC')
   {
     global $GO_CONFIG;
@@ -753,7 +889,12 @@ class filesystem extends db
     return $folders;
   }
 
-  //faster then get_files_sorted
+  /**
+   * Get files/subfolders of folder $path (faster then get_files_sorted)
+   * Return an file array.
+   * Each element is an array ('path','name','mtime','size','type')
+   * FIXME: more information about the array
+   */
   function get_files($path, $move=false)
   {
     global $GO_CONFIG;
@@ -791,8 +932,14 @@ class filesystem extends db
     return $files;
   }
 
-#returns all subfolders of a folder sorted based on the result of a function
-#passed that is performed on the pathname. (For example filesize();)
+  /**
+   * Get files/subfolders of folder $path sorted by $sort_field with sort order $sort_direction
+   * returns all subfolders of a folder sorted based on the result of a function
+   * passed that is performed on the pathname. (For example filesize();)
+   * Return an file array.
+   * Each element is an array ('path','name','mtime','size','type')
+   * FIXME: more information about the array
+   */
   function get_files_sorted($path,$sort_field='basename',$sort_direction='ASC')
   {
     global $GO_CONFIG;
@@ -864,6 +1011,9 @@ class filesystem extends db
     return $files;
   }
 
+  /**
+   * FIXME
+   */
   function search($path, $keyword, $modified_later_then=0, $modified_earlier_then=0)
   {
     global $GO_SECURITY;
@@ -904,6 +1054,9 @@ class filesystem extends db
     return $this->search_results;
   }
 
+  /**
+   * delete home folder of user $user_id and his/her shares
+   */
   function delete_user($user_id)
   {
     $fs = new filesystem();
@@ -914,6 +1067,11 @@ class filesystem extends db
     }
   }
 
+  /**
+   * Make $path system folder.
+   * $feedback is the error message when things go wrong.
+   * return true if successful, false otherwise.
+   */
   function add_system_folder($path,&$feedback)
   {
     global $GO_CONFIG;
@@ -931,6 +1089,11 @@ class filesystem extends db
     return true;
   }
 
+  /**
+   * Removed system folder attribute from folder $path.
+   * $msg is the error message when things go wrong.
+   * return true if successful, false otherwise.
+   */
   function delete_system_folder($path,&$msg)
   {
     $children = $this->get_folders($path);

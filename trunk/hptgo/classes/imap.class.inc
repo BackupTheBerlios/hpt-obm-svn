@@ -11,6 +11,11 @@
    option) any later version.
  */
 
+/**
+ * Convert $matches quoted format to NCR format.
+ * Return the converted result. 
+ * Used by imap.view_part()
+ */
 function quoted_to_ncr($matches)
 {
   if (!isset($matches[2]) || $matches[2] == '') {
@@ -39,10 +44,16 @@ class imap
   var $sort;
   var $next_sort_index;
 
-  /*
-     Open connection to server and count total and new messages
+  /**
+   * Open connection to server and count total and new messages
+   * $host, $port, $username, $password specify what host/port to connect,
+   * what username/password is used to authenticate.
+   * $type must be 'pop3' or 'imap'.
+   * $mailbox is used as root folder (imap protocol)
+   * $ssl is true if it's a ssl(ed) protocol.
+   * $novalidate_cert: do not validate certification.
+   * $flags: this parameter is passed directly to imap_open()
    */
-
   function open($host, $type, $port, $username, $password, $mailbox = "INBOX", $flags = 0, $ssl=false, $novalidate_cert=false)
   {
     global $GO_CONFIG;
@@ -72,10 +83,9 @@ class imap
     return $this->conn;
   }
 
-  /*
-     Close connection with server
+  /**
+   *  Close connection with server
    */
-
   function close()
   {
     unset($this->messages);
@@ -86,8 +96,8 @@ class imap
     unset($this->conn);
   }
 
-  /*
-     count total and new messages on server
+  /**
+   * count total and new messages on server
    */
   function count()
   {
@@ -102,16 +112,18 @@ class imap
   }
 
 
+  /**
+   * Get the status of mailbox $mailbox (the result of imap_status())
+   */
   function status($mailbox)
   {
     $status = imap_status($this->conn, "{".$this->connectstring."}".$mailbox, SA_UNSEEN);
     return $status;
   }
 
-  /*
-     return true when server is an IMAP server.
+  /**
+   * return true when server is an IMAP server.
    */
-
   function is_imap()
   {
     if ($this->servertype == "imap")
@@ -123,10 +135,10 @@ class imap
     }
   }
 
-  /*
-     Return sorted messages into $this->sort
+  /**
+   * Return sorted messages into $this->sort
+   * if $uid is true, FT_UID is passed to imap_sort()
    */
-
   function sort($type = SORTDATE, $reverse = "1", $uid=false)
   {
     if ($uid)
@@ -138,6 +150,12 @@ class imap
     }
   }
 
+  /**
+   * FIXME
+   * This should be sort(), not search() :(
+   * Call imap_sort() and store the result in $this->sort, then return count($this->sort).
+   * If something goes wrong, make $this->sort[] empty and return zero.
+   */
   function search($sort_type = SORTDATE, $reverse = "1", $query)
   {
     if($this->sort = imap_sort($this->conn, $sort_type, $reverse, SE_NOPREFETCH, trim($query)))
@@ -151,6 +169,11 @@ class imap
     return $this->count;
   }
 
+  /**
+   * get $offset messages starting from $first.
+   * If $this->sort is true, then messages will be sorted.
+   * The result is in $this->messages, $this->sort_index[], $this->sort_map[]
+   */
   function get_messages($first, $offset)
   {
     if (!isset($this->sort))
@@ -188,10 +211,9 @@ class imap
     $this->messages = imap_fetch_overview($this->conn, $get);
   }
 
-  /*
-     Loop through messages and return array with message info needed for inbox listing.
+  /**
+   * Loop through messages and return array with message info needed for inbox listing.
    */
-
   function next_message($get_to_addresses=false)
   {
     if(!isset($this->messages))
@@ -284,6 +306,10 @@ class imap
     }
   }
 
+/**
+ * get part identified by $path from an array of parts $parts
+ * return false if things go wrong.
+ */
 function mail_fetchpart($parts, $part) {
  
   $partNos = explode(".", $part);
@@ -299,9 +325,11 @@ function mail_fetchpart($parts, $part) {
     return false;
 }
 
-// splits a message given in the body if it is
-// a mulitpart mime message and returns the parts,
-// if no parts are found, returns false
+/**
+ * splits a message given in the body if it is
+ * a mulitpart mime message and returns the parts,
+ * if no parts are found, returns false
+ */
 function mail_mimesplit($header, $body) {
   $parts = array();
  
@@ -322,6 +350,10 @@ function mail_mimesplit($header, $body) {
   }   
 }
 
+/**
+ * Split $part into header and body
+ * return an array ('header','body') of $part
+ */
 function mail_mimesubme($part) {
   $headDelimiter = "\r\n\r\n";
   $delLength = strlen($headDelimiter);
@@ -336,10 +368,12 @@ function mail_mimesubme($part) {
   return $returnParts;
 }
 
-// returns an array with all parts that are
-// subparts of the given part
-// if no subparts are found, return the body of
-// the current part
+/**
+ * returns an array with all parts that are
+ * subparts of the given part
+ * if no subparts are found, return the body of
+ * the current part
+ */
 function mail_mimesub($part) {
   $i = 1;
   $headDelimiter = "\r\n\r\n";
@@ -369,9 +403,11 @@ function mail_mimesub($part) {
   }
 }
 
-// get an array with the bodies all parts of an email
-// the structure of the array corresponds to the
-// structure that is available with imap_fetchstructure
+/**
+ * get an array with the bodies all parts of an email
+ * the structure of the array corresponds to the
+ * structure that is available with imap_fetchstructure
+ */
 function mail_fetchparts($msgNo) {
   $parts = array();
   $header = imap_fetchheader($this->conn,$msgNo,FT_UID);
@@ -389,10 +425,9 @@ function mail_fetchparts($msgNo) {
   return $parts;
 }
 
-  /*
-     return an array with all message info.
+  /**
+   * return an array with all message info.
    */
-
   function get_message($uid, $preferred_type = "html", $part="")
   {
     if ($this->conn)
@@ -588,10 +623,9 @@ function mail_fetchparts($msgNo) {
     }
   }
 
-  /*
-     private function to get all the parts from a message.
+  /**
+   * private function to get all the parts from a message.
    */
-
   function get_parts($mimeobj,$preferred_type = "html", $section = '',$header,$body,$skip = false)
   {
     if (isset($mimeobj->type))
@@ -785,6 +819,9 @@ function mail_fetchparts($msgNo) {
 
   }
 
+  /**
+   * FIXME
+   */
   function print_structure($mimeobj, $depth = 0, $section = 0)
   {
     for($y = 0; $y < $depth; $y++)
@@ -860,8 +897,8 @@ function mail_fetchparts($msgNo) {
 }
 
 
-/*
-   private function to get mimetype in text
+/**
+ * private function to get mimetype in text
  */
 
 function get_encoding($encoding)
@@ -894,8 +931,8 @@ function get_encoding($encoding)
   return $encoding;
 }
 
-/*
-   private function to get encoding in text
+/**
+ * private function to get encoding in text
  */
 
 function get_mime_type($type)
@@ -933,6 +970,9 @@ function get_mime_type($type)
 }
 
 
+/**
+ * get a value of field $fieldname from header $header
+ */
 function get_header_value($fieldname, $header)
 {
   $resu = '';
@@ -955,6 +995,9 @@ function get_header_value($fieldname, $header)
   return trim($resu);
 }
 
+/**
+ * Delete $messages (imap_delete() and then imap_expunge())
+ */
 function delete($messages)
 {
   for ($i=0;$i<count($messages);$i++)
@@ -964,6 +1007,9 @@ function delete($messages)
   @imap_expunge($this->conn);
 }
 
+/**
+ * Return a MIME part identified by $part_no in message $uid
+ */
 function view_part($uid, $part_no, $transfer, $part_charset='')
 {
   $text = imap_fetchbody($this->conn, $uid, $part_no, FT_UID);
@@ -984,12 +1030,18 @@ function view_part($uid, $part_no, $transfer, $part_charset='')
 }
 
 
+/**
+ * DB interface's method.
+ */
 function f($name)
 {
   $value = isset($this->message[$name]) ? $this->message[$name] : false;
   return $value;
 }
 
+/**
+ * Get mailbox delimiter()
+ */
 function get_mailbox_delimiter()
 {
   $list = imap_getmailboxes($this->conn, "{".$this->connectstring."}", '%');
@@ -1004,6 +1056,9 @@ function get_mailbox_delimiter()
   return false;
 }
 
+/**
+ * FIXME
+ */
 function check_mbroot($mbroot)
 {
   $mbroot = trim($mbroot);
@@ -1032,6 +1087,9 @@ function check_mbroot($mbroot)
 }
 
 
+/**
+ * FIXME
+ */
 function get_mailboxes($mailbox_root='', $name_only=false)
 {
   $this->mailboxes = array();
@@ -1062,6 +1120,10 @@ function get_mailboxes($mailbox_root='', $name_only=false)
 
   return $this->mailboxes;
 }
+
+/**
+ * FIXME
+ */
 function get_subscribed($mailbox_root='', $name_only=false)
 {
   $this->mailboxes = array();
@@ -1095,6 +1157,9 @@ function get_subscribed($mailbox_root='', $name_only=false)
 
 
 
+/**
+ * FIXME
+ */
 function is_subscribed($name, $mailbox_root)
 {
   $this->get_subscribed($mailbox_root);
@@ -1108,16 +1173,25 @@ function is_subscribed($name, $mailbox_root)
   return false;
 }
 
+/**
+ * Subcribe an imap folder named $name
+ */
 function subscribe($name)
 {
   return imap_subscribe($this->conn, "{".$this->connectstring."}".imap_utf7_encode($name));
 }
 
+/**
+ * Unsubcribe an imap folder named $name
+ */
 function unsubscribe($name)
 {
   return imap_unsubscribe($this->conn, "{".$this->connectstring."}".imap_utf7_encode($name));
 }
 
+/**
+ * Delete folder $name from mailbox $mailbox_root
+ */
 function delete_folder($name, $mailbox_root)
 {
   if ($this->is_subscribed($name, $mailbox_root))
@@ -1133,6 +1207,9 @@ function delete_folder($name, $mailbox_root)
   }
 }
 
+/**
+ * Create new folder named $name
+ */
 function create_folder($name)
 {
   if (imap_createmailbox($this->conn,"{".$this->connectstring."}".imap_utf7_encode($name)))
@@ -1141,6 +1218,9 @@ function create_folder($name)
   }
 }
 
+/**
+ * Rename folder $old_name to $new_name
+ */
 function rename_folder($old_name, $new_name)
 {
   if ($this->unsubscribe($old_name))
@@ -1153,6 +1233,9 @@ function rename_folder($old_name, $new_name)
   return false;
 }
 
+/**
+ * Move messages $messages to folder $folder.
+ */
 function move($folder, $messages)
 {
   $messageset = implode (",",$messages);
@@ -1164,11 +1247,17 @@ function move($folder, $messages)
   return false;
 }
 
+/**
+ * Get mail quota
+ */
 function get_quota()
 {
   return imap_get_quota($this->conn,"user.".$this->username);
 }
 
+/**
+ * FIXME
+ */
 function append_message($mailbox, $body, $flags = "")
 {
   if(@imap_append($this->conn, "{".$this->connectstring."}".imap_utf7_encode($mailbox), $body, $flags))
@@ -1180,6 +1269,9 @@ function append_message($mailbox, $body, $flags = "")
   }
 }
 
+/**
+ * FIXME
+ */
 function set_message_flag($mailbox = "INBOX", $uid_array, $flags, $action = "")
 {
   if($mailbox == $this->mailbox || $this->reopen($mailbox))
@@ -1211,6 +1303,9 @@ function set_message_flag($mailbox = "INBOX", $uid_array, $flags, $action = "")
   }
 }
 
+/**
+ * Reopen the connection.
+ */
 function reopen($mailbox = "INBOX", $flags = "")
 {
   if(imap_reopen($this->conn, "{".$this->connectstring."}".imap_utf7_encode($mailbox), $flags))
@@ -1223,6 +1318,11 @@ function reopen($mailbox = "INBOX", $flags = "")
   }
 }
 
+/**
+ * Get information from imap_mailboxmsginfo().
+ * The result is the array $this->mailbox_info ('date','driver','mailbox','nmsgs','recent','size')
+ * Return true if successful, false otherwise
+ */
 function mailbox_info()
 {
   $info = imap_mailboxmsginfo($this->conn);
