@@ -40,7 +40,8 @@ while (<>) {
 			print ">\n";
 			if (defined($i->{"notnull"})) {
 				print "\t\t\t<NOTNULL/>\n";
-			}elsif (defined($i->{"primary"})) {
+			}
+			if (defined($i->{"primary"})) {
 				print "\t\t\t<PRIMARY/>\n";
 			} elsif (defined($i->{"key"})) {
 				print "\t\t\t<KEY/>\n";

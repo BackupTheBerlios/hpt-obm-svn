@@ -1,94 +1,112 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
+
+
 <schema version="0.2">
-	<table name="no_catagories">
-		<field name="name" type="C">
+  <table name="no_catagories">
+    <field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+		</field>
+    <field name="name" size="50" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+			<descr>Category name</descr>
+		</field>
+  </table>
+  <table name="no_notes">
+    <field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+		</field>
+    <field name="user_id" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<descr>Note owner</descr>
+			<link table="users" field="id"/>
+		</field>
+    <field name="contact_id" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<link table="ab_contacts" field="id"/>
+		</field>
+    <field name="project_id" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<descr>If this note is associated with a project, then here is the project id</descr>
+			<link table="pmProjects" field="id"/>
+		</field>
+    <field name="file_path" size="255" type="C">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<descr>If this note is associated with a file, then here is the file path</descr>
+		</field>
+    <field name="catagory_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<link table="no_catagories" field="id"/>
+		</field>
+    <field name="res_user_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Note responsible user</descr>
+			<link table="users" field="id"/>
+		</field>
+    <field name="due_date" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+    <field name="ctime" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+    <field name="mtime" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+    <field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="id" type="I">
+    <field name="content" size="50" type="X">
+			<NOTNULL/>
+			<descr>Note content</descr>
+		</field>
+    <field name="acl_read" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Users be able to read this note</descr>
+			<link table="acl" field="acl_id"/>
 		</field>
-		<descr></descr>
-	</table>
-
-	<table name="no_notes">
-		<field name="acl_read" type="I">
+    <field name="acl_write" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Users be able to read and edit this note</descr>
+			<link table="acl" field="acl_id"/>
 		</field>
-		<field name="ctime" type="I">
+  </table>
+  <table name="no_settings">
+    <field name="user_id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="file_path" type="C">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="mtime" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="content" type="X">
-			<NOTNULL/>
-		</field>
-		<field name="name" type="C">
+    <field name="sort_field" size="20" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="acl_write" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="res_user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="catagory_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="due_date" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="contact_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="project_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
-	</table>
-
-	<table name="no_settings">
-		<field name="sort_order" type="C">
+    <field name="sort_order" size="20" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="sort_field" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="show_notes" type="L">
+    <field name="show_notes" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
-	</table>
-
+  </table>
 </schema>

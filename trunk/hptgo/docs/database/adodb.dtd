@@ -1,7 +1,7 @@
 <!ELEMENT schema (table*, sql*)>
 <!ATTLIST schema version CDATA #REQUIRED>
 <!ELEMENT table ((field+|DROP), constraint*, descr?, index*, data*)>
-<!ELEMENT field ((NOTNULL|KEY|PRIMARY)?, (AUTO|AUTOINCREMENT)?, (DEFAULT|DEFDATE|DEFTIMESTAMP)?, NOQUOTE?, constraint?, descr?)>
+<!ELEMENT field ((NOTNULL)?,(KEY|PRIMARY)?, (AUTO|AUTOINCREMENT)?, (DEFAULT|DEFDATE|DEFTIMESTAMP)?, NOQUOTE?, constraint?, descr?, link*)>
 <!ELEMENT data (row+)>
 <!ELEMENT row (f+)>
 <!ELEMENT f (#PCDATA)>
@@ -17,6 +17,11 @@
 <!ELEMENT NOQUOTE EMPTY>
 <!ELEMENT DROP EMPTY>
 <!ELEMENT constraint (#PCDATA)>
+<!ELEMENT link EMPTY>
+<!ATTLIST link
+	table CDATA #REQUIRED
+	field CDATA #REQUIRED
+>
 <!ATTLIST table
 	name CDATA #REQUIRED
 	platform CDATA #IMPLIED

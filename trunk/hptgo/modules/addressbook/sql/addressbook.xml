@@ -1,550 +1,607 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <schema version="0.2">
 	<table name="ab_addressbooks">
-		<field name="acl_read" type="I">
+		<field name="id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>ID</descr>
 		</field>
-		<field name="name" type="C">
+		<field name="user_id" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<descr>Addressbook owner</descr>
+			<link table="users" field="id"/>
+		</field>
+		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Addressbook name</descr>
 		</field>
-		<field name="acl_write" type="I">
+		<field name="acl_read" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Users be able access this addressbook</descr>
+			<link field="acl_id" table="acl"/>
 		</field>
-		<field name="user_id" type="I">
+		<field name="acl_write" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Users be able access and manage this addressbook</descr>
+			<link field="acl_id" table="acl"/>
 		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="ab_companies">
-		<field name="shortname" type="C">
+		<field name="id" size="11" type="I">
 			<NOTNULL/>
-			<DEFAULT value=""/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<descr>ID</descr>
 		</field>
-		<field name="bank_no" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="acl_write" type="I">
+		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Company owner</descr>
+			<link table="users" field="id"/>
 		</field>
-		<field name="state" type="C">
+		<field name="addressbook_id" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<descr>ID</descr>
+			<link table="ab_addressbooks" field="id"/>
+		</field>
+		<field name="name" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Company name</descr>
 		</field>
-		<field name="email" type="C">
+		<field name="address" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Physical location address</descr>
 		</field>
-		<field name="city" type="C">
+		<field name="zip" size="10" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>ZIP code</descr>
 		</field>
-		<field name="fax" type="C">
+		<field name="city" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>City name</descr>
 		</field>
-		<field name="id" type="I">
+		<field name="state" size="50" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+			<descr>Company's state</descr>
+		</field>
+		<field name="country" size="50" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+			<descr>Country name</descr>
+		</field>
+		<field name="phone" size="20" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+			<descr>Phone number</descr>
+		</field>
+		<field name="fax" size="20" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+			<descr>Fax number</descr>
+		</field>
+		<field name="email" size="75" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+			<descr>Email address</descr>
+		</field>
+		<field name="homepage" size="100" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+			<descr>Homepage URL</descr>
+		</field>
+		<field name="bank_no" size="20" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+			<descr>Bank number</descr>
+		</field>
+		<field name="vat_no" size="30" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+			<descr>VAT Number</descr>
+		</field>
+		<field name="acl_read" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Users be able access and manage this company</descr>
+			<link field="acl_id" table="acl"/>
 		</field>
-		<field name="address" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="vat_no" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="country" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="acl_read" type="I">
+		<field name="acl_write" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Users be able access and manage this company</descr>
+			<link field="acl_id" table="acl"/>
 		</field>
-		<field name="parent" type="I">
+		<field name="parent" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Parent company of this company</descr>
+			<link table="ab_companies" field="id"/>
 		</field>
-		<field name="name" type="C">
+		<field name="shortname" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Company short name</descr>
 		</field>
-		<field name="phone" type="C">
+		<field name="engname" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>English name</descr>
 		</field>
-		<field name="homepage" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
+		<field name="relation_date" size="100" type="D">
+			<descr>The time when relation with this company is made</descr>
 		</field>
-		<field name="zip" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="addressbook_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="relation_date" type="D">
-		</field>
-		<field name="engname" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="ab_contacts">
-		<field name="home_phone" type="C">
+		<field name="id" size="11" type="I">
 			<NOTNULL/>
-			<DEFAULT value=""/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<descr>ID</descr>
 		</field>
-		<field name="department" type="C">
+		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
-			<DEFAULT value=""/>
+			<DEFAULT value="0"/>
+			<descr>User who owns this contact</descr>
+			<link table="users" field="id"/>
 		</field>
-		<field name="function" type="C">
+		<field name="addressbook_id" size="11" type="I">
 			<NOTNULL/>
-			<DEFAULT value=""/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<descr>Addressbook to which this contact belongs</descr>
+			<link table="ab_addressbooks" field="id"/>
 		</field>
-		<field name="acl_write" type="I">
+		<field name="source_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>User id of this contact, if this contact is derived from a user</descr>
+			<link table="users" field="id"/>
+		</field>
+		<field name="group_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="state" type="C">
+		<field name="first_name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="last_name" type="C">
+		<field name="middle_name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="email" type="C">
+		<field name="last_name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="color" type="C">
+		<field name="initials" size="30" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="city" type="C">
+		<field name="title" size="10" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="fax" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="address" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="birthday" type="D">
-			<NOTNULL/>
-			<DEFAULT value="0000-00-00"/>
-		</field>
-		<field name="work_phone" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="acl_read" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="country" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="initials" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="company_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="source_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="middle_name" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="sex" type="C">
+		<field name="sex" size="10" type="C">
 			<NOTNULL/>
 			<DEFAULT value="M"/>
 		</field>
-		<field name="zip" type="C">
+		<field name="birthday" size="10" type="D">
+			<NOTNULL/>
+			<DEFAULT value="0000-00-00"/>
+		</field>
+		<field name="email" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="cellular" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="work_fax" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="comment" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="group_id" type="I">
+		<field name="company_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Company of which this contact is a member</descr>
+			<link table="ab_companies" field="id"/>
 		</field>
-		<field name="addressbook_id" type="I">
+		<field name="department" size="50" type="C">
 			<NOTNULL/>
-			<DEFAULT value="0"/>
+			<DEFAULT value=""/>
+			<descr>Department</descr>
 		</field>
-		<field name="title" type="C">
+		<field name="function" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="user_id" type="I">
+		<field name="home_phone" size="20" type="C">
 			<NOTNULL/>
-			<DEFAULT value="0"/>
+			<DEFAULT value=""/>
+			<descr>Home phone number</descr>
 		</field>
-		<field name="first_name" type="C">
+		<field name="work_phone" size="20" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<descr></descr>
+		<field name="fax" size="20" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="work_fax" size="20" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="cellular" size="20" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="country" size="50" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="state" size="50" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="city" size="50" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="zip" size="10" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="address" size="100" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="comment" size="50" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="color" size="6" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="acl_read" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Users be able to read this contact</descr>
+			<link table="users" field="id"/>
+		</field>
+		<field name="acl_write" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Users be able to read and edit this contact</descr>
+			<link table="users" field="id"/>
+		</field>
 	</table>
-
 	<table name="ab_custom_company_fields">
-		<field name="id" type="I">
+		<field name="id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="ab_custom_company_fields_cats">
-		<field name="acl_id" type="I">
+		<field name="id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="name" type="C">
+		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<descr></descr>
+		<field name="acl_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
 	</table>
-
 	<table name="ab_custom_company_fields_sort">
-		<field name="size" type="L">
+		<field name="catagory_id" size="11" type="I">
 			<NOTNULL/>
+			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="sort_index" type="L">
+		<field name="field" size="50" type="C">
 			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="field" type="C">
-			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="catagory_id" type="I">
+		<field name="size" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<descr></descr>
+		<field name="sort_index" size="4" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
 	</table>
-
 	<table name="ab_custom_contact_fields">
-		<field name="id" type="I">
+		<field name="id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="ab_custom_contact_fields_cats">
-		<field name="acl_id" type="I">
+		<field name="id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="name" type="C">
+		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<descr></descr>
+		<field name="acl_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
 	</table>
-
 	<table name="ab_custom_contact_fields_sort">
-		<field name="size" type="L">
+		<field name="catagory_id" size="11" type="I">
 			<NOTNULL/>
+			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="sort_index" type="L">
+		<field name="field" size="50" type="C">
 			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="field" type="C">
-			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="catagory_id" type="I">
+		<field name="size" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<descr></descr>
+		<field name="sort_index" size="4" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
 	</table>
-
 	<table name="ab_groups">
-		<field name="id" type="I">
+		<field name="id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>Group ID</descr>
 		</field>
-		<field name="name" type="C">
+		<field name="addressbook_id" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<descr>The addressbook to which this group belongs</descr>
+			<link table="ab_addressbooks" field="id"/>
+		</field>
+		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Group name</descr>
 		</field>
-		<field name="addressbook_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="ab_settings">
-		<field name="search_users_field" type="C">
+		<field name="user_id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<link table="users" field="id"/>
+		</field>
+		<field name="sort_contacts_field" size="20" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="sort_companies_order" type="C">
+		<field name="sort_contacts_order" size="4" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="search_addressbook_id" type="I">
+		<field name="sort_companies_field" size="20" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="sort_companies_order" size="4" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="sort_users_field" size="20" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="sort_users_order" size="4" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="search_type" size="10" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="search_contacts_field" size="30" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="search_companies_field" size="30" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="search_users_field" size="30" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="search_addressbook_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="sort_users_field" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="search_companies_field" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="sort_contacts_field" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="search_type" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="sort_users_order" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="sort_companies_field" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="search_contacts_field" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="sort_contacts_order" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="ab_subscribed">
-		<field name="standard" type="C">
+		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>Associated user</descr>
+			<link table="users" field="id"/>
 		</field>
-		<field name="addressbook_id" type="I">
+		<field name="addressbook_id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>Associated addressbook</descr>
+			<link table="ab_addressbooks" field="id"/>
 		</field>
-		<field name="user_id" type="I">
+		<field name="standard" size="1" type="L">
 			<NOTNULL/>
+			<KEY/>
 			<DEFAULT value="0"/>
+			<descr>Whether if this addressbook is the default addressbook</descr>
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="tp_mailing_companies">
-		<field name="company_id" type="I">
+		<field name="group_id" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="company_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="group_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="tp_mailing_contacts">
-		<field name="contact_id" type="I">
+		<field name="group_id" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="contact_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="group_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="tp_mailing_groups">
-		<field name="acl_write" type="I">
+		<field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="user_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<link table="users" field="id"/>
+		</field>
+		<field name="acl_read" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="id" type="I">
+		<field name="acl_write" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="acl_read" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="name" type="C">
+		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="tp_subscribed">
-		<field name="template_id" type="I">
+		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
+			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="user_id" type="I">
+		<field name="template_id" size="11" type="I">
 			<NOTNULL/>
+			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="tp_templates">
-		<field name="content" type="B">
+		<field name="id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
 		</field>
-		<field name="acl_write" type="I">
+		<field name="user_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<link table="users" field="id"/>
+		</field>
+		<field name="type" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="acl_read" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="name" type="C">
+		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="type" type="L">
+		<field name="content" size="50" type="B">
+			<NOTNULL/>
+		</field>
+		<field name="acl_read" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="user_id" type="I">
+		<field name="acl_write" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="ab_cate_companies">
-		<field name="category_id" type="I">
+		<field name="company_id" size="11" type="I">
 			<PRIMARY/>
+			<link table="ab_companies" field="id"/>
 		</field>
-		<field name="company_id" type="I">
+		<field name="category_id" size="11" type="I">
 			<PRIMARY/>
+			<link table="ab_categories" field="id"/>
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="ab_categories">
-		<field name="parent_id" type="I">
-		</field>
-		<field name="category_id" type="I">
+		<field name="category_id" size="11" type="I">
 			<PRIMARY/>
+			<descr>Category ID</descr>
 		</field>
-		<field name="category" type="C">
+		<field name="category" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Category name</descr>
 		</field>
-		<descr></descr>
+		<field name="parent_id" size="11" type="I">
+			<descr>Category parent ID</descr>
+			<link table="ab_categories" field="id"/>
+		</field>
 	</table>
-
 	<table name="ab_new_companies">
-		<field name="company_id" type="I">
+		<field name="addressbook_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<link table="ab_addressbooks" field="id"/>
 		</field>
-		<field name="addressbook_id" type="I">
+		<field name="company_id" size="11" type="I">
 			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
-	</table>
-
-	<table name="ab_config">
-		<field name="page" type="C">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="order_fields" type="X">
-		</field>
-		<field name="order_all" type="X">
-		</field>
-		<field name="user_id" type="I">
 			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<link table="ab_companies" field="id"/>
 		</field>
-		<descr></descr>
 	</table>
-
+	<table name="ab_config">
+		<field name="page" size="30" type="C">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="user_id" size="11" type="I">
+			<PRIMARY/>
+			<descr>Associated user</descr>
+		</field>
+		<field name="order_fields" size="11" type="X">
+		</field>
+		<field name="order_all" size="11" type="X">
+		</field>
+	</table>
 </schema>

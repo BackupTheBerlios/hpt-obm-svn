@@ -1,12 +1,335 @@
-.field {
-	border: 2px inset #999;
-	width: 100%;
+/* License: You are free to take this CSS. :-) No warranty or guarantees.
+* Feel free to credit me, if you like.
+*
+* Original Author: Maxwell Kanat-Alexander <max {at} fedorafaq {dot} org>
+* Significant contributions by Sindre Pedersen Bjordal <foolish {at} vnossfaq {dot} org>
+* Parts are from vnoss.redhat.com -- those are noted.
+*/
+
+/* *** General Style *** */
+
+body {
+	margin: 10px;
+	padding: 10px;
+	color: black;
+	/*background-color: #d9d9d9;*/
+	font-family: Verdana, Arial, 'sans serif';
+	font-size: 13px;
 }
 
-.field th {
-	background-color: #333;
+H1, H2, H4 {
+	font-family: 'Times New Roman', Verdana, Arial;
+	font-weight: bold;
 }
 
 h1 {
+	margin-bottom: .2em;
 	text-align: center;
+	font-size: 26px;
+}
+
+h2 {
+	margin-left: 0em;
+	color: #5a76a5;
+	font-size: 22px;
+}
+
+h3 {
+	margin-left: 0 em;
+	font-family: Verdana;
+	color: #5a76a5;
+	font-size: 14px;
+}
+
+h4 {
+	margin-bottom: .1em;
+	color: #5a76a5;
+	font-style: italic;
+	font-size: 16px;
+}
+
+
+blockquote {
+	font-size: 90%;
+	font-weight: bold;
+	color: #524e4e;
+}
+
+abbr, acronym {
+	border-bottom: 1px dotted black;
+}
+
+address {
+	border-top: 1px dashed #666;
+	background-color: #eee;
+	color: black;
+	padding: .5em;
+}
+
+hr {
+	border-style: inset;
+	border-color: #314263;
+}
+
+ul {
+	list-style-type: square;
+	margin-left: .5em;
+}
+
+/* *** Translation Bar *** */
+
+.TranslationBar ul {
+	margin: 0;
+	padding: 0;
+	display: inline;
+	list-style-type: none;
+}
+
+.TranslationBar li {
+	display: inline;
+	margin: 0 .25em;
+}
+
+/* *** Link Highlighting *** */
+
+a:link    {color: #118;}
+a:visited {color: #647;}
+a:active  {color: #5a76a5;}
+a:hover   {color: #5a76a5;}
+
+/* *** Large Questions and Smaller Answers *** */
+
+.FaqList {
+	font-size: 14px;
+	color: #191970; /* MidnightBlue */
+	background-color: white;
+}
+
+.AnswerDiv {
+	font-size: 12px;
+	color: black;
+	background-color: white;
+	margin: 1em 0;
+}
+
+/* *** List Spacing *** */
+.Guidelines li {
+	margin-top: .5em;
+}
+
+.AnswerDiv ol li {
+	margin-top: .5em;
+}
+
+
+/* *** "Q" and "A" *** */
+
+.Q, .A {
+	font-weight: bold;
+	font-size: 14px;
+}
+
+.Q {
+	color: #5a76a5;
+}
+
+.A {
+	color: black; 
+}
+
+/* *** "Updated" notices *** */
+
+.Updated {
+	color: #5a76a5;
+	background-color: white;
+	font-style: italic;
+}
+
+/* *** Special Types of User Instructions *** */
+
+.Version, .TODO, .Info, .SideNote {
+	margin: 1em;
+	padding: .6em;
+	color: black;
+	border: 1px solid #c1c2d3;
+}
+.TODO {
+	background-color: #fbf9e4;
+	font-family: "Times New Roman", Times;
+	font-size: 10pt;
+	font-style: italic;
+}
+
+.NOTE {
+	margin: 0em;
+	font-family: "Times New Roman", Times;
+	font-size: 10pt;
+	font-style: italic;
+	text-align: center;
+}
+
+/* Used for additional information that may be critical to the reader. */
+.Version {
+	background-color: #fbf9e4;
+	font-family: "Times New Roman", Times;
+	font-size: 10pt;
+	font-style: italic;
+}
+
+/* Used for additional information that is just nice to know. */
+.Info, .SideNote {
+	background-color: #f0f4fb;
+}
+
+.SideNote {
+	width: 25%;
+	float: right;
+	margin: 1em 1.5em .3em 0;
+}
+
+.SideNote form {
+	text-align: center;
+	margin-bottom: 0;
+}
+
+.SideNote form p {
+	margin: 0;
+}
+
+.Warning img, .Info img, .SideNote img {
+	float: left;
+	/* clear: right; */
+	vertical-align: middle;
+	border: none;
+	margin-right: .75em;
+}
+
+.CodeSample {
+	margin-left: 2em;
+	margin-right: 3em;
+	padding: .7em;
+
+	background-color: #f6f6f6;
+	border: 1px inset black;
+	font-family: monospace, 'Courier New',fixed;
+}
+
+.WrongCodeSample {
+	margin-left: 2em;
+	margin-right: 3em;
+	padding: .7em;
+
+	background-color: #f8efef;
+	border: 1px inset black;
+	font-family: monospace, 'Courier New',fixed;
+}
+
+.TerminalCommand {
+	margin-left: 1em;
+	margin-right: 2em;
+	padding: .5em;
+
+	background-color: #e4e7ea;
+	border: 1px solid #b6b8b8;
+	font-family: monospace, 'Courier New',fixed;
+}
+
+.pre {
+	margin-left: 1em;
+	margin-right: 2em;
+	padding: .5em;
+
+	background-color: #e4e7ea;
+	border: 1px outset #163858;
+	font-family: monospace, 'Courier New',fixed;
+}
+
+
+/* *** vnoss Style *** */
+
+/* content containers */
+#vnoss-middle-one, #vnoss-middle-two, #vnoss-middle-three {
+	font-size: 0.9em;
+	/* position: relative; */ /* relative to utilize z-index */
+	width: auto;
+	min-width: 120px;
+	margin: 10px;
+	z-index: 3; /* content can overlap when the browser is narrow */
+}
+#vnoss-middle-two, #vnoss-middle-three {
+	margin-left: 3em;
+	padding-left: 24px;
+}
+#vnoss-middle-three {
+	margin-right: 3em;
+	padding-right: 24px;
+}			
+
+#vnoss-content {
+	padding: 40px;
+	margin: 0;
+	border: 1px solid #aaa;
+	background-color: #fff;
+}
+#vnoss-author {
+	font-family: 'Times New Roman', Verdana, Arial;
+	font-size: 12pt;
+	font-style: italic;
+	text-align: center;
+}
+
+#vnoss-content > .vnoss-corner-bottom { top: 0; }	
+
+#vnoss-content > .vnoss-corner-bottom { top: 0; }
+
+.vnoss-corner-tl, .vnoss-corner-tr, .vnoss-corner-bl, .vnoss-corner-br {
+	background-color: #d9d9d9;
+	position: relative;
+	width: 19px;
+	height: 19px;
+	/* The following line is to render PNGs with alpha transparency within IE/Win, using DirectX */
+	/* Work-around for IE6/Mac borkage (Part 1) */
+	display: none;
+}
+
+.vnoss-corner-tl, .vnoss-corner-bl { float: left; left: 0px; }
+.vnoss-corner-tr, .vnoss-corner-br { float: right; right: 0px; }
+.vnoss-corner-tl, .vnoss-corner-tr { top: 0px; }
+.vnoss-corner-bl, .vnoss-corner-br { bottom: 0px; margin-top: 0px; /* Opera fix (part 1) */ top: -19px;}
+
+html>body .vnoss-corner-tl { background: #d9d9d9 url("./corner-tl.png") no-repeat left top; }
+html>body .vnoss-corner-tr { background: #d9d9d9 url("./corner-tr.png") no-repeat right top; }
+html>body .vnoss-corner-bl { background: #d9d9d9 url("./corner-bl.png") no-repeat left bottom; }
+html>body .vnoss-corner-br { background: #d9d9d9 url("./corner-br.png") no-repeat right bottom; }
+
+/* \*/
+.vnoss-corner-tl, .vnoss-corner-tr, .vnoss-corner-bl, .vnoss-corner-br {
+	/* Restore the view for everything but IE6/Mac (part 2 of the "IE/Mac fix") */
+	display: block;
+}
+/* */
+
+.vnoss-corner-tl { filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='./corner-tl.png',sizingMethod='scale'); }
+.vnoss-corner-tr { filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='./corner-tr.png',sizingMethod='scale'); }
+.vnoss-corner-br { filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='./corner-br.png',sizingMethod='scale'); }
+.vnoss-corner-bl { filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='./corner-bl.png',sizingMethod='scale'); }
+
+table.field {
+	border: 1px solid black;
+	width: 100%;
+	padding:0px;
+	border-padding: 0px;
+	border-spacing: 0px;
+}
+
+.field th {
+	background-color: #999;
+}
+
+tr.row_0 {
+	background-color: #eee;
+}
+
+tr.row_1 {
+	background-color: #fff;
 }

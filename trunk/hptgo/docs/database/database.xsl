@@ -13,32 +13,81 @@
 	</xsl:template>
 
 	<xsl:template match="table">
-		<h2><xsl:value-of select="@name"/></h2>
+		<h2 id="{concat('table_',@name)}">Table <xsl:value-of select="@name"/></h2>
+		<xsl:if test="DROP">DROM</xsl:if>
 		<h3>Description</h3>
 		<xsl:copy-of select="descr"/> 
+		<xsl:apply-templates select="constraint"/>
 		<h3>Field</h3>
 		<table class="field">
 			<tr>
-				<th>Name</th>
-				<th>Type</th>
-				<th>Size</th>
-				<th>NULL</th>
-				<th>Attributes</th>
-				<th>Description</th>
+				<th nowrap="1"></th>
+				<th nowrap="1">Name</th>
+				<th nowrap="1">Type</th>
+				<th nowrap="1">Attributes</th>
+				<th nowrap="1">Value</th>
+				<th nowrap="1">Constraints</th>
+				<th nowrap="1" width="100%">Description</th>
+				<th nowrap="1">Link</th>
 			</tr>	
 			<xsl:apply-templates select="field">
-				<xsl:sort select="@name" order="ascending"/>
+				<xsl:with-param name="table_name" select="@name"/>
+				<!-- xsl:sort select="@name" order="ascending"/ -->
 			</xsl:apply-templates>
 		</table>
 	</xsl:template>
 	<xsl:template match="field">
-		<tr>
-			<td><xsl:value-of select="@name"/></td>
-			<td><xsl:value-of select="@type"/></td>
-			<td><xsl:value-of select="@size"/></td>
-			<td><xsl:choose><xsl:when test="NOTNULL=''">N</xsl:when><xsl:otherwise>Y</xsl:otherwise></xsl:choose></td>
-			<td/>
-			<td><xsl:value-of select="descr"/></td>
+		<xsl:param name="table_name"/>
+		<tr id="field_{$table_name}_{@name}" class="row_{position() mod 2}">
+			<td nowrap="1">
+				<xsl:if test="PRIMARY">P</xsl:if>
+				<xsl:if test="KEY">K</xsl:if>
+			</td>
+			<td nowrap="1"><!-- Name -->
+				<xsl:value-of select="@name"/>
+			</td>
+			<td nowrap="1"><!-- Type -->
+				<xsl:choose>
+					<xsl:when test="@type = 'I'">Integer</xsl:when>
+					<xsl:when test="@type = 'C'">Varchar</xsl:when>
+					<xsl:when test="@type = 'X'">Text</xsl:when>
+					<xsl:when test="@type = 'B'">BLOB</xsl:when>
+					<xsl:when test="@type = 'XL'">CLOB</xsl:when>
+					<xsl:when test="@type = 'L'">Boolean</xsl:when>
+					<xsl:when test="@type = 'D'">Date</xsl:when>
+					<xsl:when test="@type = 'T'">Timestamp</xsl:when>
+					<xsl:when test="@type = 'F'">Float</xsl:when>
+					<xsl:otherwise>Unknown<xsl:value-of select="@type"/></xsl:otherwise>
+				</xsl:choose>
+				<xsl:if test="@size != ''">
+					(<xsl:value-of select="@size"/>)
+				</xsl:if>
+			</td>
+			<td><!-- Attributes -->
+				<xsl:choose>
+					<xsl:when test="NOTNULL"></xsl:when>
+					<xsl:otherwise>NULL</xsl:otherwise>
+				</xsl:choose>
+				<xsl:if test="AUTO"> AUTO</xsl:if>
+				<xsl:if test="AUTOINCREMENT"> AUTOINCREMENT</xsl:if>
+				<xsl:if test="NOQUOTE"> NOQUOTE</xsl:if>
+			</td>
+			<td><!-- Default value -->
+				<xsl:value-of select="DEFAULT/@value"/>
+			</td>
+			<td><!-- Constraints -->
+				<xsl:copy-of select="constraint"/>
+			</td>
+			<td><!-- Description -->
+				<xsl:value-of select="descr"/>
+			</td>
+			<td><!-- Link -->
+				<xsl:apply-templates select="link"/>
+			</td>
 		</tr>	
+	</xsl:template>
+
+	<xsl:template match="link">
+		<a href="#table_{@table}"><xsl:value-of select="@table"/></a>.<a href="#field_{@table}_{@field}"><xsl:value-of select="@field"/></a>
 	</xsl:template>
 </xsl:stylesheet>

@@ -1,401 +1,479 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <schema version="0.2">
 	<table name="cal_calendars">
-		<field name="acl_read" type="I">
+		<field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<descr>Calendar ID</descr>
+		</field>
+		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Calendar owner</descr>
+			<link table="users" field="id"/>
 		</field>
-		<field name="name" type="C">
+		<field name="acl_read" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Users be able to read this calendar</descr>
+			<link table="acl" field="acl_id"/>
+		</field>
+		<field name="acl_write" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Users be able to read and edit this calendar</descr>
+			<link table="acl" field="acl_id"/>
+		</field>
+		<field name="name" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Calendar name</descr>
 		</field>
-		<field name="start_hour" type="L">
+		<field name="start_hour" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Start hour in calendar time range. All events before this hour will not be displayed.</descr>
 		</field>
-		<field name="acl_write" type="I">
+		<field name="end_hour" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Start hour in calendar time range. All events after this hour will not be displayed.</descr>
 		</field>
-		<field name="user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="end_hour" type="L">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="cal_events">
-		<field name="all_day_event" type="C">
+		<field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<descr>Event ID</descr>
+		</field>
+		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Event owner</descr>
+			<link table="users" field="id"/>
 		</field>
-		<field name="wed" type="C">
+		<field name="acl_read" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<descr>Users be able to read this event</descr>
+			<link table="acl" field="acl_id"/>
+		</field>
+		<field name="acl_write" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<descr>Users be able to read and edit this event</descr>
+			<link table="acl" field="acl_id"/>
+		</field>
+		<field name="start_time" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<descr>Start time of the event</descr>
+		</field>
+		<field name="end_time" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<descr>End time of event</descr>
+		</field>
+		<field name="all_day_event" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Whether this event is all day event</descr>
 		</field>
-		<field name="acl_write" type="I">
+		<field name="contact_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Contact associated with this event</descr>
+			<link table="ab_contacts" field="id"/>
 		</field>
-		<field name="end_time" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="tue" type="C">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="repeat_end_time" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="mon" type="C">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="contact_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="repeat_every" type="L">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="ctime" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="acl_read" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="fri" type="C">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="location" type="C">
+		<field name="name" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Event name</descr>
 		</field>
-		<field name="repeat_type" type="C">
+		<field name="description" size="100" type="X">
 			<NOTNULL/>
-			<DEFAULT value="0"/>
+			<descr>Event content</descr>
 		</field>
-		<field name="mtime" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="start_time" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="name" type="C">
+		<field name="location" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Location where this event occurs</descr>
 		</field>
-		<field name="background" type="C">
+		<field name="background" size="7" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Event background color</descr>
 		</field>
-		<field name="reminder" type="I">
+		<field name="repeat_type" size="1" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Possible values are 0..5</descr>
+		</field>
+		<field name="repeat_forever" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="description" type="X">
-			<NOTNULL/>
-		</field>
-		<field name="repeat_forever" type="C">
+		<field name="repeat_every" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="sun" type="C">
+		<field name="repeat_end_time" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="mon" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="month_time" type="C">
+		<field name="tue" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="sat" type="C">
+		<field name="wed" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="user_id" type="I">
+		<field name="thu" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="thu" type="C">
+		<field name="fri" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<descr></descr>
+		<field name="sat" size="1" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="sun" size="1" type="L">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="month_time" size="1" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Possible values are 0..5</descr>
+		</field>
+		<field name="reminder" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="ctime" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="mtime" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Last modified time</descr>
+		</field>
 	</table>
-
 	<table name="cal_events_calendars">
-		<field name="event_id" type="I">
+		<field name="calendar_id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<link table="cal_calendars" field="id"/>
 		</field>
-		<field name="calendar_id" type="I">
+		<field name="event_id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<link table="cal_events" field="id"/>
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="cal_holidays">
-		<field name="date" type="I">
+		<field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="user_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<link table="users" field="id"/>
+		</field>
+		<field name="calendar_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<link table="cal_calendars" field="id"/>
+		</field>
+		<field name="date" size="10" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="region" type="C">
+		<field name="name" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="name" type="C">
+		<field name="region" size="4" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="calendar_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="cal_participants">
-		<field name="event_id" type="I">
+		<field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<descr>ID</descr>
+		</field>
+		<field name="event_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Associated event</descr>
+			<link table="cal_events" field="id"/>
 		</field>
-		<field name="status" type="C">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="email" type="C">
+		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Participant name</descr>
 		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="name" type="C">
+		<field name="email" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Participant email</descr>
 		</field>
-		<field name="user_id" type="I">
+		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>User ID, in case participant is a user</descr>
+			<link table="users" field="id"/>
 		</field>
-		<descr></descr>
+		<field name="status" size="1" type="C">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Possible values are 0..2</descr>
+		</field>
 	</table>
-
 	<table name="cal_reminders">
-		<field name="event_id" type="I">
+		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<descr>User that is to be reminded</descr>
+			<link table="users" field="id"/>
+		</field>
+		<field name="event_id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<descr>Associated event</descr>
+			<link table="cal_events" field="id"/>
+		</field>
+		<field name="remind_time" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="remind_time" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="cal_settings">
-		<field name="show_todos" type="L">
+		<field name="user_id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<descr>Associated user</descr>
+			<link table="users" field="id"/>
+		</field>
+		<field name="default_cal_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Default calendar.</descr>
+			<link table="cal_calendars" field="id"/>
+		</field>
+		<field name="default_view_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Default calendar view.</descr>
+			<link table="cal_views" field="id"/>
+		</field>
+		<field name="show_days" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="default_view_id" type="I">
+		<field name="hide_completed_todos" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="default_cal_id" type="I">
+		<field name="show_todos" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Whether show todos</descr>
 		</field>
-		<field name="hide_completed_todos" type="C">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="show_days" type="L">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="cal_todos">
-		<field name="priority" type="C">
+		<field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="user_id" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<descr>Todo owner</descr>
+			<link table="users" field="id"/>
+		</field>
+		<field name="contact_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Associated contact</descr>
+			<link table="ab_contacts" field="id"/>
+		</field>
+		<field name="ctime" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="status" type="L">
+		<field name="mtime" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="res_user_id" type="I">
+		<field name="start_time" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="due_time" type="I">
+		<field name="due_time" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="remind_style" type="C">
+		<field name="completion_time" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="completion_time" type="I">
+		<field name="remind_time" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="remind_style" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="contact_id" type="I">
+		<field name="status" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Todo status</descr>
 		</field>
-		<field name="id" type="I">
+		<field name="priority" size="1" type="C">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Todo priority.Possible values are 0..2</descr>
 		</field>
-		<field name="remind_time" type="I">
+		<field name="res_user_id" size="11" type="I">
 			<NOTNULL/>
+			<KEY/>
 			<DEFAULT value="0"/>
+			<descr>User who is assigned to this todo</descr>
+			<link table="users" field="id"/>
 		</field>
-		<field name="ctime" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="location" type="C">
+		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="mtime" type="I">
+		<field name="description" size="50" type="X">
 			<NOTNULL/>
-			<DEFAULT value="0"/>
+			<descr>Todo content</descr>
 		</field>
-		<field name="background" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="name" type="C">
+		<field name="location" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="start_time" type="I">
+		<field name="background" size="6" type="C">
 			<NOTNULL/>
-			<DEFAULT value="0"/>
+			<DEFAULT value=""/>
 		</field>
-		<field name="description" type="X">
-			<NOTNULL/>
-		</field>
-		<field name="user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="cal_views">
-		<field name="standard" type="C">
+		<field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<descr>View ID</descr>
+		</field>
+		<field name="standard" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="acl_write" type="I">
+		<field name="user_id" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<descr>View owner</descr>
+			<link table="users" field="id"/>
+		</field>
+		<field name="name" size="50" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+			<descr>View name</descr>
+		</field>
+		<field name="start_hour" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="end_hour" type="L">
+		<field name="end_hour" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="start_hour" type="L">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="acl_read" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="name" type="C">
+		<field name="type" size="10" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="type" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="user_id" type="I">
+		<field name="acl_read" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Users be able to read this view</descr>
+			<link table="acl" field="acl_id"/>
 		</field>
-		<descr></descr>
+		<field name="acl_write" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Users be able to read and edit this view</descr>
+			<link table="acl" field="acl_id"/>
+		</field>
 	</table>
-
 	<table name="cal_views_calendars">
-		<field name="view_id" type="I">
+		<field name="view_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Associated view</descr>
+			<link table="cal_views" field="id"/>
 		</field>
-		<field name="calendar_id" type="I">
+		<field name="calendar_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Associated calendar</descr>
+			<link table="cal_calendars" field="id"/>
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="cal_config">
-		<field name="calendar_id" type="I">
+		<field name="user_id" size="11" type="I">
 			<PRIMARY/>
+			<descr>Associated user</descr>
+			<link table="users" field="id"/>
 		</field>
-		<field name="user_id" type="I">
+		<field name="calendar_id" size="11" type="I">
 			<PRIMARY/>
+			<descr>Associated calendar</descr>
+			<link table="cal_calendars" field="id"/>
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="cal_view_subscriptions">
-		<field name="view_id" type="I">
+		<field name="user_id" size="11" type="I">
 			<PRIMARY/>
+			<descr>Associated user</descr>
+			<link table="users" field="id"/>
 		</field>
-		<field name="user_id" type="I">
+		<field name="view_id" size="11" type="I">
 			<PRIMARY/>
+			<descr>Associated view</descr>
+			<link table="cal_calendars" field="id"/>
 		</field>
-		<descr></descr>
 	</table>
-
 </schema>

@@ -1,111 +1,107 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <schema version="0.2">
 	<table name="wiki_interwiki">
-		<field name="url" type="C">
+		<field name="prefix" size="80" type="C">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="where_defined" size="80" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="where_defined" type="C">
+		<field name="url" size="255" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="prefix" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="wiki_links">
-		<field name="link" type="C">
+		<field name="page" size="80" type="C">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="count" type="I">
-		</field>
-		<field name="page" type="C">
+		<field name="link" size="80" type="C">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value=""/>
 		</field>
-		<descr></descr>
+		<field name="count" size="10" type="I">
+		</field>
 	</table>
-
 	<table name="wiki_pages">
-		<field name="supercede" type="T">
+		<field name="title" size="80" type="C">
 			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value=""/>
 		</field>
-		<field name="time" type="T">
-			<NOTNULL/>
-		</field>
-		<field name="version" type="I">
+		<field name="version" size="10" type="I">
 			<PRIMARY/>
 		</field>
-		<field name="author" type="C">
+		<field name="time" size="14" type="T">
 			<NOTNULL/>
-			<DEFAULT value=""/>
 		</field>
-		<field name="username" type="C">
-		</field>
-		<field name="body" type="X">
-		</field>
-		<field name="comment" type="C">
+		<field name="supercede" size="14" type="T">
 			<NOTNULL/>
-			<DEFAULT value=""/>
 		</field>
-		<field name="title" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="mutable" type="C">
+		<field name="mutable" size="14" type="C">
 			<NOTNULL/>
 			<DEFAULT value="on"/>
 		</field>
-		<descr></descr>
+		<field name="username" size="80" type="C">
+		</field>
+		<field name="author" size="80" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="comment" size="80" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="body" size="80" type="X">
+		</field>
 	</table>
-
 	<table name="wiki_rate">
-		<field name="time" type="T">
+		<field name="ip" size="20" type="C">
 			<NOTNULL/>
-		</field>
-		<field name="ip" type="C">
-			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="searchLimit" type="I">
+		<field name="time" size="14" type="T">
+			<NOTNULL/>
 		</field>
-		<field name="editLimit" type="I">
+		<field name="viewLimit" size="5" type="I">
 		</field>
-		<field name="viewLimit" type="I">
+		<field name="searchLimit" size="5" type="I">
 		</field>
-		<descr></descr>
+		<field name="editLimit" size="5" type="I">
+		</field>
 	</table>
-
 	<table name="wiki_remote_pages">
-		<field name="page" type="C">
+		<field name="page" size="80" type="C">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="site" type="C">
+		<field name="site" size="80" type="C">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value=""/>
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="wiki_sisterwiki">
-		<field name="where_defined" type="C">
+		<field name="prefix" size="80" type="C">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="where_defined" size="80" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="url" type="C">
+		<field name="url" size="255" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="prefix" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<descr></descr>
 	</table>
-
 </schema>

@@ -1,341 +1,367 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <schema version="0.2">
 	<table name="acl">
-		<field name="acl_id" type="I">
+		<field name="acl_id" type="I" size="11">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<link table="acl_items" field="id"/>
 		</field>
-		<field name="group_id" type="I">
+		<field name="user_id" type="I" size="11">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<link table="users" field="id"/>
 		</field>
-		<field name="user_id" type="I">
+		<field name="group_id" type="I" size="11">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<link table="groups" field="id"/>
 		</field>
-		<descr></descr>
+		<descr>
+			ACL means Access Control List. It is a set of users related to an acl_id.
+		</descr>
 	</table>
-
 	<table name="acl_items">
-		<field name="user_id" type="I">
+		<field name="id" type="I" size="11">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="id" type="I">
+		<field name="user_id" type="I" size="11">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<link table="users" field="id"/>
 		</field>
-		<field name="description" type="C">
+		<field name="description" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<descr></descr>
+		<descr>Description of an ACL</descr>
 	</table>
-
 	<table name="db_sequence">
-		<field name="nextid" type="I">
+		<field name="seq_name" type="C" size="20">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value=""/>
+			<descr>sequence name</descr>
+		</field>
+		<field name="nextid" type="I" size="11">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="seq_name" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<descr></descr>
+		<descr>This table is sequence emulation.</descr>
 	</table>
-
 	<table name="filetypes">
-		<field name="friendly" type="C">
+		<field name="extension" type="C" size="10">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="mime" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="extension" type="C">
+		<field name="friendly" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
 		<field name="image" type="B">
 			<NOTNULL/>
 		</field>
-		<field name="mime" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<descr>filetypes</descr>
+		<descr>file types</descr>
 	</table>
-
 	<table name="groups">
-		<field name="leader_id" type="I">
+		<field name="id" type="I" size="11">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="name" type="C">
+		<field name="name" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Group name</descr>
 		</field>
-		<field name="user_id" type="I">
+		<field name="user_id" type="I" size="11">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<link table="users" field="id"/>
 		</field>
-		<field name="id" type="I">
+		<field name="leader_id" type="I" size="11">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<link table="groups" field="id"/>
 		</field>
-		<descr>filetypes</descr>
+		<descr>User group</descr>
 	</table>
-
 	<table name="modules">
-		<field name="acl_read" type="I">
+		<field name="id" type="C" size="20">
 			<NOTNULL/>
-			<DEFAULT value="0"/>
+			<PRIMARY/>
+			<DEFAULT value=""/>
 		</field>
-		<field name="enable" type="L">
+		<field name="version" type="C" size="5">
 			<NOTNULL/>
-			<DEFAULT value="0"/>
+			<DEFAULT value=""/>
+			<descr>Module version. Used for module upgrading</descr>
 		</field>
-		<field name="version" type="C">
+		<field name="path" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="acl_write" type="I">
+		<field name="acl_read" type="I" size="11">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Users be able to access this module</descr>
+			<link table="acl" field="acl_id"/>
 		</field>
-		<field name="path" type="C">
+		<field name="acl_write" type="I" size="11">
 			<NOTNULL/>
-			<DEFAULT value=""/>
+			<DEFAULT value="0"/>
+			<descr>Users be able to access and manage this module</descr>
+			<link table="acl" field="acl_id"/>
 		</field>
-		<field name="id" type="C">
+		<field name="enable" type="L" size="1">
 			<NOTNULL/>
-			<DEFAULT value=""/>
+			<DEFAULT value="0"/>
+			<descr>If false, no one can access this module</descr>
 		</field>
-		<descr>filetypes</descr>
+		<descr>Module information</descr>
 	</table>
-
 	<table name="settings">
+		<field name="name" type="C" size="20">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value=""/>
+		</field>
 		<field name="value" type="X">
 			<NOTNULL/>
 		</field>
-		<field name="name" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<descr>filetypes</descr>
+		<descr>System configuration</descr>
 	</table>
-
 	<table name="users">
-		<field name="first_weekday" type="L">
+		<field name="id" type="I" size="11">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="auth_source" type="I" size="4">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="decimal_seperator" type="C">
-			<NOTNULL/>
-			<DEFAULT value=","/>
-		</field>
-		<field name="home_phone" type="C">
+		<field name="username" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="department" type="C">
+		<field name="password" type="C" size="64">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="authcode" type="C">
+		<field name="authcode" type="C" size="20">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="work_city" type="C">
+		<field name="first_name" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="time_format" type="C">
+		<field name="middle_name" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="state" type="C">
+		<field name="last_name" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="email" type="C">
+		<field name="initials" type="C" size="10">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="password" type="C">
+		<field name="title" type="C" size="10">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="DST" type="C">
+		<field name="sex" type="C" size="1">
 			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="address" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="lastlogin" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="work_phone" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="timezone" type="L">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="work_country" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="work_address" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="username" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="modules" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="homepage" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="thousands_seperator" type="C">
-			<NOTNULL/>
-			<DEFAULT value="."/>
-		</field>
-		<field name="zip" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="cellular" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="work_zip" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="title" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="date_format" type="C">
-			<NOTNULL/>
-			<DEFAULT value="'d-m-Y"/>
-		</field>
-		<field name="function" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="auth_source" type="L">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="last_name" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="currency" type="C">
-			<NOTNULL/>
-			<DEFAULT value="$"/>
-		</field>
-		<field name="acl_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="city" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="fax" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="logins" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
+			<DEFAULT value="M"/>
+			<descr>Sex. Must be 'M' or 'F'.</descr>
 		</field>
 		<field name="birthday" type="D">
 			<NOTNULL/>
 			<DEFAULT value="0000-00-00"/>
 		</field>
-		<field name="company" type="C">
+		<field name="email" type="C" size="100">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="theme" type="C">
+		<field name="company" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="max_rows_list" type="L">
-			<NOTNULL/>
-			<DEFAULT value="15"/>
-		</field>
-		<field name="initials" type="C">
+		<field name="department" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="country" type="C">
+		<field name="function" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="registration_time" type="I">
+		<field name="home_phone" type="C" size="20">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="work_phone" type="C" size="20">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="fax" type="C" size="20">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="cellular" type="C" size="20">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="country" type="C" size="50">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="state" type="C" size="50">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="city" type="C" size="50">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="zip" type="C" size="10">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="address" type="C" size="100">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="homepage" type="C" size="100">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="work_address" type="C" size="100">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="work_zip" type="C" size="10">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="work_country" type="C" size="50">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="work_state" type="C" size="50">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="work_city" type="C" size="50">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="work_fax" type="C" size="20">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="acl_id" type="I" size="11">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Users be able to see this user</descr>
+			<link table="acl" field="acl_id"/>
 		</field>
-		<field name="language" type="C">
+		<field name="date_format" type="C" size="20">
+			<NOTNULL/>
+			<DEFAULT value="'d-m-Y"/>
+		</field>
+		<field name="time_format" type="C" size="10">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="mail_client" type="L">
+		<field name="thousands_seperator" type="C" size="1">
+			<NOTNULL/>
+			<DEFAULT value="."/>
+		</field>
+		<field name="decimal_seperator" type="C" size="1">
+			<NOTNULL/>
+			<DEFAULT value=","/>
+		</field>
+		<field name="currency" type="C" size="3">
+			<NOTNULL/>
+			<DEFAULT value="$"/>
+		</field>
+		<field name="mail_client" type="I" size="4">
 			<NOTNULL/>
 			<DEFAULT value="1"/>
 		</field>
-		<field name="middle_name" type="C">
+		<field name="logins" type="I" size="11">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="lastlogin" type="I" size="11">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="registration_time" type="I" size="11">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="max_rows_list" type="I" size="4">
+			<NOTNULL/>
+			<DEFAULT value="15"/>
+		</field>
+		<field name="timezone" type="I" size="4">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="DST" type="C" size="1">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Must be either 0 or 1 2</descr>
+		</field>
+		<field name="start_module" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="sex" type="C">
-			<NOTNULL/>
-			<DEFAULT value="M"/>
-		</field>
-		<field name="work_fax" type="C">
+		<field name="language" type="C" size="20">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="work_state" type="C">
+		<field name="theme" type="C" size="20">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="start_module" type="C">
+		<field name="first_weekday" type="I" size="4">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="modules" type="C" size="255">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>List of modules displayed in menu.</descr>
 		</field>
-		<field name="first_name" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<descr>filetypes</descr>
+		<descr>User information</descr>
 	</table>
-
 	<table name="users_groups">
-		<field name="user_id" type="I">
+		<field name="group_id" type="I" size="11">
 			<NOTNULL/>
+			<KEY/>
 			<DEFAULT value="0"/>
+			<link field="id" table="groups"/>
 		</field>
-		<field name="group_id" type="I">
+		<field name="user_id" type="I" size="11">
 			<NOTNULL/>
+			<KEY/>
 			<DEFAULT value="0"/>
+			<link field="id" table="users"/>
 		</field>
-		<descr>filetypes</descr>
+		<descr>List of users in each group</descr>
 	</table>
-
 </schema>

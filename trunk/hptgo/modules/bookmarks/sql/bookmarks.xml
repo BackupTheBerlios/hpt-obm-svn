@@ -1,63 +1,81 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <schema version="0.2">
 	<table name="bm_bookmarks">
-		<field name="acl_read" type="I">
+		<field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<descr>Bookmark ID</descr>
+		</field>
+		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Bookmark owner</descr>
+			<link table="users" field="id"/>
 		</field>
-		<field name="URL" type="C">
+		<field name="catagory_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Bookmark category</descr>
+			<link table="bm_catagories" field="id"/>
+		</field>
+		<field name="URL" size="200" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Bookmark URL</descr>
 		</field>
-		<field name="new_window" type="L">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="name" type="C">
+		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Bookmark name</descr>
 		</field>
-		<field name="acl_write" type="I">
+		<field name="new_window" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Whether if bookmark be opened in a new window</descr>
 		</field>
-		<field name="catagory_id" type="I">
+		<field name="acl_read" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Users be able to read this bookmark</descr>
+			<link table="acl" field="acl_id"/>
 		</field>
-		<field name="id" type="I">
+		<field name="acl_write" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Users be able to edit this bookmark</descr>
+			<link table="acl" field="acl_id"/>
 		</field>
-		<field name="user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="bm_catagories">
-		<field name="acl_read" type="I">
+		<field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<descr>Bookmark categeory ID</descr>
+		</field>
+		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Bookmark category owner</descr>
+			<link table="users" field="id"/>
 		</field>
-		<field name="name" type="C">
+		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Bookmark name</descr>
 		</field>
-		<field name="acl_write" type="I">
+		<field name="acl_read" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Users be able to read this bookmark category</descr>
+			<link table="acl" field="acl_id"/>
 		</field>
-		<field name="user_id" type="I">
+		<field name="acl_write" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Users be able to read and edit this bookmark category</descr>
+			<link table="acl" field="acl_id"/>
 		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 </schema>

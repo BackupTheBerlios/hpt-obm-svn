@@ -1,162 +1,166 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <schema version="0.2">
 	<table name="emAccounts">
-		<field name="auto_check" type="C">
+		<field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="user_id" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="type" size="4" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="host" size="100" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="port" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="standard" type="L">
+		<field name="username" size="50" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="password" size="64" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="name" size="100" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="email" size="100" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="signature" size="100" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="standard" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="mbroot" type="C">
+		<field name="mbroot" size="30" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="email" type="C">
+		<field name="sent" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="spam" type="C">
+		<field name="spam" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="password" type="C">
+		<field name="trash" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="sent" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="id" type="I">
+		<field name="auto_check" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="name" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="novalidate_cert" type="C">
+		<field name="use_ssl" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="port" type="I">
+		<field name="novalidate_cert" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="host" type="C">
+		<field name="draft" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="username" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="draft" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="use_ssl" type="C">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="trash" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="signature" type="X">
-			<NOTNULL/>
-		</field>
-		<field name="type" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="emFilters">
-		<field name="priority" type="I">
+		<field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="account_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<link table="emAccounts" field="id"/>
+		</field>
+		<field name="field" size="20" type="C">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="keyword" type="C">
+		<field name="keyword" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="folder" type="C">
+		<field name="folder" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="id" type="I">
+		<field name="priority" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="field" type="C">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="account_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="emFolders">
-		<field name="parent_id" type="I">
+		<field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="account_id" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<link table="emAccounts" field="id"/>
+		</field>
+		<field name="name" size="100" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+			<descr>Folder name</descr>
+		</field>
+		<field name="subscribed" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="delimiter" type="C">
+		<field name="parent_id" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<link table="emFolders" field="id"/>
+		</field>
+		<field name="delimiter" size="1" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="id" type="I">
+		<field name="attributes" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="name" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<field name="account_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="subscribed" type="C">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="attributes" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="em_settings">
-		<field name="sort_order" type="C">
+		<field name="user_id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<link table="users" field="id"/>
+		</field>
+		<field name="sort_field" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="sort_field" type="L">
+		<field name="sort_order" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="send_format" type="C">
+		<field name="send_format" size="10" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 </schema>

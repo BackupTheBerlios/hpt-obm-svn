@@ -1,140 +1,126 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <schema version="0.2">
 	<table name="sc_attach_categories">
-		<field name="name" type="C">
+		<field name="id" size="11" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="name" size="30" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="id" type="I">
-			<PRIMARY/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="sc_attachments">
-		<field name="product_id" type="I">
+		<field name="product_id" size="11" type="I">
 			<PRIMARY/>
 		</field>
-		<field name="attach_cate_id" type="I">
+		<field name="attach_cate_id" size="11" type="I">
 			<PRIMARY/>
 		</field>
-		<field name="attach_id" type="I">
+		<field name="attach_id" size="11" type="I">
 			<PRIMARY/>
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="sc_cate_products">
-		<field name="category_id" type="I">
+		<field name="product_id" size="11" type="I">
 			<PRIMARY/>
 		</field>
-		<field name="product_id" type="I">
+		<field name="category_id" size="11" type="I">
 			<PRIMARY/>
 		</field>
-		<field name="be_attachment" type="L">
+		<field name="be_attachment" size="1" type="L">
 			<PRIMARY/>
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="sc_categories">
-		<field name="category_id" type="I">
+		<field name="category_id" size="11" type="I">
 			<PRIMARY/>
 		</field>
-		<field name="category_name" type="C">
+		<field name="category_name" size="30" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="parent_id" type="I">
+		<field name="parent_id" size="11" type="I">
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="sc_order_detail">
-		<field name="order_number" type="C">
+		<field name="order_number" size="30" type="C">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="product_id" size="11" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="attach_cate_id" size="11" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="attach_id" size="11" type="I">
+			<PRIMARY/>
+		</field>
+		<field name="quantity" size="11" type="I">
+		</field>
+		<field name="price" size="11" type="F">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="product_id" type="I">
-			<PRIMARY/>
+		<field name="discount" size="11" type="I">
 		</field>
-		<field name="quantity" type="I">
-		</field>
-		<field name="attach_cate_id" type="I">
-			<PRIMARY/>
-		</field>
-		<field name="price" type="F">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="discount" type="I">
-		</field>
-		<field name="attach_id" type="I">
-			<PRIMARY/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="sc_orders">
-		<field name="seller" type="I">
+		<field name="order_number" size="30" type="C">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
 		</field>
-		<field name="sale_date" type="D">
+		<field name="phone" size="30" type="C">
 		</field>
-		<field name="order_number" type="C">
+		<field name="sale_date" size="30" type="D">
+		</field>
+		<field name="fax" size="30" type="C">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="valid_date" type="D">
+		<field name="company" size="100" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="attn" size="50" type="C">
+			<NOTNULL/>
+			<DEFAULT value=""/>
+		</field>
+		<field name="valid_date" size="50" type="D">
 			<NOTNULL/>
 			<DEFAULT value="0000-00-00"/>
 		</field>
-		<field name="attn" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
+		<field name="seller" size="11" type="I">
 		</field>
-		<field name="phone" type="C">
-		</field>
-		<field name="fax" type="C">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="company" type="C">
-			<NOTNULL/>
-			<DEFAULT value=""/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="sc_products">
-		<field name="VAT" type="F">
-		</field>
-		<field name="warranty_info" type="X">
-			<NOTNULL/>
-		</field>
-		<field name="description" type="X">
-		</field>
-		<field name="part_number" type="C">
-		</field>
-		<field name="product_id" type="I">
+		<field name="product_id" size="11" type="I">
 			<PRIMARY/>
 		</field>
-		<field name="price" type="F">
+		<field name="product_name" size="30" type="C">
+		</field>
+		<field name="description" size="30" type="X">
+		</field>
+		<field name="price" size="30" type="F">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="product_name" type="C">
+		<field name="part_number" size="30" type="C">
 		</field>
-		<descr></descr>
+		<field name="VAT" size="30" type="F">
+		</field>
+		<field name="warranty_info" size="30" type="X">
+			<NOTNULL/>
+		</field>
 	</table>
-
 	<table name="sc_templates">
-		<field name="category_id" type="I">
+		<field name="category_id" size="11" type="I">
 			<PRIMARY/>
 		</field>
-		<field name="attach_cate_id" type="I">
+		<field name="attach_cate_id" size="11" type="I">
 			<PRIMARY/>
 		</field>
-		<descr></descr>
 	</table>
-
 </schema>

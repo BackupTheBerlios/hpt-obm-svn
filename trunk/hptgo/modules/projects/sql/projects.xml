@@ -1,270 +1,283 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <schema version="0.2">
 	<table name="pmFees">
-		<field name="time" type="I">
+		<field name="id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="value" type="F">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="name" type="C">
+		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="id" type="I">
+		<field name="value" size="50" type="F">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<descr></descr>
+		<field name="time" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
 	</table>
-
 	<table name="pmHours">
-		<field name="end_time" type="I">
+		<field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="project_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="break_time" type="I">
+		<field name="user_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<link table="users" field="id"/>
+		</field>
+		<field name="start_time" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="start_time" type="I">
+		<field name="end_time" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="unit_value" type="I">
+		<field name="break_time" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="user_id" type="I">
+		<field name="unit_value" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="comments" type="X">
+		<field name="comments" size="11" type="X">
 			<NOTNULL/>
 		</field>
-		<field name="project_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="pmMaterials">
-		<field name="value" type="F">
+		<field name="id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="name" type="C">
+		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="id" type="I">
+		<field name="value" size="50" type="F">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="description" type="X">
+		<field name="description" size="50" type="X">
 			<NOTNULL/>
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="pmProjects">
-		<field name="cat_id" type="I">
+		<field name="id" size="11" type="I">
 			<NOTNULL/>
+			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="status" type="L">
+		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
+			<KEY/>
 			<DEFAULT value="0"/>
+			<link table="users" field="id"/>
 		</field>
-		<field name="acl_write" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="budget" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="comments" type="X">
-			<NOTNULL/>
-		</field>
-		<field name="res_user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="task_template_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="contact_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="start_date" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="fee_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="acl_read" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="ctime" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="mtime" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="name" type="C">
+		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="probability" type="L">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="description" type="C">
+		<field name="description" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="end_date" type="I">
+		<field name="contact_id" size="11" type="I">
+			<NOTNULL/>
+			<KEY/>
+			<DEFAULT value="0"/>
+			<link table="ab_contacts" field="id"/>
+		</field>
+		<field name="res_user_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Project manager</descr>
+			<link table="users" field="id"/>
+		</field>
+		<field name="acl_read" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<link table="acl" field="acl_id"/>
+		</field>
+		<field name="acl_write" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Project members</descr>
+			<link table="acl" field="acl_id"/>
+		</field>
+		<field name="comments" size="11" type="X">
+			<NOTNULL/>
+		</field>
+		<field name="ctime" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="user_id" type="I">
+		<field name="mtime" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<descr></descr>
+		<field name="start_date" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="end_date" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="status" size="10" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="probability" size="4" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="fee_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="budget" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+		</field>
+		<field name="task_template_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Project templage</descr>
+			<link table="task_templates" field="id"/>
+		</field>
+		<field name="cat_id" size="11" type="I">
+			<NOTNULL/>
+			<DEFAULT value="0"/>
+			<descr>Project category</descr>
+			<link table="pmCatalog" field="id"/>
+		</field>
 	</table>
-
 	<table name="pmTimers">
-		<field name="project_id" type="I">
+		<field name="user_id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<link table="users" field="id"/>
+		</field>
+		<field name="start_time" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="start_time" type="I">
+		<field name="project_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<link table="pmProjects" field="id"/>
 		</field>
-		<field name="user_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<descr></descr>
 	</table>
-
 	<table name="pm_settings">
-		<field name="show_catalog" type="I">
+		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="sort_order" type="C">
+		<field name="sort_field" size="20" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="sort_field" type="C">
+		<field name="sort_order" size="20" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<field name="user_id" type="I">
+		<field name="show_projects" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="show_projects" type="L">
+		<field name="show_catalog" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<descr></descr>
 	</table>
-
 	<table name="pmCatalog">
-		<field name="id" type="I">
+		<field name="id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
 		</field>
-		<field name="name" type="C">
+		<field name="name" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<descr>Project catalog</descr>
 	</table>
-
 	<table name="pmStatus">
-		<field name="cat_id" type="I">
+		<field name="cat_id" size="11" type="I">
 			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<descr>Project category</descr>
+			<link table="pmCatalog" field="id"/>
+		</field>
+		<field name="value" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="value" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="name" type="C">
+		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
-		<descr>Project catalog</descr>
 	</table>
-
 	<table name="task_templates">
-		<field name="cat_id" type="I">
+		<field name="id" size="11" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+		</field>
+		<field name="cat_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Project category</descr>
+			<link table="pmCatalog" field="id"/>
 		</field>
-		<field name="id" type="I">
-			<NOTNULL/>
+		<field name="name" size="128" type="C">
 		</field>
-		<field name="name" type="C">
-		</field>
-		<descr>Project catalog</descr>
 	</table>
-
 	<table name="task">
-		<field name="task_level" type="L">
+		<field name="task_project_id" size="8" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
+			<link table="pmProjects" field="id"/>
 		</field>
-		<field name="task_name" type="C">
+		<field name="task_id" size="8" type="I">
+			<NOTNULL/>
+			<PRIMARY/>
+			<DEFAULT value="0"/>
 		</field>
-		<field name="task_person_id" type="L">
+		<field name="task_name" size="255" type="C">
 		</field>
-		<field name="task_approved_date" type="T">
+		<field name="task_predecessors" size="255" type="C">
 		</field>
-		<field name="task_id" type="I">
+		<field name="task_time" size="4" type="I">
+		</field>
+		<field name="task_person_id" size="4" type="I">
+		</field>
+		<field name="task_status" size="4" type="I">
+		</field>
+		<field name="task_comment" size="4" type="B">
+		</field>
+		<field name="task_approved" size="1" type="C">
+		</field>
+		<field name="task_level" size="4" type="I">
+		</field>
+		<field name="task_approved_date" size="4" type="T">
+		</field>
+		<field name="task_order" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
-		<field name="task_project_id" type="I">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="task_comment" type="B">
-		</field>
-		<field name="task_status" type="L">
-		</field>
-		<field name="task_time" type="I">
-		</field>
-		<field name="task_approved" type="C">
-		</field>
-		<field name="task_order" type="L">
-			<NOTNULL/>
-			<DEFAULT value="0"/>
-		</field>
-		<field name="task_predecessors" type="C">
-		</field>
-		<descr>Project catalog</descr>
 	</table>
-
 </schema>
