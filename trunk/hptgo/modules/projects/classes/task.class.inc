@@ -484,7 +484,7 @@ class project_task extends db {
 	if ($status == TASK_DONE)
           $mail_body  = sprintf($mailTaskStatusChangedToDone,$project_name,$project_description,$task_name,$project_url);
 	else
-          $mail_body  = sprintf($mailTaskStatusChangedToOngoing,$project_name,$project_description,$task_name,$task_duration,$project_url);
+          $mail_body  = sprintf($mailTaskStatusChangedToOngoing,$pm_task_status_values[$this->status],$project_name,$project_description,$task_name,$task_duration,$project_url);
 
         $mail->Body = $mail_body;
         $mail->ClearAllRecipients();
