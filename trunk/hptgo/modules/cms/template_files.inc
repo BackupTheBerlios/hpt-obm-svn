@@ -33,7 +33,7 @@ while ($cms->next_record())
 	$short_name = htmlspecialchars(cut_string($cms->f('name'), 30));
 
 	echo '<tr class="Table1">';
-	echo '<td><img width="16" height="16" border="0" src="'.$GO_CONFIG->control_url.'icon.php?extension='.$cms->f('extension').'" /></td>';
+	echo '<td><img width="16" height="16" border="0" src="'.get_filetype_image($cms->f('extension')).'" /></td>';
 	echo '<td nowrap>&nbsp;<a href="javascript:popup(\'template_file.php?template_file_id='.$cms->f('id').'\',\'400\',\'300\')" title="'.htmlspecialchars($cms->f('name')).'">'.$short_name.'</a>&nbsp;&nbsp;</td>';
 	echo '<td nowrap>'.$cms->f('content_type_friendly').'&nbsp;&nbsp;</td>';
 	echo '<td nowrap align="right">'.format_size($cms->f('size')).'&nbsp;&nbsp;</td>';

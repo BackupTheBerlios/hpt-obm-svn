@@ -11,15 +11,10 @@
  */
 
 require("../../Group-Office.php");
-//load file management class
-
-require($GO_CONFIG->class_path.'filetypes.class.inc');
-
 $cms_module = $GO_MODULES->get_module('cms');
 require($cms_module['class_path'].'cms.class.inc');
-
 $cms = new cms();
-$filetypes = new filetypes();
+
 
 $site = $cms->get_site($_REQUEST['site_id']);
 if ($site['acl_read'] > 0)

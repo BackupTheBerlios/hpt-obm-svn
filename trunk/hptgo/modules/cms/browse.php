@@ -56,18 +56,10 @@ switch ($task)
       $task = 'list';
       if (isset($_FILES['file']))
       {
-	require_once($GO_CONFIG->class_path.'filetypes.class.inc');
-	$filetypes = new filetypes();
 	for ($i=0;$i<count($_FILES['file']['tmp_name']);$i++)
 	{
 	  if (is_uploaded_file($_FILES['file']['tmp_name'][$i]))
 	  {
-	    $extension = get_extension($_FILES['file']['name'][$i]);
-	    if (!$filetypes->get_type($extension))
-	    {
-	      $filetypes->add_type($extension, $_FILES['file']['type'][$i]);
-	    }
-
 	    $name = $_FILES['file']['name'][$i];
 	    $x=0;
 	    while ($cms->file_exists($folder_id, $name))

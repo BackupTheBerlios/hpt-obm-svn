@@ -201,7 +201,7 @@ while ($cms->next_record())
 
     }
 	
-	echo '<img width="16" height="16" border="0" src="'.$GO_CONFIG->full_url.'controls/icon.php?extension='.$cms->f('extension').'" align="absmiddle" />&nbsp;&nbsp;';
+	echo '<img width="16" height="16" border="0" src="'.get_filetype_image($cms->f('extension')).'" align="absmiddle" />&nbsp;&nbsp;';
 
     if (isset($cut_files) && in_array($cms->f('id'), $cut_files))
     {

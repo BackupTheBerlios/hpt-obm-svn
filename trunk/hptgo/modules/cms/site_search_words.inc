@@ -51,7 +51,7 @@ if($task == 'add_search_word')
 					$check = in_array($cms->f('id'), $searched_files) ? 'checked' : '';
 				}
 				echo '<tr><td><input type="hidden" name="files[]" value="'.$cms->f('id').'" /><input type="checkbox" name="selected_files[]" value="'.$cms->f('id').'" '.$check.' /></td>';
-				echo '<td><img align="absmiddle" border="0" src="'.$GO_CONFIG->control_url.'icon.php?extension='.$cms->f('extension').'" /></td>';
+				echo '<td><img align="absmiddle" border="0" src="'.get_filetype_image($cms->f('extension')).'" /></td>';
 				echo '<td>'.$cms2->get_path($folder_id).'/'.$cms->f('name');
 
 			}
@@ -73,7 +73,7 @@ if($task == 'add_search_word')
 			while($cms->next_record())
 			{
 				echo '<tr><td><input type="hidden" name="files[]" value="'.$cms->f('id').'" /><input type="checkbox" name="selected_files[]" value="'.$cms->f('id').'" checked /></td>';
-				echo '<td><img align="absmiddle" border="0" src="'.$GO_CONFIG->control_url.'icon.php?extension='.$cms->f('extension').'" /></td>';
+				echo '<td><img align="absmiddle" border="0" src="'.get_filetype_image($cms->f('extension')).'" /></td>';
 				echo '<td><a href="browse.php?site_id='.$site_id.'&folder_id='.$cms->f('folder_id').'&file_id='.$cms->f('id').'">'.$cms2->get_path($cms->f('folder_id')).'/'.htmlspecialchars($cms->f('name')).'</a></td></tr>';
 			}
 		}

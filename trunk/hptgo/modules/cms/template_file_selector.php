@@ -46,7 +46,7 @@ while ($cms->next_record())
   $short_name = cut_string($cms->f('name'), 30);
 
   echo '<tr class="Table1">';
-  echo '<td><img width="16" height="16" border="0" src="'.$GO_CONFIG->control_url.'icon.php?extension='.$cms->f('extension').'" /></td>';
+  echo '<td><img width="16" height="16" border="0" src="'.get_filetype_image($cms->f('extension')).'" /></td>';
   echo '<td nowrap>&nbsp;<a href="javascript:paste_url(\''.$GO_MODULES->url.'template_file.php?template_file_id='.$cms->f('id').'\')" title="'.$cms->f('name').'">'.$short_name.'</a>&nbsp;&nbsp;</td>';
   echo '<td nowrap>'.$cms->f('content_type_friendly').'&nbsp;&nbsp;</td></tr>';
 }

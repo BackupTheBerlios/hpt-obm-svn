@@ -323,7 +323,6 @@ class cms_site extends cms
       {
 	$file['title'] = strip_extension($file['name']);
       }
-      $file['title'] = $this->site['name'].' - '.$file['title'];
       $folder_id = $file['folder_id'];
 
       $this->get_attached_search_words($file_id);
@@ -384,7 +383,7 @@ class cms_site extends cms
 
 
     //start output
-    $page = $this->generate_header($file['title'], $file['keywords'], $file['description']);
+    $page = $this->generate_header($this->site['name'].' - '.$file['title'], $file['keywords'], $file['description']);
 
     switch($task)
     {
@@ -448,7 +447,7 @@ class cms_site extends cms
 	{
 	  if($print_title == 'true')
 	  {
-	    $content = '<p class="'.$title_class.'">'.$file['title'].'</p>';
+	    $content = '<h1 class="'.$title_class.'">'.$file['title'].'</h1>';
 	  }
 	  $content .= $file['content'];
 	}
@@ -726,7 +725,7 @@ class cms_site extends cms
   function print_icon()
   {
     global $extension, $GO_CONFIG;
-    return  '<img border="0" align="absmiddle" src="'.$GO_CONFIG->control_url.'icon.php?extension='.$extension.'" />';
+    return  '<img border="0" align="absmiddle" src="'.get_filetype_image($extension).'" />';
   }
 
   function print_home($text, $template_name, $active_template_name, $class, $active_class)
@@ -826,10 +825,10 @@ class cms_site extends cms
 	  if ($item_template)
 	  {
 	    $item_template_content =  $this->parse_template($item_template['content']);
-	    $folders .= str_replace($this->get_tag('content', $item_template_content),'<a class="'.$class.'" href="'.$this->create_url($this->f('id')).'">'.$this->f('name').'</a>', $item_template_content);
+	    $folders .= str_replace($this->get_tag('content', $item_template_content),'<a class="'.$class.'" href="'.$this->create_url($this->f('id')).'" title="'.$this->f('name').'">'.$this->f('name').'</a>', $item_template_content);
 	  }else
 	  {
-	    $folders .= '<a class="'.$class.'" href="'.$this->create_url($this->f('id')).'">'.$this->f('name').'</a>';
+	    $folders .= '<a class="'.$class.'" title="'.$this->f('name').'" href="'.$this->create_url($this->f('id')).'">'.$this->f('name').'</a>';
 	  }
 	}
 	if ($template)
@@ -882,10 +881,10 @@ class cms_site extends cms
 	if ($item_template)
 	{
 	  $item_template_content =  $this->parse_template($item_template['content']);
-	  $folders .= str_replace($this->get_tag('content', $item_template_content),'<a class="'.$_class.'" href="'.$this->create_url($this->f('id')).'">'.$this->f('name').'</a>', $item_template_content);
+	  $folders .= str_replace($this->get_tag('content', $item_template_content),'<a title="'.$this->f('name').'" class="'.$_class.'" href="'.$this->create_url($this->f('id')).'">'.$this->f('name').'</a>', $item_template_content);
 	}else
 	{
-	  $folders .= '<a class="'.$_class.'" href="'.$this->create_url($this->f('id')).'">'.$this->f('name').'</a>';
+	  $folders .= '<a title="'.$this->f('name').'" class="'.$_class.'" href="'.$this->create_url($this->f('id')).'">'.$this->f('name').'</a>';
 	}
       }
       if ($template)
@@ -912,7 +911,7 @@ class cms_site extends cms
 	{
 	  if ($this->f('id') == $folder_id)
 	  {
-	    $folders .= '<li><strong><a href="'.$this->create_url($this->f('id')).'">'.$this->f('name').'</a></strong>';
+	    $folders .= '<li><strong><a title="'.$this->f('name').'" href="'.$this->create_url($this->f('id')).'">'.$this->f('name').'</a></strong>';
 	    $cms = new cms();
 
 	    $folder_count = $cms->get_visible_folders($this->f('id'));
@@ -921,7 +920,7 @@ class cms_site extends cms
 	      $folders .= '<ul>';
 	      while($cms->next_record())
 	      {
-		$folders .= '<li><a href="'.$this->create_url($cms->f('id')).'">'.$cms->f('name').'</a></li>';
+		$folders .= '<li><a title="'.$this->f('name').'" href="'.$this->create_url($cms->f('id')).'">'.$cms->f('name').'</a></li>';
 	      }
 	    }
 
@@ -1021,10 +1020,11 @@ class cms_site extends cms
 
 	if ($this->publish_static || eregi('htm',$this->f('extension')))
 	{
-	  $content = '<a class="'.$_class.'" href="'.$this->create_url($folder_id, $this->f('id')).'">'.strip_extension($this->f('name')).'</a>';
+		$name = strip_extension($this->f('name'));
+	  $content = '<a title="'.$name.'" class="'.$_class.'" href="'.$this->create_url($folder_id, $this->f('id')).'">'.$name.'</a>';
 	}else
 	{
-	  $content = '<a target="'.$target.'" class="'.$_class.'" href="'.$cms_module['url'].'download.php?site_id='.$this->site['id'].'&file_id='.$this->f('id').'">'.strip_extension($this->f('name')).'</a>';
+	  $content = '<a title="'.$name.'" target="'.$target.'" class="'.$_class.'" href="'.$cms_module['url'].'download.php?site_id='.$this->site['id'].'&file_id='.$this->f('id').'">'.strip_extension($this->f('name')).'</a>';
 	}
 	if ($item_template)
 	{

@@ -8,4 +8,5 @@ $module['cms']['version'] = '1.2';
 $module['cms']['release_date'] = '2004-07-15';
 $module['cms']['status'] = 'Stable';
 $module['cms']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
+$module['cms']['sort_order'] = '90';
 ?>	

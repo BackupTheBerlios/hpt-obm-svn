@@ -274,7 +274,7 @@ if ($site_id > 0)
   }
   if ($task == 'edit_search_words')
   {
-    $tabtable->set_active_tab(1);
+    $tabtable->set_active_tab('search_words');
   }
 }else
 {
@@ -417,13 +417,12 @@ switch($tabtable->get_active_tab_id())
       $template_id = isset($_POST['template_id']) ? $_POST['template_id'] : '';
       $display_type = isset($_POST['display_type']) ? $_POST['display_type'] : NORMAL_DISPLAY;
     }
-
-    if ($cms->get_templates() == 0)
+    if ($cms->get_authorized_templates($GO_SECURITY->user_id) == 0)
     {
       echo '<br />';
       echo $cms_no_themes;
       echo '<br /><br />';
-      $button = new button($cmdOk, "javascript:document.location='".$GO_MODULES->url."index.php?tabindex=2';");
+      $button = new button($cmdOk, "javascript:document.location='".$GO_MODULES->url."index.php?tabindex=1';");
     }else
     {
       ?>

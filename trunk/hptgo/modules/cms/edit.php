@@ -20,8 +20,6 @@ $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('cms');
 
 require($GO_MODULES->class_path.'cms.class.inc');
-require_once($GO_CONFIG->class_path.'filetypes.class.inc');
-$filetypes = new filetypes();
 $cms = new cms();
 
 //get the language file

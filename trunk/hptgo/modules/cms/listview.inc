@@ -16,8 +16,8 @@ if ($cms_settings['sort_field'] == "cms_files.name")
 echo $image_string;
 echo '</a></td>';
 
-echo '<td class="TableHead2" width="100" nowrap><a class="TableHead2" href="'.$_SERVER['PHP_SELF'].'?site_id='.$site_id.'&new_sort_field=filetypes.friendly&new_sort_order='.$new_sort_order.'&folder_id='.$folder_id.'">'.$strType;
-if ($cms_settings['sort_field'] == "filetypes.friendly")
+echo '<td class="TableHead2" width="100" nowrap><a class="TableHead2" href="'.$_SERVER['PHP_SELF'].'?site_id='.$site_id.'&new_sort_field=cms_files.extension&new_sort_order='.$new_sort_order.'&folder_id='.$folder_id.'">'.$strType;
+if ($cms_settings['sort_field'] == "cms_files.extension")
 echo $image_string;
 echo '</a></td>';
 /*
@@ -88,7 +88,7 @@ while ($cms->next_record())
     echo '<a target="_self" href="download.php?site_id='.$site_id.'&file_id='.$cms->f('id').'" title="'.htmlspecialchars($cms->f('name')).'">';
   }
   
-  echo '<img width="16" height="16" border="0" src="'.$GO_CONFIG->control_url.'icon.php?extension='.$cms->f('extension').'" align="absmiddle" />&nbsp;&nbsp;';
+  echo '<img width="16" height="16" border="0" src="'.get_filetype_image($cms->f('extension')).'" align="absmiddle" />&nbsp;&nbsp;';
 
   if (isset($_SESSION['cut_files']) && in_array($cms->f('id'), $_SESSION['cut_files']))
   {
@@ -97,7 +97,7 @@ while ($cms->next_record())
   {
     echo $short_name;
   }
-  echo '</a>&nbsp;&nbsp;</td><td nowrap>'.$cms->f('friendly').'&nbsp;&nbsp;</td>';
+  echo '</a>&nbsp;&nbsp;</td><td nowrap>'.get_filetype_description($cms->f('extension')).'&nbsp;&nbsp;</td>';
   /*
      echo '<td nowrap align="right">'.format_size($cms->f('size')).'&nbsp;&nbsp;</td>';
      echo '<td nowrap>'.date($_SESSION['GO_SESSION']['date_format'], $cms->f('mtime')).'&nbsp;&nbsp;</td>';

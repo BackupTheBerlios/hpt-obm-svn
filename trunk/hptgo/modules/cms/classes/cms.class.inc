@@ -358,7 +358,7 @@ class cms extends db
 		  //functions for files and folders of sites
 		  function get_files($folder_id, $sort = "priority", $direction = "ASC")
 		  {
-		    $sql = "SELECT cms_files.*, filetypes.friendly FROM cms_files INNER JOIN filetypes ON filetypes.extension=cms_files.extension WHERE folder_id='$folder_id' ORDER BY $sort $direction";
+		    $sql = "SELECT * FROM cms_files WHERE folder_id='$folder_id' ORDER BY $sort $direction";
 		    $this->query($sql);
 		    return $this->num_rows();
 		  }
@@ -466,7 +466,7 @@ class cms extends db
 
 		  function get_file($file_id)
 		  {
-		    $this->query("SELECT cms_files.*, filetypes.mime AS content_type, filetypes.friendly AS content_type_friendly FROM cms_files LEFT JOIN filetypes ON (filetypes.extension=cms_files.extension) WHERE id='$file_id'");
+		    $this->query("SELECT * FROM cms_files WHERE id='$file_id'");
 		    if ($this->next_record())
 		    {
 		      return $this->Record;

@@ -367,7 +367,7 @@ switch($tabtable->get_active_tab_id())
 	  echo $fbFolder;
 	}else
 	{
-	  echo '<img border="0" width="16" height="16" src="'.$GO_CONFIG->control_url.'icon.php?extension='.$item['extension'].'" />';
+	  echo '<img border="0" width="16" height="16" src="'.get_filetype_image($item['extension']).'" />';
 	  echo '&nbsp;</td><td valign="top">';
 	  echo $item['content_type_friendly'];
 	  if (($item['content_type'] != $item['content_type_friendly']) && $item['content_type'] != '')

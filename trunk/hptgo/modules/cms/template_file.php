@@ -13,10 +13,8 @@ require("../../Group-Office.php");
 
 $cms_module = $GO_MODULES->get_module('cms');
 
-require($GO_CONFIG->class_path.'filetypes.class.inc');
 require($cms_module['class_path'].'cms.class.inc');
 $cms = new cms();
-$filetypes = new filetypes();
 
 if ($file = $cms->get_template_file($_REQUEST['template_file_id']))
 {
