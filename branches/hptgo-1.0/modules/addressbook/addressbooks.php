@@ -28,7 +28,7 @@ switch($task)
 	case 'delete_addressbook':
 		$delete_ab = $ab->get_addressbook($_POST['delete_addressbook_id']);
 
-		if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $delete_ab['acl_write']))
+		if($GO_SECURITY->user_id == $delete_ab['user_id'])
 		{
 			$default_id = $ab->get_default_addressbook($GO_SECURITY->user_id);
 			if ($ab->delete_addressbook($_POST['delete_addressbook_id']))
