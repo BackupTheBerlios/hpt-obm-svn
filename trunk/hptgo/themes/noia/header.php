@@ -57,22 +57,17 @@ function Bold_Text(id)
 	<?php echo $title; ?>
 	</td>
 	
-	<td width="200" height="55" valign="bottom" align="right">
+	<td width="220" height="55" valign="bottom" align="right">
 		<table border="0" width="100%">
 		
 		<tr height="*">
 			<td align="right" valign="bottom" nowrap width="100%">
-			<?php
-			if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
-			{
-			?>			
-			<a class="HeaderBar" href="<?php echo $GO_CONFIG->host; ?>administrator/" target="main">
-			<img src="<?php echo $GO_THEME->images['admin']; ?>" width="16" height="16" border="0" align="absmiddle" />
-			<?php echo $menu_admin; ?>
-			</a>			
-			<?php
-			}
-			?>
+				
+				<a class="ModuleIcons1" href="<?php echo $GO_CONFIG->host;?>configuration/" target="main">
+				<img src="<?php echo $GO_THEME->images['configuration']; ?>" width="16" height="16" border="0" align="absmiddle" />
+				<?php echo $menu_configuration; ?>
+				</a>
+				
 				<a class="ModuleIcons1" href="javascript:popup('<?php echo $GO_CONFIG->host; ?>doc/Vietnamese/index.html', 500, 500);">
 				<img src="<?php echo $GO_THEME->images['help']; ?>" width="16" height="16" border="0" align="absmiddle" />
 				<?php echo $menu_help; ?>
@@ -82,15 +77,26 @@ function Bold_Text(id)
 		
 		<tr valign="middle">
 			<td align="right" valign="bottom" nowrap width="100%">
+				
+				<?php
+				if($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+				{
+				?>			
+			
+				<a class="ModuleIcons1" href="<?php echo $GO_CONFIG->host; ?>administrator/" target="main">
+				<img src="<?php echo $GO_THEME->images['admin']; ?>" width="16" height="16" border="0" align="absmiddle" />
+				<?php echo $menu_admin; ?>
+				</a>			
+			
+				<?php
+				}
+				?>
+				
 				<a class="ModuleIcons1" href="<?php echo $GO_CONFIG->host; ?>index.php?task=logout" target="_parent">
 				<img src="<?php echo $GO_THEME->images['logout']; ?>" width="16" height="16" border="0" align="absmiddle" />
 				<?php echo $menu_logout; ?>&nbsp;<b><?php echo htmlspecialchars($_SESSION['GO_SESSION']['username']); ?></b>
 				</a>
 				
-				<a class="ModuleIcons1" href="<?php echo $GO_CONFIG->host;?>configuration/" target="main">
-				<img src="<?php echo $GO_THEME->images['configuration']; ?>" width="16" height="16" border="0" align="absmiddle" />
-				<?php echo $menu_configuration; ?>
-				</a>
 			</td>
 		</tr>
 				
