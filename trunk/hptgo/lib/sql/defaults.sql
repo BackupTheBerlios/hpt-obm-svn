@@ -379,7 +379,7 @@ CREATE TABLE `users` (
 # Gegevens worden uitgevoerd voor tabel `users`
 #
 
-INSERT INTO `users` VALUES (1, 0, 'admin', '21232f297a57a5a743894a0e4a801fc3', '8bv2alqx', '', '', '', '', '', 'M', '0000-00-00', 'mschering@intermesh.nl', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 'd-m-Y', 'G:i', '.', ',', '$', 1, 1, 1081226719, 1081226703, 15, 1, '', 'nl', 'Professional', 1);
+INSERT INTO `users` VALUES (1, 0, 'admin', '21232f297a57a5a743894a0e4a801fc3', '8bv2alqx', '', '', '', '', '', 'M', '0000-00-00', 'mschering@intermesh.nl', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 1, 'd-m-Y', 'G:i', '.', ',', '$', 1, 1, 1081226719, 1081226703, 15, 1, '', 'nl', 'Professional', 1, '');
 
 # --------------------------------------------------------
 
@@ -391,7 +391,7 @@ DROP TABLE IF EXISTS `users_groups`;
 CREATE TABLE `users_groups` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
-  PRIM?Y KEY (`group_id`, `user_id`)
+  PRIMARY KEY (`group_id`, `user_id`)
   KEY `group_id` (`group_id`),
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;

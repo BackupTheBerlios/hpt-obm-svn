@@ -109,6 +109,7 @@ CREATE TABLE `modules` (
   `path` varchar(50) NOT NULL default '',
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
+  `enable` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `id` (`id`)
 ) TYPE=MyISAM;
