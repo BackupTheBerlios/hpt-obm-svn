@@ -173,7 +173,14 @@ switch($post_action)
 }
 ?>
 	<td class="ModuleIcons">
-	<a class="small" href="<?php echo $_SERVER['PHP_SELF']; ?>?post_action=categories&addressbook_id=<?php echo $addressbook_id.(isset($active_tab)?"&active_tab=".$active_tab:""); ?><?php echo (isset($active_tab)?"&active_tab=".$active_tab:"")?>"><img src="<?php echo $GO_THEME->images['add_category']; ?>" border="0" height="32" width="32" /><br /><?php echo $strConfig; ?></a>
+	<a class=
+		<?php if (!isset($found) && ($post_action == 'categories')){
+			echo '"bold_small" ';
+			$found=true;
+		}else{
+			echo '"small" ';
+		} ?> 
+		href="<?php echo $_SERVER['PHP_SELF']; ?>?post_action=categories&addressbook_id=<?php echo $addressbook_id.(isset($active_tab)?"&active_tab=".$active_tab:""); ?><?php echo (isset($active_tab)?"&active_tab=".$active_tab:"")?>"><img src="<?php echo $GO_THEME->images['add_category']; ?>" border="0" height="32" width="32" /><br /><?php echo $strConfig; ?></a>
 	</td>
 	
 	<?php

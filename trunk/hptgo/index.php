@@ -129,6 +129,7 @@ if ( $_SERVER['REQUEST_METHOD'] == "POST" || (isset($_COOKIE['GO_UN'])
 	  } else
 	  {
 	    $link = $GO_CONFIG->host.'configuration/preferences/';
+		echo $link;
 	  }
 	  //redefine theme
 	  $GO_THEME = new GO_THEME();
