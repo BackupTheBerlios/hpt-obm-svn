@@ -20,8 +20,6 @@ function update()
 <?php
 				echo '<br/><br/>';
 				new button("Update","javascript:update();");
-				echo '&nbsp;&nbsp;';
-				new button($cmdClose,"javascript:document.location='$return_to'");
 			}
 			else
 			{
@@ -34,12 +32,18 @@ function update()
 					{
 						if (isset($updates[$cur_ver]))
 						{
+							echo "Update version $cur_ver<br/>";
 							while($query = array_shift($updates[$cur_ver]))
 							{
+								echo "Query ".htmlspecialchars($query)."<br/>";
 								@$db->query($query);
 							}
 						}
 					}
+				}
+				else
+				{
+					echo 'updates file not exist. No update<br/>';
 				}
 				$db->query("UPDATE modules SET version='{$module_info['version']}' WHERE id='{$module_id}'");
 				echo "Done!";
