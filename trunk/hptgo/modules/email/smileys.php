@@ -300,7 +300,7 @@ $smiley_patterns = array(
 	'/(\:D)([\s+|<])/',
 );
 
-$smiley_path = $GO_CONFIG->full_url.'smileys/';
+$smiley_path = $GO_CONFIG->host.'smileys/';
 
 function smiley_symbols_to_images($matches)
 {
