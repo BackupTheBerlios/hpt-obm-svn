@@ -148,7 +148,7 @@ if ($calendar_count > 0)
 	
     echo '<tr>';
 //    echo '<td align="center"><input type="radio" name="default_calendar_id" value="'.$cal->f('id').'"></td>';
-	echo '<td nowrap><a href="index.php?calendar_id='.$cal->f("id").'" class="normal">'.$cal->f("name").'</a>&nbsp;</td>';
+	echo '<td nowrap><a href="index.php?calendar_id='.$cal->f("id").'" class="normal">'.htmlspecialchars($cal->f("name")).'</a>&nbsp;</td>';
     echo '<td nowrap>'.show_profile($cal->f("user_id")).'&nbsp;</td>';
     echo '<td align="center"><input type="checkbox" id="subscribed" name="subscribed[]" value="'.$cal->f('id').'" '.$checked.'></td>';	
     echo '<td><a href="calendar.php?calendar_id='.$cal->f("id").'&return_to='.rawurlencode($link_back).'" title="'.$strEdit.' \''.htmlspecialchars(addslashes($cal->f("name"))).'\'"><img src="'.$GO_THEME->images['edit'].'" border="0" /></a></td>';
