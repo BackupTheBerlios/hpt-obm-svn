@@ -610,7 +610,7 @@ if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_gr
       ?>
 	</td>
 	<td colspan="2">
-	<input class="textbox" type="text" name="mail_cc" size="95" value="<?php echo (isset($mail_cc) ? htmlspecialchars( $mail_cc) : '') ?>" onkeydown="return display_list(event);" onblur="cleanup(event);" />
+	<input class="textbox" type="text" id="mail_cc" name="mail_cc" size="95" value="<?php echo (isset($mail_cc) ? htmlspecialchars($mail_cc) : '') ?>" onkeydown="return display_list(event);" onblur="cleanup(event);" />
 	</td>
 	</tr>
 	<tr id="BCC" style="<?php echo $bcc_style; ?>">
@@ -631,7 +631,8 @@ if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_gr
 	}
 	?>
 	  </td>
-	  <td colspan="2"><input class="textbox" type="text" name="mail_bcc" size="95" value="<?php echo (isset($mail_bcc) ? htmlspecialchars($mail_bcc) : '') ?>" onkeydown="return display_list(event);" onblur="cleanup(event);" /></td>
+	  <td colspan="2">
+    <input class="textbox" type="text" id="mail_bcc" name="mail_bcc" size="95" value="<?php echo (isset($mail_bcc) ? htmlspecialchars($mail_bcc) : '') ?>" onkeydown="return display_list(event);" onblur="cleanup(event);" /></td>
 	  </tr>
 	  <?php
 }//endif mailing_group_id
@@ -793,23 +794,31 @@ function send()
   {
     <?php
       if ($mailing_group_id == 0) echo 'if (validate()){';
-	?>
+    ?>
 
-	  document.sendform.sendaction.value = "send";
-	<?php
+    document.sendform.sendaction.value = "send";
+    <?php
 	  if (isset($uid) && $uid > 0)
-	  {
-	    echo 'document.sendform.uid.value="'.$uid.'";';
-	  }
-	if ($content_type == 'text/HTML')
-	{
-	  echo 'document.sendform.onsubmit();';
-	}
-	?>
-	  document.sendform.submit();
-	<?php if ($mailing_group_id == 0) echo '}'; ?>
-      }
+    {
+      echo 'document.sendform.uid.value="'.$uid.'";';
+    }
+    if ($content_type == 'text/HTML')
+    {
+      echo 'document.sendform.onsubmit();';
+    }
+    ?>
+    var fn = ['CC', 'BCC'];
+    var ff = ['mail_cc', 'mail_bcc'];
+
+    for (i = 0; i < fn.length; i++) {
+      field = document.getElementById(fn[i]);
+      if (field.style.visibility == 'hidden')
+        document.getElementById(ff[i]).value = '';
+    }
+    document.sendform.submit();
+    <?php if ($mailing_group_id == 0) echo '}'; ?>
   }
+}
 
   function attach()
   {
@@ -1008,7 +1017,13 @@ function send()
 
     field = f;
     switch (e.keyCode) {
+      case 0: // unknown
       case 9: // tab
+      case 16: // shift
+      case 17: // ctrl
+      case 18: // alt
+      case 20: // caps-lock
+      case 27: // esc
         return true;
       case 8: // backspace
         m = m[m.length - 1].replace(/.$/g, '');
@@ -1051,17 +1066,21 @@ function send()
     }
 
     if (contents != '') {
-      var p = get_position(f);
+      var p = get_position(field);
       var mc = document.getElementById('maillist_contents');
       mc.innerHTML = '<table cellspacing="0" cellpadding="0" border="0" bgcolor="white">'
         +contents+'</table>';
-      ml.style.top = (p.y + f.offsetHeight) + "px";
+      ml.style.top = (p.y + field.offsetHeight) + "px";
       ml.style.left = p.x + "px";
       ml.style.display = '';
       ml.style.visibility = 'visible';
       highlight(sel_idx = 0);
       ml_visible = true;
     }
+    else if (ml_visible) {
+      hide_maillist();
+    }
+
     return true;
   }
 
