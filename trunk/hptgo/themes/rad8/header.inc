@@ -5,11 +5,10 @@ header('Content-Type: text/html; charset='.$charset);
 ?>
 <html>
 <head>
-<link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" />
 <?php if (isset($GO_HEADER['head'])) echo $GO_HEADER['head']; ?>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>" />
 <script language="javascript" type="text/javascript" src="<?php echo $GO_CONFIG->host; ?>javascript/common.js"></script>
-<link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" />
+<link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" type="image/x-icon" />
 <link href="<?php echo $GO_THEME->theme_url.'style.css'; ?>" rel="stylesheet" type="text/css" />
 <link href="<?php echo $GO_THEME->theme_url.'htmlarea.css'; ?>" rel="stylesheet" type="text/css" />
 <link href="<?php echo $GO_THEME->theme_url.'calendar.css'; ?>" type="text/css" rel="stylesheet" />
