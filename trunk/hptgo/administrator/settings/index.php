@@ -19,6 +19,7 @@ $return_to = $GO_CONFIG->host.'configuration/';
 
 require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 $fs = new filesystem();
+$fs->root = '';
 
 $modules = $fs->get_folders($GO_CONFIG->module_path);
 $existing_modules = array();

@@ -135,7 +135,6 @@ $lv->columns[] = array(
 
 require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 $order = print_config_title($constMembersPage);
-
 for ($i=0; $i<count($order); $i++)
 {
 	$lv->columns[] = array(
@@ -156,6 +155,8 @@ if (count($order) == 0)
 	);
 }
 
+$lv->columns[] = array('text' => '');
+
 
 if ($ab_settings['sort_users_field'] == '')
 	$ab_settings['sort_users_field'] = 'name';
@@ -171,17 +172,21 @@ echo '</tr></table>';
 
 $lv->print_head();
 
+$firstrun = true;
 if ($count > 0) {
 while ($GO_USERS->next_record())
 {
-	$row = array();
+	if ($firstrun)
+		$row = array();
+	$irow = 0;
 	$middle_name = $GO_USERS->f('middle_name') == '' ? '' : $GO_USERS->f('middle_name').' ';
 	$name = $GO_USERS->f('last_name').' '.$middle_name.$GO_USERS->f('first_name');
 	$attrs = array(
 		'id' => $GO_USERS->f("id"),
 		'height' => '18'
 	);
-	$row[] = array(
+	if ($firstrun)
+	$row[$irow++] = array(
 		'tag' => 'input',
 		'attributes' => array(
 			'width' => 16),
@@ -191,23 +196,34 @@ while ($GO_USERS->next_record())
 			'value' => $GO_USERS->f("id"),
 			'onclick' => 'item_click(this)')
 	);
-	$row[] = array(
+	else
+	$row[$irow++]['tag_attributes']['value'] = $GO_USERS->f("id");
+
+	if ($firstrun)
+	$row[$irow++] = array(
 		'html' => show_profile($GO_USERS->f("id"), $name),
 		'attributes' => array(
 			'nowrap' => '1'),
 	);
+	else
+	$row[$irow++]['html'] = show_profile($GO_USERS->f("id"),$name);
 
 	if (count($order) == 0)
 	{
-		$row[] = array(
+		if ($firstrun)
+		$row[$irow++] = array(
 			'html' => mail_to(empty_to_stripe($GO_USERS->f("email")))
 		);
-		$row[] = empty_to_stripe($GO_USERS->f("company"));
+		else
+		$row[$irow++]['html'] = mail_to(empty_to_stripe($GO_USERS->f("email")));
+
+		$row[$irow++] = empty_to_stripe($GO_USERS->f("company"));
 	}
 
-	fill_config_content($order,$GO_USERS,$constMembersPage,$row);
+	fill_config_content($order,$GO_USERS,$constMembersPage,$row,$irow,$firstrun);
 
-	$row[] = array(
+	if ($firstrun)
+	$row[$irow++] = array(
 		'href' => "contact.php?user_id=".$GO_USERS->f("id")."&return_to=".urlencode($link_back),
 		'html' => "<img src=\"".$GO_THEME->images['save']."\" border=\"0\" />",
 		'tag_attributes' => array(
@@ -216,7 +232,10 @@ while ($GO_USERS->next_record())
 		'attributes' => array(
 			'nowrap' => '1'),
 	);
+	else
+	$row[$irow++]['href'] = "contact.php?user_id=".$GO_USERS->f("id")."&return_to=".urlencode($link_back);
 	$lv->print_line($row,$attrs);
+	$firstrun = false;
 }
 }
 $lv->print_foot();

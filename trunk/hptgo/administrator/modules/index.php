@@ -20,6 +20,7 @@ $link_back = $_SERVER['PHP_SELF'];
 
 require_once($GO_CONFIG->class_path.'filesystem.class.inc');
 $fs = new filesystem();
+$fs->root = '';
 
 
 

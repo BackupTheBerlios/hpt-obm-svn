@@ -382,6 +382,7 @@ echo '<td align="right" valign="top">'.format_size($mem['swap']['total']*1024, 2
 </tr>
 <?php
 $fs = $sysinfo->filesystems();
+$fs->root = '';
 $sum["size"] = 0;
 $sum["used"] = 0;
 $sum["free"] = 0;

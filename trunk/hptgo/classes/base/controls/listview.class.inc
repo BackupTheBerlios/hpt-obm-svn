@@ -120,7 +120,7 @@ function <?=$this->id?>_change_list(first, max_rows)
 <?php
 
 		echo '<table border="0" cellspacing="0" cellpadding="0" width="100%">';
-		echo '<tr>';
+		echo '<tbody>';
 
 		echo '<tr'.(isset($this->head_attr) ? attributes_implode($this->head_attr) : '').'>';
 		$this->column_count = 0;
@@ -150,7 +150,7 @@ function <?=$this->id?>_change_list(first, max_rows)
 				}
 
 
-				echo '<th'.(isset($i['attributes']) ? attributes_implode($i['attributes']) : '').'>';
+				echo '<th nowrap'.(isset($i['attributes']) ? attributes_implode($i['attributes']) : '').'>';
 				if (isset($i['href']))
 				{
 					$i['tag'] = 'a';
@@ -165,7 +165,7 @@ function <?=$this->id?>_change_list(first, max_rows)
 			}
 			else
 			{
-				echo '<th>'.htmlspecialchars($i).'</th>';
+				echo '<th nowrap>'.htmlspecialchars($i).'</th>';
 			}
 			$this->column_count ++;
 		}
@@ -183,7 +183,7 @@ function <?=$this->id?>_change_list(first, max_rows)
 		{
 			if (is_array($i))
 			{
-				echo '<td'.(isset($i['attributes']) ? attributes_implode($i['attributes']) : '').'>';
+				echo '<td nowrap'.(isset($i['attributes']) ? attributes_implode($i['attributes']) : '').'>';
 				if (isset($i['href']))
 				{
 					$i['tag'] = 'a';
@@ -198,7 +198,7 @@ function <?=$this->id?>_change_list(first, max_rows)
 			}
 			else
 			{
-				echo '<td>'.htmlspecialchars($i).'</td>';
+				echo '<td nowrap>'.htmlspecialchars($i).'</td>';
 			}
 		}
 		echo '</tr>';
@@ -280,6 +280,7 @@ function <?=$this->id?>_change_list(first, max_rows)
 				echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 			}
 		}
+		echo '</tbody></table>';
 	}
 }
 
