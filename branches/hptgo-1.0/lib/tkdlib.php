@@ -9,6 +9,16 @@
    Free Software Foundation; either version 2 of the License, or (at your
    option) any later version.
  */
+ 	function initTyping($root_path)
+	{
+		$str = '<script language="javascript" src="'.$root_path.'lib/vietuni.js"></script>'.
+			   '<script language="javascript">'.
+				 	'initTypingForm();'.
+					'setTypingMode(2);'.
+				'</script>';
+		echo $str;
+	}
+	
 	function get_today()
 	{
 		$local_time = get_time();
