@@ -10,9 +10,9 @@
    option) any later version.
  */
 
-define(SHOW_ALL, 0);
-define(SHOW_OWN, 1);
-define(SHOW_SUB, 2);
+define('SHOW_ALL', 0);
+define('SHOW_OWN', 1);
+define('SHOW_SUB', 2);
 
 require("../../Group-Office.php");
 
