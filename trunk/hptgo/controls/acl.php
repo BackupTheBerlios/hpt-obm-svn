@@ -25,7 +25,7 @@ echo '<table border="0" cellpadding="0" cellspacing="0" width="100%" height="100
 if (isset($_REQUEST['project_acl']))
   require($GO_LANGUAGE->get_language_file('projects'));
 
-$acl = new acl($_REQUEST['acl_id']);
+$acl = new acl($_REQUEST['acl_id'],isset($_REQUEST['acl_table']) ? $_REQUEST['acl_table'] : 'acl');
 echo '</td></tr></table>';
 require($GO_THEME->theme_path."footer.inc");
 ?>

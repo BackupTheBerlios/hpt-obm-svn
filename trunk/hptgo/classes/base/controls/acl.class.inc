@@ -17,23 +17,26 @@ class acl
   var $read_only;
   var $selected_groups_name;
   var $selected_users_name;
+  var $ACL;
 
   /**
    * Constructor.
    *
    * @param int $acl_id
    */
-  function acl($acl_id)
+  function acl($acl_id,$acl_table='acl')
   {
     global $GO_SECURITY;
 
     $task = isset($_POST['task']) ? $_POST['task'] : '';
 
+    $this->ACL = new GO_SECURITY();
+    $this->ACL->acl_table = $acl_table;
     if ($acl_id > 0)
     {
       $this->acl_id = $acl_id;
       //$this->read_only = $read_only == 'true' ? true : false;
-      $this->read_only = !$GO_SECURITY->user_owns_acl($GO_SECURITY->user_id, $acl_id);
+      $this->read_only = !$this->ACL->user_owns_acl($GO_SECURITY->user_id, $acl_id);
       $this->form_name = 'acl_control_'.$acl_id;
       $this->selected_groups_name = "selected_groups_".$acl_id;
       $this->selected_users_name = "selected_users_".$acl_id;
@@ -91,6 +94,7 @@ class acl
     echo '<form name="'.$this->form_name.'" method="post" action="'.$_SERVER['PHP_SELF'].'">';
     echo '<input type="hidden" name="task" value="search" />';
     echo '<input type="hidden" name="acl_id" value="'.$this->acl_id.'" />';
+    echo '<input type="hidden" name="acl_table" value="'.$this->ACL->acl_table.'" />';
     //echo '<input type="hidden" name="read_only" value="'.$this->read_only.'" />';
 
     echo '<table border="0" cellpadding="0" cellspacing="3"><tr><td>';
@@ -201,6 +205,7 @@ class acl
       $_SERVER['PHP_SELF'].'">';
     echo '<input type="hidden" name="task" value="" />';
     echo '<input type="hidden" name="acl_id" value="'.$this->acl_id.'" />';
+    echo '<input type="hidden" name="acl_table" value="'.$this->ACL->acl_table.'" />';
     echo '<input type="hidden" name="read_only" value="'.
       $this->read_only.'" />';
     echo '<input type="hidden" name="show_all" value="'.(isset($_REQUEST['show_all']) ? $_REQUEST['show_all'] : 'false').'" />';
@@ -264,31 +269,31 @@ class acl
       ' multiple="true" style="width: 250px;height: 250px;"'.
       ' class="textbox" '.$disabled.'>';
 
-    $GO_SECURITY->get_groups_in_acl($this->acl_id);
+    $this->ACL->get_groups_in_acl($this->acl_id);
 
-    while ($GO_SECURITY->next_record())
-      // echo '<option value="'.$GO_SECURITY->f('id').'">'
-      //	.$GO_SECURITY->f('name').'</option>';
+    while ($this->ACL->next_record())
+      // echo '<option value="'.$this->ACL->f('id').'">'
+      //	.$this->ACL->f('name').'</option>';
     {
-      if ( $GO_SECURITY->f("name") )
+      if ( $this->ACL->f("name") )
       {
 	if (!$this->hide_self ||
-	    ($GO_SECURITY->f("id") != $GO_SECURITY->group_id))
+	    ($this->ACL->f("id") != $this->ACL->group_id))
 	{
-	  echo '<option value="'.$GO_SECURITY->f('id').'">'.
-	    htmlspecialchars($GO_SECURITY->f('name')).'</option>';
+	  echo '<option value="'.$this->ACL->f('id').'">'.
+	    htmlspecialchars($this->ACL->f('name')).'</option>';
 	}
       } else
       {
 	if ( !$this->hide_self ||
-	    ( $GO_SECURITY->f("user_id" != $GO_SECURITY->group_id ) ) )
+	    ( $this->ACL->f("user_id" != $this->ACL->group_id ) ) )
 	{
 	  require_once($GO_CONFIG->class_path.'profiles.class.inc');
 	  $profiles = new profiles();
-	  if ($profile = $profiles->get_group_profile($GO_SECURITY->
+	  if ($profile = $profiles->get_group_profile($this->ACL->
 		f('group_id')))
 	  {
-	    echo '<option value="'.$GO_SECURITY->f('group_id').
+	    echo '<option value="'.$this->ACL->f('group_id').
 	      '">'.htmlspecialchars($profile["name"]).'</option>';
 	  }
 	}
@@ -315,19 +320,19 @@ class acl
 
     $disabled = $this->read_only ? 'disabled' : '';
 
-    $GO_SECURITY->get_users_in_acl($this->acl_id);
+    $this->ACL->get_users_in_acl($this->acl_id);
     echo '<select name="'.$this->selected_users_name.
       '[]" multiple="true" style="width: 250px;height: 250px;"'.
       ' class="textbox" '.$disabled.'>';
 
-    while ($GO_SECURITY->next_record())
+    while ($this->ACL->next_record())
     {
-      if ( $profile = $GO_USERS->get_user( $GO_SECURITY->f('user_id') ) )
+      if ( $profile = $GO_USERS->get_user( $this->ACL->f('user_id') ) )
       {
 	$middle_name = $profile["middle_name"] == '' ?
 	  '' : $profile["middle_name"].' ';
 	$name = $profile["last_name"].' '.$middle_name.$profile["first_name"];
-	echo '<option value="'.$GO_SECURITY->f('user_id').'">'
+	echo '<option value="'.$this->ACL->f('user_id').'">'
 	  .htmlspecialchars($name).'</option>';
       }
     }
@@ -376,6 +381,7 @@ class acl
     echo '<form name="'.$this->form_name.'" method="post" action="'.$_SERVER['PHP_SELF'].'">';
     echo '<input type="hidden" name="task" value="" />';
     echo '<input type="hidden" name="acl_id" value="'.$this->acl_id.'" />';
+    echo '<input type="hidden" name="acl_table" value="'.$this->ACL->acl_table.'" />';
     echo '<input type="hidden" name="read_only" value="'.$this->read_only.'" />';
     echo '<table border="0" cellspacing="0" cellpadding="0">';
     echo '<tr><td><h3>'.$acl_control_auth_users.'</h3></td><td width="20">&nbsp;</td>';
@@ -407,7 +413,7 @@ class acl
 
     for ($i=0;$i<count($selected_groups);$i++)
     {
-      $GO_SECURITY->delete_group_from_acl($selected_groups[$i],
+      $this->ACL->delete_group_from_acl($selected_groups[$i],
 					  $this->acl_id);
 
       if($GO_CONFIG->dav_switch){
@@ -434,7 +440,7 @@ class acl
     {
       if ($selected_users[$i] != $GO_SECURITY->user_id)
       {
-	$GO_SECURITY->delete_user_from_acl($selected_users[$i],
+	$this->ACL->delete_user_from_acl($selected_users[$i],
 					   $this->acl_id);
 
 	if($GO_CONFIG->dav_switch) {
@@ -460,10 +466,10 @@ class acl
 
     for ($i=0;$i<count($selected_groups);$i++)
     {
-      if (!$GO_SECURITY->group_in_acl($selected_groups[$i], 
+      if (!$this->ACL->group_in_acl($selected_groups[$i], 
 				      $this->acl_id))
       {
-	$GO_SECURITY->add_group_to_acl($selected_groups[$i],
+	$this->ACL->add_group_to_acl($selected_groups[$i],
 				       $this->acl_id);
 
 	if($GO_CONFIG->dav_switch) {
@@ -489,10 +495,10 @@ class acl
 
     for ($i=0;$i<count($selected_users);$i++)
     {
-      if (!$GO_SECURITY->user_in_acl($selected_users[$i], 
+      if (!$this->ACL->user_in_acl($selected_users[$i], 
 				     $this->acl_id))
       {
-	$GO_SECURITY->add_user_to_acl($selected_users[$i],
+	$this->ACL->add_user_to_acl($selected_users[$i],
 				      $this->acl_id);
 
 	if($GO_CONFIG->dav_switch) {

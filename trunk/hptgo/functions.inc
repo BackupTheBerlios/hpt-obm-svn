@@ -434,12 +434,12 @@ function split_name($full_name)
 * @access public
 * @return void
 */
-function print_acl($acl_id)
+function print_acl($acl_id,$acl_table = 'acl')
 {
   global $GO_CONFIG;
   echo '<iframe width="550"; height="320" border="0" frameborder="0" '.
 				'scrolling="no" src="'.$GO_CONFIG->control_url.'acl.php?acl_id='.
-				$acl_id.'"></iframe>';
+				$acl_id.'&acl_table='.$acl_table.'"></iframe>';
 }
 
 /**
