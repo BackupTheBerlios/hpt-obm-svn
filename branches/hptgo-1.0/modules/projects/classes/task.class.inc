@@ -474,8 +474,10 @@ class project_task extends db {
             else
                 $latency = $diff;
         }
-        elseif ($today > $rsd)
-            $latency = round(($today - $rsd) / $day_sec);
+        elseif ($today > $rsd) {
+			$sd = $pstart_date + $this->start_date * $day_sec;
+            $latency = round(($today - $sd) / $day_sec) - $this->days;
+		}
     }
 
     if (is_numeric($advance)) {
