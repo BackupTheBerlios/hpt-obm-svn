@@ -316,7 +316,7 @@ switch ($task)
   case 'save_task_status':
     $tid = $_REQUEST['task_id'];
     $tstat = $_REQUEST['task_status'];
-    $tcomm = trim($_REQUEST['task_comments']);
+    $tcomm = isset($_REQUEST['task_comments']) ? trim($_REQUEST['task_comments']) : null;
     $tcuser = $_REQUEST['task_cuser'];
     $tdays = $_REQUEST['task_time'];
 

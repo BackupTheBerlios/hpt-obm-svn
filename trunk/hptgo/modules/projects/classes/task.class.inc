@@ -628,6 +628,7 @@ class project_task extends db {
     if ($status == TASK_ONGOING || $status == TASK_DONE) {
 
       global $GO_CONFIG;
+      global $php_mailer_lang;
       
       $db = new db();
       $sql = "SELECT users.* FROM".
