@@ -72,6 +72,7 @@
 				}
 				else index++;
 		}
+		if (number.value.length == 0) number.value = 0;
 	}
 
 	

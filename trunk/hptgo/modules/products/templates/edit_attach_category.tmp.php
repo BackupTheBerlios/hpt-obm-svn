@@ -26,7 +26,7 @@
 		
 		$click_del = "javascript:click_del(document.frmAttachCategory, $id , \"$name\" , \"".sprintf($sc_ConfirmDeleteCategory2, $name)."\")";
 ?>	
-	<tr class="HiLi">
+	<tr>
 		<td align="center"> <?php echo ++$i;?> </td>
 		<td nowrap>
 			<a href="<?php echo "javascript:set_edit(document.frmAttachCategory,'$id','$name')"?>"> 

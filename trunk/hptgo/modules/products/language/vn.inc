@@ -1,11 +1,11 @@
 <?php
 require($GO_LANGUAGE->get_fallback_language_file('products'));
 	$sc_amount = 'Tổng giá trị';
-	$sc_add_category = 'Danh mục sản phẩm mới';
-	$sc_add_attach_category = 'Danh mục Linh kiện mới';
+	$sc_add_category = 'Danh mục sản phẩm';
+	$sc_add_attach_category = 'Danh mục Linh kiện';
 	$sc_add_products = 'Sản phẩm mới';
-	$sc_cart = 'Giỏ hàng';
-	$sc_order_list = 'Đơn đặt hàng';
+	$sc_cart = 'Tạo bảng báo giá';
+	$sc_order_list = 'Bảng giá';
 	
 	$sc_search_on = 'Tìm theo';
 	$sc_search_phrase = 'Chực cụm từ';
@@ -17,15 +17,20 @@ require($GO_LANGUAGE->get_fallback_language_file('products'));
 	$sc_quantity = 'Số lượng';
 	$sc_price = 'Giá tiền';
 	$sc_total = 'Tổng cộng';
+	$sc_inc_dec = 'Tăng/giảm';
 	$sc_category = 'Danh mục';
-	$sc_be_attachment = 'Là phụ kiện';
+	$sc_be_attachment = 'Là linh kiện';
 	$sc_of = 'của';
 	$sc_sum = 'Tổng giá tiền';
+	$sc_inc_dec_quotation = 'Điều chỉnh giá';
+	$sc_amount_quotation = 'Tổng giá trị bảng giá';
 	$sc_information = 'Thông tin';
 	$sc_part_number = 'Part number';
 	$sc_image = 'Hình ảnh';
-	$sc_VAT = 'VAT';
+	$sc_VAT = 'VAT (%)';
 	$sc_warranty = 'Chế độ bảo hành';
+	$sc_cc = 'Cc';
+	$sc_subject = 'Chủ đề';
 
 	$sc_company = 'Đến';
 	$sc_attn = 'Người nhận';
@@ -64,9 +69,9 @@ require($GO_LANGUAGE->get_fallback_language_file('products'));
 	$sc_AskInput = 'Xin vui lòng nhập';
 	$sc_no_select = 'Không chọn';
 	
-	$sc_clear_cart = 'Xóa giỏ hàng';
+	$sc_clear_cart = 'Xóa bảng báo giá';
 	
 	$sc_buy = 'Mua';
-	$sc_buy_all = 'Mua tất cả';	
+	$sc_buy_all = 'Mua các món hàng đã chọn';	
 	$sc_export = 'Xuất';
 ?>

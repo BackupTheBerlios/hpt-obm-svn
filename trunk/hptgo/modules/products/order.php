@@ -40,6 +40,9 @@ require('../addressbook/classes/addressbook.class.inc');
 			$fax = $_POST['fax'];
 			$sale_date = date_to_db_date($_POST['sale_date']);
 			$valid_date = date_to_db_date($_POST['valid_date']);
+			$cc = $_POST['cc'];
+			$subject = $_POST['subject'];
+			$adjustment = $_POST['incdecquotation'];
 
 			$product = $_POST['product'];
 			$cate = $_POST['cate'];
@@ -47,9 +50,11 @@ require('../addressbook/classes/addressbook.class.inc');
 				
 			$quantity = $_POST['quantity'];
 			$price = $_POST['price'];
+			$incdec = $_POST['incdec'];
+			$VAT = $_POST['VAT'];
 				
-			if ($pro->update_order($seller, $order_number, $company, $attn, $phone, $fax, $sale_date, $valid_date, $product, $cate, $attach, $quantity, $price)) 
-				goURL('index.php');
+			if ($pro->update_order($seller, $order_number, $company, $attn, $cc, $subject, $phone, $fax, $sale_date, $valid_date, $adjustment, $product, $cate, $attach, $quantity, $price, $VAT, $incdec)) 
+				goURL('order.php');
 		break;
 		case 'save':
 		case 'apply':
@@ -69,6 +74,9 @@ require('../addressbook/classes/addressbook.class.inc');
 				$fax = $_POST['fax'];
 				$sale_date = date_to_db_date($_POST['sale_date']);
 				$valid_date = date_to_db_date($_POST['valid_date']);
+				$cc = $_POST['cc'];
+				$subject = $_POST['subject'];
+				$adjustment = $_POST['incdecquotation'];
 				
 				$product = $_POST['product'];
 				$cate = $_POST['cate'];
@@ -76,14 +84,15 @@ require('../addressbook/classes/addressbook.class.inc');
 				
 				$quantity = $_POST['quantity'];
 				$price = $_POST['price'];
+				$incdec = $_POST['incdec'];
+				$VAT = $_POST['VAT'];
 				
-				if ($pro->add_order($seller, $order_number, $company, $attn, $phone, $fax, $sale_date, $valid_date, $product, $cate, $attach, $quantity, $price)) 
+				if ($pro->add_order($seller, $order_number, $company, $attn, $cc, $subject, $phone, $fax, $sale_date, $valid_date, $adjustment, $product, $cate, $attach, $quantity, $price, $VAT, $incdec)) 
 				{
 					$_SESSION['cart']->cleanall();
 					break;
 				}
 
-//				echo 'Khong them duoc';	
 				$_POST['close_win'] == 'f';
 			}
 		break;
@@ -121,6 +130,8 @@ require('../addressbook/classes/addressbook.class.inc');
 				$order_attach_arr[$apid.$acate] = $pro->f('attach_id');
 				$order_price_arr[$apid.$acate] = $pro->f('price');
 				$order_quantity_arr[$apid.$acate] = $pro->f('quantity');
+				$order_discount_arr[$apid.$acate] = $pro->f('discount');
+				$order_VAT_arr[$apid.$acate] = $pro->f('VAT');
 			}
 			
 			$pro_order = new products();
@@ -135,7 +146,7 @@ require('../addressbook/classes/addressbook.class.inc');
 			$pro->get_orders();
 			require('templates/list_order.tmp.php');
 	}
-	if ($_POST['close_win']=='true') goURL('index.php');
+	if ($_POST['close_win']=='true') goURL('order.php');
 
 	require($GO_THEME->theme_path."footer.inc"); 		
 ?>

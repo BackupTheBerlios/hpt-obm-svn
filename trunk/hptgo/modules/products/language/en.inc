@@ -1,9 +1,9 @@
 <?php
 	$sc_amount = 'Amount';
-	$sc_add_category = 'New product category';
-	$sc_add_attach_category = 'New accessory category';
+	$sc_add_category = 'Product category';
+	$sc_add_attach_category = 'Accessories category';
 	$sc_add_products = 'New product';
-	$sc_cart = 'Cart';
+	$sc_cart = 'Create a quotation';
 	$sc_order_list = 'Quotations';
 	
 	$sc_search_on = 'Tìm theo';
@@ -16,15 +16,20 @@
 	$sc_quantity = 'Quantity';
 	$sc_price = 'Price';
 	$sc_total = 'Total';
+	$sc_inc_dec = 'Increase/Decrease';
 	$sc_category = 'Category';
 	$sc_be_attachment = 'is accessory';
 	$sc_of = 'of';
 	$sc_sum = 'Amount';
+	$sc_inc_dec_quotation = 'Price adjustment';
+	$sc_amount_quotation = 'Quotation amount';	
 	$sc_information = 'Information';
 	$sc_part_number = 'Part number';
 	$sc_image = 'Image';
-	$sc_VAT = 'VAT';
+	$sc_VAT = 'VAT (%)';
 	$sc_warranty = 'Warranty';
+	$sc_cc = 'Cc';
+	$sc_subject = 'Subject';
 
 	$sc_company = 'To';
 	$sc_attn = 'Attn.';
@@ -66,6 +71,6 @@
 	$sc_clear_cart = 'Clear cart';
 	
 	$sc_buy = 'Buy';
-	$sc_buy_all = 'Buy all';
+	$sc_buy_all = 'Buy checked items';
 	$sc_export = 'Export';
 ?>

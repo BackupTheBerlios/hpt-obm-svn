@@ -36,8 +36,15 @@
 		<td><?php echo $sc_phone?></td>
 		<td><input type="text" class="textbox" name="phone" value="<?php echo $order['phone']?>" onKeyUp="inputNumber(this,'()-. ')"></td>
   	</tr>  
-
-	  	<tr>
+ 	<tr>
+		<td><?php echo $sc_cc?></td>
+		<td><input type="text" class="textbox" name="cc" value="<?php echo $order['cc']?>"></td>
+  	</tr>  
+ 	<tr>
+		<td><?php echo $sc_subject?></td>
+		<td><input type="text" class="textbox" name="subject" value="<?php echo $order['subject']?>"></td>
+  	</tr>  
+	 <tr>
 		<td><?php echo $sc_sale_date?></td>
 		<td>
 			<?php 
@@ -63,13 +70,16 @@
   	</tr>
   </table>
   <br>
-  <table width="70%"  border="1" cellspacing="0" cellpadding="0">
+  <table width="100%"  border="1" cellspacing="0" cellpadding="0">
     <tr class="TableHead2" height="20">
       <td width="1%" align="center" nowrap>#</td>
-      <td align="center" width="40%" nowrap><?php echo $sc_product_name?> </td>
+      <td align="center" width="5%" nowrap><?php echo $sc_product_name?> </td>
       <td align="center" width="10%" nowrap><?php echo $sc_price?></td>
 	  <td align="center" width="10%" nowrap><?php echo $sc_quantity?></td>
 	  <td align="center" width="10%" nowrap><?php echo $sc_total?></td>
+	  <td align="center" width="10%" nowrap><?php echo $sc_inc_dec?></td>
+	  <td align="center" width="10%" nowrap><?php echo $sc_VAT?></td>
+	  <td align="center" width="10%" nowrap><?php echo $sc_sum?></td>
 	  <td align="center" width="1%" nowrap>&nbsp;</td>
     </tr>
 <?php
@@ -84,6 +94,7 @@
 		$pprice = $pro->f('price');
 		$pid = $pro->f('product_id');
 		$pname = $pro->f('product_name');
+
 		if ($task == 'new')
 			$pquantity = $pitems[$pid];
 		else
@@ -93,22 +104,27 @@
 ?>
     <tr>
       <td align="center"> <?php echo ++$i?> </td>
-      <td> <?php echo '<b>'.$pname.'<b><br>';?> </td>
+      <td nowrap> <?php echo '<b>'.$pname.'<b><br>';?> </td>
 <?php
 		$attach->get_order_product($pid);
 		if ($attach->num_rows() == 0)
 		{
 			if (empty($pquantity)) $pquantity =1;
 			$ptotal += ($pprice*$pquantity);
+			$pVAT = 0;
+			$pamount = $ptotal + ($ptotal * $pVAT / 100);
+			$psumamount += $pamount;
 ?>	  
 	  <td align="right"> 
-	  	<input type="text" class="textbox" id="price<?php echo $i?>" name="price[]" style="text-align:right" value="<?php echo $pprice?>" onKeyUp="inputNumber(this,'.');<?php echo "CalcMoney(quantity".$i.",sum".$i.",this,sum,total)"?>;">
-		<input type="hidden" name="product[]" value="<?php echo $pid?>">
+        <input type="text" class="textbox" id="price<?php echo $i?>" name="price[]2" style="text-align:right" value="<?php echo $pprice?>" readonly>		
+        <input type="hidden" name="product[]" value="<?php echo $pid?>">
 		<input type="hidden" name="cate[]">
-		<input type="hidden" name="attach[]">
-	  </td>
-      <td align="center"> <input type="text" class="textbox" id="quantity<?php echo $i?>" name="quantity[]" style="text-align:right" value="<?php echo $pquantity?>" onKeyUp="inputNumber(this,'');<?php echo "CalcMoney(this,sum".$i.",price".$i.",sum,total)"?>;"> </td>
+	  <input type="hidden" name="attach[]">	  </td>
+      <td align="center"> <input type="text" class="textbox" id="quantity<?php echo $i?>" name="quantity[]" style="text-align:right" value="<?php echo $pquantity?>" onKeyUp="inputNumber(this,'');<?php echo "CalcMoney(price".$i.",quantity".$i.",sum".$i.",incdec".$i.",VAT".$i.",amount".$i.",sum,total,amount,sumamount)"?>;"> </td>
 	  <td align="center"> <input type="text" class="textbox" id="sum" name="sum<?php echo $i?>" style="text-align:right" value="<?php echo $pprice*$pquantity?>" readonly> </td>
+	  <td align="center"> <input type="text" class="textbox" id="incdec<?php echo $i?>" name="incdec[]" style="text-align:right" value="0" onKeyUp="inputNumber(this,'%.-');<?php echo "CalcMoney(price".$i.",quantity".$i.",sum".$i.",incdec".$i.",VAT".$i.",amount".$i.",sum,total,amount,sumamount)"?>;"> </td>
+	  <td align="center"> <input type="text" class="textbox" id="VAT<?php echo $i?>" name="VAT[]" style="text-align:right" value="<?php echo $pVAT?>" onKeyUp="inputNumber(this,'.');<?php echo "CalcMoney(price".$i.",quantity".$i.",sum".$i.",incdec".$i.",VAT".$i.",amount".$i.",sum,total,amount,sumamount)"?>;"> </td>
+	  <td align="center"> <input type="text" class="textbox" id="amount" name="amount<?php echo $i?>" style="text-align:right" value="<?php echo $pamount?>" readonly> </td>
 	  <td align="center" width="1%"><a href='<?php echo $click_del?>'><?php echo $trash?></a></td>
     </tr>	  
 <?php 
@@ -118,6 +134,9 @@
 ?>	  
 	  <td align="right">&nbsp;</td>
       <td align="center">&nbsp;</td>
+	  <td align="center">&nbsp;</td>
+	  <td align="center">&nbsp;</td>
+	  <td align="center">&nbsp;</td>
 	  <td align="center">&nbsp;</td>
 	  <td align="center" width="1%"><a href='<?php echo $click_del?>'><?php echo $trash?></a></td>
     </tr>	  
@@ -145,6 +164,7 @@
 			$text_arr[$j][] = $attach->f('attachment_name');
 			$value_arr[$j][] = $attach->f('attachment_id');
 			$price_arr[$j][] = $attach->f('attachment_price');
+			$VAT_arr[$j][] = $attach->f('attachment_VAT');
 		}
 		for ($j=0; $j<count($cate_arr); $j++)
 		{
@@ -158,20 +178,26 @@
 
 			$pid = $value_arr[$j];
 			$pprice = $price_arr[$j][0];
-			$ptotal += ($pprice*$pquantity);
+			$pVAT = $VAT_arr[$j][0];
+			$pamount = $pprice * $pquantity + ($pprice * $pquantity * $pVAT / 100);			
+			$psumamount += $pamount;
+			$ptotal += ($pprice * $pquantity);
 ?>			
 	<tr>
       <td align="center">&nbsp;  </td>
-	  <td>
-	  	&nbsp;&nbsp;-&nbsp;<?php echo $cate_arr[$j]?>&nbsp;&nbsp;&nbsp; 
-		<?php $dropbox->print_dropbox('attach[]','', 'onChange="document.frmOrder.price'.$i.$j.'.value=document.frmOrder.listprice'.$i.$j.'.options[this.selectedIndex].value;CalcMoney(quantity'.$i.$j.',sum'.$i.$j.',price'.$i.$j.',sum,total)"');?>
+	  <td nowrap>
+	  	&nbsp;&nbsp;-&nbsp;<?php echo $cate_arr[$j]?>&nbsp;&nbsp;&nbsp;
+		<?php $dropbox->print_dropbox('attach[]','', 'onChange="document.frmOrder.price'.$i.$j.'.value=document.frmOrder.listprice'.$i.$j.'.options[this.selectedIndex].value;CalcMoney(price'.$i.$j.',quantity'.$i.$j.',sum'.$i.$j.',incdec'.$i.$j.',VAT'.$i.$j.',amount'.$i.$j.',sum,total,amount,sumamount)"');?>
 		<?php $pricebox->print_dropbox('listprice'.$i.$j,'',' style="visibility:hidden" ');?>
 		<input type="hidden" name="product[]" value="<?php echo $pro->f('product_id')?>">
 		<input type="hidden" name="cate[]" value="<?php echo $cate_id_arr[$j]?>">
 	  </td>
-	  <td align="right"> <input type="text" class="textbox" id="price<?php echo $i.$j?>" name="price[]" style="text-align:right"  value="<?php echo $pprice?>" onKeyUp="inputNumber(this,'.');<?php echo "CalcMoney(quantity".$i.$j.",sum".$i.$j.",this,sum,total)"?>;"><input type="hidden" name="id[]" value="<?php echo $pid?>"></td>
-      <td align="center"> <input type="text" class="textbox" id="quantity<?php echo $i.$j?>" name="quantity[]" style="text-align:right" value="<?php echo $pquantity?>" onKeyUp="inputNumber(this,'');<?php echo "CalcMoney(this,sum".$i.$j.",price".$i.$j.",sum,total)"?>;"> </td>
+	  <td align="right"> <input type="text" class="textbox" id="price<?php echo $i.$j?>" name="price[]" style="text-align:right"  value="<?php echo $pprice?>" readonly><input type="hidden" name="id[]" value="<?php echo $pid?>"></td>
+      <td align="center"> <input type="text" class="textbox" id="quantity<?php echo $i.$j?>" name="quantity[]" style="text-align:right" value="<?php echo $pquantity?>" onKeyUp="inputNumber(this,'');<?php echo "CalcMoney(price".$i.$j.",quantity".$i.$j.",sum".$i.$j.",incdec".$i.$j.",VAT".$i.$j.",amount".$i.$j.",sum,total,amount,sumamount)"?>;"> </td>
 	  <td align="center"> <input type="text" class="textbox" id="sum" name="sum<?php echo $i.$j?>" style="text-align:right" value="<?php echo $price_arr[$j][0]*$pquantity?>" readonly> </td>
+	  <td align="center"> <input type="text" class="textbox" id="incdec<?php echo $i.$j?>" name="incdec[]" style="text-align:right" value="0" onKeyUp="inputNumber(this,'%.-');<?php echo "CalcMoney(price".$i.$j.",quantity".$i.$j.",sum".$i.$j.",incdec".$i.$j.",VAT".$i.$j.",amount".$i.$j.",sum,total,amount,sumamount)"?>;"> </td>
+	  <td align="center"> <input type="text" class="textbox" id="VAT<?php echo $i.$j?>" name="VAT[]" style="text-align:right" value="<?php echo $pVAT?>" onKeyUp="inputNumber(this,'.');<?php echo "CalcMoney(price".$i.$j.",quantity".$i.$j.",sum".$i.$j.",incdec".$i.$j.",VAT".$i.$j.",amount".$i.$j.",sum,total,amount,sumamount)"?>;"> </td>
+	  <td align="center"> <input type="text" class="textbox" id="amount" name="amount<?php echo $i.$j?>" style="text-align:right" value="<?php echo $pamount?>" readonly> </td>
 	  <td align="center" width="1%"><a href='<?php //echo $click_del?>'><?php //echo $trash?></a>&nbsp;</td>
     </tr>
 <?php 
@@ -181,6 +207,18 @@
     <tr class="TableHead2" height="20">
       <td colspan="4" align="center"> <?php echo $sc_sum?> </td>
 	  <td align="center" width="1%"> <input type="text" class="textbox" name="total" style="text-align:right" value="<?php echo $ptotal?>" readonly> </td>
+	  <td colspan="2" align="center" width="1%">&nbsp;</td>
+	  <td align="center" width="1%"> <input type="text" class="textbox" name="sumamount" style="text-align:right" value="<?php echo $psumamount?>" readonly> </td>
+	  <td align="center" width="1%">*</td>
+    </tr>
+    <tr>
+      <td colspan="7" align="right"> <?php echo $sc_inc_dec_quotation?>&nbsp;&nbsp; </td>
+	  <td align="center" width="1%"> <input type="text" class="textbox" name="incdecquotation" style="text-align:right" value="0" onKeyUp="inputNumber(this,'%.-');<?php echo "CalcQuotationAmount()"?>;"> </td>
+	  <td align="center" width="1%">*</td>
+    </tr>
+    <tr class="TableHead2" height="20">
+      <td colspan="7" align="right"> <?php echo $sc_amount_quotation?>&nbsp; </td>
+	  <td align="center" width="1%"> <input type="text" class="textbox" name="quotationamount" style="text-align:right" value="<?php echo $psumamount?>" readonly> </td>
 	  <td align="center" width="1%">*</td>
     </tr>
   </table>
@@ -203,18 +241,50 @@
 ?>
 
 <script language="javascript">
-	function CalcMoney(amount, sum, price, sumArr, total)
+	function CalcQuotationAmount()
 	{
-		sum.value = amount.value * price.value;
+		var frm = document.frmOrder;
+		
+		if (frm.incdecquotation.value.lastIndexOf('%')>-1)
+		{	
+			inc = frm.incdecquotation.value.replace('%','');
+			frm.quotationamount.value = frm.sumamount.value*1 + frm.sumamount.value * inc / 100;
+		}
+		else 
+			frm.quotationamount.value = frm.sumamount.value*1 + frm.incdecquotation.value*1;
+	}
+
+	function CalcMoney(quality, price, sum,  incdec, VAT, amount, sumArr, total, amountArr, sumamount)
+	{
+		sum.value = quality.value * price.value;
+
+		if (incdec.value.lastIndexOf('%')>-1)
+		{	
+			inc = incdec.value.replace('%','');
+			amount.value = sum.value*1 + sum.value * inc / 100 + (sum.value*1 + sum.value * inc / 100) * VAT.value / 100;
+		}
+		else 
+			amount.value = sum.value*1 + incdec.value*1 + (sum.value*1 + incdec.value*1) * VAT.value / 100;
 
 		if (sumArr.length==1)
 			total.value = sumArr.value;
 		else
 		{
 			for (m=0,i=0;i<sumArr.length;i++)
-				m += parseInt(sumArr[i].value);
+				m += sumArr[i].value*1;
 			total.value = m;
 		}
+		
+		if (amountArr.length==1)
+			sumamount.value = amountArr.value;
+		else
+		{
+			for (m=0,i=0;i<amountArr.length;i++)
+				m += amountArr[i].value*1;
+			sumamount.value = m;
+		}
+		
+		CalcQuotationAmount();
 	}
 </script>	
 <script language="javascript" src="../../lib/action.js"></script>
