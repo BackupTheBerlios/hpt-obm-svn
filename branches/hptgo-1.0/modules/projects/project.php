@@ -540,7 +540,7 @@ switch($tabtable->get_active_tab_id())
           $catalog->add_value($db->f('id'), $db->f('name'));
 	  if (!isset($cat_id)) $cat_id = $db->f('id');
 	}
-        $db->query("SELECT * FROM task_templates WHERE cat_id=$cat_id ORDER BY id");
+        $db->query("SELECT * FROM task_templates WHERE cat_id='$cat_id' ORDER BY id");
         $task_templates = new dropbox();
         $task_templates->add_value(0, ' ');
         while ($db->next_record())
