@@ -18,7 +18,7 @@ $checked_accounts = 0;
 		{
 			$account = $email1->Record;
 	
-			if ($imap->open($account['host'], $account['type'],$account['port'],$account['username'],$GO_CRYPTO->decrypt($account['password'])))
+			if ($imap->open($account['host'], $account['type'],$account['port'],$account['username'],$GO_CRYPTO->decrypt($account['password']), 'INBOX', 0, $account['use_ssl'], $account['novalidate_cert']))
 			{
 				if ($account['type'] == 'imap')
 				{

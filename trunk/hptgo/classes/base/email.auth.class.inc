@@ -48,7 +48,8 @@ class GO_AUTH
       $username = $email_address;
     }
 
-    if ($imap->open($params['host'], $params['proto'], $params['port'], $username, $password))
+    if ($imap->open($params['host'], $params['proto'], $params['port'],
+				$username, $password, 'INBOX', 0, $params['ssl'], $params['novalidate_cert']))
     {
       $imap->close();
 
@@ -134,6 +135,8 @@ class GO_AUTH
 			  $params['proto'],
 			  $params['host'], 
 			  $params['port'], 
+			  $params['ssl'],
+			  $params['novalidate_cert'],
 			  $params['mbroot'], 
 			  $username, 
 			  $password, 
