@@ -46,9 +46,11 @@ echo '<input type="hidden" name="delete_contact_id" />';
 echo '<input type="hidden" name="new_sort_field" value="'.$contact_sort.'" />';
 echo '<input type="hidden" name="new_sort_direction" value="'.$contact_direction.'" />';
 
-echo '<a class="normal" href="'.$GO_MODULES->url.'contact.php?company_id='.$company_id.'&addressbook_id='.$addressbook_id.'&return_to='.rawurlencode($link_back.'&active_tab='.$tabtable->active_tab).'">'.$ab_add_new.'</a>';
-echo '&nbsp;|&nbsp;';
-echo '<a class="normal" href="'.$ab->select_contacts('', $GO_MODULES->url.'add_employees.php?company_id='.$company_id, 'true', 'false', 'false', 'true', 'false', 'id').'">'.$ab_add_existing.'</a>';
+if ($write_permission) {
+	echo '<a class="normal" href="'.$GO_MODULES->url.'contact.php?company_id='.$company_id.'&addressbook_id='.$addressbook_id.'&return_to='.rawurlencode($link_back.'&active_tab='.$tabtable->active_tab).'">'.$ab_add_new.'</a>';
+	echo '&nbsp;|&nbsp;';
+	echo '<a class="normal" href="'.$ab->select_contacts('', $GO_MODULES->url.'add_employees.php?company_id='.$company_id, 'true', 'false', 'false', 'true', 'false', 'id').'">'.$ab_add_existing.'</a>';
+}
 
 
 echo '<table border="0" cellspacing="0" cellpadding="2">';
@@ -94,7 +96,8 @@ if ($count > 0)
 		echo '<td>'.mail_to($ab->f('email'), $ab->f('email')).'</td>';
 		echo '<td>'.$ab->f('home_phone').'</a></td>';
 		echo '<td>'.$ab->f('work_phone').'</td>';
-		echo "<td><a href='javascript:confirm_action(\"javascript:delete_contact(".$ab->f('id').")\",\"".rawurlencode($strDeletePrefix."'".$name."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$name."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
+		if ($write_permission)
+			echo "<td><a href='javascript:confirm_action(\"javascript:delete_contact(".$ab->f('id').")\",\"".rawurlencode($strDeletePrefix."'".$name."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$name."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
 		echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 	}
 
