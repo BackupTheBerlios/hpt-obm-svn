@@ -139,7 +139,7 @@ $strAddContact = "Add to contacts";
 
 $strReadRights = "Read permissions";
 $strWriteRights = "Write permissions";
-$strPermissions = 'permissions';
+$strPermissions = 'Permissions';
 
 $days[0]="Su";
 $days[1]="Mo";
