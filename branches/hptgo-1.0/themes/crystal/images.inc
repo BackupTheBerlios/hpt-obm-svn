@@ -157,6 +157,7 @@ $images['up']			= 'buttons/up.gif';
 $images['upload']		= 'buttons/upload.png';
 $images['uplvl_big']		= 'buttons/uplvl_big.png';
 $images['users']		= 'buttons/users.png';
+$images['small_user_icon']	= 'buttons/small_user_icon.gif';
 $images['week']			= 'buttons/week.png';
 
 $images['arrow']		= 'menu/arrow.gif';

@@ -159,6 +159,7 @@ $images['up']			= 'buttons/up.gif';
 $images['upload']		= 'buttons/upload.png';
 $images['uplvl_big']		= 'buttons/uplvl_big.png';
 $images['users']		= 'buttons/users.png';
+$images['small_user_icon']	= 'buttons/small_user_icon.gif';
 $images['magnifier']		= 'buttons/viewmag.png';
 $images['magnifier_big'] 	= 'buttons/viewmag_big.png';
 $images['week']			= 'buttons/week.png';
