@@ -18,6 +18,7 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
+		<descr>Project fee. FIXME</descr>
 	</table>
 	<table name="pmHours">
 		<field name="id" size="11" type="I">
@@ -28,6 +29,7 @@
 		<field name="project_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<link table="pmProjects" field="id"/>
 		</field>
 		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
@@ -53,6 +55,7 @@
 		<field name="comments" size="11" type="X">
 			<NOTNULL/>
 		</field>
+		<descr>FIXME</descr>
 	</table>
 	<table name="pmMaterials">
 		<field name="id" size="11" type="I">
@@ -71,31 +74,37 @@
 		<field name="description" size="50" type="X">
 			<NOTNULL/>
 		</field>
+		<descr>FIXME</descr>
 	</table>
 	<table name="pmProjects">
 		<field name="id" size="11" type="I">
 			<NOTNULL/>
 			<KEY/>
 			<DEFAULT value="0"/>
+			<descr>Project ID</descr>
 		</field>
 		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
 			<KEY/>
 			<DEFAULT value="0"/>
+			<descr>User who created this project</descr>
 			<link table="users" field="id"/>
 		</field>
 		<field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Project name</descr>
 		</field>
 		<field name="description" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Project description</descr>
 		</field>
 		<field name="contact_id" size="11" type="I">
 			<NOTNULL/>
 			<KEY/>
 			<DEFAULT value="0"/>
+			<descr>Associated contact</descr>
 			<link table="ab_contacts" field="id"/>
 		</field>
 		<field name="res_user_id" size="11" type="I">
@@ -107,6 +116,7 @@
 		<field name="acl_read" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Project monitors</descr>
 			<link table="acl" field="acl_id"/>
 		</field>
 		<field name="acl_write" size="11" type="I">
@@ -121,10 +131,12 @@
 		<field name="ctime" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Creation time</descr>
 		</field>
 		<field name="mtime" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Last modified time</descr>
 		</field>
 		<field name="start_date" size="11" type="I">
 			<NOTNULL/>
@@ -145,6 +157,7 @@
 		<field name="fee_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<link table="pmFees" field="id"/>
 		</field>
 		<field name="budget" size="11" type="I">
 			<NOTNULL/>
@@ -162,6 +175,7 @@
 			<descr>Project category</descr>
 			<link table="pmCatalog" field="id"/>
 		</field>
+		<descr>Project information</descr>
 	</table>
 	<table name="pmTimers">
 		<field name="user_id" size="11" type="I">
@@ -179,12 +193,14 @@
 			<DEFAULT value="0"/>
 			<link table="pmProjects" field="id"/>
 		</field>
+		<descr>FIXME</descr>
 	</table>
 	<table name="pm_settings">
 		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<link table="users" field="id"/>
 		</field>
 		<field name="sort_field" size="20" type="C">
 			<NOTNULL/>
@@ -202,16 +218,20 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
+		<descr>Project user settings</descr>
 	</table>
 	<table name="pmCatalog">
 		<field name="id" size="11" type="I">
 			<NOTNULL/>
 			<PRIMARY/>
+			<descr>Project category ID</descr>
 		</field>
 		<field name="name" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Project category name</descr>
 		</field>
+		<descr>Project category</descr>
 	</table>
 	<table name="pmStatus">
 		<field name="cat_id" size="11" type="I">
@@ -230,6 +250,7 @@
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
+		<descr>FIXME</descr>
 	</table>
 	<table name="task_templates">
 		<field name="id" size="11" type="I">
@@ -244,28 +265,36 @@
 		</field>
 		<field name="name" size="128" type="C">
 		</field>
+		<descr>Task template.FIXME</descr>
 	</table>
 	<table name="task">
 		<field name="task_project_id" size="8" type="I">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>Project ID</descr>
 			<link table="pmProjects" field="id"/>
 		</field>
 		<field name="task_id" size="8" type="I">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>Task ID</descr>
 		</field>
 		<field name="task_name" size="255" type="C">
+			<descr>Task name</descr>
 		</field>
 		<field name="task_predecessors" size="255" type="C">
+			<descr>Task predecessors. Task IDs separated by comma</descr>
 		</field>
 		<field name="task_time" size="4" type="I">
 		</field>
 		<field name="task_person_id" size="4" type="I">
+			<descr>User takes reponsibility for this task</descr>
+			<link table="users" field="id"/>
 		</field>
 		<field name="task_status" size="4" type="I">
+			<descr>Task status</descr>
 		</field>
 		<field name="task_comment" size="4" type="B">
 		</field>
@@ -278,6 +307,8 @@
 		<field name="task_order" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Task order, for displaying</descr>
 		</field>
+		<descr>Task information</descr>
 	</table>
 </schema>

@@ -21,21 +21,27 @@
 			<NOTNULL/>
 			<KEY/>
 			<DEFAULT value="0"/>
+			<descr>Announcement will not be shown after this time</descr>
 		</field>
 		<field name="ctime" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Creation time</descr>
 		</field>
 		<field name="mtime" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Last modified time</descr>
 		</field>
 		<field name="title" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Announcement title</descr>
 		</field>
 		<field name="content" size="50" type="X">
 			<NOTNULL/>
+			<descr>Announcement content</descr>
 		</field>
+		<descr>Announcement information.</descr>
 	</table>
 </schema>

@@ -5,22 +5,28 @@
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>ACL ID</descr>
 			<link table="acl_items" field="id"/>
 		</field>
 		<field name="user_id" type="I" size="11">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>User who is able to access this ACL. Zero if not used</descr>
 			<link table="users" field="id"/>
 		</field>
 		<field name="group_id" type="I" size="11">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>Group who is able to access this ACL. Zero if not used</descr>
 			<link table="groups" field="id"/>
 		</field>
 		<descr>
-			ACL means Access Control List. It is a set of users related to an acl_id.
+			ACL means Access Control List. It is a set of users related to
+			an acl_id. Either user_id or group_id is valid in each
+			record. If user_id is valid, then group_id must be zero. If
+			group_id is valid then user_id must be zero.
 		</descr>
 	</table>
 	<table name="acl_items">
@@ -28,15 +34,18 @@
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>ACL ID</descr>
 		</field>
 		<field name="user_id" type="I" size="11">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>User who created this ACL</descr>
 			<link table="users" field="id"/>
 		</field>
 		<field name="description" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>ACL Description</descr>
 		</field>
 		<descr>Description of an ACL</descr>
 	</table>
@@ -45,30 +54,39 @@
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value=""/>
-			<descr>sequence name</descr>
+			<descr>Sequence name. Used to distinct sequences. This field should be
+			table name.</descr>
 		</field>
 		<field name="nextid" type="I" size="11">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>NextID value. This is the value to be used to new
+			allocated record</descr>
 		</field>
-		<descr>This table is sequence emulation.</descr>
+		<descr>This table is sequence emulation. Instead of using MySQL's
+		auto increment. The next id(s) of each tables ara maintained as a
+		row in this table. </descr>
 	</table>
 	<table name="filetypes">
 		<field name="extension" type="C" size="10">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value=""/>
+			<descr>File extension</descr>
 		</field>
 		<field name="mime" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>MIME type</descr>
 		</field>
 		<field name="friendly" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Friendly name of this extension</descr>
 		</field>
 		<field name="image" type="B">
 			<NOTNULL/>
+			<descr>Image content of icon associated with this extension</descr>
 		</field>
 		<descr>file types</descr>
 	</table>
@@ -77,6 +95,7 @@
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>Group ID</descr>
 		</field>
 		<field name="name" type="C" size="50">
 			<NOTNULL/>
@@ -86,20 +105,23 @@
 		<field name="user_id" type="I" size="11">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>User who created/owns this group</descr>
 			<link table="users" field="id"/>
 		</field>
 		<field name="leader_id" type="I" size="11">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>User who is leader of this group</descr>
 			<link table="groups" field="id"/>
 		</field>
-		<descr>User group</descr>
+		<descr>User group. This table stores information about user groups.</descr>
 	</table>
 	<table name="modules">
 		<field name="id" type="C" size="20">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value=""/>
+			<descr>Module ID. This is usually module name, not an integer.</descr>
 		</field>
 		<field name="version" type="C" size="5">
 			<NOTNULL/>
@@ -109,6 +131,7 @@
 		<field name="path" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Module path. Currently unused</descr>
 		</field>
 		<field name="acl_read" type="I" size="11">
 			<NOTNULL/>
@@ -134,9 +157,11 @@
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value=""/>
+			<descr>Configuration name</descr>
 		</field>
 		<field name="value" type="X">
 			<NOTNULL/>
+			<descr>Configuration value</descr>
 		</field>
 		<descr>System configuration</descr>
 	</table>
@@ -145,34 +170,42 @@
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>User ID</descr>
 		</field>
 		<field name="auth_source" type="I" size="4">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>FIXME</descr>
 		</field>
 		<field name="username" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Username used to login</descr>
 		</field>
 		<field name="password" type="C" size="64">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Password used to login</descr>
 		</field>
 		<field name="authcode" type="C" size="20">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>FIXME</descr>
 		</field>
 		<field name="first_name" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>User's first name</descr>
 		</field>
 		<field name="middle_name" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>User's middle name</descr>
 		</field>
 		<field name="last_name" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>User's last name</descr>
 		</field>
 		<field name="initials" type="C" size="10">
 			<NOTNULL/>
@@ -280,42 +313,52 @@
 		<field name="date_format" type="C" size="20">
 			<NOTNULL/>
 			<DEFAULT value="'d-m-Y"/>
+			<descr>Preferred date format</descr>
 		</field>
 		<field name="time_format" type="C" size="10">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Preferred time format</descr>
 		</field>
 		<field name="thousands_seperator" type="C" size="1">
 			<NOTNULL/>
 			<DEFAULT value="."/>
+			<descr>Thounsands separator.</descr>
 		</field>
 		<field name="decimal_seperator" type="C" size="1">
 			<NOTNULL/>
 			<DEFAULT value=","/>
+			<descr>Decimal separator</descr>
 		</field>
 		<field name="currency" type="C" size="3">
 			<NOTNULL/>
 			<DEFAULT value="$"/>
+			<descr>Currency</descr>
 		</field>
 		<field name="mail_client" type="I" size="4">
 			<NOTNULL/>
 			<DEFAULT value="1"/>
+			<descr>FIXME</descr>
 		</field>
 		<field name="logins" type="I" size="11">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>FIXME</descr>
 		</field>
 		<field name="lastlogin" type="I" size="11">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>FIXME</descr>
 		</field>
 		<field name="registration_time" type="I" size="11">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>FIXME</descr>
 		</field>
 		<field name="max_rows_list" type="I" size="4">
 			<NOTNULL/>
 			<DEFAULT value="15"/>
+			<descr>Number of lines displayed in listview</descr>
 		</field>
 		<field name="timezone" type="I" size="4">
 			<NOTNULL/>
@@ -329,14 +372,19 @@
 		<field name="start_module" type="C" size="50">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>The module used to display after user logged in</descr>
+			<link table="modules" field="id"/>
 		</field>
 		<field name="language" type="C" size="20">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Displaying language</descr>
 		</field>
 		<field name="theme" type="C" size="20">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Theme name. Appropriate theme should be available in
+			themes directory</descr>
 		</field>
 		<field name="first_weekday" type="I" size="4">
 			<NOTNULL/>
@@ -345,7 +393,8 @@
 		<field name="modules" type="C" size="255">
 			<NOTNULL/>
 			<DEFAULT value=""/>
-			<descr>List of modules displayed in menu.</descr>
+			<descr>List of modules displayed in menu. Whether if module name
+			should be displayed. Refer OBM source code for the field structure.</descr>
 		</field>
 		<descr>User information</descr>
 	</table>
@@ -354,12 +403,14 @@
 			<NOTNULL/>
 			<KEY/>
 			<DEFAULT value="0"/>
+			<descr>Group ID</descr>
 			<link field="id" table="groups"/>
 		</field>
 		<field name="user_id" type="I" size="11">
 			<NOTNULL/>
 			<KEY/>
 			<DEFAULT value="0"/>
+			<descr>User who is a member of this group</descr>
 			<link field="id" table="users"/>
 		</field>
 		<descr>List of users in each group</descr>

@@ -33,6 +33,7 @@
 		<h2 id="{generate-id(.)}">Module <xsl:value-of select="@name"/></h2>
 		<center>
 			<xsl:for-each select="document(@href)/schema/table">
+				<xsl:sort select="@name" order="ascending"/>
 				<xsl:if test="position() != 1"> - </xsl:if>
 				<a href="#table_{@name}"><xsl:value-of select="@name"/></a>
 			</xsl:for-each>

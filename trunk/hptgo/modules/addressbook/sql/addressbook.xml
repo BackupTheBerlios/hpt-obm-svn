@@ -5,7 +5,7 @@
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
-			<descr>ID</descr>
+			<descr>Addressbook ID</descr>
 		</field>
 		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
@@ -31,13 +31,14 @@
 			<descr>Users be able access and manage this addressbook</descr>
 			<link field="acl_id" table="acl"/>
 		</field>
+		<descr>Addressbook information.</descr>
 	</table>
 	<table name="ab_companies">
 		<field name="id" size="11" type="I">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
-			<descr>ID</descr>
+			<descr>Company ID</descr>
 		</field>
 		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
@@ -49,7 +50,7 @@
 			<NOTNULL/>
 			<KEY/>
 			<DEFAULT value="0"/>
-			<descr>ID</descr>
+			<descr>Addressbook ID to which this company belongs</descr>
 			<link table="ab_addressbooks" field="id"/>
 		</field>
 		<field name="name" size="100" type="C">
@@ -143,13 +144,14 @@
 		<field name="relation_date" size="100" type="D">
 			<descr>The time when relation with this company is made</descr>
 		</field>
+		<descr>Company information</descr>
 	</table>
 	<table name="ab_contacts">
 		<field name="id" size="11" type="I">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
-			<descr>ID</descr>
+			<descr>Contact ID</descr>
 		</field>
 		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
@@ -173,18 +175,23 @@
 		<field name="group_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Contact group ID. Zero means group "Other" or no group</descr>
+			<link table="ab_groups" field="id"/>
 		</field>
 		<field name="first_name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>First name</descr>
 		</field>
 		<field name="middle_name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Middle name</descr>
 		</field>
 		<field name="last_name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Last name</descr>
 		</field>
 		<field name="initials" size="30" type="C">
 			<NOTNULL/>
@@ -197,6 +204,7 @@
 		<field name="sex" size="10" type="C">
 			<NOTNULL/>
 			<DEFAULT value="M"/>
+			<descr>Sex. Must be 'M' or 'F'</descr>
 		</field>
 		<field name="birthday" size="10" type="D">
 			<NOTNULL/>
@@ -205,6 +213,7 @@
 		<field name="email" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Email address</descr>
 		</field>
 		<field name="company_id" size="11" type="I">
 			<NOTNULL/>
@@ -282,6 +291,7 @@
 			<descr>Users be able to read and edit this contact</descr>
 			<link table="users" field="id"/>
 		</field>
+		<descr>Contact information</descr>
 	</table>
 	<table name="ab_custom_company_fields">
 		<field name="id" size="11" type="I">
@@ -289,6 +299,7 @@
 			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
+		<descr>FIXME</descr>
 	</table>
 	<table name="ab_custom_company_fields_cats">
 		<field name="id" size="11" type="I">
@@ -303,7 +314,9 @@
 		<field name="acl_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<link table="acl" field="acl_id"/>
 		</field>
+		<descr>FIXME</descr>
 	</table>
 	<table name="ab_custom_company_fields_sort">
 		<field name="catagory_id" size="11" type="I">
@@ -331,6 +344,7 @@
 			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
+		<descr>FIXME</descr>
 	</table>
 	<table name="ab_custom_contact_fields_cats">
 		<field name="id" size="11" type="I">
@@ -346,6 +360,7 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
+		<descr>FIXME</descr>
 	</table>
 	<table name="ab_custom_contact_fields_sort">
 		<field name="catagory_id" size="11" type="I">
@@ -367,13 +382,14 @@
 			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
+		<descr>FIXME</descr>
 	</table>
 	<table name="ab_groups">
 		<field name="id" size="11" type="I">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
-			<descr>Group ID</descr>
+			<descr>Contact group ID</descr>
 		</field>
 		<field name="addressbook_id" size="11" type="I">
 			<NOTNULL/>
@@ -387,6 +403,7 @@
 			<DEFAULT value=""/>
 			<descr>Group name</descr>
 		</field>
+		<descr>Contact groups</descr>
 	</table>
 	<table name="ab_settings">
 		<field name="user_id" size="11" type="I">
@@ -438,7 +455,9 @@
 		<field name="search_addressbook_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<link table="ab_addressbooks" field="id"/>
 		</field>
+		<descr>Storing sort settings</descr>
 	</table>
 	<table name="ab_subscribed">
 		<field name="user_id" size="11" type="I">
@@ -461,6 +480,7 @@
 			<DEFAULT value="0"/>
 			<descr>Whether if this addressbook is the default addressbook</descr>
 		</field>
+		<descr>Information about what addressbooks is subscribed by what user</descr>
 	</table>
 	<table name="tp_mailing_companies">
 		<field name="group_id" size="11" type="I">
@@ -472,6 +492,7 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
+		<descr>FIXME</descr>
 	</table>
 	<table name="tp_mailing_contacts">
 		<field name="group_id" size="11" type="I">
@@ -483,6 +504,7 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
+		<descr>FIXME</descr>
 	</table>
 	<table name="tp_mailing_groups">
 		<field name="id" size="11" type="I">
@@ -507,6 +529,7 @@
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
+		<descr>FIXME</descr>
 	</table>
 	<table name="tp_subscribed">
 		<field name="user_id" size="11" type="I">
@@ -519,6 +542,7 @@
 			<KEY/>
 			<DEFAULT value="0"/>
 		</field>
+		<descr>FIXME</descr>
 	</table>
 	<table name="tp_templates">
 		<field name="id" size="11" type="I">
@@ -550,6 +574,7 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
+		<descr>FIXME</descr>
 	</table>
 	<table name="ab_cate_companies">
 		<field name="company_id" size="11" type="I">
@@ -560,11 +585,12 @@
 			<PRIMARY/>
 			<link table="ab_categories" field="id"/>
 		</field>
+		<descr>Company categorization. What company is in what category</descr>
 	</table>
 	<table name="ab_categories">
 		<field name="category_id" size="11" type="I">
 			<PRIMARY/>
-			<descr>Category ID</descr>
+			<descr>Company category ID</descr>
 		</field>
 		<field name="category" size="50" type="C">
 			<NOTNULL/>
@@ -575,6 +601,7 @@
 			<descr>Category parent ID</descr>
 			<link table="ab_categories" field="id"/>
 		</field>
+		<descr>Company category</descr>
 	</table>
 	<table name="ab_new_companies">
 		<field name="addressbook_id" size="11" type="I">
@@ -588,6 +615,7 @@
 			<DEFAULT value="0"/>
 			<link table="ab_companies" field="id"/>
 		</field>
+		<descr>Newly modified/added company list</descr>
 	</table>
 	<table name="ab_config">
 		<field name="page" size="30" type="C">
@@ -603,5 +631,6 @@
 		</field>
 		<field name="order_all" size="11" type="X">
 		</field>
+		<descr>FIXME</descr>
 	</table>
 </schema>

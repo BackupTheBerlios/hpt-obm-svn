@@ -46,6 +46,7 @@
 			<descr>Users be able to edit this bookmark</descr>
 			<link table="acl" field="acl_id"/>
 		</field>
+		<descr>Bookmark information</descr>
 	</table>
 	<table name="bm_catagories">
 		<field name="id" size="11" type="I">
@@ -77,5 +78,6 @@
 			<descr>Users be able to read and edit this bookmark category</descr>
 			<link table="acl" field="acl_id"/>
 		</field>
+		<descr>Bookmark category</descr>
 	</table>
 </schema>

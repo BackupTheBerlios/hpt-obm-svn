@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
 <schema version="0.2">
   <table name="no_catagories">
     <field name="id" size="11" type="I">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>Category ID</descr>
 		</field>
     <field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 			<descr>Category name</descr>
 		</field>
+		<descr>Note category</descr>
   </table>
   <table name="no_notes">
     <field name="id" size="11" type="I">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>Note ID</descr>
 		</field>
     <field name="user_id" size="11" type="I">
 			<NOTNULL/>
@@ -31,6 +32,7 @@
 			<NOTNULL/>
 			<KEY/>
 			<DEFAULT value="0"/>
+			<descr>If this not is associated to a contact, then here is the contact id</descr>
 			<link table="ab_contacts" field="id"/>
 		</field>
     <field name="project_id" size="11" type="I">
@@ -49,6 +51,7 @@
     <field name="catagory_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Note category of this note. Zero means no category</descr>
 			<link table="no_catagories" field="id"/>
 		</field>
     <field name="res_user_id" size="11" type="I">
@@ -64,14 +67,17 @@
     <field name="ctime" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Creationg time</descr>
 		</field>
     <field name="mtime" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Last modified time</descr>
 		</field>
     <field name="name" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Note name</descr>
 		</field>
     <field name="content" size="50" type="X">
 			<NOTNULL/>
@@ -89,12 +95,14 @@
 			<descr>Users be able to read and edit this note</descr>
 			<link table="acl" field="acl_id"/>
 		</field>
+		<descr>Note information</descr>
   </table>
   <table name="no_settings">
     <field name="user_id" size="11" type="I">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<link table="users" field="id"/>
 		</field>
     <field name="sort_field" size="20" type="C">
 			<NOTNULL/>
@@ -108,5 +116,6 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
+		<descr>Note users settings</descr>
   </table>
 </schema>

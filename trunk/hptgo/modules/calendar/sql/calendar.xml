@@ -40,6 +40,7 @@
 			<DEFAULT value="0"/>
 			<descr>Start hour in calendar time range. All events after this hour will not be displayed.</descr>
 		</field>
+		<descr>Calendar</descr>
 	</table>
 	<table name="cal_events">
 		<field name="id" size="11" type="I">
@@ -168,12 +169,14 @@
 		<field name="ctime" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Creation time</descr>
 		</field>
 		<field name="mtime" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 			<descr>Last modified time</descr>
 		</field>
+		<descr>Calendar event</descr>
 	</table>
 	<table name="cal_events_calendars">
 		<field name="calendar_id" size="11" type="I">
@@ -188,12 +191,14 @@
 			<DEFAULT value="0"/>
 			<link table="cal_events" field="id"/>
 		</field>
+		<descr>Calendar/Calendar event bindings</descr>
 	</table>
 	<table name="cal_holidays">
 		<field name="id" size="11" type="I">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>Holiday ID</descr>
 		</field>
 		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
@@ -212,11 +217,13 @@
 		<field name="name" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Holiday name</descr>
 		</field>
 		<field name="region" size="4" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
+		<descr>Calendar holidays</descr>
 	</table>
 	<table name="cal_participants">
 		<field name="id" size="11" type="I">
@@ -252,6 +259,7 @@
 			<DEFAULT value="0"/>
 			<descr>Possible values are 0..2</descr>
 		</field>
+		<descr>This table keep track of people who participate an event</descr>
 	</table>
 	<table name="cal_reminders">
 		<field name="user_id" size="11" type="I">
@@ -273,6 +281,7 @@
 			<PRIMARY/>
 			<DEFAULT value="0"/>
 		</field>
+		<descr>Calendar remind time</descr>
 	</table>
 	<table name="cal_settings">
 		<field name="user_id" size="11" type="I">
@@ -307,6 +316,7 @@
 			<DEFAULT value="0"/>
 			<descr>Whether show todos</descr>
 		</field>
+		<descr>Calendar user settings</descr>
 	</table>
 	<table name="cal_todos">
 		<field name="id" size="11" type="I">
@@ -330,6 +340,7 @@
 		<field name="ctime" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Creation time</descr>
 		</field>
 		<field name="mtime" size="11" type="I">
 			<NOTNULL/>
@@ -389,6 +400,7 @@
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
+		<descr>Todo</descr>
 	</table>
 	<table name="cal_views">
 		<field name="id" size="11" type="I">
@@ -437,6 +449,7 @@
 			<descr>Users be able to read and edit this view</descr>
 			<link table="acl" field="acl_id"/>
 		</field>
+		<descr>Caledar view (Calendar group) information</descr>
 	</table>
 	<table name="cal_views_calendars">
 		<field name="view_id" size="11" type="I">
@@ -451,6 +464,7 @@
 			<descr>Associated calendar</descr>
 			<link table="cal_calendars" field="id"/>
 		</field>
+		<descr>Calendar view/Calendar bindings</descr>
 	</table>
 	<table name="cal_config">
 		<field name="user_id" size="11" type="I">
@@ -463,6 +477,7 @@
 			<descr>Associated calendar</descr>
 			<link table="cal_calendars" field="id"/>
 		</field>
+		<descr>Calendar user configuration</descr>
 	</table>
 	<table name="cal_view_subscriptions">
 		<field name="user_id" size="11" type="I">
@@ -475,5 +490,6 @@
 			<descr>Associated view</descr>
 			<link table="cal_calendars" field="id"/>
 		</field>
+		<descr>Calendar view subscriptions</descr>
 	</table>
 </schema>

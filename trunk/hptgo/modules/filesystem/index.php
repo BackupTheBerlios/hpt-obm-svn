@@ -38,6 +38,7 @@ if (!defined('GO_LOADED'))
 {
   require_once("../../Group-Office.php");
 }
+
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('filesystem');
 require($GO_LANGUAGE->get_language_file('filesystem'));

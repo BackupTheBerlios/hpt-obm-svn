@@ -5,89 +5,111 @@
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>Account ID</descr>
 		</field>
 		<field name="user_id" size="11" type="I">
 			<NOTNULL/>
 			<KEY/>
 			<DEFAULT value="0"/>
+			<link table="users" field="id"/>
 		</field>
 		<field name="type" size="4" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Account type. 'imap' or 'pop3' currently</descr>
 		</field>
 		<field name="host" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Mail server host name</descr>
 		</field>
 		<field name="port" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Mail server post</descr>
 		</field>
 		<field name="username" size="50" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Username used to log in to mail server</descr>
 		</field>
 		<field name="password" size="64" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Password used to log in to mail server</descr>
 		</field>
 		<field name="name" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Account name</descr>
 		</field>
 		<field name="email" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Email address</descr>
 		</field>
 		<field name="signature" size="100" type="X">
 			<NOTNULL/>
+			<descr>Email signature</descr>
 		</field>
 		<field name="standard" size="4" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>FIXME</descr>
 		</field>
 		<field name="mbroot" size="30" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Mailbox root</descr>
 		</field>
 		<field name="sent" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Sent mailbox name</descr>
 		</field>
 		<field name="spam" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Spam mailbox name</descr>
 		</field>
 		<field name="trash" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Trash mailbox name</descr>
 		</field>
 		<field name="auto_check" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Auto-check email for this account</descr>
 		</field>
 		<field name="use_ssl" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Use SSL (pops or imaps)</descr>
 		</field>
 		<field name="novalidate_cert" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Don't validate certification</descr>
 		</field>
 		<field name="draft" size="100" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Draft mailbox name</descr>
 		</field>
+		<descr>Email account information.</descr>
 	</table>
 	<table name="emFilters">
 		<field name="id" size="11" type="I">
 			<NOTNULL/>
 			<PRIMARY/>
 			<DEFAULT value="0"/>
+			<descr>Filter ID</descr>
 		</field>
 		<field name="account_id" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Email account</descr>
 			<link table="emAccounts" field="id"/>
 		</field>
 		<field name="field" size="20" type="C">
@@ -106,6 +128,7 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
+		<descr>Email filters</descr>
 	</table>
 	<table name="emFolders">
 		<field name="id" size="11" type="I">
@@ -117,6 +140,7 @@
 			<NOTNULL/>
 			<KEY/>
 			<DEFAULT value="0"/>
+			<descr>Account ID</descr>
 			<link table="emAccounts" field="id"/>
 		</field>
 		<field name="name" size="100" type="C">
@@ -127,21 +151,25 @@
 		<field name="subscribed" size="1" type="L">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
+			<descr>Is this a subscribed folder?</descr>
 		</field>
 		<field name="parent_id" size="11" type="I">
 			<NOTNULL/>
 			<KEY/>
 			<DEFAULT value="0"/>
+			<descr>Parent folder</descr>
 			<link table="emFolders" field="id"/>
 		</field>
 		<field name="delimiter" size="1" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Folder delimiter</descr>
 		</field>
 		<field name="attributes" size="11" type="I">
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 		</field>
+		<descr>Email folders</descr>
 	</table>
 	<table name="em_settings">
 		<field name="user_id" size="11" type="I">
@@ -162,5 +190,6 @@
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
+		<descr>Email user settings</descr>
 	</table>
 </schema>

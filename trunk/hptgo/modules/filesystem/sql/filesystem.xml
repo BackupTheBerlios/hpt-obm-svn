@@ -26,6 +26,7 @@
 			<descr>Users be able to read and operate on this share</descr>
 			<link table="acl" field="acl_id"/>
 		</field>
+		<descr>This table keeps track of sharable folders</descr>
 	</table>
 	<table name="fs_settings">
 		<field name="user_id" size="11" type="I">
@@ -42,11 +43,14 @@
 			<NOTNULL/>
 			<DEFAULT value=""/>
 		</field>
+		<descr>Filesystem user settings</descr>
 	</table>
 	<table name="fsSystemFolders">
 		<field name="path" size="200" type="C">
 			<NOTNULL/>
 			<DEFAULT value=""/>
+			<descr>Path of system folder</descr>
 		</field>
+		<descr>System folders</descr>
 	</table>
 </schema>

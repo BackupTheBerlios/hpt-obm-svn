@@ -44,7 +44,16 @@
 				<xsl:if test="KEY">K</xsl:if>
 			</td>
 			<td nowrap="1"><!-- Name -->
-				<xsl:value-of select="@name"/>
+				<xsl:choose>
+					<xsl:when test="PRIMARY">
+						<b>
+							<xsl:value-of select="@name"/>
+						</b>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="@name"/>
+					</xsl:otherwise>
+				</xsl:choose>
 			</td>
 			<td nowrap="1"><!-- Type -->
 				<xsl:choose>
