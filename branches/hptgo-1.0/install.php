@@ -171,13 +171,13 @@ if (!$config_exists)
   $config_data = str_replace('%title%', 'Group-Office', $config_data);
   $config_data = str_replace('%slash%', '/', $config_data);
 
-  $host= substr(str_replace($_SERVER['DOCUMENT_ROOT'],"",$root_path),0,-1);
+  $host= str_replace('//','/',substr(str_replace(str_replace('\\','/',$_SERVER['DOCUMENT_ROOT']),"",$root_path),0,-1));
   $full_url = 'http://'.$_SERVER['HTTP_HOST'].$host;
 
   $config_data = str_replace('%host%', $host, $config_data);
   $config_data = str_replace('%full_url%', $full_url, $config_data);
   $config_data = str_replace('%root_path%', addslashes($root_path), $config_data);
-  $config_data = str_replace('%language%', 'nl', $config_data);
+  $config_data = str_replace('%language%', 'vn', $config_data);
   $config_data = str_replace('%first_weekday%', '1', $config_data);
   $config_data = str_replace('%tmpdir%', (getenv('TEMP') ? getenv('TEMP') : '/tmp/'), $config_data);
   $config_data = str_replace('%theme%', 'crystal', $config_data);
