@@ -137,6 +137,12 @@ class filesystem extends db
     return $db->query("SELECT * FROM fsSystemFolders WHERE path='".$folder."'") && $db->num_rows();
   }
 
+  function update_system_folder($old_folder,$new_folder)
+  {
+    $db = new db();
+    return $db->query("UPDATE fsSystemFolders SET path='$new_folder' WHERE path='".$old_folder."'");
+  }
+
   function get_shares($user_id)
   {
     //ORDER BY PATH important so higher order shares come first
@@ -396,6 +402,10 @@ class filesystem extends db
 	    {
 	      $this->update_share($source_path, $destination_path);
 	    }
+	    if ($this->is_system_folder($source_path))
+	    {
+	      $this->update_system_folder($source_path,$destination_path);
+	    }
 	  }
 	}
 	$files = $this->get_files($source_path, true);
@@ -418,6 +428,10 @@ class filesystem extends db
 	    if ($this->get_share($child['path']))
 	    {
 	      $this->update_share($child['path'], $destination_path.'/'.$child['name']);
+	    }
+	    if ($this->is_system_folder($source_path))
+	    {
+	      $this->update_system_folder($source_path,$destination_path);
 	    }
 	  }
 	}
@@ -541,6 +555,12 @@ class filesystem extends db
 	if (!$this->disable_go_permissions &&  $this->get_share($path))
 	{
 	  $this->delete_share($path);
+	}
+	if ($this->is_system_folder($source_path))
+	{
+	  $db = new db();
+	  $db->query("DELETE FROM fsSystemFolders WHERE path='$source_path'");
+	  unset($db);
 	}
 
 	global $GO_CONFIG;
