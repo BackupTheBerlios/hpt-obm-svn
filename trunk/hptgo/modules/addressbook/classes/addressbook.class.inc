@@ -786,7 +786,7 @@ class addressbook extends db
 	"LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
 	"WHERE ((users_groups.user_id='$user_id' AND acl.user_id=0) OR (".
 	"acl.group_id=0 AND acl.user_id='$user_id')) ".
-	"AND addressbook_id='$addressbook_id' ORDER BY $sort $direction";
+	"AND addressbook_id='$addressbook_id'".($sort != 'company_id' ? " ORDER BY $sort $direction" : "");
 
     if ($offset != 0)
     {
