@@ -20,8 +20,6 @@ switch ($task) {
 	$db->query("DELETE FROM ab_config WHERE page = '$page' AND user_id = '$user'");  
   break;
   case 'ok_status':
-		require('../../lib/tkdlib.php');
-
 		$com = $_REQUEST['com'];
 		$order_all = $_REQUEST['order_all'];
 		
@@ -33,7 +31,8 @@ switch ($task) {
 		$db->query("DELETE FROM ab_config WHERE page = '$page' AND user_id = '$user'");
 		if (!empty($order_all))
 			$db->query("INSERT INTO ab_config VALUES('$page', '$user', '$com', '$order_all')");
-		
+	case 'return_to':		
+		require('../../lib/tkdlib.php');
 		switch ($page)
 		{
 			case $constContactsPage:
@@ -46,7 +45,6 @@ switch ($task) {
 				goURL("index.php?post_action=members&addressbooks=".$user);
 			break;
 		}
-    break;
 }
 
 $db->query("SELECT order_fields, order_all FROM ab_config WHERE page = '$page' AND user_id = '$user'");
@@ -143,6 +141,7 @@ if ($count > 0)
 {
 	for ($i = 0; $i < $count; $i++)
 	{
+//echo "<script language=javascript>alert('".$res[$i]['name']."--".$strCom[$res[$i]['name']]."');<script>";	
 		if ( isset($strCom[$res[$i]['name']]) )// && !$haveCom[$res[$i]['name']] )
 		{
 			if ($value > 1)		
@@ -182,7 +181,8 @@ echo '<br />';
 echo '<br><br>&nbsp;&nbsp;';
 $button = new button($cmdOk, 'javascript:ok_status()');
 echo '&nbsp;&nbsp;';
-$button = new button($cmdClose, "javascript:document.location='".$return_to."'");
+//$button = new button($cmdClose, "javascript:document.location='".$return_to."'");
+$button = new button($cmdClose, "javascript:return_to()");
 echo '&nbsp;&nbsp;';
 $button = new button($cmdDefault, 'javascript:default_status()');
 ?>
@@ -198,5 +198,23 @@ function ok_status()
 {
     document.forms[0].task.value = 'ok_status';
     document.forms[0].submit();
+}
+
+function return_to()
+{
+	document.forms[0].task.value = 'return_to';
+	document.forms[0].submit();
+/*    switch (page)
+	{
+		case 1:
+			document.location = "index.php?post_action=companies&addressbooks=" + user;
+		break;
+		case 2:
+			document.location = "index.php?post_action=members&addressbooks=" + user;
+		break;		
+		case default:
+			document.location = "index.php?post_action=browse&addressbooks=" + user;
+	}
+*/
 }
 </script>

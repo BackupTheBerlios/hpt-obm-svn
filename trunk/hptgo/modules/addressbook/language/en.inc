@@ -257,8 +257,15 @@ $strCom['cellular'] = $strCellular;
 $strCom['home_phone'] = $strPhone;
 $strCom['department'] = $strDepartment;
 $strCom['function'] = $strFunction;
+
 $strCom['work_phone'] = $strWorkphone;
 $strCom['work_fax'] = $strWorkFax;
+$strCom['work_address'] = $strWorkAddress;
+$strCom['work_zip'] = $strWorkZip;
+$strCom['work_country'] = $strWorkCountry;
+$strCom['work_state'] = $strWorkState;
+$strCom['work_city'] = $strWorkCity;
+
 $strCom['company_id'] = $strCompany;
 $strCom['company'] = $strCompany;
 ?>
