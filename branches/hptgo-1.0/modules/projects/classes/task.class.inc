@@ -238,7 +238,7 @@ class project_task extends db {
   }
 
   function get_pid_tips() {
-    global $pm_status_begin, $tasks;
+    global $pm_status_begin, $tasks, $link_back, $return_to;
 
     if ($this->pids == '0') {
       $pids = '&nbsp;';
@@ -268,7 +268,9 @@ class project_task extends db {
                         '?task=show_task_status'.
                         '&project_id='.$this->project_id.
                         '&task_id='.$tasks[$p]->id.
-                        '&task_status="'.$tasks[$p]->status.
+                        '&task_status='.$tasks[$p]->status.
+			'&return_to='.rawurlencode($return_to).
+			'&return_to2='.rawurlencode($link_back).'"'.
                         ' class="normal">'.$to.'</a>';
         }
       }
@@ -284,7 +286,7 @@ class project_task extends db {
 
   function print_info($member_ids, $member_names, $member_list) {
     global $GO_THEME, $pm_task_status_values, $pm_status_begin,
-           $responsible_user_id, $is_new_project, $tasks;
+           $responsible_user_id, $is_new_project, $tasks, $link_back, $return_to;
 
     if ($this->level == -1)
       echo '<tr>';
@@ -312,7 +314,7 @@ class project_task extends db {
         echo "<td>".$pm_task_status_values[$this->status]."</td>";
     }
     echo '<td align="center">'.($this->approved ? '<img border="0" src="'.$GO_THEME->images['checked'].'"/>' : '&nbsp;').'</td>';
-    $url = $this->doc_url;
+    $url = $this->doc_url.'&return_to='.rawurlencode($return_to).'&return_to2='.rawurlencode($link_back);
 
     if ($this->level == -1) {
       if ($this->is_owner || $this->is_manager || $this->is_monitor)
@@ -334,12 +336,15 @@ class project_task extends db {
   }
   
   function print_name() {
+    global $link_back,$return_to;
     if (($this->is_manager || $this->is_monitor || $this->is_owner) &&
         $this->project_status != STATUS_DROP) {
       $url = $_SERVER['PHP_SELF'] . '?task=show_task_status'.
              '&project_id='.$this->project_id.
              '&task_id='.$this->id.
-             '&task_status='.$this->status;
+             '&task_status='.$this->status.
+             '&return_to='.rawurlencode($return_to).
+             '&return_to2='.rawurlencode($link_back);
       echo '<td><b><a href="'.$url.'" class="normal">'.$this->name.'</a></b></td>';
     }
     else echo '<td>'.$this->name.'</td>';
@@ -358,7 +363,7 @@ class project_task extends db {
   }
 
   function print_status($member_list) {
-    global $GO_SECURITY, $GO_THEME, $monitors,
+    global $GO_SECURITY, $GO_THEME, $monitors, $link_back, $return_to,
            $pm_task_status_values, $pm_task_comments, $pm_task_new_comments;
 
     echo '<tr>';
@@ -438,10 +443,10 @@ class project_task extends db {
     else
       echo '<td align="center">'.($this->approved ? '<img border="0" src="'.$GO_THEME->images['checked'].'"/>' : '&nbsp;').'</td>';
     if ($this->level >= 0)
-      echo '<td align="center"><a href="'.$this->doc_url.'">'.
+      echo '<td align="center"><a href="'.$this->doc_url.'&return_to='.rawurlencode($return_to).'&return_to2='.rawurlencode($link_back).'">'.
            '<img border="0" src="'.$GO_THEME->images['doc_red'].'"/></a></td>';
     else
-      echo '<td align="center"><a href="'.$this->doc_url.'">'.
+      echo '<td align="center"><a href="'.$this->doc_url.'&return_to='.rawurlencode($return_to).'&return_to2='.rawurlencode($link_back).'">'.
            '<img border="0" src="'.$GO_THEME->images['doc'].'"/></a></td>';
     echo '</tr>';
     $this->show_datetimes();
