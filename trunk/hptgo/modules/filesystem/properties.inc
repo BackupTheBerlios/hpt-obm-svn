@@ -51,13 +51,13 @@ switch($tabtable->get_active_tab_id())
 {
   case 'read_permissions':
     print_acl($share['acl_read']);
-    echo '<br />';
+    echo '<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;';
     $button = new button($cmdClose, 'javascript:document.location=\''.$_SERVER['PHP_SELF'].'?path='.$return_to_path.'\';');
     break;
 
   case 'write_permissions':
     print_acl($share['acl_write']);
-    echo '<br />';
+    echo '<br /><br />&nbsp;&nbsp;&nbsp;&nbsp;';
     $button = new button($cmdClose, 'javascript:document.location=\''.$_SERVER['PHP_SELF'].'?path='.$return_to_path.'\';');
     break;
 

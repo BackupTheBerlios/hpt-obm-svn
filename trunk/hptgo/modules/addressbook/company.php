@@ -334,6 +334,7 @@ switch($active_tab_id)
 	case 'read_permissions':
 		print_acl($company['acl_read']);
 		echo '<br />';
+    		echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;';
 		if (isset($return_to))
 		{
 			$button = new button($cmdClose, "javascript:document.location='".$return_to."';");
@@ -343,6 +344,7 @@ switch($active_tab_id)
 	case 'write_permissions':
 		print_acl($company['acl_write']);
 		echo '<br />';
+    		echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;';
 		if (isset($return_to))
 		{
 			$button = new button($cmdClose, "javascript:document.location='".$return_to."';");
