@@ -848,7 +848,7 @@ function notify_relevant_members($project_id,$task_id,$person_id,$assigned = tru
         global $subjectTaskAssigneeChanged,$mailTaskAssigneeLeft,$mailTaskAssigneeJoined;
         $mail->Subject = sprintf($subjectTaskAssigneeChanged,$task_name,$project_name);
 	if ($assigned)
-          $mail_body  = sprintf($mailTaskAssigneeJoined,$project_name,$project_description,$task_name,$task_duration,$project_url);
+          $mail_body  = sprintf($mailTaskAssigneeJoined,$project_name,$project_description,$task_name,$task_duration,$task_url);
 	else
           $mail_body  = sprintf($mailTaskAssigneeLeft,$project_name,$project_description,$task_name);
 

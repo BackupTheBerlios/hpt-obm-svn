@@ -471,8 +471,8 @@ class project_task extends db {
   	  'WHERE id="'.$this->project_id.'" ');
         $db->next_record();
 
-        $task_url = $GO_CONFIG->full_url.'modules/projects/project.php?task=show_task_status&project_id='.$this->project_id.'&task_id='.$this->id.'&task_status='.$status;
-        $project_url = $GO_CONFIG->full_url.'modules/projects/project.php?project_id='.$this->project_id;
+        $task_url = $GO_CONFIG->full_url.'index.php?return_to='.$GO_CONFIG->full_url.'modules/projects/project.php?task=show_task_status&project_id='.$this->project_id.'&task_id='.$this->id.'&task_status='.$status;
+        $project_url = $GO_CONFIG->full_url.'index.php?return_to='.$GO_CONFIG->full_url.'modules/projects/project.php?project_id='.$this->project_id;
 
 
         global $pm_task_status_values;
@@ -482,7 +482,7 @@ class project_task extends db {
         global $subjectTaskStatusChanged,$mailTaskStatusChangedToDone,$mailTaskStatusChangedToOngoing;
         $mail->Subject = sprintf($subjectTaskStatusChanged,$task_name,$project_name,$pm_task_status_values[$this->status]);
 	if ($status == TASK_DONE)
-          $mail_body  = sprintf($mailTaskStatusChangedToDone,$project_name,$project_description,$task_name,$project_url);
+          $mail_body  = sprintf($mailTaskStatusChangedToDone,$project_name,$project_description,$task_name,$task_url);
 	else
           $mail_body  = sprintf($mailTaskStatusChangedToOngoing,$pm_task_status_values[$this->status],$project_name,$project_description,$task_name,$task_duration,$project_url);
 
