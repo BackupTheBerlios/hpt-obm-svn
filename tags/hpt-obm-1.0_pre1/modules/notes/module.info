@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<module name="notes">
+	<description>
+		Chức năng ghi chú được tích hợp với các chức năng khác, bạn có thể dễ dàng kẹp chung vào hồ sơ, dự án, liên hệ...
+	</description>
+	<version>
+		1.0
+	</version>
+	<releaseDate>
+	2004-10-10
+	</releaseDate>
+	<status>
+		Ổn định
+	</status>
+	<authors>
+		<author name="Merijn Schering" email="mschering@intermesh.nl" />
+	</authors>
+</module>
+	

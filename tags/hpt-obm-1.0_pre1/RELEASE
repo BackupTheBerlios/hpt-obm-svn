@@ -1,0 +1,197 @@
+2004/10/15 Version 1.00
+HPT Vietnam Corporation - Development Team very please to announce the first
+release of HPT OBM - Open Business Management (version 1.0), which is based on
+Group-Office 2.05 of Intermesh.  This release include new style of Project
+Management module using work-flow, project template, task allocation, gantt
+chart monitorring, document management and alot more of features. Additionally,
+OBM v1.0 also include alot of bug fixes, Vietnamese support, dictionary module,
+company relation display (tree view), Group/Common filesystem...
+
+
+2004/05/23 Version 2.05
+Major changes under the hood and a nice new summary module. It's been two months
+since last release but we give you a much more stable and powerfull Group-Office
+in return. Upgrading is recommended for everybody.
+
+!!Important!! For upgrading you will have to delete your old Group-Office.php
+
+2004/03/24 Version 2.04
+With great help from many contributers this version a lot of improvements
+were made. The application is much more stable with this release.
+Upgrading is recommended.
+
+2004/03/18 Version 2.03 SP1
+Late tired and a rushy release leaded stupid mistakes.
+Just typo's in the sql updates and forgot to remove some files made
+2.03 to a disaster I think. 
+
+!!!IMPORTANT!!!!
+If you already installed the first 2.03 then delete all files except for
+Group-Office.php and replace all other by the files from this package.
+
+Now open lib/updates.inc and check all the SQL updates for 2.02 and see
+if your database matches. Look for the ab_custom_... tables and 
+bm_bookmarks tables esspecially.
+
+Sorry for the inconvience!
+
+2004/03/10 Version 2.03
+Just bugfixes in here. Fixed bugs in IMAP client.
+
+2004/03/10 Version 2.02
+There were some installation issues with 2.01, and some people disliked the
+changed IMAP behavior of downloading all folders from the server. This version
+offers an improved mail client and some other small bugfixes. 
+
+2004/03/08 Version 2.01
+This version contains all patches for 2.0 and feautures an improved e-mail 
+client.
+
+2004/02/28 Version 2.0
+After a lot of 1.9x releases 2.0 is finally in stable state.
+
+This only goes for the modules:
+- Addressbook
+- E-mail client
+- Projects
+- Calendar
+- Websites
+- Notes
+- Bookmarks
+
+And languages:
+
+-English
+-Nederlands
+-Deutsch
+
+2004/02/18 Version 1.98
+This release performs better and adds some new functionality.
+
+Modules that are known to work properly:
+- Addressbook
+- E-mail client
+- Projects
+- Calendar
+- Websites
+- Notes
+- Bookmarks
+
+The other ones are in development.
+
+Languages that are known to be complete:
+
+-English
+-Nederlands
+
+
+2004/02/11 Version 1.97
+PLEASE READ IF YOU DON"T WANT TO LOSE DATA!!!
+
+This installer will upgrade your database automatically. This release
+features a new addressbook where contacts and companies are seperated.
+The company fields from your contacts will therefore be DELETED.
+Because of this you should export your contacts first to CSV using
+Group-Office. After upgrading you should first import companies from
+that file. After that import the contacts.
+Backup your database too to be extra safe.
+
+This version also features:
+
+- Complete redesigned user interface
+- Automatically checks for reminders and email now and pops up a new window.
+- Bug fixes
+
+2004/02/02 Version 1.96
+After releasing 1.95 some bugs came forward. This version solves these 
+issues.
+
+2004/01/19 Version 1.95
+Making Group-Office to run in an environment without register_globals
+brought a lot of bugs with it. This version brings all the fixes, along 
+with powerfull enhancements to the addressbook, calendar and projects module.
+
+2003/11/22 Version 1.94
+This version no longer require the register_globals setting to be enabled.
+Now it works on all setups and the security is enhanced.
+
+2003/10/25 Version 1.93 (GO2 ALPHA 3)
+Major performance improvements come with this release. Especially when you
+have lots of users. Also the GUI is redesigned to work with a lot of users.
+This release also contains othere new features and some small bugfixes.
+I recommend everybody to upgrade to this version even though it's an alpha
+release.
+
+2003/09/23 VERSION 1.91 (GO2 ALPHA RELEASE)
+This realese only contains bugfixes for the previous version.
+
+2003/09/21 VERSION 1.9 (GO2 ALPHA RELEASE)
+This release is the prelease to Group-Office 2.0. It now features sharable 
+addressbooks and overall increased usability.
+Group-Office now can authenticate users against LDAP or mail servers so 
+implementing Group-Office in your existing user environment was never easier.
+
+Group-Office ships only with the English and Dutch language now. Other 
+langugaes have to be downloaded seperately.
+
+See the notes in the file 'INSTALL' on how to migrate to the new addressbook.
+
+
+2003/08/07 VERSION 1.12
+This release contains major bugfixes. It also includes an updated manual,
+a new dutch manual, New themes, languages and more! Autorizing users is 
+simplefied.
+
+These languages are known to be incomplete:
+-Dansk
+-Portugues
+
+2003/07/24 VERSION 1.11
+This release focusses mainly on some bugfixes.
+There is also a great new theme called Nuvola and the scheduler is improved.
+
+2003/07/18 VERSION 1.1
+After a very buggy installer in the last release this one comes with a 
+completely renewed installer that will guide you through the installation 
+process interactively. The email module has unlimited subfolder support now 
+and the scheduler has a reminder function. Administrators might also be happy 
+with new configuration tools. The scheduler module has an improved view and 
+functionality There is a completly new Web site managemnet module.
+Special thanks to all contributers!
+
+2003/06/18 VERSION 1.06
+This release is officially announced as a production stable release!
+The e-mail module has improved functionallity and there is a new theme called 
+crystal. This release also includes additional language support.
+
+2003/06/03 VERSION 1.05
+This release is revolutionary because there were lots of contributions for 
+this release! We now have language support for: German, Danish, Dutch and 
+English. There are also new features, bugfixes and an end user manual.
+
+Special thanks to:
+
+- Casey Ruark for his wonderfull end user manual
+- Georg Lorenz for making the e-mail module work with Cyrus IMAP and the 
+  German translation
+- Allan Hansen for the Danish translation
+
+See the chanelog for more details
+
+
+2003/05/08 VERSION 1.03
+This version is released because the makers of the menu used in the previous 
+versions have changed the license to an incompatible form. Now the program
+is 100% GPL. Also small bug fixes and translations were made.
+
+2003/04/26 VERSION 1.02
+This release has some new features in the modules and the framework.
+It's also a lot more stable. Please read the changelog for details.
+Read the installation instructions when installing and upgrading!!!
+
+2003/04/08 VERSION 1.01
+small bug fixes
+
+2003/03/21 VERSION 1.0
+First release
+

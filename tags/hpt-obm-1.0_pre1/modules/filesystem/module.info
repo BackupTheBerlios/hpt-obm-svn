@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<module name="filesystem">
+	<description>
+		Chức năng quản lý hồ sơ được dùng để lưu trữ trực tuyến các hồ sơ cá nhân và có thể chia sẻ với người khác nếu bạn muốn. Một số tính năng mở rộng cho phép bạn làm việc theo nhóm như giám sát và tao tác trực tiếp các thư mục của các thành viên trong nhóm, tạo các thư mục dùng chung, chia sẻ cho toàn bộ công ty. Bạn có thể sao chép các hồ sơ giữa các thư mục dễ dàng.  Việc thao tác, chia sẻ thông tin, hồ sơ trực tuyến với các bạn đồng nghiệp trở nên dễ dàng, đây cũng là tính năng nổi trội của chức năng này, toàn bộ văn phòng luôn ở bên bạn mọi lúc mọi nơi.
+	</description>
+	<version>
+		1.0
+	</version>
+	<releaseDate>
+	2004-10-10
+	</releaseDate>
+	<status>
+		Ổn định
+	</status>
+	<authors>
+		<author name="Merijn Schering" email="mschering@intermesh.nl" />
+		<author name="Đào Hải Lâm" email="lamdh@hptvietnam.com.vn" />
+		<author name="Nguyễn Hồng Lê" email="lenh@hptvietnam.com.vn" />
+		<author name="Nguyễn Thái Ngọc Duy" email="duyntn@hptvietnam.com.vn" />
+	</authors>
+</module>
+	

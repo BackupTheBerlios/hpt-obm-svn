@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<module name="addressbook">
+	<description>
+		Chức năng quản lý sổ địa chỉ nhỏ gọn và đầy đủ tính năng dùng trong HPT-OBM, có thể kết hợp chặt chẽ với các chức năng khác tạo nên môi trường làm việc tích hợp linh động và tiện lợi
+	</description>
+	<version>
+		1.0
+	</version>
+	<releaseDate>
+	2004-10-10
+	</releaseDate>
+	<status>
+		Ổn định
+	</status>
+	<authors>
+		<author name="Merijn Schering" email="mschering@intermesh.nl" />
+		<author name="Đào Hải Lâm" email="lamdh@hptvietnam.com.vn" />
+		<author name="Nguyễn Hồng Lê" email="lenh@hptvietnam.com.vn" />
+		<author name="Trần Kiến Đức" email="ductk@hptvietnam.com.vn" />
+		<author name="Nguyễn Thái Ngọc Duy" email="duyntn@hptvietnam.com.vn" />
+	</authors>
+</module>
+	
