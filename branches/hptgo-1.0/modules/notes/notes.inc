@@ -125,7 +125,7 @@ if ($count > 0)
     $due_date = $notes->f('due_date') > 0 ? date($_SESSION['GO_SESSION']['date_format'], $notes->f('due_date')) : '';
     echo '<td>'.$due_date.'</td>';
     echo '<td>'.date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $notes->f('mtime')+($_SESSION['GO_SESSION']['timezone']*3600)).'</td>';
-    echo "<td><a href='javascript:confirm_action(\"javascript:delete_note(".$notes->f('id').")\",\"".rawurlencode($strDeletePrefix."'".htmlspecialchars($notes->f('name'))."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".htmlspecialchars($notes->f('name'))."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
+    echo "<td><a href='javascript:confirm_action(\"javascript:delete_note(".$notes->f('id').")\",\"".$strDeletePrefix."\\\"".htmlspecialchars($notes->f('name'))."\\\"".$strDeleteSuffix."\")' title=\"".$strDeleteItem." '".htmlspecialchars($notes->f('name'))."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
     echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
   }
 
