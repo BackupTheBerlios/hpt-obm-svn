@@ -40,7 +40,7 @@
 		<input type="text" class="textbox"  name="engname" size="40" value="<?php echo htmlspecialchars($company['engname']); ?>" maxlength="50">
 		</td>
 	</tr>
-
+	<tr><td>&nbsp;</td></tr>
 	<tr>
 		<td align="right" nowrap>
 		<?php echo $strAddress; ?>:&nbsp;
