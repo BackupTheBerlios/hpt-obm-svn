@@ -113,6 +113,16 @@ $pm_task_approved = 'Duyệt';
 $pm_task_document = 'Tài liệu';
 $pm_task_level = 'Cấp';
 
+$pm_task_duration = 'Thời gian';
+$pm_task_planning = 'Dự kiến';
+$pm_task_reality  = 'Thực tế';
+$pm_task_advance  = 'Sớm';
+$pm_task_latency  = 'Trễ';
+$pm_task_start    = 'Bắt đầu';
+$pm_task_stop     = 'Kết thúc';
+$pm_task_days     = 'ngày';
+$pm_task_day      = 'ngày';
+
 $pm_task_comments = 'Chú thích';
 $pm_task_new_comments = 'Thêm chú thích mới';
 

@@ -161,6 +161,16 @@ function load_project_task($projects, $project_id) {
   return $tasks;
 }
 
+function datetime_string($dt) {
+  global $months;
+
+  $d = date("j", $dt);
+  $m = date("m", $dt);
+  if ($_SESSION['GO_SESSION']['date_format'] == 'd-m-Y')
+    return $d.' '.$months[$m - 1];
+  return $months[$m - 1].' '.$d;
+}
+
 class project_task extends db {
   var $project_status = 1;
   var $project_id = 0;
@@ -176,6 +186,8 @@ class project_task extends db {
   var $approved_date;
 
   var $elapsed = -1;
+  var $start_date = 0;
+  var $real_start_date = 0;
 
   var $is_owner = false;
   var $is_manager = false;
@@ -375,6 +387,7 @@ class project_task extends db {
       echo '<td align="center"><a href="'.$this->doc_url.'">'.
            '<img border="0" src="'.$GO_THEME->images['doc'].'"/></a></td>';
     echo "</tr>";
+    $this->show_datetimes();
     echo "<tr><td>&nbsp;</td></tr>";
     echo "</table>";
     echo "<table border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">";
@@ -419,6 +432,87 @@ class project_task extends db {
     echo "<tr><td colspan=\"8\" width=\"100%\"><iframe src=\"folder.php?path=".$this->doc_path."\" width=\"100%\" height=\"300\">".
          "</iframe></td></tr>";
   }
+
+  function show_datetimes() {
+    global $pstart_date, $GO_THEME, $today,
+           $pm_task_duration, $pm_task_planning, $pm_task_reality,
+           $pm_task_advance, $pm_task_latency,
+           $pm_task_start, $pm_task_stop,
+           $pm_task_days, $pm_task_day;
+
+    $this->get_elapsed();
+
+    $day_sec = 24 * 3600;
+    $start_date = datetime_string($pstart_date + $this->start_date * $day_sec);
+    $stop_date = datetime_string($pstart_date + ($this->start_date + $this->days) * $day_sec);
+    $real_start_date = ($this->status != TASK_WAITING && $this->status != TASK_BYPASS) ?
+        datetime_string($pstart_date + $this->real_start_date * $day_sec) : '-';
+    $real_stop_date = $this->approved ? datetime_string(strtotime($this->approved_date)) : '-';
+
+    $advance = $latency = '-';
+    if ($this->approved) {
+        $approved_date = strtotime($this->approved_date);
+        $diff = $approved_date - ($pstart_date + ($this->start_date + $this->days) * $day_sec);
+        if ($diff < 0)
+            $advance = (0 - $diff) / $day_sec;
+        else
+            $latency = $diff / $day_sec;
+    }
+    elseif ($this->status == TASK_ONGOING) {
+        $rsd = $pstart_date + ($this->real_start_date + $this->days) * $day_sec;
+        if ($today < $rsd) {
+            $diff = $this->real_start_date - $this->start_date;
+            if ($diff < 0)
+                $advance = -$diff;
+            else
+                $latency = $diff;
+        }
+        elseif ($today > $rsd)
+            $latency = round(($today - $rsd) / $day_sec);
+    }
+
+    if (is_numeric($advance)) {
+        if ($advance >= 2)
+            $advance .= ' '.$pm_task_days;
+        elseif ($advance > 0)
+            $advance .= ' '.$pm_task_day;
+        else
+            $advance = '-';
+    }
+
+    if (is_numeric($latency)) {
+        if ($latency >= 2)
+            $latency .= ' '.$pm_task_days;
+        elseif ($latency > 0)
+            $latency .= ' '.$pm_task_day;
+        else
+            $latency = '-';
+    }
+
+    echo '<tr><td colspan="8">&nbsp;</td></tr>';
+    echo '<tr><td colspan="8" align="center">';
+    echo '<table border="0" cellspacing="0" cellpadding="0" bgcolor="#BBBBBB">';
+    echo '<tr><td width="100%">';
+
+    echo '<table border="0" cellspacing="1" cellpadding="0">';
+    echo '<tr class="TableInside2" align="center">';
+    echo '<td width="80">'.$pm_task_duration.'</td>';
+    echo '<td width="100">'.$pm_task_planning.'</td>';
+    echo '<td width="100">'.$pm_task_reality.'</td>';
+    echo '<td width="100">'.$pm_task_advance.'</td>';
+    echo '<td width="100">'.$pm_task_latency.'</td></tr>';
+    echo '<tr bgcolor="white" align="center">';
+    echo '<td>'.$pm_task_start.'</td><td>'.$start_date.'</td><td>'.$real_start_date.'</td>';
+    echo '<td rowspan="2">'.$advance.'</td><td rowspan="2">'.$latency.'</td></tr>';
+    echo '<tr bgcolor="white" align="center">';
+    echo '<td>'.$pm_task_stop.'</td><td>'.$stop_date.'</td><td>'.$real_stop_date.'</td></tr>';
+    echo '</table>';
+
+    echo '</td></tr>';
+    echo '</table>';
+    echo '</td></tr>';
+  }
+
 
   function set_status($status) {
     if ($status == $this->status) return;
@@ -610,6 +704,9 @@ class project_task extends db {
                   $real_start_date);
     else
       $this->elapsed = 0;
+
+    $this->start_date = $start_date;
+    $this->real_start_date = $real_start_date;
   }
 }
 ?>
