@@ -69,6 +69,7 @@ $pm_status = 'Trạng thái';
 $pm_category = 'Loại dự án';
 $pm_process_template = 'Quy trình chuẩn';
 $pm_new_category = 'Tạo loại dự án mới';
+$pm_new_template = 'Tạo quy trình mới';
 
 $pm_days = 'ngày';
 $pm_delay = 'Trễ';

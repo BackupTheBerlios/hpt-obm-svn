@@ -69,6 +69,7 @@ $pm_status = 'Status';
 $pm_category = 'Category';
 $pm_process_template = 'Process template';
 $pm_new_category = 'New Category';
+$pm_new_template = 'New Template';
 
 $pm_status_values[0] = 'Discontinued';
 $pm_status_values[1] = 'Offer';
