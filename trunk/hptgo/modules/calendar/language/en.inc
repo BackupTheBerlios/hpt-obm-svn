@@ -15,7 +15,11 @@ $month_times[3] = "Fourth";
 
 $sc_new_app = "New event";
 $sc_calendars = "Calendars";
-$sc_invited = 'You are invited to join the event described below.';
+$sc_invited = 'You are invited to join the event described below : ';
+
+$sc_declined_event = 'is declined to join the event described below :';
+$sc_declined_mail_title = '(Calendar) Declined your event';
+$sc_reason = 'Reason';
 
 $sc_types1[0] = 'No recurrence';
 $sc_types1[1] = 'days';

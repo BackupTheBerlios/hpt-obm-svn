@@ -1,6 +1,6 @@
 <?php 
 /*
-   Copyright Intermesh 2003
+   Copyright (2004)
    Author: Tran Kien Duc <trankien_duc@yahoo.com>
    Version: 1.0 Release date: 13 July 2004
 
@@ -9,6 +9,65 @@
    Free Software Foundation; either version 2 of the License, or (at your
    option) any later version.
  */
+
+	function send_mail($mail_to, $mail_body, $mail_subject='No title',$mail_name='No name', $mail_from='',$mail_priority=3, $mail_wordwrap=50, $mail_altbody='')
+	{
+		global $GO_CONFIG;
+	
+//	$mail_to='ductk@hptvietnam.com.vn';		
+	
+//	$mail_from = 'bigduck1004@yahoo.com';
+//	$mail_name = "333";
+//	$mail_subject = 'subject';
+	
+//	$mail_body = '123456789';
+//	$mail_altbody = 'qqqqqqqqqqqqqqqq';
+	
+		require($GO_CONFIG->class_path."phpmailer/class.phpmailer.php");
+		require($GO_CONFIG->class_path."phpmailer/class.smtp.php");
+
+	    $mail = new PHPMailer();
+    	$mail->PluginDir = $GO_CONFIG->class_path.'phpmailer/';
+	    $mail->SetLanguage($php_mailer_lang, $GO_CONFIG->class_path.'phpmailer/language/');
+
+	    switch($GO_CONFIG->mailer)
+    	{
+      		case 'smtp':
+				$mail->Host = $GO_CONFIG->smtp_server;
+				$mail->Port = $GO_CONFIG->smtp_port;
+				$mail->IsSMTP();			  
+			break;			
+    	    case 'qmail':
+				$mail->IsQmail();
+			break;			
+    	  	case 'sendmail':
+				$mail->IsSendmail();
+			break;
+	        case 'mail':
+				$mail->IsMail();
+			break;
+    	}
+	    $mail->Priority = $mail_priority;
+	    $mail->Sender     = $mail_from;    
+	    $mail->From     = $mail_from;
+	
+	    $mail->FromName = $mail_name;
+	    $mail->AddReplyTo($mail_from,$mail_name);
+	    $mail->WordWrap = $mail_wordwrap;
+//    $mail->Encoding = "quoted-printable";
+
+	    $mail->IsHTML(true);
+	    $mail->Subject = $mail_subject;
+
+		$mail->AddAddress($mail_to);
+
+		$mail->Body = $mail_body;
+		$mail->AltBody = $mail_altbody;
+
+	    if(!$mail->Send())
+			return '<p class="Error">'.$ml_send_error.' '.$mail->ErrorInfo.'</p>';
+	}
+
 	function print_config_title($page=0)
 	{
 		global $GO_SECURITY;

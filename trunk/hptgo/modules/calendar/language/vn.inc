@@ -15,7 +15,11 @@ $month_times[3] = "Thứ ba";
 
 $sc_new_app = "Thêm sự kiện";
 $sc_calendars = "Lịch công tác";
-$sc_invited = 'Bạn được mời tham gia các việc mô tả dưới đây.';
+$sc_invited = 'Bạn được mời tham gia các việc mô tả dưới đây : ';
+
+$sc_declined_event = 'từ chối tham gia sự kiện mô tả dưới đây :';
+$sc_declined_mail_title = '(Lịch) Từ chối tham gia sự kiện của bạn';
+$sc_reason = 'Lý do';
 
 $sc_types1[0] = 'Không tái diễn';
 $sc_types1[1] = 'ngày';
@@ -106,7 +110,6 @@ $sc_week = 'Tuần';
 $sc_weeks = 'tuần';
 $sc_reminder_set_to_early = "'Nhắc nhở' không thể xuất hiện trước một cái đã có. Hãy thu ngắn thời gian nhắc hoặc kéo dài chu kỳ lặp.";
 $sc_cycle_start_later = 'Ngày bắt đầu trễ hơn hoặc bằng ngày kết thúc.';
-
 
 $cmdGenerate = 'Tính';
 $sc_preferences = 'Chọn giao diện';
