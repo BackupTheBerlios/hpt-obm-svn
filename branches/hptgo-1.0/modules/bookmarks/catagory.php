@@ -167,6 +167,7 @@ switch($tabtable->get_active_tab_id())
 		}
 		print_acl($catagory["acl_read"]);
 		echo '<br />';
+		echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;';
 		$button = new button($cmdClose, "javascript:document.location='".$return_to."';");
 	break;
 
@@ -177,6 +178,7 @@ switch($tabtable->get_active_tab_id())
 		}
 		print_acl($catagory["acl_write"]);
 		echo '<br />';
+		echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;';
 		$button = new button($cmdClose, "javascript:document.location='".$return_to."';");
 	break;
 

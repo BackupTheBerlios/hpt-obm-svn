@@ -138,12 +138,14 @@ switch($tabtable->get_active_tab_id())
   case 'read_permissions':
     print_acl($bookmark["acl_read"]);
     echo '<br />';
+    echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;';
     $button = new button($cmdClose, "javascript:document.location='".$GO_MODULES->url."';");
     break;
 
   case 'write_permissions':
     print_acl($bookmark["acl_write"]);
     echo '<br />';
+    echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;';
     $button = new button($cmdClose, "javascript:document.location='".$GO_MODULES->url."';");
     break;
 
