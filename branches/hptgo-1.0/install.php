@@ -87,7 +87,8 @@ function save_config($config)
 
 function print_head()
 {
-  echo '<html><head><title>Group-Office Installation</title></head><body style="font-family: Arial,Helvetica">';
+  header('Content-Type: text/html; charset='.$charset);
+  echo '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Group-Office Installation</title></head><body style="font-family: Arial,Helvetica">';
   echo '<form method="post" action="install.php">';
   echo '<table align="center" style="background: #f1f1f1;border-width: 1px;border-color: black;border-style: solid;font-family: Arial,Helvetica; font-size: 12px; width: 500px;">';
   echo '<tr><td align="center"><h2><img src="lib/intermesh.gif" border="0" /><br />Group-Office installation</h2></td></tr>';
@@ -115,7 +116,7 @@ if ($script_path == '')
 {
   print_head();
   echo '<b>Fatal error:</b> Could not get the path of the this script. The server variable \'SCRIPT_FILENAME\' and \'PATH_TRANSLATED\' are not set.';
-  echo '<br /><br />Correct this and refresh this page. If you are not able to correct this try the manual installation described in the file \'INSTALL\'';
+  echo '<br /><br />Hãy điều chỉnh và nhấn Refresh để cập nhật lại trang này. If you are not able to correct this try the manual installation described in the file \'INSTALL\'';
   print_foot();
   exit();
 }
@@ -128,25 +129,25 @@ $config_exists = file_exists('Group-Office.php');
 if ($config_exists && !is_writable('Group-Office.php'))
 {
   print_head();
-  echo 'The configuration file Group-Office.php exists in '.$root_path.' but is not writable. If you wish to make changes then you have to make Group-Office.php writable during the configuration process.';
-  echo '<br /><br />Correct this and refresh this page.';
-  echo '<br /><br /><font color="#003399"><i>$ chmod 777 '.$root_path.'Group-Office.php<br /></i></font>';
+  echo 'Tập tin cấu hình Group-Office.php đã có tại '.$root_path.' nhưng không thể hiệu chỉnh. Nếu bạn muốn thay đổi cấu hình, bạn phải cho phép ghi vào Group-Office.php trong suốt tiến trình cài đặt.';
+  echo '<br /><br />Hãy điều chỉnh và nhấn Refresh để cập nhật trang này.';
+  echo '<br /><br /><font color="#003399">Với Linux, thực hiện lệnh: <i>$ chmod 777 '.$root_path.'Group-Office.php<br /></i></font>';
   print_foot();
   exit();
 }elseif(!$config_exists && !is_writable($root_path))
 {
   print_head();
-  echo 'Can\'t create configuration file in '.$root_path.'. If you wish to install Group-Office you have to make '.$root_path.' temporarily writable.';
-  echo '<br /><br />Correct this and refresh this page.';
-  echo '<br /><br /><font color="#003399"><i>$ chmod 777 '.$root_path.'<br /></i></font>';
+  echo 'Không thể tạo tập tin cấu hình trong '.$root_path.'. Nếu bạn muốn cài đặt HPT-OBM bạn phải tạm thời cho phép ghi vào '.$root_path.'.';
+  echo '<br /><br />Hãy điều chỉnh và nhấn Refresh để cập nhật lại trang này.';
+  echo '<br /><br /><font color="#003399">Với Linux, thực hiện lệnh: <i>$ chmod 777 '.$root_path.'<br /></i></font>';
   print_foot();
   exit();
 }elseif(!function_exists('mysql_connect'))
 {
   print_head();
-  echo '<b>Fatal error:</b> The required PHP MySQL extension is not installed.'.
-    'Please take a look at <a href="http://www.php.net" target="_blank">'.
-    'http://www.php.net</a> for more information about installing this extension.';
+  echo '<b>Lỗi nghiêm trọng:</b> Phần mở rộng PHP MySQL chưa được cài đặt.'.
+    'Vui lòng xem <a href="http://www.php.net" target="_blank">'.
+    'http://www.php.net</a> để biết thêm thông tin chi tiết cách cài đặt phần mở rộng này.';
 
   print_foot();
   exit();
@@ -233,16 +234,16 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
       if ($pass1 == '' || $username=='')
       {
-	$feedback = '<font color="red">Please enter a password and a username!</font>';
+	$feedback = '<font color="red">Vui lòng nhập mật khẩu và tên người dùng.</font>';
       }elseif( strlen($pass1) < 4)
       {
-	$feedback = '<font color="red">Password can\'t be shorter then 4 characters!</font>';
+	$feedback = '<font color="red">Mật khẩu không thể ngắn hơn 4 ký tự!</font>';
       }elseif($pass1 != $pass2)
       {
-	$feedback = '<font color="red">Passwords did not match!</font>';
+	$feedback = '<font color="red">Mật khẩu không giống nhau!</font>';
       }elseif(!eregi("^([a-z0-9]+)([._-]([a-z0-9]+))*[@]([a-z0-9]+)([._-]([a-z0-9]+))*[.]([a-z0-9]){2}([a-z0-9])?$", $email))
       {
-	$feedback = '<font color="red">Invalid E-mail address!</font>';
+	$feedback = '<font color="red">Địa chỉ E-mail không hợp lệ!</font>';
       }else
       {
 	$GO_USERS->get_users();
@@ -326,7 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
       }else
       {
-	$feedback ='<font color="red">Failed to connect to database</font>';
+	$feedback ='<font color="red">Lỗi kết nối với cơ sở dữ liệu</font>';
       }
       break;
 
@@ -336,8 +337,8 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
       if (!$db->connect($GO_CONFIG->db_name, $GO_CONFIG->db_host, $GO_CONFIG->db_user, $GO_CONFIG->db_pass))
       {
 	print_head();
-	echo 'Can\'t connect to database!';
-	echo '<br /><br />Correct this and refresh this page.';
+	echo 'Không thể kết nối với cơ sở dữ liệu!';
+	echo '<br /><br />Hãy điều chỉnh và nhấn Refresh để cập nhật lại trang này.';
 	print_foot();
 	exit();
       }else
@@ -350,7 +351,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 	  if (!isset($updates[$old_version]))
 	  {
 	    //invalid version, abort upgrade
-	    $feedback = '<font color="red">The version number you entered is invalid</font>';
+	    $feedback = '<font color="red">Số phiên bản bạn nhập không hợp lệ</font>';
 	  }else
 	  {
 	    for ($cur_ver=$old_version;$cur_ver<$new_version;$cur_ver++)
@@ -366,7 +367,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
 	      if (file_exists($GO_CONFIG->root_path.'lib/scripts/'.$cur_ver.'.inc'))
 	      {
-		echo 'Running special update script for version '.$cur_ver.'...<br>';
+		echo 'Đang chạy chương trình cập nhật cho phiên bản '.$cur_ver.'...<br>';
 		require_once($GO_CONFIG->root_path.'lib/scripts/'.$cur_ver.'.inc');
 	      }
 	    }
@@ -422,7 +423,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
     case 'userdir':
       if (!is_writable($_POST['userdir']))
       {
-	$feedback = '<font color="red">The path you entered is not writable.<br />Please correct this and try again.</font>';
+	$feedback = '<font color="red">Đường dẫn bạn nhập không cho phép ghi.<br />Hãy điều chỉnh và thử lại lần nữa.</font>';
       }else
       {
 	if (substr($_POST['userdir'], -1) != '/') $_POST['userdir'] = $_POST['userdir'].'/';
@@ -442,7 +443,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
       $tmpdir=$_POST['tmpdir'];
       if (!is_writable($tmpdir))
       {
-	$feedback = '<font color="red">The path you entered is not writable.<br />Please correct this and try again.</font>';
+	$feedback = '<font color="red">Đường dẫn bạn nhập không cho phép ghi.<br />Hãy điều chỉnh và thử lại lần nữa.</font>';
       }else
       {
 	if (substr($tmpdir, -1) != '/') $tmpdir = $tmpdir.'/';
@@ -458,11 +459,11 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
     case 'title':
       if ($_POST['title'] == '')
       {
-	$feedback = 'You dind\'t enter a title.';
+	$feedback = 'Bạn chưa nhập tiêu đề.';
 
       }elseif(!eregi("^([a-z0-9]+)([._-]([a-z0-9]+))*[@]([a-z0-9]+)([._-]([a-z0-9]+))*[.]([a-z0-9]){2}([a-z0-9])?$", $_POST['webmaster_email']))
       {
-	$feedback = 'You entered an invalid e-mail address.';
+	$feedback = 'Bạn đã nhập địa chỉ e-mail không hợp lệ.';
       }else
       {
 	$GO_CONFIG->webmaster_email = $_POST['webmaster_email'];
@@ -498,7 +499,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 
       }else
       {
-	$feedback = '<font color="red">You dind\'t enter both fields.</font>';
+	$feedback = '<font color="red">Bạn chưa nhập cả hai.</font>';
       }
       break;
 
@@ -581,9 +582,9 @@ if (!isset($_SESSION['completed']['license']))
 
   print_head();
   echo '<input type="hidden" name="task" value="license" />';
-  echo 'Do you agree to the terms of the license agreement?<br /><br />';
+  echo 'Bạn có đồng ý với những điều khoản được nêu trong giấy phép này hay không?<br /><br />';
   echo '<iframe style="width: 670; height: 250; background: #ffffff;" src="'.$license.'"></iframe>';
-  echo '<br /><br /><div align="center"><input type="submit" value="I agree to these terms" /></div>';
+  echo '<br /><br /><div align="center"><input type="submit" value="Tôi đồng ý với những điều khoản này" /></div>';
   print_foot();
   exit();
 }
@@ -593,9 +594,9 @@ if (!isset($_SESSION['completed']['release_notes']))
 {
   print_head();
   echo '<input type="hidden" name="task" value="release_notes" />';
-  echo 'Please read the release notes<br /><br />';
+  echo 'Vui lòng đọc thông tin về chương trình<br /><br />';
   echo '<iframe style="width: 670; height: 250; background: #ffffff;" src="RELEASE"></iframe>';
-  echo '<br /><br /><div align="center"><input type="submit" value="Continue" /></div>';
+  echo '<br /><br /><div align="center"><input type="submit" value="Tiếp tục" /></div>';
   print_foot();
   exit();
 }
@@ -612,24 +613,24 @@ if (!isset($_SESSION['completed']['database_connection']))
   }
   ?>
     <input type="hidden" name="task" value="database_connection" />
-    Create a database now and fill in the values to connect to your database.<br />
-    The database user should have permission to perform select-, insert-, update- and delete queries. It must also be able to lock tables.
+    Hãy tạo cơ sở dữ liệu và điền thông tin vào bên dưới để kết nối với cơ sở dữ liệu.<br />
+    Người dùng cơ sở dữ liệu cần có quyền thực hiện các câu lệnh select, insert, update, delete và được quyền khoá bảng.
 
     <br /><br />
 
     <font color="#003399"><i>
     $ mysql -u root -p<br />
-    $ mysql&#62; CREATE DATABASE 'groupoffice';<br />
+    $ mysql&#62; CREATE DATABASE groupoffice;<br />
     <table width="100%" border="0">
-    $ mysql&#62; GRANT ALL PRIVILEGES ON groupoffice.* TO 'groupoffice'@'localhost'<br />
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&#62; IDENTIFIED BY 'some_pass' WITH GRANT OPTION;<br />
+    $ mysql&#62; GRANT ALL PRIVILEGES ON groupoffice.* TO groupoffice@localhost<br />
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&#62; IDENTIFIED BY "mật khẩu của bạn" WITH GRANT OPTION;<br />
     </i></font>
 
     <br /><br />
     <table width="100%" style="border-width: 0px;font-family: Arial,Helvetica; font-size: 12px;">
     <tr>
     <td>
-    Host:
+    Máy chủ:
     </td>
     <td>
     <input type="text" size="40" name="db_host" value="<?php echo $GO_CONFIG->db_host; ?>" />
@@ -637,7 +638,7 @@ if (!isset($_SESSION['completed']['database_connection']))
     </tr>
     <tr>
     <td>
-    Database:
+    Tên CSDL:
     </td>
     <td>
     <input type="text" size="40" name="db_name" value="<?php echo $GO_CONFIG->db_name; ?>" />
@@ -646,7 +647,7 @@ if (!isset($_SESSION['completed']['database_connection']))
 
     <tr>
     <td>
-    Username:
+    Tên người dùng:
     </td>
     <td>
     <input type="text" size="40" name="db_user" value="<?php echo $GO_CONFIG->db_user; ?>"  />
@@ -654,7 +655,7 @@ if (!isset($_SESSION['completed']['database_connection']))
     </tr>
     <tr>
     <td>
-    Password:
+    Mật khẩu:
     </td>
     <td>
     <input type="password" size="40" name="db_pass" value="<?php echo $GO_CONFIG->db_pass; ?>"  />
@@ -663,7 +664,7 @@ if (!isset($_SESSION['completed']['database_connection']))
     <tr>
     <td colspan="2" align="center">
     <br />
-    <input type="submit" value="Continue" />
+    <input type="submit" value="Tiếp tục" />
     </td>
     </tr>
     </table>
@@ -683,8 +684,8 @@ if(!isset($_SESSION['completed']['database_structure']))
   if (!@$db->connect($GO_CONFIG->db_name, $GO_CONFIG->db_host, $GO_CONFIG->db_user, $GO_CONFIG->db_pass))
   {
     print_head();
-    echo 'Can\'t connect to database!';
-    echo '<br /><br />Correct this and refresh this page.';
+    echo 'Không thể kết nối với cơ sở dữ liệu!';
+    echo '<br /><br />Hãy điều chỉnh và nhấn Refresh để cập nhật lại trang này.';
     print_foot();
     exit();
   }else
@@ -727,7 +728,7 @@ if(!isset($_SESSION['completed']['database_structure']))
 	<script type="text/javascript">
 	function delete_database()
 	{
-	  if (confirm("Are you sure you want to delete all Group-Office users and data?"))
+	  if (confirm("Bạn có chắc muốn xóa mọi thông tin về người dùng và dữ liệu trong HPT-OBM không?"))
 	  {
 	    document.forms[0].upgrade.value="false";
 	    document.forms[0].submit();
@@ -737,13 +738,13 @@ if(!isset($_SESSION['completed']['database_structure']))
       </script>
 	<input type="hidden" name="task" value="database_structure" />
 	<input type="hidden" name="upgrade" value="true" />
-	Group-Office has detected a previous installation of Group-Office. Do you wish to keep the existing data and perform an upgrade?
+	HPT-OBM tìm ra một phiên bản HPT-OBM đã được cài đặt. Bạn có muốn giữ nguyên dữ liệu và thực hiện nâng cấp không?
 	<?php
 	if (!$db_version)
 	{
-	  echo '<br /><br />Group-Office was unable to detect your old Group-Office version.'.
-	    'The installer needs your old version number to determine updates that might apply.<br />'.
-	    'Please enter the version number below if you wish to perform an upgrade.';
+	  echo '<br /><br />HPT-OBM không thể xác định số hiệu phiên bản HPT-OBM cũ của bạn.'.
+	    'Trình cài đặt cần số hiệu phiên bản cũ để xác định cần phải cập nhật những gì.<br />'.
+	    'Vui lòng nhập số hiệu phiên bản bên dưới nếu bạn muốn thực hiện nâng cấp.';
 	}
       ?>
 	<br /><br />
@@ -761,9 +762,9 @@ if(!isset($_SESSION['completed']['database_structure']))
 	?>
 	  <tr>
 	  <td colspan="2" align="center">
-	  <input type="submit" value="Yes" />
+	  <input type="submit" value="Có" />
 	  &nbsp;&nbsp;
-	<input type="button" onclick="javasscript:delete_database()" value="No" />
+	<input type="button" onclick="javasscript:delete_database()" value="Không" />
 	  </td>
 	  </tr>
 	  </table>
@@ -778,10 +779,10 @@ if(!isset($_SESSION['completed']['database_structure']))
 	'<input type="hidden" name="task" value="database_structure" />';
 
 
-      echo 'Group-Office succesfully connected to your database!<br />'.
-	'Click on \'Continue\' to create the tables for the Group-Office '.
-	'base system. This can take some time. Don\'t interupt this process.<br /><br />';
-      echo '<div align="center"><input type="submit" value="Continue" /></div>';
+      echo 'HPT-OBM đã kết nối thành công với cơ sở dữ liệu!<br />'.
+	'Hãy nhấn \'Tiếp tục\' để tạo bảng cơ sở cho HPT-OBM.'.
+	'Việc này có thể mất một ít thời gian. Đừng ngắt đột ngột tiến trình này.<br /><br />';
+      echo '<div align="center"><input type="submit" value="Tiếp tục" /></div>';
       print_foot();
       exit();
     }
@@ -800,10 +801,11 @@ if (!isset($_SESSION['completed']['userdir']))
   }
   ?>
     <input type="hidden" name="task" value="userdir" />
-    Group-Office needs a place to store user data. Create a writable path for this purpose now and enter it in the box below.<br />
-    The path should be have 0777 permissions or should be owned by the webserver user. You probably need to be root to do the last.
-    <br />Also enter a maximum number of bytes to upload and a valid ocatal value for the file permissions.
+    HPT-OBM cần một nơi để lưu trữ dữ liệu. Hãy tạo một thư mục cho phép ghi để lưu trữ dữ liệu và nhập đường dẫn đó vào bên dưới.<br />
+    Người dùng chạy webserver cần được phép ghi vào thư mục này (Trong Linux, hãy đặt quyền 0777 và owner là người dùng chạy webserver - Bạn có thể sẽ cần quyền root để thực hiện điều này).
+    <br />Ngoài ra cần nhập kích thước tối đa cho phép đưa tập tin lên server (và quyền truy cập tập tin dạng bát phân với Linux).
     <br /><br />
+    Trong Linux, thực hiện lệnh:
     <font color="#003399"><i>
     $ su<br />
     $ mkdir /home/groupoffice<br />
@@ -813,7 +815,7 @@ if (!isset($_SESSION['completed']['userdir']))
     <br /><br />
     <table width="100%" style="border-width: 0px;font-family: Arial,Helvetica; font-size: 12px;">
     <tr>
-    <td colspan="2">User home directory:</td>
+    <td colspan="2">Thư mục lưu trữ dữ liệu:</td>
     </tr>
     <tr>
     <?php
@@ -823,7 +825,7 @@ if (!isset($_SESSION['completed']['userdir']))
     </tr>
     <tr>
     <td>
-    Maximum upload size:
+    Kích thước tập tin đưa lên tối đa:
     </td>
     </tr>
     <td>
@@ -849,7 +851,7 @@ if (!isset($_SESSION['completed']['userdir']))
     </tr>
     </table><br />
     <div align="center">
-    <input type="submit" value="Continue" />
+    <input type="submit" value="Tiếp tục" />
     </div>
     <?php
     print_foot();
@@ -868,12 +870,12 @@ if (!isset($_SESSION['completed']['tmpdir']))
   }
   ?>
     <input type="hidden" name="task" value="tmpdir" />
-    Group-Office needs a place to store temporarily data such as session data or file uploads. Create a writable path for this purpose now and enter it in the box below.<br />
-    The /tmp directory is a good option.
+    HPT-OBM cần chỗ để lưu thông tin tạm thời như session và các tập tin tải lên. Hãy tạo một thư mục cho phép ghi và nhập vào bên dưới.<br />
+    Trong Linux, thư mục /tmp là một lựa chọn tốt.
     <br /><br />
     <table width="100%" style="border-width: 0px;font-family: Arial,Helvetica; font-size: 12px;">
     <tr>
-    <td>Temporarily files directory:</td>
+    <td>Thư mục tạm:</td>
     </tr>
     <tr>
     <?php
@@ -883,7 +885,7 @@ if (!isset($_SESSION['completed']['tmpdir']))
     </tr>
     </table><br />
     <div align="center">
-    <input type="submit" value="Continue" />
+    <input type="submit" value="Tiếp tục" />
     </div>
     <?php
     print_foot();
@@ -899,17 +901,17 @@ if (!isset($_SESSION['completed']['url']))
   }
   ?>
     <input type="hidden" name="task" value="url" />
-    Enter a relative and an absolute url.<br /><br />
+    Hãy nhập URL tương đối và tuyệt đối.<br /><br />
     <font color="#003399"><i>
-    Example:<br />
-    Relative URL: /groupoffice/<br />
-    Absolute URL: http://www.intermesh.nl/groupoffice/</i>
+    Ví dụ:<br />
+    URL tương đối: /hpt-obm/<br />
+    Absolute URL: http://www.hptvietnam.com.vn/hpt-obm/</i>
     </font>
     <br /><br />
     <table width="100%" style="border-width: 0px;font-family: Arial,Helvetica; font-size: 12px;">
     <tr>
     <td>
-    Relative URL:
+    URL tương đối:
     </td>
     <td>
     <?php
@@ -919,7 +921,7 @@ if (!isset($_SESSION['completed']['url']))
     </td>
     </tr>
     <tr>
-    <td>Absolute URL:</td>
+    <td>URL tuyệt đối:</td>
     <td>
     <?php
     $full_url = isset($_POST['full_url']) ? $_POST['full_url'] : $GO_CONFIG->full_url;
@@ -929,7 +931,7 @@ if (!isset($_SESSION['completed']['url']))
     </tr>
     </table><br />
     <div align="center">
-    <input type="submit" value="Continue" />
+    <input type="submit" value="Tiếp tục" />
     </div>
     <?php
     print_foot();
@@ -947,12 +949,12 @@ if (!isset($_SESSION['completed']['title']))
   }
   ?>
     <input type="hidden" name="task" value="title" />
-    Enter a title for your Group-Office and webmaster email address for your application.<br />
-    The email address will recieve information about new registered users.
+    Hãy nhập tên phiên bản HPT-OBM của bạn và địa chỉ e-mail của webmaster cho ứng dụng.<br />
+    Địa chỉ e-mail sẽ nhận thông tin về những người dùng vừa đăng ký.
     <br /><br />
     <table style="border-width: 0px;font-family: Arial,Helvetica; font-size: 12px;">
     <tr>
-    <td>Title:</td>
+    <td>Tên:</td>
     </tr>
     <tr>
     <?php
@@ -963,7 +965,7 @@ if (!isset($_SESSION['completed']['title']))
     </tr>
     <tr>
     <td>
-    Webmaster E-mail:
+    E-mail Webmaster:
     </td>
     </tr>
     <tr>
@@ -973,7 +975,7 @@ if (!isset($_SESSION['completed']['title']))
     </tr>
     </table><br />
     <div align="center">
-    <input type="submit" value="Continue" />
+    <input type="submit" value="Tiếp tục" />
     </div>
     <?php
     print_foot();
@@ -990,11 +992,11 @@ if (!isset($_SESSION['completed']['theme']))
   }
   ?>
     <input type="hidden" name="task" value="theme" />
-    Select the default theme for Group-Office and whether users are allowed to change the theme or not.
+    Hãy chọn kiểu dáng mặc định cho HPT-OBM và cho biết người dùng có được quyền đổi kiểu dáng hay không.
     <br /><br />
     <table style="border-width: 0px;font-family: Arial,Helvetica; font-size: 12px;">
     <tr>
-    <td>Default theme:</td>
+    <td>Kiểu dáng mặc định:</td>
     <td>
     <?php
     $themes = $GO_THEME->get_themes();
@@ -1005,21 +1007,21 @@ if (!isset($_SESSION['completed']['theme']))
     </td>
     </tr>
     <tr>
-    <td align="right">Allow:</td>
+    <td align="right">Cho phép:</td>
     <td>
     <?php
     $allow_themes = isset($_POST['allow_themes']) ? $_POST['allow_themes'] : $GO_CONFIG->allow_themes;
   $allow_themes = $allow_themes ? 'true' : 'false';
   $dropbox = new dropbox();
-  $dropbox->add_value('true', 'Yes');
-  $dropbox->add_value('false', 'No');
+  $dropbox->add_value('true', 'Có');
+  $dropbox->add_value('false', 'Không');
   $dropbox->print_dropbox('allow_themes', $allow_themes);
   ?>
     </td>
     </tr>
     </table><br />
     <div align="center">
-    <input type="submit" value="Continue" />
+    <input type="submit" value="Tiếp tục" />
     </div>
     <?php
     print_foot();
@@ -1036,25 +1038,25 @@ if (!isset($_SESSION['completed']['allow_password_change']))
   }
   ?>
     <input type="hidden" name="task" value="allow_password_change" />
-    Do you want to allow users to change thier password?
+    Bạn có muốn cho phép người dùng đổi mật khẩu của họ không?
     <br /><br />
     <table style="border-width: 0px;font-family: Arial,Helvetica; font-size: 12px;">
     <tr>
-    <td align="right">Allow:</td>
+    <td align="right">Cho phép:</td>
     <td>
     <?php
     $allow_password_change = isset($_POST['allow_password_change']) ? $allow_password_change : $GO_CONFIG->allow_password_change;
   $allow_password_change = $allow_password_change ? 'true' : 'false';
   $dropbox = new dropbox();
-  $dropbox->add_value('true', 'Yes');
-  $dropbox->add_value('false', 'No');
+  $dropbox->add_value('true', 'Có');
+  $dropbox->add_value('false', 'Không');
   $dropbox->print_dropbox('allow_password_change', $allow_password_change);
   ?>
     </td>
     </tr>
     </table><br />
     <div align="center">
-    <input type="submit" value="Continue" />
+    <input type="submit" value="Tiếp tục" />
     </div>
     <?php
     print_foot();
@@ -1070,14 +1072,11 @@ if (!isset($_SESSION['completed']['language']))
   }
   ?>
     <input type="hidden" name="task" value="language" />
-    Select your language. Group-Office will use default regional settings based on this setting. 
-    If your language is not in the list please select the closest match.<br />
-    It would be nice if you added your missing language to the language/languages.inc file and send it to
-    info@intermesh.nl!
+    Hãy chọn ngôn ngữ mặc định cho HPT-OBM. HPT-OBM sẽ đặt các thiết lập khác dựa trên thiết lập này. 
     <br /><br />
     <table style="border-width: 0px;font-family: Arial,Helvetica; font-size: 12px;">
     <tr>
-    <td>Language:</td>
+    <td>Ngôn ngữ:</td>
     <td>
     <?php
     $dropbox= new dropbox();
@@ -1092,7 +1091,7 @@ if (!isset($_SESSION['completed']['language']))
     </tr>
     </table><br />
     <div align="center">
-    <input type="submit" value="Continue" />
+    <input type="submit" value="Tiếp tục" />
     </div>
     <?php
     print_foot();
@@ -1108,8 +1107,8 @@ if (!isset($_SESSION['completed']['smtp']))
   }
   ?>
     <input type="hidden" name="task" value="smtp" />
-    Group-Office has the ability to send and recieve e-mail. Please configure your SMTP server. <br />
-    Leave this blank use the php mail() function but then you won't be able use CC and BCC headers!
+    HPT-OBM có thể gửi và nhận e-mail. Vui lòng cho biết thiết lập SMTP server của bạn. <br />
+    Hãy để trong chỗ này nếu bạn dùng hàm php mail(), nhưng bạn sẽ không thể dùng dùng CC và BCC header!
     <br />
     <br />
     <table style="border-width: 0px;font-family: Arial,Helvetica; font-size: 12px;">
@@ -1138,7 +1137,7 @@ if (!isset($_SESSION['completed']['smtp']))
     </tr>
     <tr>
     <td>
-    SMTP port:
+    Cổng SMTP:
     </td>
     <td>
     <input type="text" size="40" name="smtp_port" value="<?php echo $GO_CONFIG->smtp_port; ?>" />
@@ -1146,7 +1145,7 @@ if (!isset($_SESSION['completed']['smtp']))
     </tr>
     <tr>
     <td>
-    Maximum size of attachments:
+    Kích thước tập tin đính kèm tối đa:
     </td>
     <td>
     <input type="text" size="40" name="max_attachment_size" value="<?php echo $GO_CONFIG->max_attachment_size; ?>" />
@@ -1155,16 +1154,13 @@ if (!isset($_SESSION['completed']['smtp']))
     <tr>
     <td colspan="2">
     <br />
-    Some servers require some connection string options when connecting
-    to an IMAP or POP-3 server using the PHP IMAP extension. For example most Redhat systems
-    require '/notls' or '/novalidate-cert'.
-    If you are not sure then leave this field blank.
+    Vài máy chủ cần tùy chọn chuỗi kết nối khi kết nối với máy chủ IMAP hoặc POP-3 bằng phần mở rộng PHP IMAP. Ví dụ các hệ thống Red Hat cần '/notls' hoặc '/novalidate-cert'. Nếu bạn không rõ, hãy để trống phần này.
     <br /><br />
     </td>
     </tr>
     <tr>
     <td>
-    Connection options:
+    Tùy chọn kết nối:
     </td>
     <td>
     <input type="text" size="40" name="email_connectstring_options" value="<?php echo $GO_CONFIG->email_connectstring_options; ?>" />
@@ -1172,7 +1168,7 @@ if (!isset($_SESSION['completed']['smtp']))
     </tr>
     </table><br />
     <div align="center">
-    <input type="submit" value="Continue" />
+    <input type="submit" value="Kết nối" />
     </div>
     <script type="text/javascript">
     function change_mailer()
@@ -1208,11 +1204,11 @@ if(!isset($_SESSION['completed']['administrator']))
     }
     ?>
       <input type="hidden" name="task" value="administrator" />
-      Group-Office needs an administrator account. The username will be 'administrator'. Please create a password for 'administrator'.
+      HPT-OBM cần một tài khoản cho quản trị hệ thống. Tên người dùng là 'admin'. Hãy nhập mật khẩu cho 'admin'.
       <br /><br />
       <table style="border-width: 0px;font-family: Arial,Helvetica; font-size: 12px;">
       <tr>
-      <td>Username:</td>
+      <td>Tên người dùng:</td>
       <td>
       <?php 
       $username = isset($_POST['username']) ? smartstrip(htmlspecialchars($_POST['username'])) : 'admin';
@@ -1221,7 +1217,7 @@ if(!isset($_SESSION['completed']['administrator']))
       </tr>
       <tr>
       <td>
-      Password:
+      Mật khẩu:
       </td>
       <td>
       <input type="password" name="pass1" />
@@ -1229,7 +1225,7 @@ if(!isset($_SESSION['completed']['administrator']))
       </tr>
       <tr>
       <td>
-      Confirm password:
+      Xác nhận mật khẩu:
       </td>
       <td>
       <input type="password" name="pass2" />
@@ -1246,7 +1242,7 @@ if(!isset($_SESSION['completed']['administrator']))
       </tr>
       </table><br />
       <div align="center">
-      <input type="submit" value="Continue" />
+      <input type="submit" value="Tiếp tục" />
       </div>
       <?php
       print_foot();
@@ -1254,89 +1250,15 @@ if(!isset($_SESSION['completed']['administrator']))
   }
 }
 
-if(!isset($_SESSION['completed']['send_info']))
-{
-  print_head();
-  if (isset($feedback))
-  {
-    echo $feedback.'<br /><br />';
-  }
-  ?>
-    <input type="hidden" name="task" value="send_info" />
-    Intermesh would like to know that you are using Group-Office to find out how many people are
-    using Group-Office. Please select an Option. (If you already sent information before, please select 'No').
-    <br /><br />
-    <table cellpadding="10" style="border-width: 0px;font-family: Arial,Helvetica; font-size: 12px;">
-    <tr>
-    <td>
-    <?php
-    $info = isset($_REQUEST['info']) ? $_REQUEST['info'] : 'no';
-  $users = isset($_REQUEST['users']) ? $_REQUEST['users'] : '&lt; 5';
-
-  $radio_list = new radio_list('info', $info);
-  $radio_list->add_option('no', "");
-  echo "No, Don't send information to Intermesh <br />";
-  $radio_list->add_option('business', "");
-  echo "Yes, tell Intermesh that I'm using Group-Office for business purpose.<br />";
-  $radio_list->add_option('personal', "");
-  echo "Yes, tell Intermesh that I'm using Group-Office for personal use or I'm just testing.";
-  ?>
-    </td>
-    </tr>
-    <tr>
-    <td>
-    How many users do you have in Group-Office?
-    <?php
-    $dropbox = new dropbox();
-  $dropbox->add_value('&lt; 5', '&lt; 5');
-  $dropbox->add_value('20-30', '20-30');
-  $dropbox->add_value('30-50', '30-50');
-  $dropbox->add_value('50-75', '50-75');
-  $dropbox->add_value('75-100', '75-100');
-  $dropbox->add_value('100-150', '100-150');
-  $dropbox->add_value('150-200', '150-200');
-  $dropbox->add_value('300-400', '300-400');
-  $dropbox->add_value('&gt; 400', '&gt; 400');
-  $dropbox->print_dropbox('users', $users);
-  ?>
-    </td>
-    </tr>
-    <tr>
-    <td>
-    If you would like to recieve information about Group-Office Professional
-    please fill in a name and an e-mail address where Intermesh may contact you:<br />
-    <?php
-    $email = isset($email)? $email : $GO_CONFIG->webmaster_email;
-  $name = isset($name)? $name : '';
-  ?>
-    <table style="border-width: 0px;font-family: Arial,Helvetica; font-size: 12px;">
-    <tr>
-    <td>E-mail:</td>
-    <td><input type="text" size="50" name="email" value="<?php echo $email; ?>" /></td>
-    </tr>
-    <tr>
-    <td>Name:</td>
-    <td><input type="text" size="50" name="name" value="<?php echo $name; ?>" /></td>
-    </tr>
-    </table>
-    </td>
-    </tr>
-    </table><br />
-    <div align="center">
-    <input type="submit" value="Continue" />
-    </div>
-    <?php
-    print_foot();
-  exit();
-}
 
 print_head();
 
 ?>
-Installation complete!<br />
+Quá trình cài đặt đã hoàn tất!<br />
 <br />
-Please make sure Group-Office.php is not writable anymore now.<br />
+Vui lòng kiểm tra lại và đảm bảo là không ai được phép sửa chữa tập tin Group-Office.php từ lúc này.<br />
 <br />
+Trong Linux, hãy thực hiện:
 <font color="#003399"><i>
 $ chown -R someuser:someuser <?php echo $GO_CONFIG->root_path; ?><br />
 $ chmod 644 <?php echo $GO_CONFIG->root_path; ?><br />
@@ -1345,28 +1267,23 @@ $ chmod 644 <?php echo $GO_CONFIG->root_path; ?>Group-Office.php
 </i></font>
 <br />
 <br />
-If you don't have shell access then you should download Group-Office.php, delete Group-Office.php
-from the server and upload it back to the server. This way you change the ownership to your account.
+Trong Windows, hãy đặt thuộc tính Read-Only cho Group-Office.php
 <br />
-<br /> 
-When you are done log in to Group-Office with the administrator account.<br />
+<br />
+Sau khi hoàn tất, hãy đăng nhập vào HPT-OBM với tài khoản của quản trị hệ thống.<br />
 <ul>
-<li>Navigate to the menu: Configuration -> module management, select the modules you wish to use and click at the 'save' button</li>
-<li>Navigate to the menu: Configuration -> Manage user groups and create user groups.</li>
-<li>Navigate to the menu: Configuration -> Manage users and add new users.</li>
+<li>Chọn phần Cấu hình, Thêm/bớt chức năng và chọn cài đặt những module bạn cần</li>
+<li>Chọn phần Cấu hình, Quản lý nhóm để tạo các nhóm mới.</li>
+<li>Chọn phần Cấu hình, Quản lý người dùng để thêm các người dùng mới.</li>
 </ul>
 <br />
 <br />
-You can also configure external authentication servers such as an IMAP, POP-3 or LDAP server.
-Take a look at 'auth_sources.inc' for more information about this.
+Bạn cũng có thể cấu hình xác thực độc lập như IMAP, POP-3, hoặc máy chủ LDAP.
+Hãy xem 'auth_sources.inc' để biết thêm thông tin chi tiết.
 <br />
 <br />
-For troubleshooting please consult the <a target="_blank" href="FAQ">FAQ</a> included with the package. 
-If that doesn't help post on the <a target="_blank" href="http://www.group-office.com/forum/">forums</a>.<br />
-Developers should take a look at modules/example/index.php
-<br /><br />
 <div align="center">
-<input type="button" value="Launch Group-Office!" onclick="javascript:window.location='<?php echo $GO_CONFIG->host; ?>';" />
+<input type="button" value="Mở HPT-OBM!" onclick="javascript:window.location='<?php echo $GO_CONFIG->host; ?>';" />
 </div>
 <?php
 print_foot();
