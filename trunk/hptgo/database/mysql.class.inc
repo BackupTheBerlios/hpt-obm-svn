@@ -74,6 +74,7 @@ class db {
   /** 
    * Configuration parameter
    *
+   * Table name stores next ID values of some tables in the database
    * @access public 
    */
   var $Seq_Table     = "db_sequence";
@@ -86,7 +87,7 @@ class db {
   var $Record   = array();
   
   /**
-   *	Storing a record in a recordset
+   * Storing a record in a recordset
    *
    * @access public
    */
@@ -132,9 +133,8 @@ class db {
   /**
    * Result identifier
    *
-   * @access private
-   *
    * The positive number is returned by <i> mysql_query() </i> function
+   * @access private
    */
   var $Query_ID = 0;
 
@@ -319,6 +319,7 @@ class db {
 
     return 1;
   }
+  
   /**
    * Locking a table or some tables in the current database
    *
@@ -367,37 +368,83 @@ class db {
     return $res;
   }
 
-
+  /**
+   * Return the number of rows affected by the previous SQL query (for example: INSERT, DELETE, REPLACE, UPDATE)
+   *
+   * @access public
+   * @return int
+   */
   /* public: evaluate the result (size, width) */
   function affected_rows() {
     return @mysql_affected_rows($this->Link_ID);
   }
 
+  /**
+   * Return the number of rows returned by the previous SELECT SQL query
+   *
+   * @access public
+   * @return int
+   */
   function num_rows() {
     return @mysql_num_rows($this->Query_ID);
   }
 
+  /**
+   * Return the number of fields in a result set
+   * @access public
+   * @return int
+   */
   function num_fields() {
     return @mysql_num_fields($this->Query_ID);
   }
 
+  /**
+   * Return the number of rows
+   *
+   * Shorthand notation - invoke num_rows() function
+   * @access public
+   * @return int
+   */
   /* public: shorthand notation */
   function nf() {
     return $this->num_rows();
   }
 
+  /**
+   * Print the number of rows
+   *
+   * Print the value returned by num_rows() function 
+   * @access public
+   */
   function np() {
     print $this->num_rows();
   }
 
+  /**
+   * Return the value of $Name field in the current record
+   * @access public
+   * @param string $Name
+   * @return mixed
+   */
   function f($Name) {
     return $this->Record[$Name];
   }
 
+  /**
+   * Print the value of $Name field in the current record
+   * @access public
+   * @param string $Name
+   */
   function p($Name) {
     print $this->Record[$Name];
   }
 
+  /**
+   * Return the next ID value of $seq_name table
+   * @access public
+   * @param string $seq_name
+   * @return int
+   */
   /* public: sequence numbers */
   function nextid($seq_name) {
     $this->connect();
@@ -435,6 +482,15 @@ class db {
     return $nextid;
   }
 
+  /**
+   * Return metadata of a table (determined by $table parameter) or of a query result
+   *
+   * Depending on $full parameter, this function returns the short/full values:  
+   * @access public
+   * @param string $table
+   * @param int $full
+   * @return mixed array of metadata on success
+   */
   /* public: return table metadata */
   function metadata($table='',$full=false) {
     $count = 0;
@@ -509,6 +565,11 @@ class db {
     return $res;
   }
 
+  /**
+   * Error handling
+   * @access private
+   * @param string $msg
+   */
   /* private: error handling */
   function halt($msg) {
     $this->Error = @mysql_error($this->Link_ID);
@@ -522,13 +583,22 @@ class db {
       die("Session halted.");
   }
 
+  /*
+   * Display the error information on the web page
+   * @access private
+   * @param string $msg 
+   */
   function haltmsg($msg) {
     printf("</td></tr></table><b>Database error:</b> %s<br>\n", $msg);
     printf("<b>MySQL Error</b>: %s (%s)<br>\n",
       $this->Errno,
       $this->Error);
   }
-
+  /**
+   * Return an array listing names of the permanent table (Non-Temporary tables) in the current database
+   * @access private
+   * @return mixed 
+   */
   function table_names() {
     $this->query("SHOW TABLES");
     $i=0;
