@@ -17,13 +17,30 @@ define('STATUS_OFFER', 1);
 define('STATUS_SIGNED', 2);
 define('STATUS_IMPLEMENT', 3);
 
+/**
+* Class for Projects module
+* 
+*  @author: Merijn Schering <mschering@intermesh.nl>
+*  @version: 1.0 Release date: 08 July 2003
+*/
 class projects extends db
 {
+
+/**
+* Constructor
+*/
   function projects()
   {
     $this->db();
   }
 
+/**
+* Get setting for user
+*
+* Get setting from database, if not, insert a default setting then get again.
+* @param	int		$user_id	User ID
+* @return	Record	a record in pm_settings table
+*/
   function get_settings($user_id)
   {
     $this->query("SELECT * FROM pm_settings WHERE user_id='$user_id'");
@@ -39,6 +56,14 @@ class projects extends db
     }                
   }
 
+/**
+* Set order and field sorting
+*
+* @param	int		$user_id	User ID
+* @param	string	$sort_field	Field name to sort
+* @param	string	$sort_order	Order string ("ASC","DESC")
+* @return	int 	= 0 if fail
+*/
   function set_sorting($user_id, $sort_field, $sort_order)
   {
     $sql = "UPDATE pm_settings SET sort_field='$sort_field' , ".
@@ -46,18 +71,39 @@ class projects extends db
     return $this->query($sql);
   }
 
+/**
+* Save show projects for current user
+*
+* @param	int		$user_id		User ID
+* @param	int		$show_projects	Show projects value
+* @return	int 	= 0 if fail
+*/
   function set_show_projects($user_id, $show_projects)
   {
     $sql = "UPDATE pm_settings SET show_projects='$show_projects'  WHERE user_id='$user_id'";
     return $this->query($sql);
   }
 
+/**
+* Save show catalog of current user
+*
+* @param	int		$user_id		User ID
+* @param	string	$sort_catalog	Show catalog value
+* @return	int 	= 0 if fail
+*/
   function set_show_catalog($user_id, $show_catalog)
   {
     $sql = "UPDATE pm_settings SET show_catalog='$show_catalog'  WHERE user_id='$user_id'";
     return $this->query($sql);
   }
 
+/**
+* Set start timer (don't use now)
+*
+* @param	int		$user_id	User ID
+* @param	string	$project_id	Project ID
+* @return	int 	= 0 if fail
+*/
   function start_timer($user_id, $project_id)
   {
     $sql = "INSERT INTO pmTimers (user_id, start_time, project_id) ".
@@ -65,12 +111,24 @@ class projects extends db
     return $this->query($sql);
   }
 
+/**
+* Remove timer (stop)
+*
+* @param	int		$user_id	User ID
+* @return	int 	= 0 if fail
+*/
   function stop_timer($user_id)
   {
     $sql = "DELETE FROM pmTimers WHERE user_id='$user_id'";
     return $this->query($sql);
   }
 
+/**
+* Get timer
+*
+* @param	int		$user_id	User ID
+* @return	mixed 	if success return a record in pmTimer table, if fail return false
+*/
   function get_timer($user_id)
   {
     $sql = "SELECT start_time, project_id FROM pmTimers WHERE user_id='$user_id'";
@@ -82,6 +140,20 @@ class projects extends db
     return false;
   }
 
+/**
+* Add a new project
+*
+* @param	int		$user_id				User ID, who creates this project
+* @param	string	$name					Project name
+* @param	string	$Description			Description
+* @param	int		$contact_id				Client ID
+* @param	string	$comments				Comments
+* @param	string	$start_date				Start date of project
+* @param	string	$end_date				End date of project
+* @param	string	$responsible_user_id	Project manager ID
+* @param	string	$probability		Project name
+* @return	int 	= 0 if fail
+*/
   function add_project($user_id, $name, $description, $contact_id, $comments,
       $start_date, $end_date, $status, $responsible_user_id,
       $probability, $fee_id, $budget, $acl_read, $acl_write, $task_template_id, $cat_id)
