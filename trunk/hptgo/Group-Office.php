@@ -78,7 +78,7 @@ class GO_CONFIG
 * @var     string
 * @access  public
 */
-  var $version = "2.05";
+  var $version = "1.01";
 
 /**
 * Relative hostname with slash on both start and end
