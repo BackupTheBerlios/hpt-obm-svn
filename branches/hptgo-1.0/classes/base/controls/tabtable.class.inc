@@ -121,7 +121,7 @@ class tabtable
 				'<td colspan="100">'.
 					'<table width="100%" border="0" cellspacing="0" cellpadding="0">'.
 						'<tr>'.
-    						'<th width="99%" nowrap>'.$this->html_title ? $this->title : htmlspecialchars($this->title).'</th>'.
+    						'<th width="99%" nowrap>'.($this->html_title ? $this->title : htmlspecialchars($this->title)).'</th>'.
     						'<th width="1%" nowrap>'.htmlspecialchars($this->right_title).'&nbsp;</th>'.
 						'</tr>'.
 					'</table>'.
