@@ -47,7 +47,7 @@ if (is_group_folder($group_folders, $path) || $fs->has_read_permission($GO_SECUR
 		header('Content-Disposition: attachment; filename="'.$filename.'"');
 	}
 	header('Content-Transfer-Encoding: binary');
-	$fd = fopen($path,'rb');
+	$fd = $fs->chroot_fopen($path,'rb');
 	while (!feof($fd)) {
 		print fread($fd, 32768);
 	}

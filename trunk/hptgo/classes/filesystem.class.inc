@@ -1401,4 +1401,8 @@ class filesystem extends db
     return get_mime_type($this->root.$path);
   }
 
+  function chroot_fopen($path,$mode)
+  {
+    return fopen($this->root.$path,$mode);
+  }
 }
