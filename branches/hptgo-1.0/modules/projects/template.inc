@@ -240,16 +240,16 @@ $legend = '<table border="0" cellspacing="1" cellpadding="0" width="180" bgcolor
             '<tr>'.
               '<td align="center">'.
                 '<img src="'.$GO_THEME->images['add_project_task'].'" border="0" /></td>'.
-              '<td>'.$pm_insert_task.'</td>'.
+              '<td>'.$pm_legend_addtask.'</td>'.
             '</tr>'.
             '<tr>'.
               '<td align="center"><img src="'.$GO_THEME->images['task_up'].'" border="0" /><br>'.
               '<img src="'.$GO_THEME->images['task_dn'].'" border="0" /></td>'.
-              '<td>Move task up/down</td>'.
+              '<td>'.$pm_legend_movetask.'</td>'.
             '</tr>'.
             '<tr>'.
               '<td align="center">'.$trash.'</td>'.
-              '<td>Delete task/template</td>'.
+              '<td>'.$pm_legend_deltask.'</td>'.
             '</tr>'.
             '</table>'.
           '</td></tr>'.

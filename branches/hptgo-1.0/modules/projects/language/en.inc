@@ -135,6 +135,10 @@ $pm_legend_planning = 'Planning';
 $pm_legend_ongoing = 'Ongoing';
 $pm_legend_done = 'Done';
 
+$pm_legend_addtask = 'Insert new task';
+$pm_legend_movetask = 'Move task up/down';
+$pm_legend_deltask = 'Delete task/template';
+
 $cmdGantt = 'Gantt chart';
 $cmdDrop = 'Discontinue';
 $cmdRecover = 'Recover';

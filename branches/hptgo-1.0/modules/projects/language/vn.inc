@@ -135,6 +135,10 @@ $pm_legend_planning = 'Dự kiến';
 $pm_legend_ongoing = 'Tiến hành';
 $pm_legend_done = 'Hoàn tất';
 
+$pm_legend_addtask = 'Thêm công việc mới';
+$pm_legend_movetask = 'Thay đổi thứ tự công việc';
+$pm_legend_deltask = 'Xoá công việc hoặc quy trình';
+
 $cmdGantt = 'Biểu đồ Gantt';
 $cmdDrop = 'Huỷ bỏ dự án';
 $cmdRecover = 'Phục hồi dự án';
