@@ -130,6 +130,16 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 	global $image, $path, $GO_SECURITY, $GO_THEME,$group_folders;
 	global $addressbook_id,$ab_settings;
 	global $rowcount,$link_back,$first,$max_rows;
+	global $has_parent;
+
+	$ab = new addressbook();
+	$has_parent = array();
+	$ab->query("SELECT DISTINCT a1.id AS id ".
+		   "FROM ab_companies AS a1, ab_companies AS a2 ".
+		   "WHERE a1.id=a2.parent AND a1.parent=".(int)$parent);
+	while ($ab->next_record())
+		$has_parent[$ab->f('id')] = true;
+
 
 	$total = 0;
 
@@ -156,10 +166,8 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 		}
 
 		$open = in_array($ab->f('id'), $_SESSION['expanded']);
-		$subab = new addressbook();
-		$subcount = $subab->get_count_by_parent($addressbook_id,$ab->f('id'));
-		//if ($subfolders_count > 0)
-		if ($subcount)
+		$yes_im_a_child = isset($has_parent[$ab->f('id')]);
+		if ($yes_im_a_child)
 		{
 			if ($i < ($count-1))
 			{
@@ -183,7 +191,6 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 				$node = $image['emptylastnode'];
 			}
 		}
-		unset($subab);
 
 		if ($open)
 		{
@@ -202,7 +209,7 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 //		echo '<td width="16"><input id="'.addslashes($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
 		echo '<td width="16"><input type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
 		
-		if ($subcount)
+		if ($yes_im_a_child)
 			echo '<td><a href="javascript:document.forms[0].expand_path.value=\''.$path.','.$ab->f('id').'\';document.forms[0].submit()">'.$images.$node.'</a>';
 		else
 			echo '<td>'.$images.$node;
