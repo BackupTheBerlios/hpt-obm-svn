@@ -3,12 +3,14 @@
 <tr>
 	<td valign="top">
 	<table border="0" cellpadding="0" cellspacing="3">
+<?php if ($company_id > 0) { /* When adding new company, addressbook is not specified yet, so disable this thing.*/?>
 	<tr>
 		<td align="right" nowrap>
 		<?php echo $strParentCompany; ?>:&nbsp;
 		</td>
 		<td><?php $parent_dropbox->print_dropbox('parent_id',$company['parent_id']);?></td>
 	</tr>
+<?php } ?>
 
 	<tr>
 		<td align="right" nowrap>

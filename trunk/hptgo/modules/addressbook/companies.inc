@@ -81,10 +81,11 @@ if ($ab->get_subscribed_addressbooks($GO_SECURITY->user_id) > 1)
 }
 
 
-$count = $ab->get_companies($addressbook_id, $ab_settings['sort_companies_field'], $ab_settings['sort_companies_order'], $first, $max_rows);
+$count = $ab->get_companies($addressbook_id, ($ab_settings['sort_companies_field'] == 'new' ? 'company_id' : $ab_settings['sort_companies_field']), $ab_settings['sort_companies_order'], $first, $max_rows);
 $str_count = $count == 1 ? $ab_companies_count_single : $ab_companies_count;
 echo '</td><td colspan="99" class="small" align="right">'.$count.' '.$str_count.'</td></tr>';
 echo '<tr height="20">';
+
 echo '<td class="TableHead2" width="16"><input type="checkbox" name="dummy" value="dummy" onclick="javascript:invert_selection()" /></td>';
 echo '<td class="TableHead2" nowrap><a class="TableHead2" href="javascript:_sort(\'name\',\''.$new_sort_order.'\');">'.$strName.'</a>';
 if ($ab_settings['sort_companies_field'] == 'name')
@@ -117,19 +118,63 @@ if ($ab_settings['sort_companies_field'] == 'phone')
 	echo $sort_arrow;
 }
 echo '</td>';
+
+// check for new companies
+$myab = new addressbook();
+if ($myab->query("SELECT * FROM ab_addressbooks WHERE id='$addressbook_id'") &&
+    $myab->next_record())
+{
+	$owner = $myab->f('user_id');
+	if ($GO_SECURITY->user_id == $owner &&
+	    $myab->query("SELECT company_id FROM ab_new_companies WHERE addressbook_id='$addressbook_id'"))
+	{
+		$new_companies = array();
+		while ($myab->next_record())
+			$new_companies[$myab->f('company_id')] = 1;
+		if (isset($_REQUEST['reviewed']) && (int)$_REQUEST['reviewed'] != 0)
+		{
+			$id = (int)$_REQUEST['reviewed'];
+			if (isset($new_companies[$id]))
+			{
+				@$myab->query("DELETE FROM ab_new_companies WHERE addressbook_id='$addressbook_id' AND company_id='$id'");
+				unset($new_companies[$id]);
+			}
+			else
+			{
+				@$myab->query("INSERT INTO ab_new_companies (addressbook_id,company_id) VALUES('$addressbook_id','$id')");
+				$new_companies[$id] = 1;
+			}
+		}
+		echo '<td class="TableHead2"><a class="TableHead2" href="javascript:_sort(\'company_id\',\''.$new_sort_order.'\');">'.$strNew.'</a>';
+		if ($ab_settings['sort_companies_field'] == 'company_id')
+		{
+			echo $sort_arrow;
+		}
+		echo '</td>';
+		echo '<input type="hidden" name="reviewed" value="" />';
+	}
+}
+unset($myab);
+
+
 echo '</tr>';
 
 if ($count > 0)
 {
 	while($ab->next_record())
 	{
-		echo '<tr id="'.$ab->f("id").'">';
+		echo '<tr id="'.$ab->f("id").'" '.(isset($new_companies[$ab->f('id')]) ? 'class="TableInside2"': '').' >';
 		echo '<td width="16"><input id="'.addslashes($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
 		echo '<td><a class="normal" href="'.$GO_MODULES->url.'company.php?company_id='.$ab->f('id').'&return_to='.rawurlencode($link_back).'">'.htmlspecialchars($ab->company_name()).'</a></td>';
 		echo '<td>'.$ab->f('city').'</td>';
 		echo '<td>'.mail_to($ab->f('email'), $ab->f('email')).'</td>';
 		echo '<td><a class="normal" target="_blank" href="'.$ab->f('homepage').'">'.$ab->f('homepage').'</a></td>';
-		echo '<td>'.$ab->f('phone').'</td></tr>';
+		echo '<td>'.$ab->f('phone').'</td>';
+		if (isset($new_companies))
+		{
+			echo '<td align="center"><input type="checkbox" onchange="javacript:document.forms[0].reviewed.value=\''.$ab->f('id').'\';document.forms[0].submit()" '.(isset($new_companies[$ab->f('id')]) ? 'checked' : '').' /></td>';
+		}
+		echo '</tr>';
 		echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 	}
 

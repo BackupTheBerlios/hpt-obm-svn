@@ -339,3 +339,10 @@ CREATE TABLE ab_categories (
   PRIMARY KEY  (category_id)
 ) TYPE=MyISAM;
 
+DROP TABLE IF EXISTS `ab_new_companies`;
+CREATE TABLE ab_new_companies ( 
+  `addressbook_id` int(11) NOT NULL default '0',
+  `company_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (addressbook_id,company_id)
+) TYPE=MyISAM;
+

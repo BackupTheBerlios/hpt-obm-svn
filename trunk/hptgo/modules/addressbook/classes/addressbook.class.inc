@@ -696,7 +696,16 @@ class addressbook extends db
 	"('$company_id', '$user_id', '$addressbook_id', '$name', '$address', '$zip', '$city', '$state', '$country', '$email', '$phone', '$fax', '$homepage', '$bank_no', '$vat_no', '$acl_read', '$acl_write', '$parent_id', '$shortname', '$engname')";
       if ($this->query($sql))
       {
+	global $GO_SECURITY;
 	$this->query("INSERT INTO ab_custom_company_fields (id) VALUES ('$company_id')");
+
+	if ($this->query("SELECT * FROM ab_addressbooks WHERE id='$addressbook_id'") && 
+	    $this->next_record() &&
+	    $GO_SECURITY->user_id != $this->f('user_id'))
+	{
+	  $this->query("INSERT INTO ab_new_companies (addressbook_id,company_id) VALUES('$addressbook_id','$company_id')");
+	}
+
 	return $company_id;
       }
     }
@@ -714,7 +723,18 @@ class addressbook extends db
       "homepage='$homepage', bank_no='$bank_no', vat_no='$vat_no', parent='$parent_id', ".
       "shortname='$shortname', engname='$engname'  WHERE id='$company_id'";
 
-    return $this->query($sql);
+    if ($this->query($sql))
+    {
+      global $GO_SECURITY;
+      if ($this->query("SELECT * FROM ab_addressbooks WHERE id='$addressbook_id'") && 
+	  $this->next_record() && $GO_SECURITY->user_id != $this->f('user_id'))
+      {	
+	@$this->query("INSERT INTO ab_new_companies (addressbook_id,company_id) VALUES('$addressbook_id','$company_id')");
+      }
+      return true;
+    }
+    else
+      return false;
 
   }
 
@@ -747,16 +767,40 @@ class addressbook extends db
     {
       $user_id = $GO_SECURITY->user_id;
     }
-    $sql = "SELECT DISTINCT ab_companies.* FROM ab_companies ".
-      "INNER JOIN acl ON (ab_companies.acl_read = acl.acl_id OR ab_companies.acl_write = acl.acl_id) ".
-      "LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
-      "WHERE ((users_groups.user_id='$user_id' AND acl.user_id=0) OR (".
-      "acl.group_id=0 AND acl.user_id='$user_id')) ".
-      "AND addressbook_id='$addressbook_id' ORDER BY $sort $direction";
+    $myab = new addressbook();
+    if ($myab->query("SELECT * FROM ab_addressbooks WHERE id='$addressbook_id'") &&
+	$myab->next_record())
+      $owner = $myab->f('user_id');
+
+    if (isset($owner) && $owner == $GO_SECURITY->user_id)
+      $sql = "SELECT DISTINCT ab_companies.*, ab_new_companies.company_id FROM ab_companies ".
+	"LEFT JOIN ab_new_companies ON ab_companies.id=ab_new_companies.company_id AND ab_companies.addressbook_id=ab_new_companies.addressbook_id ".
+	"INNER JOIN acl ON (ab_companies.acl_read = acl.acl_id OR ab_companies.acl_write = acl.acl_id) ".
+	"LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
+	"WHERE ((users_groups.user_id='$user_id' AND acl.user_id=0) OR (".
+	"acl.group_id=0 AND acl.user_id='$user_id')) ".
+	"AND ab_companies.addressbook_id='$addressbook_id' ORDER BY $sort $direction";
+    else
+      $sql = "SELECT DISTINCT ab_companies.* FROM ab_companies ".
+	"INNER JOIN acl ON (ab_companies.acl_read = acl.acl_id OR ab_companies.acl_write = acl.acl_id) ".
+	"LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
+	"WHERE ((users_groups.user_id='$user_id' AND acl.user_id=0) OR (".
+	"acl.group_id=0 AND acl.user_id='$user_id')) ".
+	"AND addressbook_id='$addressbook_id' ORDER BY $sort $direction";
+
     if ($offset != 0)
     {
       $sql .= " LIMIT $start, $offset";
 
+    if (isset($owner) && $owner == $GO_SECURITY->user_id)
+      $sql2 = "SELECT DISTINCT ab_companies.id FROM ab_companies ".
+	"LEFT JOIN ab_new_companies ON ab_companies.id=ab_new_companies.company_id AND ab_companies.addressbook_id=ab_new_companies.addressbook_id ".
+	"INNER JOIN acl ON (ab_companies.acl_read = acl.acl_id OR ab_companies.acl_write = acl.acl_id) ".
+	"LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
+	"WHERE ((users_groups.user_id='$user_id' AND acl.user_id=0) OR (".
+	"acl.group_id=0 AND acl.user_id='$user_id')) ".
+	"AND ab_companies.addressbook_id='$addressbook_id'";
+    else
       $sql2= "SELECT DISTINCT ab_companies.id FROM ab_companies ".
 	"INNER JOIN acl ON (ab_companies.acl_read = acl.acl_id OR ab_companies.acl_write = acl.acl_id) ".
 	"LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
