@@ -45,7 +45,7 @@ require($GO_THEME->theme_path."header.inc");
 				while($bookmarks->next_record())
 				{
 					echo "<tr><td><a class=\"normal\" href=\"javascript:popup('".$GO_CONFIG->host."bookmarks/save_bookmark.php?bookmark_id=".$bookmarks->f("id")."&bname=".urlencode($bookmarks->f("name"))."&bURL=".$bookmarks->f("URL")."&new_window=".$bookmarks->f("new_window")."','500','160')\">".$bookmarks->f("name")."</a></td>";
-					echo "<td><a href='javascript:confirm_action(\"".$_SERVER['PHP_SELF']."?delete_bookmark=".$bookmarks->f("id")."\",\"".rawurlencode($strDeletePrefix."'".$bookmarks->f("name")."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$bookmarks->f("name")."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td></tr>";
+					echo "<td><a href='javascript:div_confirm_action(\"".$_SERVER['PHP_SELF']."?delete_bookmark=".$bookmarks->f("id")."\",\"".div_confirm_id($strDeletePrefix."'".$bookmarks->f("name")."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$bookmarks->f("name")."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td></tr>";
 				}
 			}else
             {

@@ -219,9 +219,9 @@ if ($count == 0)
 					'<td width="8">'.$priority.'</td>'.
 					'<td width="100%"><a class="'.$class.'" href="'.$calendar_module_url.'todo.php?todo_id='.$todos->f('id').
 					'&return_to='.urlencode($link_back).'" '.$overlib->print_overlib($title).'">'.$todos->f('name').'</a></td>'.
-					"<td><a href='javascript:confirm_action(\"javascript:delete_todo(".
-					$todos->f('id').")\",\"".($strDeletePrefix."%27".
-					htmlspecialchars($todos->f('name'))."%27".$strDeleteSuffix).
+					"<td><a href='javascript:div_confirm_action(\"javascript:delete_todo(".
+					$todos->f('id').")\",\"".div_confirm_id($strDeletePrefix."'".
+					$todos->f('name')."'".$strDeleteSuffix).
 					"\")' title=\"".$strDeleteItem." '".
 					htmlspecialchars($todos->f('name'))."'\"><img src=\"".
 					$GO_THEME->images['delete']."\" border=\"0\"></a></td>".

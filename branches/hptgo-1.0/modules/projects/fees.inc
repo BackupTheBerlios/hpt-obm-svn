@@ -33,9 +33,9 @@ while ($projects->next_record())
 					$strEdit.' \''.$projects->f('name').'\'"><img src="'.$GO_THEME->images['edit'].
 					'" border="0"></a></td>';
 
-		echo "<td><a href='javascript:confirm_action(\"".$_SERVER['PHP_SELF'].
+		echo "<td><a href='javascript:div_confirm_action(\"".$_SERVER['PHP_SELF'].
 					"?post_action=fees&delete_fee=".$projects->f("id")."\",\"".
-					rawurlencode($strDeletePrefix.htmlspecialchars($projects->f("name")).
+					div_confirm_id($strDeletePrefix.htmlspecialchars($projects->f("name")).
 					$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".
 					htmlspecialchars($projects->f("name")).
 					"'\"><img src=\"".$GO_THEME->images['delete'].

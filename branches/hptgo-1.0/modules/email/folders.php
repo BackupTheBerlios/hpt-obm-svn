@@ -376,7 +376,7 @@ if ($account && $mail->open($account['host'], $account['type'],
 
 				echo '<td align="center"><input type="checkbox" name="use[]" value="'.$go_mailboxes[$a]['name'].'" '.$checked.' /></td>';
 				echo '<td><a href="'.$_SERVER['PHP_SELF'].'?account_id='.$account_id.'&return_to='.urlencode($return_to).'&link_back='.urlencode($link_back).'&edit_name='.urlencode($go_mailboxes[$a]['name']).'" title="'.$strEdit.' '.$go_mailboxes[$a]['name'].'"><img src="'.$GO_THEME->images['edit'].'" border="0" /></a></td>';
-				echo "<td><a href='javascript:confirm_action(\"".$_SERVER['PHP_SELF']."?account_id=".$account_id."&return_to=".urlencode($return_to)."&delete_folder=".urlencode($go_mailboxes[$a]['name'])."\",\"".rawurlencode($strDeletePrefix."'".$folder_name."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$go_mailboxes[$a]['name']."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>";
+				echo "<td><a href='javascript:div_confirm_action(\"".$_SERVER['PHP_SELF']."?account_id=".$account_id."&return_to=".urlencode($return_to)."&delete_folder=".urlencode($go_mailboxes[$a]['name'])."\",\"".div_confirm_id($strDeletePrefix."'".$folder_name."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$go_mailboxes[$a]['name']."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>";
 				echo '</tr>';
 				$lastfolder = $go_mailboxes[$a]['name'];
 			}

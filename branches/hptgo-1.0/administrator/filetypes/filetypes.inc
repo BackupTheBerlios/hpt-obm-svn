@@ -54,7 +54,7 @@ $first = isset($_REQUEST['first']) ? $_REQUEST['first'] : 0;
 				echo '<td>'.$filetypes->f("mime").'</td>';
 				echo '<td>'.$filetypes->f("friendly").'</td>';
 				echo '<td><a href="'.$_SERVER['PHP_SELF'].'?task=filetype&extension='.$filetypes->f("extension").'&first='.$first.'" title="'.$strEdit.' '.$ft_friendly.'"><img src="'.$GO_THEME->images['edit'].'" border="0" /></a></td>';
-				echo "<td><a href='javascript:confirm_action(\"".$_SERVER['PHP_SELF']."?delete_type=".$filetypes->f("extension")."&first=".$first."\",\"".rawurlencode($strDeletePrefix."'".$filetypes->f("extension")."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$filetypes->f("extension")."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td></tr>\n";
+				echo "<td><a href='javascript:div_confirm_action(\"".$_SERVER['PHP_SELF']."?delete_type=".$filetypes->f("extension")."&first=".$first."\",\"".div_confirm_id($strDeletePrefix."'".$filetypes->f("extension")."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$filetypes->f("extension")."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td></tr>\n";
 				echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 			}
 

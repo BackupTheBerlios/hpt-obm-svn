@@ -1509,4 +1509,21 @@ function hex2dec($html_color)
   $color['B']=$B;
   return $color;
 }
+
+function div_confirm_id($string)
+{
+	global $confirm_id;
+	global $confirm_texts;
+
+	if (!isset($confirm_id))
+		$confirm_id = 0;
+	$id = $confirm_id++;
+	$confirm_texts[$id] = $string;
+	return $id;
+}
+
+function div_confirm_action($url,$string)
+{
+	return "div_confirm_action('$url',".div_confirm_id($string).")";
+}
 ?>
