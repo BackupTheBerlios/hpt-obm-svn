@@ -114,6 +114,7 @@ $ab_comment = 'Chú thích';
 $ab_contact = 'Liên hệ';
 $ab_send_message = 'E-mail';
 $ab_new_event = 'Sự kiện';
+$ab_new_project = 'Dự án';
 
 $ab_templates = 'Các biểu mẫu';
 $ab_your_templates = 'Của bạn';

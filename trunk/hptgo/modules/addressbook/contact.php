@@ -335,6 +335,11 @@ if ($contact_id > 0)
     echo mail_to($contact['email'], '<img src="'.$GO_THEME->images['ab_email'].'" border="0" height="32" width="32" /><br />'.$ab_send_message, 'small', true, $contact_id);
     echo '</td>';
   }
+    
+    echo '<td  class="ModuleIcons" nowrap>';
+      echo '<a href="'.$projects_module['url'].'project.php?contact_id='.$contact_id.'&return_to='.rawurlencode($link_back).'"><img src="'.$GO_THEME->images['pr_new_project'].'" border="0" height="32" width="32" /><br />'.$ab_new_project.'</td>';
+      
+      
   $calendar_module = $GO_MODULES->get_module('calendar');
   if ($calendar_module)
   {

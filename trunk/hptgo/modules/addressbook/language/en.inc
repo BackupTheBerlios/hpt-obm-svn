@@ -114,6 +114,7 @@ $ab_comment = 'Comment';
 $ab_contact = 'Contact';
 $ab_send_message = 'E-mail';
 $ab_new_event = 'Event';
+$ab_new_project = 'Project';
 
 $ab_templates = 'Templates';
 $ab_your_templates = 'Your';
