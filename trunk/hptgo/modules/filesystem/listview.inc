@@ -41,7 +41,11 @@ echo '<input type="hidden" name="task" />';
 echo '<table border="0" cellpadding="0" cellspacing="0"><tr>';
 
 if (!$is_project_folder) {
-  if ($parent_path = dirname($path))
+  if (isset($_REQUEST['parent_path']))
+    $parent_path = $_REQUEST['parent_path'];
+  else
+    $parent_path = dirname($path);
+  if ($parent_path)
   {
     if ($fs->has_read_permission($GO_SECURITY->user_id, $parent_path))
     {
@@ -206,7 +210,10 @@ while ($folder = array_shift($folders))
   $short_name = cut_string($folder['name'], 30);
   echo '<tr id="'.$folder['path'].'" class="Table1">';
   echo '<td><input onclick="javascript:item_click(this)" type="checkbox" name="folders[]" value="'.$folder['path'].'" /></td>';
-  if ($fs->get_share($folder['path']))
+  if ($fs->is_common_folder($folder['path']))
+    $is_system_folder = $fs->is_system_folder($folder['path']);
+  if (($fs->is_common_folder($folder['path']) && $is_system_folder) ||
+      (!$fs->is_common_folder($folder['path']) && $fs->get_share($folder['path'])))
   {
     $folder_image = $GO_THEME->images['shared_folder'];
   }else

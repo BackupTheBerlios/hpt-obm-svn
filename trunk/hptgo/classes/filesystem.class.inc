@@ -86,7 +86,6 @@ class filesystem extends db
       }
     }
 
-
     $home_path = $GO_CONFIG->file_storage_path.'projects/';
     global $GO_MODULES,$GO_SECURITY;
     $project = $GO_MODULES->get_module('projects');
@@ -105,7 +104,37 @@ class filesystem extends db
       	($db->num_rows() && $db->next_record() && $db->f('task_person_id') == $GO_SECURITY->user_id))
 	return true;
     }
+
+
+    if ($this->is_common_folder($path) &&
+	$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+      return true;
+
     return false;
+  }
+
+  function is_common_folder($folder)
+  {
+    global $GO_CONFIG,$GO_SECURITY;
+    $home_path = $GO_CONFIG->file_storage_path.'common';
+    $ret = substr($folder,0,strlen($home_path)) == $home_path;
+    /*
+    if ($ret &&
+	$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+    {
+      $fs2 = new filesystem();
+      if (!$fs2->get_share($folder))
+	$fs2->add_share($GO_SECURITY->user_id,$folder);
+    }
+    */
+    //echo "Common $folder is $ret<br/>\n";
+    return $ret;
+  }
+
+  function is_system_folder($folder)
+  {
+    $db = new db();
+    return $db->query("SELECT * FROM fsSystemFolders WHERE path='".$folder."'") && $db->num_rows();
   }
 
   function get_shares($user_id)
@@ -167,6 +196,19 @@ class filesystem extends db
 	$GO_DAV->add_share($user_id, $path);
       }
       
+      if ($this->is_common_folder($path))
+      {
+	$parent = dirname($path);
+	$parentfs = new filesystem();
+	$share = $parentfs->get_share($parent);
+	if ($share)
+	{
+	  $GO_SECURITY->copy_acl($share['acl_read'],$acl_read);
+	  $GO_SECURITY->copy_acl($share['acl_write'],$acl_write);
+	}
+      }
+      
+
       return $this->query($sql);
     }else
     {
@@ -467,6 +509,10 @@ class filesystem extends db
     global $GO_SECURITY;
     if (is_dir($path))
     {
+      if ($this->is_system_folder($path) &&
+	  !$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+	return false;
+
       $children = $this->get_folders($path);
       while ($child = array_shift($children))
       {
@@ -559,6 +605,46 @@ class filesystem extends db
 	  $folder['size'] = filesize($folder_path);
 	  $folder['type'] = filetype($folder_path);
 	  $folders[] = $folder;
+	}
+      }
+      closedir($dir);
+    }
+    return $folders;
+  }
+
+  function get_visible_folders($user_id,$path)
+  {
+    global $GO_CONFIG;
+    $slash = stristr(PHP_OS, 'Windows') ? '\\' : '/';
+    if (substr($path, -1) != $slash) $path .= $slash;
+
+    $folders = array();
+    if($dir = opendir($path))
+    {
+      while($item=readdir($dir))
+      {
+	$folder_path = $path.$item;
+	if (is_dir($folder_path) && $item != "." && $item != ".." &&
+	  $item != $GO_CONFIG->name_of_sharedir && !(strpos($item,".") === 0) )
+	{
+	  if ($this->has_read_permission($user_id,$folder_path))
+	  {
+	    //echo "Got $folder_path<br/>\n";
+	    $folder['path'] = $folder_path;
+	    $folder['name'] = basename($folder_path);
+	    $folder['mtime'] = filemtime($folder_path);
+	    $folder['size'] = filesize($folder_path);
+	    $folder['type'] = filetype($folder_path);
+	    $folders[] = $folder;
+	  }
+	  else
+	  {
+	    //echo "Dive into $folder_path<br/>\n";
+	    $subfolders = $this->get_visible_folders($user_id,$folder_path);
+	    if (is_array($subfolders))
+	      foreach ($subfolders as $folder)
+		$folders[]  = $folder;
+	  }
 	}
       }
       closedir($dir);
@@ -795,5 +881,39 @@ class filesystem extends db
     {
       $fs->delete_share($this->f('path'));
     }
+  }
+
+  function add_system_folder($path,&$feedback)
+  {
+    global $GO_CONFIG;
+    $parent = dirname($path);
+    if ($path != $GO_CONFIG->file_storage_path.'common' &&
+	!$this->is_system_folder($parent))
+    {
+      global $strParentMustBeSystemFolder;
+      $feedback = $strParentMustBeSystemFolder;
+      return false;
+    }
+
+    $db = new db();
+    @$db->query("REPLACE INTO fsSystemFolders SET path='$path'");
+    return true;
+  }
+
+  function delete_system_folder($path,&$msg)
+  {
+    $children = $this->get_folders($path);
+    foreach ($children as $child)
+    {
+      if ($this->is_system_folder($child['path']))
+      {
+	global $strChildMustNotBeSystemFolder;
+	$msg = $strChildMustNotBeSystemFolder;
+	return false;
+      }
+    }
+    $db = new db();
+    @$db->query("DELETE FROM fsSystemFolders WHERE path='$path'");
+    return true;
   }
 }

@@ -71,4 +71,11 @@ $fb_failed_to_create = 'Thất bại khi tạo hồ sơ lưu trữ.';
 $fb_failed_to_extract = 'Thất bại khi phục hồi hồ sơ';
 $fb_compression_type = 'Nén';
 $fbFreeQuotaSpace = 'Vùng trống trong thư mục của bạn';
+
+$fs_system_folder = 'Thư mục hệ thống';
+$strParentMustBeSystemFolder = "Thư mục cha phải là thư mục hệ thống để đặt thư mục này là thư mục hệ thống";
+$strChildMustNotBeSystemFolder = "Thư mục con phải không là thư mục hệ thống để bỏ đặt thư mục hệ thống cho thư mục này";
+$fbWorkspace = "Thư mục làm việc";
+$fs_set_permissions = 'Điều chỉnh quyền truy cập';
+$strUsePermissionsOf = 'Quyền truy cập giống với';
 ?>

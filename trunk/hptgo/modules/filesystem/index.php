@@ -352,6 +352,23 @@ switch ($task)
 	  }
 	}
 
+	if ($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id) && $fs->is_common_folder($path))
+	{
+	  if (isset($_POST['system_folder']) && !$fs->is_system_folder($path))
+	  {
+	    if (!$fs->add_system_folder($path,$msg))
+	      $feedback = '<p class="Error">'.$msg.'</p>';
+	  }
+	  else
+	  {
+	    if (!isset($_POST['system_folder']) && $fs->is_system_folder($path))
+	    {
+	      if (!$fs->delete_system_folder($path,$msg))
+		$feedback = '<p class="Error">'.$msg.'</p>';
+	    }
+	  }
+	}
+
 	if (!$fs->has_write_permission($GO_SECURITY->user_id, $path))
 	{
 	  $feedback = '<p class="Error">'.$strAccessDenied.'</p>';

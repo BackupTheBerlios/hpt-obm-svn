@@ -73,9 +73,13 @@ function print_filesystem($folders, $images='', $arguments='')
 			}
 		}
 
+		if ($fs->is_common_folder($folders[$i]['path']))
+			$is_system_folder = $fs->is_system_folder($folders[$i]['path']);
+
 		if ($folders[$i]['path'] == $path)
 		{
-			if($fs->get_share($folders[$i]['path']))
+			if (($fs->is_common_folder($folders[$i]['path']) && $is_system_folder) ||
+					(!$fs->is_common_folder($folders[$i]['path']) && $fs->get_share($folders[$i]['path'])))
 			{
 				$folder_image = $image['opened_folder_shared'];
 			}else
@@ -84,7 +88,8 @@ function print_filesystem($folders, $images='', $arguments='')
 			}
 		}else
 		{
-			if($fs->get_share($folders[$i]['path']))
+			if (($fs->is_common_folder($folders[$i]['path']) && $is_system_folder) ||
+					(!$fs->is_common_folder($folders[$i]['path']) && $fs->get_share($folders[$i]['path'])))
 			{
 				$folder_image = $image['closed_folder_shared'];
 			}else
@@ -102,6 +107,94 @@ function print_filesystem($folders, $images='', $arguments='')
 		if ($open)
 		{
 			print_filesystem($subfolders, $images.$new_image, $arguments);
+		}
+	}
+	unset($fs);
+}
+
+function print_common_filesystem($folders, $images='', $arguments='')
+{
+	global $image, $path, $GO_SECURITY;
+
+	$fs = new filesystem();
+
+	$count = count($folders);
+	for ($i=0;$i<$count;$i++)
+	{
+		if ($fs->has_read_permission($GO_SECURITY->user_id, $folders[$i]['path']))
+		{
+			$subfolders = $fs->get_visible_folders($GO_SECURITY->user_id,$folders[$i]['path']);
+			$subfolders_count = count($subfolders);
+			for ($ii = 0;$ii < $subfolders_count; $ii ++)
+				$subfolders[$ii]['parent'] = $folders[$i]['path'];
+			$open = in_array($folders[$i]['path'], $_SESSION['expanded']);
+		}
+		else
+		{
+			$subfolders = array();
+			$subfolders_count = 0;
+			$open = false;
+		}
+
+		if ($subfolders_count > 0)
+		{
+			if ($i < ($count-1))
+			{
+				$new_image = $image['vertline'];
+				$node = $open ? $image['mnode'] : $image['pnode'];
+
+			}else
+			{
+				$new_image = $image['blank'];
+				$node = $open ? $image['mlastnode'] : $image['plastnode'];
+			}
+		}else
+		{
+			if ($i < ($count-1))
+			{
+				$new_image = $image['vertline'];
+				$node = $image['emptynode'];
+			}else
+			{
+				$new_image = $image['blank'];
+				$node = $image['emptylastnode'];
+			}
+		}
+
+		if ($fs->is_common_folder($folders[$i]['path']))
+			$is_system_folder = $fs->is_system_folder($folders[$i]['path']);
+
+		if ($folders[$i]['path'] == $path)
+		{
+			if (($fs->is_common_folder($folders[$i]['path']) && $is_system_folder) ||
+					(!$fs->is_common_folder($folders[$i]['path']) && $fs->get_share($folders[$i]['path'])))
+			{
+				$folder_image = $image['opened_folder_shared'];
+			}else
+			{
+				$folder_image = $image['opened_folder'];
+			}
+		}else
+		{
+			if (($fs->is_common_folder($folders[$i]['path']) && $is_system_folder) ||
+					(!$fs->is_common_folder($folders[$i]['path']) && $fs->get_share($folders[$i]['path'])))
+			{
+				$folder_image = $image['closed_folder_shared'];
+			}else
+			{
+				$folder_image = $image['closed_folder'];
+			}
+
+		}
+
+		$short_name = cut_string($folders[$i]['name'], 30);
+
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path='.urlencode($folders[$i]['path']).$arguments.'">'.$images.$node.'</a>';
+		echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($folders[$i]['path']).$arguments.'&parent_path='.urlencode($folders[$i]['parent']).'" title="'.htmlspecialchars($folders[$i]['name']).'">'.$folder_image.htmlspecialchars($short_name).'</a><br />';
+
+		if ($open)
+		{
+			print_common_filesystem($subfolders, $images.$new_image, $arguments);
 		}
 	}
 	unset($fs);
@@ -157,6 +250,31 @@ $folder['name'] = basename($folder['path']);
 print_filesystem(array($folder),'',$arguments);
 
 
+	echo '<table border="0" cellpadding="0" cellspacing="0">';
+	echo '<tr><td>'.$image['group'].'</td>';
+	echo '<td>'.$fbWorkspace.'</td></tr></table>';
+//echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($home_path).$arguments.'">'.$image['user'].'home</a><br />';
+
+$folder = array();
+$folder['path'] = $GO_CONFIG->file_storage_path.'common';
+$folder['name'] = basename($folder['path']);
+$folder['parent'] = '';
+
+// We MUST share the root folder.
+if (!$fs->get_share($folder['path']) &&
+    $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+	$fs->add_share($GO_SECURITY->user_id,$folder['path']);
+
+if ($fs->has_read_permission($GO_SECURITY->user_id,$folder['path']))
+	print_common_filesystem(array($folder),'',$arguments);
+else
+{
+	$folders = $fs->get_visible_folders($GO_SECURITY->user_id,$folder['path']);
+	for ($i = 0;$i < count($folders);$i ++)
+		$folders[$i]['parent'] = '';
+	print_common_filesystem($folders,'',$arguments);
+}
+
 $users_array = array();
 
 foreach ( $fs->get_my_shares() as $sharer )
@@ -181,7 +299,13 @@ foreach ( $fs->get_my_shares() as $sharer )
 			$had_permission = false;
 			while ($fs->next_record())
 			{
-        $is_sub_dir = false;
+				$is_sub_dir = false;
+				if ($fs->is_common_folder($fs->f('path')))
+				{
+					$share_count --;
+					continue;
+				}
+
 				if (file_exists($fs->f('path')))
 				{
 					if (is_dir($fs->f('path')))

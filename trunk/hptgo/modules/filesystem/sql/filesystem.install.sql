@@ -40,3 +40,14 @@ CREATE TABLE `fs_settings` (
   `sort_order` varchar(4) NOT NULL default '',
   PRIMARY KEY  (`user_id`)
 ) TYPE=MyISAM;
+
+# --------------------------------------------------------
+
+#
+# Table structure for table `fsSystemFolders`
+#
+
+DROP TABLE IF EXISTS `fsSystemFolders`;
+CREATE TABLE `fsSystemFolders` (
+  `path` varchar(200) NOT NULL default ''
+) TYPE=MyISAM COMMENT='Table to determine which folder is system folder';

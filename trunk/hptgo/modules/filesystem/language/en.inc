@@ -71,4 +71,12 @@ $fb_failed_to_create = 'Failed to create archive.';
 $fb_failed_to_extract = 'Failed to extract';
 $fb_compression_type = 'Compression';
 $fbFreeQuotaSpace = 'Free Space in your Directory';
+
+$fs_system_folder = 'Is system folder';
+$strParentMustBeSystemFolder = "The parent folder must be system folder to make this folder system folder";
+$strChildMustNotBeSystemFolder = "All children folders must not be system folders to make this folders not system folder";
+$fbWorkspace = "Workspace";
+$fs_set_permissions = 'Customize access permissions';
+$strUsePermissionsOf = 'Access permissions is as same as';
+
 ?>

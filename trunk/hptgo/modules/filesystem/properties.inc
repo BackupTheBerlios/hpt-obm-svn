@@ -193,13 +193,46 @@ switch($tabtable->get_active_tab_id())
 		  echo '<tr><td colspan="2"><hr /></td></tr>';
 		  $disabled = ($fs->is_owner($GO_SECURITY->user_id, $path) && $write_perms) ? false : true;
 
-		  echo '<tr><td colspan="2">';
-		  $checkbox = new checkbox('share_folder', $path, $fs_activate_sharing, $share, $disabled);
-		  if ($disabled)
+		  if ($fs->is_common_folder($path) && $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
 		  {
-		    echo '<input type="hidden" name="share_folder" value="'.$path.'" />';
+		    if ($path != $GO_CONFIG->file_storage_path.'common')
+		    {
+		      echo '<tr><td colspan="2">';
+		      $checkbox = new checkbox('share_folder', $path, $fs_set_permissions, $share, $disabled);
+		      if ($disabled)
+		      {
+			echo '<input type="hidden" name="share_folder" value="'.$path.'" />';
+		      }
+		      echo '</td></tr>';
+		      if (!$share)
+		      {
+			$fs3 = new filesystem();
+			$share = $fs3->find_share($path);
+			$display_path = htmlspecialchars(str_replace($GO_CONFIG->file_storage_path,$GO_CONFIG->slash,$share['path']));
+			echo '<tr><td colspan="2">';
+			echo "$strUsePermissionsOf:&nbsp; ".$display_path;
+			echo '</td></tr>';
+		      }
+		    }
+		    else
+		    {
+		      echo '<input type="hidden" name="share_folder" value="'.$path.'" />';
+		    }
+
+		    echo '<tr><td colspan="2">';
+		    $checkbox = new checkbox('system_folder', $path, $fs_system_folder, $fs->is_system_folder($path));
+		    echo '</td></tr>';
 		  }
-		  echo '</td></tr>';
+		  else
+		  {
+		    echo '<tr><td colspan="2">';
+		    $checkbox = new checkbox('share_folder', $path, $fs_activate_sharing, $share, $disabled);
+		    if ($disabled)
+		    {
+		      echo '<input type="hidden" name="share_folder" value="'.$path.'" />';
+		    }
+		    echo '</td></tr>';
+		  }
 		}
 	      ?>
 		<tr>
