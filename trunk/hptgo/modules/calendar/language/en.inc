@@ -224,4 +224,5 @@ $sc_no_ok_in_past = 'This event is done';
 
 $cmdShowSubscribed = 'Show subscribed';
 $cmdShowOwned = 'Show owned';
+$strSaveOk = "Added event %s.";
 ?>

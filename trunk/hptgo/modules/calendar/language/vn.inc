@@ -222,4 +222,5 @@ $sc_no_ok_in_past = 'Sự kiện này đã qua';
 
 $cmdShowSubscribed = 'Xem lịch đã chọn';
 $cmdShowOwned = 'Xem lịch của mình';
+$strSaveOk = "Đã thêm sự kiện %s.";
 ?>
