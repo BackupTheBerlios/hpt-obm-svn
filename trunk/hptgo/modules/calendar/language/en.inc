@@ -209,4 +209,6 @@ $cal_event_calendars = 'Calendar(s)';
 //2.06
 $cal_view_merged = 'merged';
 $cal_view_emerged = 'emerged';
+
+$strNoPastEvent= 'You should not add an event in the past';
 ?>
