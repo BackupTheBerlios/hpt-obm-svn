@@ -111,6 +111,7 @@ if ($view_id > 0)
 	$view['end_hour'] = isset($_POST['view_end_hour']) ? $_POST['view_end_hour'] : '20';
 	$view['name'] = isset($_POST['name']) ? smartstrip($_POST['name']) : '';
 	$title = $cal_new_view;
+	$has_write_permission = true;
 }
 
 $tabtable = new tabtable('view', $title, '100%', '400', '120', '', true);

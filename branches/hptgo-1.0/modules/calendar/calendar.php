@@ -112,6 +112,7 @@ if ($calendar_id > 0)
 	$calendar['end_hour'] = isset($_POST['calendar_end_hour']) ? $_POST['calendar_end_hour'] : '20';
 	$calendar['name'] = isset($_POST['name']) ? smartstrip($_POST['name']) : '';
 	$title = $sc_new_calendar;
+	$has_write_permission = true;
 }
 
 $tabtable = new tabtable('calendar', $title, '100%', '400', '120', '', true);
