@@ -231,23 +231,13 @@ class project_task extends db {
              "&task_id=".$this->id."&task_status=show_doc";
   }
 
-  function print_info($member_ids, $member_names, $member_list) {
-    global $GO_THEME, $pm_task_status_values, $pm_status_begin,
-           $responsible_user_id, $is_new_project, $tasks;
+  function get_pid_tips() {
+    global $pm_status_begin, $tasks;
 
-    if ($this->level == -1)
-      echo '<tr>';
-    else
-      echo '<tr class="ProjectTask0">';
-
-    echo '<td align="center">'.$this->order.'</td>';
-    $this->print_name();
-    $this->print_members($member_ids, $member_names, $member_list);
     if ($this->pids == '0') {
       $pids = '&nbsp;';
       $tips = '';
-    }
-    else {
+    } else {
       $nolist = array();
       $tips = '<span id="task_tips_'.$this->order.'" '.
                 'style="position: absolute; visibility:hidden; display: none;">'.
@@ -272,6 +262,22 @@ class project_task extends db {
               implode(",", $nolist).
               '</span>';
     }
+    return array($pids, $tips);
+  }
+
+  function print_info($member_ids, $member_names, $member_list) {
+    global $GO_THEME, $pm_task_status_values, $pm_status_begin,
+           $responsible_user_id, $is_new_project, $tasks;
+
+    if ($this->level == -1)
+      echo '<tr>';
+    else
+      echo '<tr class="ProjectTask0">';
+
+    echo '<td align="center">'.$this->order.'</td>';
+    $this->print_name();
+    $this->print_members($member_ids, $member_names, $member_list);
+    list($pids, $tips) = $this->get_pid_tips();
     echo '<td>'.$tips.$pids.'</td>';
     if ($this->is_manager && $is_new_project && ($this->status > TASK_DONE))
     {
@@ -342,7 +348,8 @@ class project_task extends db {
     echo "<td align=\"center\">".$this->id."</td>";
     echo "<td>".$this->name."</td>";
     echo "<td>".$member_list[$this->person_id]."</td>";
-    echo "<td>".$this->pids."</td>";
+    list($pids, $tips) = $this->get_pid_tips();
+    echo '<td>'.$tips.$pids.'</td>';
 
     if ($this->is_manager && $this->status != TASK_BYPASS && !$this->approved)
       echo "<td><input class=\"textbox\" style=\"width: 30px;\" type=\"text\" name=\"task_time\" value=\"".$this->days."\" align=\"right\"></td>";
@@ -446,8 +453,12 @@ class project_task extends db {
   }
 
   function print_formated_comments() {
-    $_SESSION['GO_SESSION']['task_comments'] = $this->comments;
-    echo '<tr><td width="100%"><iframe src="comments.php" width="100%" class="textbox"></iframe></td></tr>';
+    $comments = trim($this->comments);
+    if ($comments == '') $height = 'height="60"';
+    $_SESSION['GO_SESSION']['task_comments'] = $comments;
+    echo '<tr><td width="100%">'.
+             '<iframe src="comments.php" width="100%" class="textbox" '.$height.'>'.
+             '</iframe></td></tr>';
   }
 
   function show_doc_folder() {
