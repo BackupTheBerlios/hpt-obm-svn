@@ -204,8 +204,10 @@ class imap
 
       if (isset($overview->subject))
       {
-				$tmp = imap_mime_header_decode($overview->subject);
-				$this->message['subject'] = isset($tmp[0]->text) ? $tmp[0]->text : '';
+	$tmp = imap_mime_header_decode($overview->subject);
+	foreach ($tmp as $t)
+	  if (isset($t->text))
+	    $this->message['subject'] .= $t->text;
       }							
       $from = imap_rfc822_parse_adrlist($overview->from, 'localhost');
       if (isset($from[0]->mailbox))
