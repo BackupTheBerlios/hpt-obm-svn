@@ -234,7 +234,28 @@ while ($db->next_record()) {
 echo '<input type="hidden" name="catalog_name" value="'.$catalog_name.'" />';
 $catalog->print_dropbox('cat_id', $cat_id,
   'onchange="javascript:change_category()"', false, '10', '200');
-echo '</td></tr>';
+$legend = '<table border="0" cellspacing="1" cellpadding="0" width="180" bgcolor="black">'.
+          '<tr><td>'.
+            '<table border="0" cellspacing="0" cellpadding="2" width="100%" bgcolor="#FFF7EB">'.
+            '<tr>'.
+              '<td align="center">'.
+                '<img src="'.$GO_THEME->images['add_project_task'].'" border="0" /></td>'.
+              '<td>'.$pm_insert_task.'</td>'.
+            '</tr>'.
+            '<tr>'.
+              '<td align="center"><img src="'.$GO_THEME->images['task_up'].'" border="0" /><br>'.
+              '<img src="'.$GO_THEME->images['task_dn'].'" border="0" /></td>'.
+              '<td>Move task up/down</td>'.
+            '</tr>'.
+            '<tr>'.
+              '<td align="center">'.$trash.'</td>'.
+              '<td>Delete task/template</td>'.
+            '</tr>'.
+            '</table>'.
+          '</td></tr>'.
+          '</table>';
+echo '</td><td colspan="2" rowspan="2">&nbsp;</td><td rowspan="3">&nbsp;&nbsp;&nbsp;</td>'.
+     '<td rowspan="3">'.$legend.'</td></tr>';
 
 $db->query('SELECT * FROM task_templates WHERE cat_id='.$cat_id);
 $count = $db->num_rows();
@@ -299,8 +320,6 @@ echo '<td nowrap colspan="30">'.$pm_task_predecessors.'</td>';
 echo '<td nowrap colspan="9">&nbsp;'.$pm_task_time.'&nbsp;</td>';
 echo '<td nowrap colspan="2">&nbsp;</td>';
 echo '</tr>';
-
-$value = 1;
 
 if ($count > 0) {
   $tasks = array();
