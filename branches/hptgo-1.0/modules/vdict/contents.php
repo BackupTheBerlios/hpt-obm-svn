@@ -1,7 +1,7 @@
 <?php
-define(S_NONE,  0);
-define(S_ITEM,  1);
-define(S_IDIOM, 2);
+define('S_NONE',  0);
+define('S_ITEM',  1);
+define('S_IDIOM', 2);
 
 function highlight($word, $s)
 {
