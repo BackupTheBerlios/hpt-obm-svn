@@ -134,7 +134,7 @@ if ($ab_settings['sort_users_field'] == "name")
 echo "</a></td>\n";
 
 require('../../lib/tkdlib.php');
-$order = print_config_title($constContactsPage);
+$order = print_config_title($constMembersPage);
 
 for ($i=0; $i<count($order); $i++)
 {
