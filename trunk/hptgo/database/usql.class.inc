@@ -7,7 +7,6 @@
  * (c) 1999-2000 Carmelo Guarneri
  *
  * $Id: usql.class.inc,v 1.1.1.1 2004/08/03 11:50:16 vutp Exp $
- *
  */
 
 

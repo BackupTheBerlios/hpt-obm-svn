@@ -1,4 +1,15 @@
 <?PHP
+/*
+   Copyright HPT Commerce 2004
+   Author: Dao Hai Lam <lamdh@hptvietnam.com.vn>
+   Version: 1.0 Release date: 08 August 2004
+
+   This program is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by the
+   Free Software Foundation; either version 2 of the License, or (at your
+   option) any later version.
+ */
+
 define(TASK_WAITING, 3);
 define(TASK_ONGOING, 2);
 define(TASK_DONE,    1);

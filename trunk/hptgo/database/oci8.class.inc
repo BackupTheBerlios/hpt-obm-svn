@@ -9,7 +9,6 @@
  * contains metadata() from db_oracle.inc 1.10
  *
  * $Id: oci8.class.inc,v 1.1.1.1 2004/08/03 11:50:16 vutp Exp $
- *
  */
 
 class db {

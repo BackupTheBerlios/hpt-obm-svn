@@ -104,6 +104,7 @@ if ($view_id > 0)
 {
 	$view = $cal->get_view($view_id);
 	$title = $view['name'];
+	$has_write_permission = $GO_SECURITY->has_permission($GO_SECURITY->user_id,$view['acl_write']);
 }else
 {
 	$view['start_hour'] = isset($_POST['view_start_hour']) ? $_POST['view_start_hour'] : '07';
@@ -167,7 +168,12 @@ if (isset($feedback))
 	<?php echo $strName; ?>:
 	</td>
 	<td>
+	<?php if ($has_write_permission) { ?>
 	<input type="text" class="textbox" name="name" maxlength="100" size="50" value="<?php echo htmlspecialchars($view['name']); ?>" />
+	<?php } else {
+		echo htmlspecialchars($view['name']);
+	}
+	?>
 	</td>
 </tr>
 <tr>
@@ -176,15 +182,23 @@ if (isset($feedback))
 	</td>
 	<td>
 	<?php
-	$dropbox = new dropbox();
-	$dropbox->add_arrays($hours, $hours);
-	$dropbox->print_dropbox('view_start_hour', $view['start_hour']);
+	if ($has_write_permission) {
+		$dropbox = new dropbox();
+		$dropbox->add_arrays($hours, $hours);
+		$dropbox->print_dropbox('view_start_hour', $view['start_hour']);
+	} else {
+		echo $view['start_hour'];
+	}
 	?>
 	&nbsp;<?php echo $sc_to; ?>&nbsp;
 	<?php
-	$dropbox = new dropbox();
-	$dropbox->add_arrays($hours, $hours);
-	$dropbox->print_dropbox('view_end_hour', $view['end_hour']);
+	if ($has_write_permission) {
+		$dropbox = new dropbox();
+		$dropbox->add_arrays($hours, $hours);
+		$dropbox->print_dropbox('view_end_hour', $view['end_hour']);
+	} else {
+		echo $view['end_hour'];
+	}
 	?>
 	</td>
 </tr>
@@ -209,9 +223,16 @@ if (isset($feedback))
 		{
 			$check = isset($_POST['calendars']) ? in_array($cal->f('id'), $_POST['calendars']) : false;
 		}
-		echo '<tr><td>';
-		$checkbox = new checkbox('calendars[]', $cal->f('id'), $cal->f('name'), $check);
-		echo '</td><td>'.show_profile($cal->f('user_id')).'</td></tr>';
+		if ($has_write_permission) {
+			echo '<tr><td>';
+			$checkbox = new checkbox('calendars[]', $cal->f('id'), $cal->f('name'), $check);
+			echo '</td><td>'.show_profile($cal->f('user_id')).'</td></tr>';
+		} else {
+			if ($check) {
+				echo '<tr><td>'.$cal->f('name');
+				echo '</td><td>'.show_profile($cal->f('user_id')).'</td></tr>';
+			}
+		}
 	}
 	?>
 	</table>
@@ -220,15 +241,17 @@ if (isset($feedback))
 <tr>
 	<td colspan="2">
 		<?php
-		$button = new button($cmdOk,"javascript:document.forms[0].close.value='true';document.forms[0].task.value='save';document.forms[0].submit()");
-		echo '&nbsp;&nbsp;';
-		$button = new button($cmdApply,"javascript:document.forms[0].task.value='save';document.forms[0].submit()");
+		if ($has_write_permission) {
+			$button = new button($cmdOk,"javascript:document.forms[0].close.value='true';document.forms[0].task.value='save';document.forms[0].submit()");
+			echo '&nbsp;&nbsp;';
+			$button = new button($cmdApply,"javascript:document.forms[0].task.value='save';document.forms[0].submit()");
+			echo '&nbsp;&nbsp;';
+		}
 		if ($view_id > 0)
 		{
-			echo '&nbsp;&nbsp;';
 			$button = new button($cal_export, "document.location='export.php?view_id=$view_id';");
+			echo '&nbsp;&nbsp;';
 		}
-		echo '&nbsp;&nbsp;';
 		$button = new button($cmdClose,"javascript:document.location='$return_to'");
 		?>
 	</td>

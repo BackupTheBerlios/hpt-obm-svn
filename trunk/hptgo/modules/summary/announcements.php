@@ -117,7 +117,7 @@ if ($count > 0)
 		$due_time = $announcements->f('due_time') > 0 ? date($_SESSION['GO_SESSION']['date_format'], $announcements->f('due_time')) : '';
 		echo '<td>'.$due_time.'</td>';
 		echo '<td>'.date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $announcements->f('mtime')+($_SESSION['GO_SESSION']['timezone']*3600)).'</td>';
-		echo "<td><a href='javascript:confirm_action(\"javascript:delete_announcement(".$announcements->f('id').")\",\"".rawurlencode($strDeletePrefix."'".htmlspecialchars($announcements->f('title'))."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".htmlspecialchars($announcements->f('title'))."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
+		echo "<td><a href='javascript:div_confirm_action(\"javascript:delete_announcement(".$announcements->f('id').")\",\"".div_confirm_id($strDeletePrefix."'".htmlspecialchars($announcements->f('title'))."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".htmlspecialchars($announcements->f('title'))."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
 		echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 	}
 

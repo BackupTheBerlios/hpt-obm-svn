@@ -109,7 +109,7 @@ while ($GO_USERS->next_record())
   echo '<td>'.number_format($GO_USERS->f("logins"), 0, $_SESSION['GO_SESSION']['decimal_seperator'], $_SESSION['GO_SESSION']['thousands_seperator']).'&nbsp;</td>';
   echo '<td>'.date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $GO_USERS->f("lastlogin")+($_SESSION['GO_SESSION']['timezone']*3600)).'&nbsp;&nbsp;&nbsp;</td>';
   echo '<td>'.date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'],$GO_USERS->f("registration_time")+($_SESSION['GO_SESSION']['timezone']*3600)).'</td>';
-  echo "<td>&nbsp;<a href='javascript:confirm_action(\"".$_SERVER['PHP_SELF']."?delete_user=".$GO_USERS->f("id")."\",\"".rawurlencode($strDeletePrefix."'".$name."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$name."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>";
+  echo "<td>&nbsp;<a href='javascript:div_confirm_action(\"".$_SERVER['PHP_SELF']."?delete_user=".$GO_USERS->f("id")."\",\"".div_confirm_id($strDeletePrefix."'".$name."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$name."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>";
   echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 }
 

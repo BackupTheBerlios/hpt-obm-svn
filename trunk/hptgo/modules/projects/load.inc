@@ -301,7 +301,7 @@ if ($task=='load')
     echo "<td valign=\"top\">";
     if (!$print)
     {
-      echo "<a href='javascript:confirm_action(\"javascript:delete_hours(".$projects->f("id").")\",\"".rawurlencode($strDeletePrefix.' '.$pm_this_entry.' '.$strDeleteSuffix)."\")' title=\"".$strDeleteItem." ".$pm_entry."\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a>";
+      echo "<a href='javascript:div_confirm_action(\"javascript:delete_hours(".$projects->f("id").")\",\"".div_confirm_id($strDeletePrefix.' '.$pm_this_entry.' '.$strDeleteSuffix)."\")' title=\"".$strDeleteItem." ".$pm_entry."\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a>";
     }
     echo "</td></tr>\n";
 

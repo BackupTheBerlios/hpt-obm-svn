@@ -1,7 +1,7 @@
 <?php 
 /*
    Copyright (2004)
-   Author: Tran Kien Duc <trankien_duc@yahoo.com>
+   Author: Tran Kien Duc <ductk@hptvietnam.com.vn>
    Version: 1.0 Release date: 13 July 2004
 
    This program is free software; you can redistribute it and/or modify it

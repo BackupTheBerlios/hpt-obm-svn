@@ -28,9 +28,9 @@ function invert_selection()
 	}
 }
 
-function confirm_empty_mailbox(message)
+function confirm_empty_mailbox(message_id)
 {
-	if (confirm(message))
+	if (div_confirm(message_id))
 	{
 		document.forms[0].empty_mailbox.value='true';
 		document.forms[0].submit();

@@ -5,7 +5,6 @@
  * Copyright (c) 1998-2000 Luis Francisco Gonzalez Hernandez
  *
  * $Id: oracle.class.inc,v 1.1.1.1 2004/08/03 11:50:16 vutp Exp $
- *
  */
 
 class db {

@@ -145,19 +145,24 @@ if(count($regions) == 0)
 				<td>
 				<?php
 				if (isset($feedback)) echo $feedback;
-				echo $sc_holidays_text2;
+				if ($has_write_permission) {
+					echo $sc_holidays_text2;
+					echo '<br /><br />';
+				}
 
 				if(is_array($holidays->holidays))
 				{
-					echo '<br /><br /><table border="0"><tr><td><h3>'.$strDate.'</h3></td><td><h3>'.$strName.'</h3></td><td></td><td></td></tr>';
+					echo '<table border="0"><tr><td><h3>'.$strDate.'</h3></td><td><h3>'.$strName.'</h3></td><td></td><td></td></tr>';
 					foreach($holidays->holidays as $index => $value)
 					{
 						echo '<tr><td width="40%">'.date($date_format, $index).'</td><td>'.$value.'</td></tr>';
 					}
 					echo '</table><br />';
 					echo '&nbsp;&nbsp;';
-					$button = new button($cmdApply, 'javascript:apply_holidays('.$count.');');
-					echo '&nbsp;&nbsp;';
+					if ($has_write_permission) {
+						$button = new button($cmdApply, 'javascript:apply_holidays('.$count.');');
+						echo '&nbsp;&nbsp;';
+					}
 					$button = new button($cmdCancel, 'javascript:cancel_holidays();');
 				}
 				?>
@@ -166,14 +171,15 @@ if(count($regions) == 0)
 			</table>
 			<?php
 		break;
-
-		default:
-			?>
+	}
+?>
 			<input type="hidden" name="year" />
 			<input type="hidden" name="holiday_id" />
 			<input type="hidden" name="region" value="<?php echo $region ?>"/>
+			<?php if ($has_write_permission) { ?>
 			<a class="normal" href="javascript:edit_holiday(0);"><?php echo $cmdAdd; ?></a>
 			<br /><br />
+			<?php } ?>
 			<table border="0" cellpadding="4">
 			<tr>
 				<td>
@@ -232,10 +238,7 @@ if(count($regions) == 0)
 				</td>
 			</tr>
 			</table>
-
-			<?php
-		break;
-	}
+<?php
 }
 ?>
 

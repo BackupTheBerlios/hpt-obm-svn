@@ -1,4 +1,15 @@
 <?php
+/*
+   Copyright HPT Commerce 2004
+   Author: Nguyen Thai Ngoc Duy <duyntn@hptvietnam.com.vn>
+   Version: 1.0 Release date: 10 October 2004
+
+   This program is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by the
+   Free Software Foundation; either version 2 of the License, or (at your
+   option) any later version.
+ */
+
 
 function get_group_folders($uid, $level)
 {

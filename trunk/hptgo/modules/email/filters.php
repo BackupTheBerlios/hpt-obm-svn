@@ -99,10 +99,10 @@ if ($email->get_all_folders($account_id, true) > 0)
 						$ml_move_up.'"><img src="'.$GO_THEME->images['up'].
 						'" border="0"></a></td>';
 
-			echo "<td>&nbsp;<a href='javascript:confirm_action(\"".
+			echo "<td>&nbsp;<a href='javascript:div_confirm_action(\"".
 						$_SERVER['PHP_SELF']."?account_id=".$account_id."&return_to=".
 						urlencode($return_to)."&delete_filter=".$email->f("id")."\",\"".
-						rawurlencode($ml_delete_filter)."\")' title=\"".$ml_delete_filter1.
+						div_confirm_id($ml_delete_filter)."\")' title=\"".$ml_delete_filter1.
 						"\"><img src=\"".$GO_THEME->images['delete'].
 						"\" border=\"0\"></a></td>";
 

@@ -491,7 +491,7 @@ for ($i=0;$i<sizeof($parts);$i++)
 	break;
     }
 
-    $part = preg_replace_callback ($smiley_patterns, "smiley_symbols_to_images", $part);
+//    $part = preg_replace_callback ($smiley_patterns, "smiley_symbols_to_images", $part);
 
     if ($parts[$i]["name"] != '')
     {

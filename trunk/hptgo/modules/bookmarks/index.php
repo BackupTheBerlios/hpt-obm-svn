@@ -133,9 +133,9 @@ while($bookmarks->next_record())
 							$bookmarks->f("id").'"><img src="'.$GO_THEME->images['edit'].
 							'" border="0"></a></td>'.
 
-					"<td width=\"16\"><a href='javascript:confirm_action(\"".
+					"<td width=\"16\"><a href='javascript:div_confirm_action(\"".
 					$_SERVER['PHP_SELF']."?delete_catagory=".$bookmarks->f('id').
-					"\",\"".rawurlencode($strDeletePrefix."'".addslashes($bookmarks->f('name')).
+					"\",\"".div_confirm_id($strDeletePrefix."'".addslashes($bookmarks->f('name')).
 					"' ".$bm_and_all_contents." ".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".
 					htmlspecialchars($bookmarks->f('name'))."'\"><img src=\"".$GO_THEME->images['delete'].
 					"\" border=\"0\"></a></td>";

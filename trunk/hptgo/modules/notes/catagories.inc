@@ -33,7 +33,7 @@ if ($GO_MODULES->write_permissions)
 		while($notes->next_record())
 		{
 			echo '<tr><td><a class="normal" href="'.$module_url.'catagory.php?catagory_id='.$notes->f('id').'&return_to='.rawurlencode($link_back).'">'.htmlspecialchars($notes->f('name')).'</a></td>';
-			echo "<td><a href='javascript:confirm_action(\"javascript:delete_catagory(".$notes->f('id').")\",\"".rawurlencode($strDeletePrefix."'".htmlspecialchars($notes->f('name'))."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$notes->f('name')."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
+			echo "<td><a href='javascript:div_confirm_action(\"javascript:delete_catagory(".$notes->f('id').")\",\"".div_confirm_id($strDeletePrefix."'".htmlspecialchars($notes->f('name'))."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$notes->f('name')."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
 			//echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 		}
 		echo '</table>';

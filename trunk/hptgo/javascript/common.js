@@ -17,6 +17,19 @@ function confirm_action(url, message)
 	}
 }
 
+function div_confirm(message_id)
+{
+	return confirm(document.getElementById('div_confirm_'+message_id).innerHTML)
+}
+
+function div_confirm_action(url, message_id)
+{
+	if (div_confirm(message_id))
+	{
+		window.location=url
+	}
+}
+
 function get_object(name)
 {
 	if (document.getElementById)

@@ -38,8 +38,8 @@ if ($count > 0)
 						$GO_THEME->images['edit'].'" border="0" /></a></td>';
 
 			echo "<td>&nbsp;<a href='javascript:confirm_delete(\"".$ab->f("id").
-						"\",\"".rawurlencode($strDeletePrefix."'".
-						htmlspecialchars($ab->f("name"))."'".$strDeleteSuffix).
+						"\",\"".div_confirm_id($strDeletePrefix."'".
+						$ab->f("name")."'".$strDeleteSuffix).
 						"\")' title=\"".$strDeleteItem." '".htmlspecialchars($ab->f("name")).
 						"'\"><img src=\"".$GO_THEME->images['delete'].
 						"\" border=\"0\"></a></td>\n";
@@ -65,9 +65,9 @@ function invert_selection()
 	}
 }
 
-function confirm_delete(group_id, message)
+function confirm_delete(group_id, message_id)
 {
-	if (confirm(unescape(message)))
+	if (div_confirm(message_id))
 	{
 		document.forms[0].delete_group_id.value = group_id;
 		document.forms[0].submit();

@@ -109,7 +109,7 @@ if ($account)
   echo '<td class="ModuleIcons">';
   echo '<a href="javascript:confirm_delete()"><img src="'.$GO_THEME->images['delete_big'].'" border="0" height="32" width="32" /><br />'.$ml_delete.'</a></td>';
   echo '<td class="ModuleIcons">';
-  echo '<a href="javascript:confirm_empty_mailbox(\''.addslashes($ml_confirm_empty_mailbox).'\')"><img src="'.$GO_THEME->images['empty_folder'].'" border="0" height="32" width="32" /><br />'.$ml_empty_mailbox.'</a></td>';
+  echo '<a href="javascript:confirm_empty_mailbox(\''.div_confirm_id($ml_confirm_empty_mailbox).'\')"><img src="'.$GO_THEME->images['empty_folder'].'" border="0" height="32" width="32" /><br />'.$ml_empty_mailbox.'</a></td>';
 }
 if ($GO_MODULES->write_permissions)
 {

@@ -56,7 +56,7 @@ while ($GO_GROUPS->next_record())
   echo '<tr>';
   echo "<td><a class=\"normal\" href=\"group.php?group_id=".$GO_GROUPS->f("id")."&group_name=".$GO_GROUPS->f("name")."\">".$GO_GROUPS->f("name")."</a></td>\n";
   echo "<td>".show_profile($GO_GROUPS->f("user_id"))."</td>\n";
-  echo "<td><a href='javascript:confirm_action(\"".$_SERVER['PHP_SELF']."?delete_group=".$GO_GROUPS->f("id")."\",\"".rawurlencode($strDeletePrefix."'".$GO_GROUPS->f("name")."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$GO_GROUPS->f("name")."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
+  echo "<td><a href='javascript:div_confirm_action(\"".$_SERVER['PHP_SELF']."?delete_group=".$GO_GROUPS->f("id")."\",\"".div_confirm_id($strDeletePrefix."'".$GO_GROUPS->f("name")."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$GO_GROUPS->f("name")."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
   echo "</tr>";
   if ($GO_GROUPS->f("id") == 2)
      echo '<tr><td colspan=3><hr></td></tr>';

@@ -268,4 +268,8 @@ $strCom['work_city'] = $strWorkCity;
 
 $strCom['company_id'] = $strCompany;
 $strCom['company'] = $strCompany;
+$str_sep['comma'] = 'Comma';
+$str_sep['semicolon'] = 'Semicolon';
+$str_sep['colon'] = 'Colon';
+$str_sep['tab'] = 'Tab';
 ?>
