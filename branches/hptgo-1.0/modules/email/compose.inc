@@ -1238,7 +1238,7 @@ function cleanup(e)
 }
 
 <?php
-if ($_REQUEST['attach_dialog_visible'] == '1')
+if (isset($_REQUEST['attach_dialog_visible']) && $_REQUEST['attach_dialog_visible'] == '1')
   echo 'window.setTimeout("show_attach()", 1000);';
 ?>
 //-->
