@@ -684,16 +684,16 @@ class addressbook extends db
     return $this->query("UPDATE ab_contacts SET company_id='$company_id' WHERE id='$contact_id'");
   }
 
-  function add_company($addressbook_id, $user_id, $name, $address, $zip, $city, $state,
+  function add_company($addressbook_id, $user_id, $name, $shortname, $engname, $address, $zip, $city, $state,
       $country, $email, $phone, $fax, $homepage, $bank_no,
-      $vat_no, $acl_read, $acl_write)
+      $vat_no, $acl_read, $acl_write, $parent_id)
   {
     $company_id = $this->nextid("ab_companies");
     if ($company_id > 0)
     {
       $sql = "INSERT INTO ab_companies ".
-	"(id, user_id, addressbook_id, name, address, zip, city, state, country, email, phone, fax, homepage, bank_no, vat_no, acl_read, acl_write) VALUES ".
-	"('$company_id', '$user_id', '$addressbook_id', '$name', '$address', '$zip', '$city', '$state', '$country', '$email', '$phone', '$fax', '$homepage', '$bank_no', '$vat_no', '$acl_read', '$acl_write')";
+	"(id, user_id, addressbook_id, name, address, zip, city, state, country, email, phone, fax, homepage, bank_no, vat_no, acl_read, acl_write, parent, shortname, engname) VALUES ".
+	"('$company_id', '$user_id', '$addressbook_id', '$name', '$address', '$zip', '$city', '$state', '$country', '$email', '$phone', '$fax', '$homepage', '$bank_no', '$vat_no', '$acl_read', '$acl_write', '$parent_id', '$shortname', '$engname')";
       if ($this->query($sql))
       {
 	$this->query("INSERT INTO ab_custom_company_fields (id) VALUES ('$company_id')");
@@ -703,7 +703,7 @@ class addressbook extends db
     return false;
   }
 
-  function update_company($company_id, $addressbook_id, $name, $address, $zip,
+  function update_company($company_id, $addressbook_id, $name, $shortname, $engname, $address, $zip,
       $city, $state, $country, $email, $phone, $fax,
       $homepage, $bank_no, $vat_no,$parent_id)
   {
@@ -711,7 +711,8 @@ class addressbook extends db
       "addressbook_id='$addressbook_id', name='$name', ".
       "address='$address', zip='$zip', city='$city', state='$state', ".
       "country='$country', email='$email', phone='$phone', fax='$fax', ".
-      "homepage='$homepage', bank_no='$bank_no', vat_no='$vat_no', parent='$parent_id' WHERE id='$company_id'";
+      "homepage='$homepage', bank_no='$bank_no', vat_no='$vat_no', parent='$parent_id', ".
+      "shortname='$shortname', engname='$engname'  WHERE id='$company_id'";
 
     return $this->query($sql);
 

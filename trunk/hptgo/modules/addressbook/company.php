@@ -47,6 +47,8 @@ switch($task)
 {
 	case 'save_company':
 		$name = trim(smart_addslashes($_POST['name']));
+		$shortname = trim(smart_addslashes($_POST['shortname']));
+		$engname = trim(smart_addslashes($_POST['engname']));
 		$address = smart_addslashes($_POST["address"]);
 		$zip = smart_addslashes($_POST["zip"]);
 		$city = smart_addslashes($_POST["city"]);
@@ -81,7 +83,7 @@ switch($task)
 					$feedback = "<p class=\"Error\">".$strParentCompanyError."</p>";
 				else
 				{
-					if ($ab->update_company($_POST['company_id'], $addressbook_id, $name,
+					if ($ab->update_company($_POST['company_id'], $addressbook_id, $name, $shortname, $engname,
 									$address, $zip, $city, $state, $country, $email, $phone, $fax,
 									$homepage, $bank_no, $vat_no,$parent_id))
 					{
@@ -101,7 +103,7 @@ switch($task)
 				$acl_write = $GO_SECURITY->get_new_acl('company write');
 
 				if ($company_id = $ab->add_company($addressbook_id, 
-							$GO_SECURITY->user_id, $name,
+							$GO_SECURITY->user_id, $name, $shortname, $engname,
 							$address, $zip, $city, $state, $country, $email,
 							$phone, $fax, $homepage, $bank_no, $vat_no,
 							$acl_read, $acl_write,$parent_id))
@@ -215,6 +217,8 @@ echo '<input type="hidden" name="company_id" value="'.$company_id.'" />';
 if ($company_id == 0 || $task == 'save_company')
 {
 	$company['name'] = isset($_REQUEST['name']) ? smartstrip($_REQUEST['name']) : '';
+	$company['shortname'] = isset($_REQUEST['shortname']) ? smartstrip($_REQUEST['shortname']) : '';
+	$company['engname'] = isset($_REQUEST['engname']) ? smartstrip($_REQUEST['engname']) : '';
 	$company['parent_id'] = isset($_REQUEST['parent_id']) ? smartstrip($_REQUEST['parent_id']) : '0';
 	$company['address'] = isset($_REQUEST['address']) ? smartstrip($_REQUEST['address']) : '';
 	$company['zip'] = isset($_REQUEST['zip']) ? smartstrip($_REQUEST['zip']) : '';

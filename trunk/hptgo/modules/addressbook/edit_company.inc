@@ -25,6 +25,24 @@
 
 	<tr>
 		<td align="right" nowrap>
+		<?php echo $strShortCompanyName; ?>*:&nbsp;
+		</td>
+		<td>
+		<input type="text" class="textbox"  name="shortname" size="40" value="<?php echo htmlspecialchars($company['shortname']); ?>" maxlength="50">
+		</td>
+	</tr>
+
+	<tr>
+		<td align="right" nowrap>
+		<?php echo $strEnglishCompanyName; ?>*:&nbsp;
+		</td>
+		<td>
+		<input type="text" class="textbox"  name="engname" size="40" value="<?php echo htmlspecialchars($company['engname']); ?>" maxlength="50">
+		</td>
+	</tr>
+
+	<tr>
+		<td align="right" nowrap>
 		<?php echo $strAddress; ?>:&nbsp;
 		</td>
 		<td>

@@ -6,12 +6,31 @@
 		<td align="right" nowrap><?php echo $strParentCompany;?>:</td>
 		<td><?php echo $ab->parent_companies_urls($company_id); ?>&nbsp;</td>
 	</tr>
+
 	<tr>
 		<td align="right" nowrap>
 		<?php echo $strName; ?>:&nbsp;
 		</td>
 		<td>
 		<?php echo empty_to_stripe($company['name']); ?>
+		</td>
+	</tr>
+
+	<tr>
+		<td align="right" nowrap>
+		<?php echo $strShortCompanyName; ?>:&nbsp;
+		</td>
+		<td>
+		<?php echo empty_to_stripe($company['shortname']); ?>
+		</td>
+	</tr>
+
+	<tr>
+		<td align="right" nowrap>
+		<?php echo $strEnglishCompanyName; ?>:&nbsp;
+		</td>
+		<td>
+		<?php echo empty_to_stripe($company['engname']); ?>
 		</td>
 	</tr>
 

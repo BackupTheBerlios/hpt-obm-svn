@@ -211,4 +211,6 @@ $strNone = "None";
 $strParentCompanyError = "Parent company's invalid";
 $strListView = "View as list";
 $strTreeView = "View as tree";
+$strShortCompanyName = "Short name";
+$strEnglishCompanyName = "English name";
 ?>

@@ -209,5 +209,9 @@ $contacts_import_text = "Chọn hồ sơ để đưa vào rồi nhấn 'Ok'";
 $strTitle = 'Chức danh';
 $strParentCompany = 'Công ty cha';
 $strNone = "Không";
+$strListView = "Xem dạng phẳng";
+$strTreeView = "Xem dạng phân cấp";
 $strParentCompanyError = "Công ty cha không hợp lệ";
+$strShortCompanyName = "Tên viết tắt";
+$strEnglishCompanyName = "Tên tiếng Anh";
 ?>
