@@ -163,7 +163,7 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
 	$mail_to = $content["reply_to"];
 	if (!stristr($subject,"Re: "))
 	  $mail_subject = "Re: ".$subject;
-	else	  
+	else
 	  $mail_subject = $subject;
 
       //add all recievers from this email
