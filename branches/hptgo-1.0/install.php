@@ -290,7 +290,9 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 	    $new_user_id
 	      );
 	    $old_umask = umask(000);
-	    mkdir($GO_CONFIG->file_storage_path.smartstrip($username), $GO_CONFIG->create_mode);
+	    mkdir($GO_CONFIG->file_storage_path.'users', $GO_CONFIG->create_mode);
+	    mkdir($GO_CONFIG->file_storage_path.'common', $GO_CONFIG->create_mode);
+	    mkdir($GO_CONFIG->file_storage_path.'users/'.smartstrip($username), $GO_CONFIG->create_mode);
 	    umask($old_umask);
 
 	    //grant administrator privileges
