@@ -276,7 +276,7 @@ if (count($my_folders) > 0) {
   echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.($from_root ? $GO_CONFIG->file_storage_path.'common' : urlencode($path)).$arguments.'">'.$image['group'].$fbWorkspace.'</a><br />';
 } else {
   echo ($has_children ? ($is_expanded ? $image['mnode'] : $image['pnode']) : $image['emptynode']);
-  echo $image['group'].$fbWorkspace.'<br />';
+  echo $image['group'].'<font color="#cccccc">'.$fbWorkspace.'</font><br />';
 }
 
 if ($is_expanded && $has_children) {
@@ -379,7 +379,7 @@ if ($count > 0)
   echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//sharefolder'.$arguments.'">'.$image['group'].$fbShares.'</a><br />';
 } else {
   echo ($count > 0 ? ($is_expanded ? $image['mnode'] : $image['pnode']) : $image['emptynode']);
-  echo $image['group'].$fbShares.'<br />';
+  echo $image['group'].'<font color="#cccccc">'.$fbShares.'</font><br />';
 }
 if ($count > 0)
 {
@@ -425,6 +425,6 @@ if (count($group_folders) > 0) {
     print_filesystem($group_folders, $image['blank'], '');
 } else {
   echo (count($group_folders) > 0 ? ($is_expanded ? $image['mlastnode'] : $image['plastnode']) : $image['emptylastnode']);
-  echo $image['group'].$fbGroupFolders.'<br />';
+  echo $image['group'].'<font color="#cccccc">'.$fbGroupFolders.'</font><br />';
 }
 ?>
