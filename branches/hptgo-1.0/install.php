@@ -104,7 +104,7 @@ ini_set('session.cookie_lifetime','0');
 
 
 //get the path of this script
-if ($_SERVER['SCRIPT_FILENAME'] != '')
+if (isset($_SERVER['SCRIPT_FILENAME']) && $_SERVER['SCRIPT_FILENAME'] != '')
 {
   $script_path = stripslashes($_SERVER['SCRIPT_FILENAME']);
 }else
