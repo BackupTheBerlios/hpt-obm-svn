@@ -143,7 +143,7 @@
 				break;
 				case 'company_id':
 				case 'parent':
-					$db->query('SELECT name FROM ab_companies WHERE id = '.$ab->f($order[$i]));
+					$db->query('SELECT name FROM ab_companies WHERE id = '.(int)$ab->f($order[$i]));
 					echo '<td nowrap> '.empty_to_stripe($db->next_record()?$db->f('name'):'').' </td>';
 				break;
 				case '':break;
