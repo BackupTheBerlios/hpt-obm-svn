@@ -197,8 +197,8 @@ if ($count > 0)
 
 		echo '<tr id="'.$ab->f("id").'" '.(isset($new_companies[$ab->f('id')]) ? 'class="TableInside2"': '').' >';
 		
-//		echo '<td width="16"><input id="'.addslashes($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
-		echo '<td width="16"><input id="C_'.$ab->f('id').'" type="checkbox" onclick="javascript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
+		echo '<td width="16"><input id="'.div_confirm_id($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
+		//echo '<td width="16"><input id="C_'.$ab->f('id').'" type="checkbox" onclick="javascript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
 
 		echo '<td><a class="normal" href="'.$GO_MODULES->url.'company.php?company_id='.$ab->f('id').'&return_to='.rawurlencode($link_back).'">'.htmlspecialchars($ab->company_name($parents)).' </a></td>';
 		
@@ -373,7 +373,7 @@ function confirm_delete()
 		break;
 
 		case 1:
-			if (confirm("<?php echo $strDeletePrefix; ?> '"+name+"' <?php echo $strDeleteSuffix; ?>"))
+			if (confirm("<?php echo $strDeletePrefix; ?> '"+div_confirm_text(name)+"' <?php echo $strDeleteSuffix; ?>"))
 			{
 				document.forms[0].task.value='delete_companies';
 				document.forms[0].submit();

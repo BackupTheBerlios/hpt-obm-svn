@@ -282,7 +282,7 @@ if ($task=='search' || $task == 'show_letter')
 					$name = $ab->f('last_name').' '.$middle_name.$ab->f('first_name');
 
 					$results .= '<tr height="20" id="'.$ab->f('id').'">';
-					$results .= '<td><input id="'.addslashes($name).'" type="checkbox" onclick="javacript:item_click(this)" name="contact[]" value="'.$ab->f("id").'" /></td>';
+					$results .= '<td><input id="'.div_confirm_id($name).'" type="checkbox" onclick="javacript:item_click(this)" name="contact[]" value="'.$ab->f("id").'" /></td>';
 					$results .= "<td nowrap><a".$style." class=\"normal\" href=\"contact.php?contact_id=".$ab->f("id")."&return_to=".$GO_MODULES->url."index.php\" title=\"".$strShowProfile."\">".htmlspecialchars($name)."</a>&nbsp;&nbsp;</td>\n";
 					$results .= "<td>".mail_to(empty_to_stripe($ab->f("email")), empty_to_stripe($ab->f("email")),'normal',true, $ab->f("id"))."&nbsp;&nbsp;</td>\n";
 					$results .= '<td>'.empty_to_stripe($ab->f('home_phone')).'&nbsp;&nbsp;</td>';
@@ -324,7 +324,7 @@ if ($task=='search' || $task == 'show_letter')
 					$count++;
 
 					$results .= '<tr height="20" id="'.$ab->f('id').'">';
-					$results .= '<td><input id="'.htmlspecialchars($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
+					$results .= '<td><input id="'.div_confirm_id($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
 					$results .= '<td nowrap><a class="normal" href="'.$GO_MODULES->url.'company.php?company_id='.$ab->f('id').'&return_to='.rawurlencode($link_back).'" title="'.$strShowProfile.'">'.htmlspecialchars($ab->company_name($parents)).'</a>&nbsp;&nbsp;</td>';
 					$results .= '<td>'.empty_to_stripe($ab->f('city')).'&nbsp;&nbsp;</td>';
 					$results .= "<td>".mail_to(empty_to_stripe($ab->f("email")), empty_to_stripe($ab->f("email")),'normal',true, $ab->f("id"))."&nbsp;&nbsp;</td>\n";
@@ -485,7 +485,7 @@ function confirm_delete()
 		break;
 
 		case 1:
-			if (confirm("<?php echo $strDeletePrefix; ?> '"+name+"' <?php echo $strDeleteSuffix; ?>"))
+			if (confirm("<?php echo $strDeletePrefix; ?> '"+div_confirm_text(name)+"' <?php echo $strDeleteSuffix; ?>"))
 			{
 				document.forms[0].task.value='<?php echo $task; ?>';
 				document.forms[0]._delete.value='true';

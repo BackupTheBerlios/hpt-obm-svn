@@ -95,7 +95,7 @@ if ($count > 0)
     if ($count == 1)
       echo '<td width="36" align="center">&nbsp;</a></td>';
 	$delitem = sprintf( ($count_child > 0)? $ab_ConfirmDeleteStatus2 : $ab_ConfirmDeleteStatus, $name);	
-    echo "<td><a href='javascript:delete_status(\"$delitem\",".$id.")'>$trash</a></td>";
+    echo "<td><a href='javascript:delete_status(\"".div_confirm_id($delitem)."\",".$id.")'>$trash</a></td>";
     echo '</tr>';
 
 //    echo $spliter;
@@ -118,7 +118,7 @@ if ($count > 0)
     		echo "<td colspan=\"97\" nowrap><a href='javascript:set_edit($id, \"$name\", $value, 0)'>".$val_child."&nbsp;&nbsp;&nbsp;$name</a></td>";
     		if ($count == 1)
       			echo '<td width="36" align="center">&nbsp;</a></td>';
-    		echo "<td><a href='javascript:delete_status(\"$delitem\",$id)'>$trash</a></td>";
+    		echo "<td><a href='javascript:delete_status(\"".div_confirm_id($delitem)."\",$id)'>$trash</a></td>";
     		echo '</tr>';
 
 //    		echo $spliter;
@@ -173,7 +173,7 @@ $button = new button($cmdClose, "javascript:document.location='".$return_to."'")
 
 function delete_status(msg, id)
 {
-  	if (confirm(msg)) {
+  	if (div_confirm(msg)) {
     	document.forms[0].task.value = 'delete_status';
 	    document.forms[0].id.value = id;
     	document.forms[0].submit();

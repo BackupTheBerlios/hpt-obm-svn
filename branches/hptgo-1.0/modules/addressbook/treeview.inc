@@ -206,8 +206,8 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 
 		echo '<tr class = "'.($rowcount ++ % 2 == 0 ? "TableInside1" : "TableInside2").'"id="'.$ab->f("id").'">';
 		
-//		echo '<td width="16"><input id="'.addslashes($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
-		echo '<td width="16"><input type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
+		echo '<td width="16"><input id="'.div_confirm_id($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
+		//echo '<td width="16"><input type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
 		
 		if ($yes_im_a_child)
 			echo '<td><a href="javascript:document.forms[0].expand_path.value=\''.$path.','.$ab->f('id').'\';document.forms[0].submit()">'.$images.$node.'</a>';
@@ -454,7 +454,7 @@ function confirm_delete()
 		break;
 
 		case 1:
-			if (confirm("<?php echo $strDeletePrefix; ?> '"+name+"' <?php echo $strDeleteSuffix; ?>"))
+			if (confirm("<?php echo $strDeletePrefix; ?> '"+div_confirm_text(name)+"' <?php echo $strDeleteSuffix; ?>"))
 			{
 				document.forms[0].task.value='delete_companies';
 				document.forms[0].submit();
