@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<module name="summary">
+	<description>
+		Chức năng này hiển thị thông tin tổng quát trong ngày về các công việc, các cuộc hẹn và các ghi chú cần làm của một người.  Chức năng này cũng hỗ trợ tạo các thông báo có email, cảnh báo & nhắc nhở về giờ giấc thực hiện công việc.  Đây có thể là trang bắt đầu rất phù hợp cho một ngày làm việc với HPT-OBM.
+	</description>
+	<version>
+		1.0
+	</version>
+	<releaseDate>
+	2004-04-05
+	</releaseDate>
+	<status>
+    Ổn định
+	</status>
+	<authors>
+		<author name="Merijn Schering" email="mschering@intermesh.nl" />
+	</authors>
+</module>
+	

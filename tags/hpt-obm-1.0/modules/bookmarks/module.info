@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<module name="bookmarks">
+	<description>
+		Những địa chỉ internet ưa thích của bạn có thể được sắp xếp, phân loại và chia sẻ cho mọi người với chức năng này.
+	</description>
+	<version>
+		1.0
+	</version>
+	<releaseDate>
+	2004-04-05
+	</releaseDate>
+	<status>
+		Ổn định
+	</status>
+	<authors>
+		<author name="Merijn Schering" email="mschering@intermesh.nl" />
+	</authors>
+</module>
+	

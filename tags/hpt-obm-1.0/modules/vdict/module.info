@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<module name="dictionary">
+	<description>
+		Từ điển Anh-Việt
+	</description>
+	<version>
+		1.0
+	</version>
+	<releaseDate>
+	2004-09-05
+	</releaseDate>
+	<status>
+		Ổn định
+	</status>
+	<authors>
+		<author name="Đào Hải Lâm" email="lamdh@hptvietnam.com.vn" />
+	</authors>
+</module>

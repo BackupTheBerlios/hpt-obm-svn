@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<module name="calendar">
+	<description>
+		Trong môi trường làm việc cộng tác, chia sẻ lịch công tác đễ dễ dàng trong việc theo dõi và điều phối người là không thể thiếu. Chức năng này cho phép bạn tạo các sự kiện trên lịch làm việc kết hợp với việc nhắc nhở.	Giao diện thân thiện, dễ sử dụng sẽ giúp bạn không bỏ sót bất cứ sự kiện nào.
+	</description>
+	<version>
+		1.0
+	</version>
+	<releaseDate>
+	2004-10-10
+	</releaseDate>
+	<status>
+		Ổn định
+	</status>
+	<authors>
+		<author name="Merijn Schering" email="mschering@intermesh.nl" />
+		<author name="Georg Lorenz" email="georg@lonux.de" />
+		<author name="Đào Hải Lâm" email="lamdh@hptvietnam.com.vn" />
+		<author name="Nguyễn Hồng Lê" email="lenh@hptvietnam.com.vn" />
+		<author name="Hồng Anh Quốc" email="quocha@hptvietnam.com.vn" />
+		<author name="Trần Kiến Đức" email="ductk@hptvietnam.com.vn" />
+		<author name="Nguyễn Thái Ngọc Duy" email="duyntn@hptvietnam.com.vn" />
+	</authors>
+</module>
+	

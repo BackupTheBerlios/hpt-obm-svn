@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<module name="email">
+	<description>
+		Với chức năng e-mail, bạn có thể đọc thư trực tuyến từ nhiều tài khoản e-mail dùng giao thức IMAP và POP3 khác nhau, mọi lúc mọi nơi, tiện lợi dễ dàng. Chức năng này cũng hỗ trợ nhiều bộ lọc e-mail và lưu trữ trong các thư mục khác nhau.  Việc soạn thảo e-mail rất dễ dàng và tiện lợi theo định dạng HTML hoặc Text.  Chức năng này cũng kết hợp chặt chẽ với chức năng quản lý hồ sơ, tạo ra một môi trường tương tác rất linh động trong quán trình làm việc.
+	</description>
+	<version>
+		1.0
+	</version>
+	<releaseDate>
+	2004-10-10
+	</releaseDate>
+	<status>
+		Ổn định
+	</status>
+	<authors>
+		<author name="Merijn Schering" email="mschering@intermesh.nl" />
+		<author name="Georg Lorenz" email="georg@lonux.de" />
+		<author name="Đào Hải Lâm" email="lamdh@hptvietnam.com.vn" />
+		<author name="Nguyễn Thái Ngọc Duy" email="duyntn@hptvietnam.com.vn" />
+	</authors>
+</module>
+	
