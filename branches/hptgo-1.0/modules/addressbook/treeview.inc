@@ -131,6 +131,7 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 	global $addressbook_id,$ab_settings;
 	global $rowcount,$link_back,$first,$max_rows;
 	global $has_parent;
+	global $GO_MODULES,$constCompaniesPage;
 
 	$ab = new addressbook();
 	$has_parent = array();
