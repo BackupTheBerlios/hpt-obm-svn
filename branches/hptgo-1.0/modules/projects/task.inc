@@ -89,11 +89,12 @@ else {
   echo '<td width="150">&nbsp;</font></td>';
   echo '<td width="565" class="GanttDate" nowrap><b>'."$pm_start_date ($date)<br>v</b></td></tr>";
 
+  $day_sec = 24 * 3600;
   if ($today == 0) {
     $today = getdate();
     $today = gmmktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']);
   }
-  $duration = round((($today < $pstop_date ? $pstop_date : $today) - $pstart_date) / (24 * 3600));
+  $duration = round((($today < $pstop_date ? $pstop_date : $today) - $pstart_date) / $day_sec);
   if ($duration == 0) $duration = 1;
   $day_space = round(480 / $duration);
 
@@ -103,10 +104,10 @@ else {
     $display_date = $start_date * $day_space;
     $display_rdate = $real_start_date * $day_space;
     $ndays = $t->days * $day_space;
-    $date = strftime("%d/%m", $pstart_date + ($start_date + $t->days) * 24 * 3600);
+    $date = strftime("%d/%m", $pstart_date + ($start_date + $t->days) * $day_sec);
     if ($t->status == TASK_ONGOING || ($t->status == TASK_DONE && !$t->approved)) {
-      $d = round(($today - $pstart_date) / (24 * 3600)) - $real_start_date;
-      $odate = strftime("%d/%m", $pstart_date + ($real_start_date + $d) * 24 * 3600);
+      $d = round(($today - $pstart_date) / $day_sec) - $real_start_date;
+      $odate = strftime("%d/%m", $pstart_date + ($real_start_date + $d) * $day_sec);
       $cwidth = $d * $day_space;
       if (!$cwidth) $cwidth = 2;
       $current = '<img src="'.$GO_THEME->images['task_on'].'" width="'.$cwidth.'" height="7">&nbsp;<font color="green">'.$odate.'</font>';
@@ -114,8 +115,8 @@ else {
       $current_space = '<img src="'.$GO_THEME->images['task_space'].'" width="'.$cspace.'" height="7">';
     }
     elseif ($t->approved) {
-      $d = (round((strtotime($t->approved_date) - $pstart_date) / (24 * 3600)) - $real_start_date);
-      $adate = strftime("%d/%m", $pstart_date + ($real_start_date + $d) * 24 * 3600);
+      $d = (round((strtotime($t->approved_date) - $pstart_date) / $day_sec) - $real_start_date);
+      $adate = strftime("%d/%m", $pstart_date + ($real_start_date + $d) * $day_sec);
       $cwidth = $d * $day_space;
       if (!$cwidth) $cwidth = 2;
       $current = '<img src="'.$GO_THEME->images['task_done'].'" width="'.$cwidth.'" height="7">&nbsp;<font color="red">'.$adate.'</font>';
@@ -137,7 +138,7 @@ else {
   }
 
   $date = strftime("%d/%m", $pstop_date);
-  $ndays = round(($pstop_date - $pstart_date) / (24 * 3600));
+  $ndays = round(($pstop_date - $pstart_date) / $day_sec);
   $display_date = $ndays * $day_space;
   $space = '<img src="'.$GO_THEME->images['task_space'].'" width="'.$display_date.'" height="7">';
   echo '<tr class="TableInside'.$n.'"><td width="25">&nbsp;</td><td width="150">&nbsp;</td>';
@@ -171,7 +172,8 @@ if ($task != 'show_task_gantt') {
   }
 }
 
-$_SESSION['GO_FILESYSTEM_PATH'] = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'];
+$_SESSION['GO_FILESYSTEM_PATH'] = $GO_CONFIG->file_storage_path.'users/'.
+                                  $_SESSION['GO_SESSION']['username'];
 if ($task != 'show_task_gantt')
 {
   if (!$is_new_project) {
@@ -183,10 +185,18 @@ if ($task != 'show_task_gantt')
 }
 else {
   $button = new button($cmdClose, 'javascript:change_tab('.TASK_LIST_TAB.')');
-  echo '</td><td align="right" width="500">';
+  echo '</td><td align="right" width="100%">'.
+       '<table border="0" cellpadding="1" cellspacing="0" bgcolor="black">'.
+	   '<tr><td>'.
+	   '<table border="0" cellspacing="5" cellpadding="0" bgcolor="#FFF7EB">'.
+	   '<tr><td>';
   echo '<img src="'.$GO_THEME->images['task_wait'].'" width="14" height="7"> '.$pm_legend_planning.'&nbsp;&nbsp;';
   echo '<img src="'.$GO_THEME->images['task_on'].'" width="14" height="7"> '.$pm_legend_ongoing.'&nbsp;&nbsp;';
   echo '<img src="'.$GO_THEME->images['task_done'].'" width="14" height="7"> '.$pm_legend_done.'&nbsp;';
+  echo '</td></tr>'.
+       '</table>'.
+       '</td></tr>'.
+	   '</table>';
 }
 echo '</td></tr></table>';
 
@@ -216,6 +226,7 @@ function show_planned_eslapsed_times() {
 
 <script type="text/javascript" language="javascript">
 var task_tips = null;
+var frm = document.projects_form;
 
 function get_position(element)
 {
@@ -265,34 +276,34 @@ function hide_tips()
 
 function _save_task(action_type)
 {
-  if (action_type != 'status' ||
-    (document.projects_form.task_status.value == document.projects_form.saved_task_status.value ||
-      (document.projects_form.task_status.value != <?php echo TASK_DONE; ?> || confirm("<?php echo smart_addslashes($strStatusChangeConfirm); ?>"))))
+  if (action_type != 'status' || (frm.task_status.value == frm.saved_task_status.value ||
+     (frm.task_status.value != <?php echo TASK_DONE; ?> ||
+	  confirm("<?php echo smart_addslashes($strStatusChangeConfirm); ?>"))))
   {
-    document.projects_form.task.value='save_task_'+action_type;
-    document.projects_form.target = '_self';
-    document.projects_form.action = '<?php echo $_SERVER['PHP_SELF']; ?>';
-    document.projects_form.submit();
+    frm.task.value='save_task_'+action_type;
+    frm.target = '_self';
+    frm.action = '<?php echo $_SERVER['PHP_SELF']; ?>';
+    frm.submit();
   }
 }
 
 function _set_approve() {
-  document.projects_form.task.value='save_task_approve';
-  document.projects_form.target = '_self';
-  document.projects_form.action = '<?php echo $_SERVER['PHP_SELF']; ?>';
-  document.projects_form.submit();
+  frm.task.value='save_task_approve';
+  frm.target = '_self';
+  frm.action = '<?php echo $_SERVER['PHP_SELF']; ?>';
+  frm.submit();
 }
 
 function _gantt()
 {
-  document.projects_form.task.value='show_task_gantt';
-  document.projects_form.target = '_self';
-  document.projects_form.action = '<?php echo $_SERVER['PHP_SELF']; ?>';
-  document.projects_form.submit();
+  frm.task.value='show_task_gantt';
+  frm.target = '_self';
+  frm.action = '<?php echo $_SERVER['PHP_SELF']; ?>';
+  frm.submit();
 }
 
 function _reset()
 {
-  document.projects_form.reset();
+  frm.reset();
 }
 </script>
