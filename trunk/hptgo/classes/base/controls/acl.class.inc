@@ -184,7 +184,7 @@ class acl
   function print_user_groups()
   {
     global $GO_SECURITY, $GO_CONFIG, $cmdAdd, $cmdCancel, $_SERVER, $query, 
-    $GO_GROUPS, $cmdShowAll, $cmdSearch;
+    $GO_GROUPS, $cmdShowAll, $cmdSearch,$add_group_showall,$add_group_showauth;
 
     echo '<form name="'.$this->form_name.'" method="post" action="'.
       $_SERVER['PHP_SELF'].'">';
@@ -192,9 +192,18 @@ class acl
     echo '<input type="hidden" name="acl_id" value="'.$this->acl_id.'" />';
     echo '<input type="hidden" name="read_only" value="'.
       $this->read_only.'" />';
+    echo '<input type="hidden" name="show_all" value="'.(isset($_REQUEST['show_all']) ? $_REQUEST['show_all'] : 'false').'" />';
+    if (isset($_REQUEST['show_all']) && $_REQUEST['show_all'] == 'true')
+      echo '<a href="javascript:document.'.$this->form_name.'.show_all.value=\'false\';refresh_groups();">'.$add_group_showauth.'</a><br/>';
+    else
+      echo '<a href="javascript:document.'.$this->form_name.'.show_all.value=\'true\';refresh_groups();">'.$add_group_showall.'</a><br/>';
+    
 
     echo '<select name="'.$this->selected_groups_name.'[]" multiple="true" style="width: 250px;height: 100px;" class="textbox">';
-    $GO_GROUPS->get_authorised_groups($GO_SECURITY->user_id);
+    if (isset($_REQUEST['show_all']) && $_REQUEST['show_all'] == 'true')
+      $GO_GROUPS->get_all_groups();
+    else
+      $GO_GROUPS->get_authorised_groups($GO_SECURITY->user_id);
     while ($GO_GROUPS->next_record())
     {
       echo '<option value="'.$GO_GROUPS->f('id').'">'.$GO_GROUPS->f('name').'</option>';
@@ -209,6 +218,12 @@ class acl
     echo '</form>';
 
     echo '<script type="text/javascript">
+
+      function refresh_groups()
+      {
+	document.'.$this->form_name.'.task.value="add_groups";
+	document.'.$this->form_name.'.submit();
+      }
 
       function add_groups()
       {
