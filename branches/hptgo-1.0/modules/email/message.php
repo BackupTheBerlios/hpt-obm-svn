@@ -345,6 +345,8 @@ $count = 0;
 $splitter = 0;
 $parts = array_reverse($mail->f("parts"));
 
+$browser = detect_browser();
+$target = $browser['name'] == 'MSIE' ? '_blank' : '_self';
 $attachments = "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\"><tr>";
 
 for ($i=0;$i<count($parts);$i++)
@@ -368,7 +370,6 @@ for ($i=0;$i<count($parts);$i++)
       }
     }
 
-    $target = '_blank';
     $link = "attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&uid=".$uid."&part=".$parts[$i]["number"]."&transfer=".$parts[$i]["transfer"]."&mime=".$parts[$i]["mime"]."&filename=".urlencode($parts[$i]["name"]);
 
     $splitter++;
