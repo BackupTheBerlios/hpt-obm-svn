@@ -21,7 +21,7 @@
 					var button = document.getElementById("'.$name.'_button");
 				</script>
 				
-				<input type="file" id="'.$name.'" name="'.$name.'" style="position:absolute;top:0px;left:0px;width:0px;-moz-opacity:.40;filter:alpha(opacity:40);opacity:.40;" size="1" '.$attributes.' onmouseover="javascript:button.className=\''.$mo_class.'\';" onmouseout="javascript:button.className=\''.$class.'\';">
+				<input type="file" id="'.$name.'" name="'.$name.'" style="position:absolute;top:0px;left:0px;width:0px;-moz-opacity:0;filter:alpha(opacity:0);opacity:0;" size="1" '.$attributes.' onmouseover="javascript:button.className=\''.$mo_class.'\';" onmouseout="javascript:button.className=\''.$class.'\';">
 			</span>
 			<script language="javascript">
 			 	if (!document.all) button.style.marginTop = "-1px";
