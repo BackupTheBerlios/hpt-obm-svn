@@ -122,7 +122,7 @@ class GO_USERS extends base_users
     return $count;
   }
 
-  function get_authorized_users($user_id, $sort="name",$direction="ASC")
+  function get_authorized_users($user_id, $sort="name",$direction="ASC",$first=0,$max_rows=0)
   {
     if ($sort == 'users.name' || $sort=='name')
     {
@@ -134,8 +134,26 @@ class GO_USERS extends base_users
       " users_groups.user_id = ".$user_id.") OR (".
       "acl.user_id = ".$user_id." )) ORDER BY ".$sort." ".$direction;
 
-    $this->query($sql);
-    return $this->num_rows();
+    if ($max_rows != 0) {
+      $sql .= " LIMIT $first, $max_rows";
+
+      $sql2 = "SELECT DISTINCT users.* FROM users, users_groups ".
+	"INNER JOIN acl ON users.acl_id= acl.acl_id WHERE ".
+	"((acl.group_id = users_groups.group_id AND ".
+	" users_groups.user_id = ".$user_id.") OR (".
+	"acl.user_id = ".$user_id." )) ORDER BY ".$sort." ".$direction;
+
+      $this->query($sql2);
+      $count = $this->num_rows();
+      if ($count > 0) {
+	$this->query($sql);
+	return $count;
+      }
+      return 0;
+    } else {
+      $this->query($sql);
+      return $this->num_rows();
+    }
   }
 
   function get_profile_by_email($email)
