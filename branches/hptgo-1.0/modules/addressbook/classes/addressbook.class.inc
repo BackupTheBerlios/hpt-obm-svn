@@ -625,7 +625,6 @@ class addressbook extends db
 
   function add_group($addressbook_id, $name)
   {
-    $name = htmlentities($name);
     $group_id = $this->nextid("ab_groups");
     if ($group_id > 0)
     {
