@@ -12,7 +12,7 @@ option) any later version.
 
 require("../../Group-Office.php");
 
-define(TASK_LIST_TAB, 2);
+define('TASK_LIST_TAB', 2);
 
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('projects');
@@ -480,7 +480,7 @@ switch($tabtable->get_active_tab_id())
     print_acl($project['acl_write'].'&project_acl=1');
     echo '<br />';
     echo '<br />&nbsp;&nbsp;&nbsp;&nbsp;';
-    if (!$is_brandnew_project)
+    if (!isset($is_brandnew_project) || !$is_brandnew_project)
       $button = new button($cmdClose, "javascript:document.location='".$return_to."';");
     else
       $button = new button($cmdNext, "javascript:change_tab('".TASK_LIST_TAB."');");
@@ -532,7 +532,8 @@ switch($tabtable->get_active_tab_id())
       if ($project_id <= 0) {
         $db->query('SELECT DISTINCT pmCatalog.* FROM pmCatalog,task_templates WHERE pmCatalog.id=task_templates.cat_id');
         $catalog = new dropbox();
-        $cat_id = $_REQUEST['catalog'];
+        if (isset($cat_id))
+	  $cat_id = $_REQUEST['catalog'];
         while ($db->next_record()) {
           $catalog->add_value($db->f('id'), $db->f('name'));
 	  if (!isset($cat_id)) $cat_id = $db->f('id');
@@ -686,7 +687,7 @@ switch($tabtable->get_active_tab_id())
                 <?php
                 if ($project_id < 1 || $project['user_id'] == $GO_SECURITY->user_id)
                 {
-                  $disabled = $pstate == STATUS_DROP ? 'disabled' : '';
+                  $disabled = (isset($pstate) && $pstate == STATUS_DROP) ? 'disabled' : '';
                   echo '<textarea name="comments" cols="50" rows="4" class="textbox" '.$disabled.'>'.$comments.'</textarea>';
                 }else
                 {
@@ -711,7 +712,7 @@ switch($tabtable->get_active_tab_id())
                   </td>
                   <td colspan="3" align="right">
                   <?php
-                  if (!$is_owner)
+                  if (!isset($is_owner) || !$is_owner)
                     echo "&nbsp;";
                   elseif ($projects->f('status') != STATUS_DROP)
                     $button = new button($cmdDrop, 'javascript:_drop_project()');

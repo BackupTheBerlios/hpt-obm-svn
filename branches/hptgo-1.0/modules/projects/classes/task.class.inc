@@ -321,8 +321,12 @@ class project_task extends db {
       echo '<td>'.$progress.'</td>';
       if ($this->status == TASK_ONGOING)
         echo "<td><b>".$pm_task_status_values[$this->status]."</b></td>";
-      else
-        echo "<td>".$pm_task_status_values[$this->status]."</td>";
+      else {
+        if (isset($pm_task_status_values[$this->status]))
+          echo "<td>".$pm_task_status_values[$this->status]."</td>";
+	else
+          echo "<td>&nbsp;</td>";
+      }
     }
     echo '<td align="center">'.($this->approved ? '<img border="0" src="'.$GO_THEME->images['checked'].'"/>' : '&nbsp;').'</td>';
     $url = $this->doc_url.'&return_to='.rawurlencode($return_to).'&return_to2='.rawurlencode($link_back);
