@@ -86,6 +86,7 @@ if (isset($_REQUEST['new_sort_direction']))
 
 	if ($addressbook_id > 0)
 		$subscribed_addressbook_id = $addressbook_id;
+	$old_subscribed_addressbook_id = $subscribed_addressbook_id;
 	if (isset($first_writable_ab) && (!isset($subscribed_addressbook_id) || $subscribed_addressbook_id == 0))
 		$subscribed_addressbook_id = $first_writable_ab;
 
@@ -295,7 +296,8 @@ if ($company_id == 0 || $task == 'save_company')
 
 }
 
-	$addressbook_id = $subscribed_addressbook_id > 0 ? $subscribed_addressbook_id : $company['addressbook_id'];
+	$addressbook_id = isset($old_subscribed_addressbook_id) && $old_subscribed_addressbook_id > 0 ? $subscribed_addressbook_id : $company['addressbook_id'];
+	$subscribed_addressbook_id = $addressbook_id;
 	$cp = new addressbook();
 	$parent_dropbox = new dropbox();
 	$company['parent_id'] = 0;
