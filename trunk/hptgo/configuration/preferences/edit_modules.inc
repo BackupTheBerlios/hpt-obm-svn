@@ -44,7 +44,7 @@ $show_text = isset($user_modules_properties[1]) ? $user_modules_properties[1] ==
 
 if ($com_string == '') {
 	$res = array_keys($module_map);
-	$com = $res = implode(' ',$res);
+	$com = $res;
 } else {
 	$com = explode(' ',$com_string);
 	$res = $com;
