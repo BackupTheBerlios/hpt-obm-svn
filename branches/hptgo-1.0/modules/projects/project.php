@@ -616,7 +616,7 @@ switch($tabtable->get_active_tab_id())
               echo '<tr><td>'.$pm_progress.':</td><td>'.$progress.'%</td></tr>';
             }
 
-            echo '<tr><td>'.$pm_budget.':</td><td><input type="text" class="textbox" size="10" name="budget" value="'.$budget.'" maxlength="50" /> '.$_SESSION['GO_SESSION']['currency'].'</td></tr>';
+            echo '<tr><td>'.$pm_budget.':</td><td><input type="text" class="textbox" size="10" name="budget" value="'.$budget.'" maxlength="50" style="text-align: right;" /> '.$_SESSION['GO_SESSION']['currency'].'</td></tr>';
           }else
           {
             echo '<tr><td>'.$pm_client.':</td><td>';
