@@ -56,7 +56,7 @@
 		break;
 		
 		case 'users':
-		  $ab_settings['search_users_field '] = $_REQUEST['search_field'];
+		  $ab_settings['search_users_field'] = $_REQUEST['search_field'];
 		break;
 	  }
 	  
