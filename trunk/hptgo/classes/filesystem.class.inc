@@ -23,7 +23,8 @@ class filesystem extends db
   /**
    * Get filesystem settings from fs_settings.
    *
-   * @param $user_id
+   * @param integer $user_id
+   * @return array the setting record
    */
   function get_settings($user_id)
   {
@@ -42,9 +43,10 @@ class filesystem extends db
   /**
    * Set filesystem sort setting.
    *
-   * @param $user_id
-   *        $sort_field sort field
-   *        $sort_order sort order
+   * @param integer $user_id
+   * @param string $sort_field sort field
+   * @param string $sort_order sort order
+   * @return boolean
    */
   function set_sorting($user_id, $sort_field, $sort_order)
   {
@@ -57,8 +59,9 @@ class filesystem extends db
    * Check if $sub_path is a subdirectory of $parent_path.
    * Return true if it is, false otherwise.
    *
-   * @param $sub_path
-   *        $parent_path 
+   * @param string $sub_path
+   * @param string $parent_path 
+   * @return boolean
    */
   function is_sub_dir($sub_path, $parent_path)
   {
@@ -78,8 +81,7 @@ class filesystem extends db
   /**
    * Filesystem class constructor.
    *
-   * @param $disable_go_permissions ignore checking go permissions
-   *
+   * @param boolean $disable_go_permissions ignore checking go permissions
    */
   function filesystem($disable_go_permissions=false)
   {
@@ -89,6 +91,10 @@ class filesystem extends db
 
   /**
    * Check if $path is the home directory of user $user_id.
+   *
+   * @param integer $user_id
+   * @param string $path
+   * @return boolean
    */
   function is_home_path($user_id, $path)
   {
@@ -108,6 +114,10 @@ class filesystem extends db
 
   /**
    * Check if $path is owned by user $user_id.
+   *
+   * @param integer $user_id
+   * @param string $path
+   * @return boolean
    */
   function is_owner($user_id, $path)
   {
@@ -151,6 +161,9 @@ class filesystem extends db
 
   /**
    * Check if $folder is a common folder.
+   *
+   * @param string $folder
+   * @return boolean
    */
   function is_common_folder($folder)
   {
@@ -172,6 +185,9 @@ class filesystem extends db
 
   /**
    * Check if $folder is a system folder.
+   *
+   * @param string $folder
+   * @return boolean
    */
   function is_system_folder($folder)
   {
@@ -184,6 +200,10 @@ class filesystem extends db
 
   /**
    * Rename/Move a system folder from $old_folder to $new_path.
+   *
+   * @param string $old_folder
+   * @param string $new_folder
+   * @return boolean
    */
   function update_system_folder($old_folder,$new_folder)
   {
@@ -198,6 +218,9 @@ class filesystem extends db
    * Get all shares of user $user_id.
    * Return the number of shares. 
    * Share information can be retrieved through db interface (table fsShares).
+   *
+   * @param integer $user_id
+   * @return int number of shares
    */
   function get_shares($user_id)
   {
@@ -209,7 +232,8 @@ class filesystem extends db
 
   /**
    * Get all users who share files to me.
-   * Return an array of user_id. 
+   *
+   * @return array an array of user_id. 
    */
   function get_my_shares()
   {
@@ -237,6 +261,9 @@ class filesystem extends db
    * Get all users who share files to user $user_id.
    * Return the number of users. 
    * User info can be retrieved through db interface. 
+   *
+   * @param integer $user_id
+   * @return integer number of shares
    */
   function get_authorized_sharers($user_id)
   {
@@ -252,6 +279,8 @@ class filesystem extends db
   /**
    * Make directory $path sharable by user $user_id.
    * Return true if successful, false otherwise. 
+   *
+   * return boolean
    */
   function add_share($user_id, $path)
   {

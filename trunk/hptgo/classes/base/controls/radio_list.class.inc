@@ -18,9 +18,8 @@ class radio_list
   /**
    * Constructor.
    *
-   * @param $group
-   * @param $selected default is empty
-   * @return none
+   * @param string $group
+   * @param string $selected default is empty
    */
   function radio_list($group, $selected='')
   {
@@ -31,11 +30,10 @@ class radio_list
   /**
    * Add new option, print it too.
    *
-   * @param $value
-   * @param $text
-   * @param $disabled default is empty
-   * @param $attributes additional attributes (default is empty)
-   * @return none
+   * @param string $value
+   * @param string $text
+   * @param boolean $disabled default is empty
+   * @param string $attributes additional attributes (default is empty)
    */
   function add_option($value, $text, $disabled=false, $attributes='')
   {

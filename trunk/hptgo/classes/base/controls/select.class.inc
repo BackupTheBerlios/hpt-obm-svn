@@ -28,11 +28,10 @@ class select
   /**
    * Constructor.
    *
-   * @param $type 'user' to select users only, or else select contacts only
-   * @param $form_name form name
-   * @param $name name of an field in form
-   * @param value default value of the field
-   * @return none
+   * @param mixed $type 'user' to select users only, or else select contacts only
+   * @param string $form_name form name
+   * @param string $name name of an field in form
+   * @param string $value default value of the field
    */
   function select($type, $form_name, $name, $value)
   {
@@ -46,8 +45,7 @@ class select
   /**
    * Print the link with caption $text.
    *
-   * @param $text
-   * @return none
+   * @param string $text
    * @see get_link
    */
   function print_link($text)
@@ -58,8 +56,8 @@ class select
   /**
    * Return the link to popup addressbook selector with caption $text.
    *
-   * @param $text
-   * @return the link
+   * @param string $text
+   * @return string the link
    */
   function get_link($text)
   {

@@ -23,9 +23,9 @@ define('DB_TIME_FORMAT', 'H:i:00');
 
 class calendar extends db
 {
-	var $events = array();
-	var $all_day_events = array();
-	var $backgrounds = array();
+  var $events = array();
+  var $all_day_events = array();
+  var $backgrounds = array();
 	
   function calendar()
   {
@@ -1465,66 +1465,66 @@ class calendar extends db
       {
       	if($object['type'] == 'VEVENT')
       	{
-	$name = isset($object['SUMMARY']['value']) ? trim($object['SUMMARY']['value']) : '';
-	$description = isset($event['DESCRIPTION']['value']) ? trim($object['DESCRIPTION']['value']) : '';
-	$location = isset($object['LOCATION']['value']) ? trim($object['LOCATION']['value']) : '';
-	
-	$timezone_id = isset($object['DTEND']['params']['TZID']) ? $object['DTEND']['params']['TZID'] : '';
-	$start_time = $ical2array->parse_date($object['DTSTART']['value'], $timezone_id);
-	
-	if(isset($object['DTEND']['value']))
-	{		
-		$timezone_id = isset($object['DTEND']['params']['TZID']) ? $object['DTEND']['params']['TZID'] : '';
-		$end_time = $ical2array->parse_date($object['DTEND']['value'],  $timezone_id);
-	}elseif(isset($object['DURATION']['value']))
-	{
-		$duration = $ical2array->parse_date($object['DURATION']['value']);
-		$end_time = $start_time+$duration;
-	}	
+	  $name = isset($object['SUMMARY']['value']) ? trim($object['SUMMARY']['value']) : '';
+	  $description = isset($event['DESCRIPTION']['value']) ? trim($object['DESCRIPTION']['value']) : '';
+	  $location = isset($object['LOCATION']['value']) ? trim($object['LOCATION']['value']) : '';
 
-	if ($name != '' && $start_time > 0 && $end_time > 0)
-	{
-	  $acl_read = $GO_SECURITY->get_new_acl('calendar_read');
-	  $acl_write = $GO_SECURITY->get_new_acl('calendar_write');
+	  $timezone_id = isset($object['DTEND']['params']['TZID']) ? $object['DTEND']['params']['TZID'] : '';
+	  $start_time = $ical2array->parse_date($object['DTSTART']['value'], $timezone_id);
 
-	  if ($acl_read > 0 && $acl_write > 0)
+	  if(isset($object['DTEND']['value']))
+	  {		
+	    $timezone_id = isset($object['DTEND']['params']['TZID']) ? $object['DTEND']['params']['TZID'] : '';
+	    $end_time = $ical2array->parse_date($object['DTEND']['value'],  $timezone_id);
+	  }elseif(isset($object['DURATION']['value']))
 	  {
-	    $all_day_event = (isset($object['DTSTART']['params']['VALUE']) &&
-		strtoupper($object['DTSTART']['params']['VALUE']) == 'DATE') ? true : false;
+	    $duration = $ical2array->parse_date($object['DURATION']['value']);
+	    $end_time = $start_time+$duration;
+	  }
 
-	    $sun = 0;
-	    $mon = 0;
-	    $tue = 0;
-	    $wed = 0;
-	    $thu = 0;
-	    $fri = 0;
-	    $sat = 0;
+	  if ($name != '' && $start_time > 0 && $end_time > 0)
+	  {
+	    $acl_read = $GO_SECURITY->get_new_acl('calendar_read');
+	    $acl_write = $GO_SECURITY->get_new_acl('calendar_write');
 
-	    $repeat_every = 0;
-	    $repeat_forever = 0;
-	    $repeat_type = REPEAT_NONE;
-	    $repeat_end_time = 0;
-	    $month_time = 0;
-
-	    if (isset($object['RRULE']['value']))
+	    if ($acl_read > 0 && $acl_write > 0)
 	    {
-	      $rrule = $ical2array->parse_rrule($object['RRULE']['value']);
+	      $all_day_event = (isset($object['DTSTART']['params']['VALUE']) &&
+				strtoupper($object['DTSTART']['params']['VALUE']) == 'DATE') ? true : false;
 
-	      if (isset($rrule['UNTIL']))
-	      {
-		$repeat_end_time = $ical2array->parse_date($rrule['UNTIL']);
-	      }else
-	      {
-		$repeat_forever = 1;
-	      }
+	      $sun = 0;
+	      $mon = 0;
+	      $tue = 0;
+	      $wed = 0;
+	      $thu = 0;
+	      $fri = 0;
+	      $sat = 0;
 
-	      $repeat_every = $rrule['INTERVAL'];
-	      switch($rrule['FREQ'])
+	      $repeat_every = 0;
+	      $repeat_forever = 0;
+	      $repeat_type = REPEAT_NONE;
+	      $repeat_end_time = 0;
+	      $month_time = 0;
+	      
+	      if (isset($object['RRULE']['value']))
 	      {
+		$rrule = $ical2array->parse_rrule($object['RRULE']['value']);
+
+		if (isset($rrule['UNTIL']))
+		{
+		  $repeat_end_time = $ical2array->parse_date($rrule['UNTIL']);
+		}else
+		{
+		  $repeat_forever = 1;
+		}
+
+		$repeat_every = $rrule['INTERVAL'];
+		switch($rrule['FREQ'])
+		{
 		case 'DAILY':
 		  $repeat_type = REPEAT_DAILY;
 		  break;
-
+		  
 		case 'WEEKLY':
 		  $repeat_type = REPEAT_WEEKLY;
 
@@ -1582,40 +1582,40 @@ class calendar extends db
 		    $repeat_type = REPEAT_MONTH_DATE;
 		  }
 		  break;
-
+		  
 		case 'YEARLY':
 		  $repeat_type = REPEAT_YEARLY;
 		  break;
+		}
 	      }
-	    }
 
-	    if (isset($object['X-GO-BGCOLOR']['value']))
-	    {
-	      $bgcolor = $object['X-GO-BGCOLOR']['value'];
-	    }else
-	    {
-	      $bgcolor = 'FFFFCC';
-	    }
+	      if (isset($object['X-GO-BGCOLOR']['value']))
+	      {
+		$bgcolor = $object['X-GO-BGCOLOR']['value'];
+	      }else
+	      {
+		$bgcolor = 'FFFFCC';
+	      }
 
-	    if ($event_id = $this->add_event($user_id, $start_time,
-		  $end_time, $all_day_event,
-		  addslashes($name), addslashes($description), 0, 0, addslashes($location),
-		  $bgcolor, $repeat_type, $repeat_end_time, $month_time, $repeat_forever,
-		  $repeat_every, $mon, $tue, $wed, $thu, $fri, $sat, $sun,
-		  $acl_read, $acl_write))
-	    {
-	      $count++;
-	      $this->subscribe_event($event_id, $calendar_id);
-	      $GO_SECURITY->add_group_to_acl($GO_CONFIG->group_everyone, $acl_read);
-	      $GO_SECURITY->add_user_to_acl($GO_SECURITY->user_id, $acl_write);
-	    }else
-	    {
-	      $GO_SECURITY->delete_acl($acl_read);
-	      $GO_SECURITY->delete_acl($acl_write);
+	      if ($event_id = $this->add_event($user_id, $start_time,
+					       $end_time, $all_day_event,
+					       addslashes($name), addslashes($description), 0, 0, addslashes($location),
+					       $bgcolor, $repeat_type, $repeat_end_time, $month_time, $repeat_forever,
+					       $repeat_every, $mon, $tue, $wed, $thu, $fri, $sat, $sun,
+					       $acl_read, $acl_write))
+	      {
+		$count++;
+		$this->subscribe_event($event_id, $calendar_id);
+		$GO_SECURITY->add_group_to_acl($GO_CONFIG->group_everyone, $acl_read);
+		$GO_SECURITY->add_user_to_acl($GO_SECURITY->user_id, $acl_write);
+	      }else
+	      {
+		$GO_SECURITY->delete_acl($acl_read);
+		$GO_SECURITY->delete_acl($acl_write);
+	      }
 	    }
 	  }
 	}
-				}
       }
     }
     return $count;

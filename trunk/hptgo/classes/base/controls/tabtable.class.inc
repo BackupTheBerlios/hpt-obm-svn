@@ -37,19 +37,18 @@ class tabtable
   /**
    * constructor sets basic properties
    *
-   * @param $id
-   * @param $title default is empty
-   * @param $width default is empty
-   * @param $height default is empty
-   * @param $tabwidth default is 120
-   * @param $arguments default is empty
-   * @param $submit_form default is false
-   * @param $align is left
-   * @param $valign is top
-   * @param $form_name default is 'forms[0]'
-   * @param $tab_direction default is horizontal
-   * @param $right_title default is empty
-   * @return none
+   * @param string $id
+   * @param string $title default is empty
+   * @param int $width default is empty
+   * @param int $height default is empty
+   * @param int $tabwidth default is 120
+   * @param string $arguments default is empty
+   * @param boolean $submit_form default is false
+   * @param string $align is left
+   * @param string $valign is top
+   * @param string $form_name default is 'forms[0]'
+   * @param string $tab_direction default is horizontal
+   * @param string $right_title default is empty
    */
   function tabtable($id, $title='', $width='', $height='', $tabwidth='120', $arguments='', $submit_form=false, $align='left', $valign='top', $form_name='forms[0]', $tab_direction='horizontal', $right_title = '')
   {
@@ -84,9 +83,8 @@ class tabtable
   /**
    * Add a tab with $id and name $name.
    *
-   * @param $id Hint: Id could be a document to include
-   * @param $name
-   * @return none
+   * @param string $id Hint: Id could be a document to include
+   * @param string $name
    */
   function add_tab($id, $name)
   {
@@ -97,8 +95,8 @@ class tabtable
   /**
    * set the active tab manually call this before the print_head() function
    *
-   * @param $index
-   * @return true/false
+   * @param string $index
+   * @return boolean
    * @see print_head
    */
   function set_active_tab($index)
@@ -116,8 +114,8 @@ class tabtable
   /**
    * set active tab by name
    *
-   * @param $name
-   * @return true/false
+   * @param string $name
+   * @return boolean
    */
   function set_active_tab_by_name($name)
   {
@@ -134,8 +132,8 @@ class tabtable
   /**
    * get active tab by name
    *
-   * @param $name
-   * @return index or 0
+   * @param string $name
+   * @return int index or 0
    */
   function get_active_tab_by_name($name)
   {

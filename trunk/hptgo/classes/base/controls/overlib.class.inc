@@ -15,7 +15,7 @@ class overlib
   /**
    * Get header
    *
-   * @return header html code
+   * @return string header html code
    */
   function get_header()
   {
@@ -31,10 +31,10 @@ class overlib
   /**
    * Get overlib.
    *
-   * @param $text text to display.
-   * @param $caption default is empty.
-   * @param $option default is empty.
-   * @return overlib html code.
+   * @param string $text text to display.
+   * @param string $caption default is empty.
+   * @param string $option default is empty.
+   * @return string overlib html code.
    */
   function print_overlib($text, $caption='', $options='')
   {

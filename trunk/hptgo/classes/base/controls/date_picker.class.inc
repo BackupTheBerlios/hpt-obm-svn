@@ -30,14 +30,13 @@ class date_picker
   /**
    * Print the date picker.
    *
-   * @param $name
-   * @param $date_format
-   * @param $set_date default is empty
-   * @param $flat_div_id default is empty
-   * @param $flat_callbackfunction default is empty
-   * @param $arguments default is empty
-   * @param $disabled default is false
-   * @return none
+   * @param string $name
+   * @param string $date_format
+   * @param string $set_date default is empty
+   * @param string $flat_div_id default is empty
+   * @param string $flat_callbackfunction default is empty
+   * @param string $arguments default is empty
+   * @param boolean $disabled default is false
    * @see get_date_picker
    */
   function print_date_picker($name, $date_format, $set_date='', $flat_div_id='', $flat_callbackfunction='', $arguments='', $disabled=false)
@@ -48,14 +47,14 @@ class date_picker
   /**
    * Get the date picker.
    *
-   * @param $name
-   * @param $date_format
-   * @param $set_date default is empty
-   * @param $flat_div_id default is empty
-   * @param $flat_callbackfunction default is empty
-   * @param $arguments default is empty
-   * @param $disabled default is false
-   * @return html code of the date picker
+   * @param string $name
+   * @param string $date_format
+   * @param string $set_date default is empty
+   * @param string $flat_div_id default is empty
+   * @param string $flat_callbackfunction default is empty
+   * @param stringg $arguments default is empty
+   * @param boolean $disabled default is false
+   * @return string html code of the date picker
    */
   function get_date_picker($name, $date_format, $set_date='', $flat_div_id='', $flat_callbackfunction='', $arguments='', $disabled=false)
   {
@@ -110,8 +109,8 @@ ifFormat    : "'.$date_format.'",';
   /**
    * Convert date format.
    *
-   * @param $php_date_format
-   * @return converted format
+   * @param string $php_date_format
+   * @return string converted format
    */
   function convert_date_format($php_date_format)
   {

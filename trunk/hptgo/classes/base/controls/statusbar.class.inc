@@ -23,9 +23,8 @@ class statusbar
   /**
    * Print the progress bar.
    *
-   * @param $usage
-   * @param $limit
-   * @return none
+   * @param string $usage
+   * @param string $limit
    */
   function print_bar($usage, $limit)
   {

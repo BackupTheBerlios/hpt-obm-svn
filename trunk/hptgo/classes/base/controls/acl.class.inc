@@ -21,8 +21,7 @@ class acl
   /**
    * Constructor.
    *
-   * @param $acl_id
-   * @return none
+   * @param int $acl_id
    */
   function acl($acl_id)
   {

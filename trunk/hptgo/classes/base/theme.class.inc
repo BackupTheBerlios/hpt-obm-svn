@@ -12,14 +12,50 @@ option) any later version.
 
 class GO_THEME
 {
-	var $theme; // theme name
-	var $default_theme; // default theme
-	var $image_url; // theme image url
-	var $theme_path; // theme image path
-	var $theme_url; // them url
-	var $stylesheet; // stylesheet url
-	var $path_to_themes; // theme path
+	/**
+	 * theme name
+	 * @var string
+	 */
+	var $theme;
+	/**
+	 * default theme
+	 * @var string
+	 */
+	var $default_theme; 
+	/**
+	 * theme image url
+	 * @var string
+	 */
+	var $image_url; 
+	/**
+	 * theme image path
+	 * @var string
+	 */
+	var $theme_path;
+	/**
+	 * theme url
+	 * @var string
+	 */
+	var $theme_url;
+	/**
+	 * stylesheet url
+	 * @var string
+	 */
+	var $stylesheet;
+	/**
+	 * theme path
+	 * @var string
+	 */
+	var $path_to_themes;
+	/**
+	 * theme images
+	 * @var array
+	 */
 	var $images = array();
+	/**
+	 * theme sounds
+	 * @var array
+	 */
 	var $sounds = array();
 
 	function GO_THEME()
@@ -62,7 +98,11 @@ class GO_THEME
 		}
 	}
 
-	//gets the themes
+	/**
+	 * gets the themes
+	 *
+	 * @return array all themes
+	 */
 	function get_themes()
 	{
 		//$location = $SCRIPT_FILENAME."languages";

@@ -15,6 +15,9 @@
  * Convert $matches quoted format to NCR format.
  * Return the converted result. 
  * Used by imap.view_part()
+ *
+ * @param array $matches
+ * @return string
  */
 function quoted_to_ncr($matches)
 {
@@ -26,7 +29,9 @@ function quoted_to_ncr($matches)
   return $matches[0];
 }
 
-
+/**
+ * Class for accessing IMAP mail folders.
+ */
 class imap
 {
   var $conn;
@@ -48,11 +53,16 @@ class imap
    * Open connection to server and count total and new messages
    * $host, $port, $username, $password specify what host/port to connect,
    * what username/password is used to authenticate.
-   * $type must be 'pop3' or 'imap'.
-   * $mailbox is used as root folder (imap protocol)
-   * $ssl is true if it's a ssl(ed) protocol.
-   * $novalidate_cert: do not validate certification.
-   * $flags: this parameter is passed directly to imap_open()
+   *
+   * @param string $host host name
+   * @param string $type must be 'pop3' or 'imap'.
+   * @param string $username
+   * @param string $password
+   * @param string $mailbox is used as root folder (imap protocol)
+   * @param integer $flags this parameter is passed directly to imap_open()
+   * @param boolean $ssl is true if it's a ssl(ed) protocol.
+   * @param boolean $novalidate_cert: do not validate certification.
+   * @return boolean
    */
   function open($host, $type, $port, $username, $password, $mailbox = "INBOX", $flags = 0, $ssl=false, $novalidate_cert=false)
   {
@@ -98,6 +108,8 @@ class imap
 
   /**
    * count total and new messages on server
+   *
+   * @return array result of imap_status
    */
   function count()
   {
@@ -114,6 +126,8 @@ class imap
 
   /**
    * Get the status of mailbox $mailbox (the result of imap_status())
+   *
+   * @return array result of imap_status
    */
   function status($mailbox)
   {
@@ -123,6 +137,7 @@ class imap
 
   /**
    * return true when server is an IMAP server.
+   * @return boolean
    */
   function is_imap()
   {

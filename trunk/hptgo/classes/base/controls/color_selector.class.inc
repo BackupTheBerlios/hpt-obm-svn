@@ -17,8 +17,7 @@ class color_selector
   /**
    * Add new color $color_code to the color selector.
    *
-   * @param $color_code
-   * @return none
+   * @param mixed $color_code
    */
   function add_color($color_code)
   {
@@ -28,10 +27,9 @@ class color_selector
   /**
    * Print the color selector.
    *
-   * @param $name name of the color selector field
-   * @param $selected_color default color
-   * @param $form_name default is 'forms[0]'
-   * @return none
+   * @param string $name name of the color selector field
+   * @param string $selected_color default color
+   * @param string $form_name default is 'forms[0]'
    */
   function print_color_selector($name, $selected_color, $form_name ='forms[0]')
   {

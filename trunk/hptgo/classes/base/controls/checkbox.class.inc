@@ -15,13 +15,12 @@ class checkbox
   /**
    * Constructor. Echo the checkbox.
    *
-   * @param $name the checkbox id.
-   * @param $value the checkbox value
-   * @param $text the checkbox caption
-   * @param $checked checked status
-   * @param $disabled
-   * @param $attributes additional attributes, default is empty
-   * @return none
+   * @param string $name the checkbox id.
+   * @param string $value the checkbox value
+   * @param string $text the checkbox caption
+   * @param boolean $checked checked status
+   * @param boolean $disabled
+   * @param string $attributes additional attributes, default is empty
    */
   function checkbox($name, $value, $text, $checked=false, $disabled=false, $attributes='')
   {

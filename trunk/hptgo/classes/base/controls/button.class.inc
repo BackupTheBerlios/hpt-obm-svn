@@ -15,10 +15,9 @@ class button
   /**
    * Constructor.
    *
-   * @param $text the text button. default is null. If $text is not null, then echo the button.
-   * @param $action default is null
-   * @size default is 100
-   * @return none
+   * @param string $text the text button. default is null. If $text is not null, then echo the button.
+   * @param string $action default is null
+   * @param int $size default is 100
    */
   function button($text=null, $action=null, $size='100')
   {
@@ -30,10 +29,10 @@ class button
   /**
    * Get button.
    *
-   * @param $text the text button. default is null
-   * @param $action default is null
-   * @size default is 100
-   * @return the html string of the button.
+   * @param string $text the text button. default is null
+   * @param string $action default is null
+   * @param int $size default is 100
+   * @return string the html string of the button.
    */
   function get_button($text, $action, $size='100')
   {
