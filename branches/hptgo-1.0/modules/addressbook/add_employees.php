@@ -32,7 +32,9 @@ if (isset($_REQUEST['company_id']) && $_REQUEST['company_id'] > 0)
 	{
 		for($i=0;$i<sizeof($contacts);$i++)
 		{
-			$ab->add_contact_to_company($contacts[$i], $_REQUEST['company_id']);
+			$contact = $ab->get_contact($contacts[$i]);
+			if ($GO_SECURITY->has_permission($GO_SECURITY->user_id,$contact['acl_write']))
+				$ab->add_contact_to_company($contacts[$i], $_REQUEST['company_id']);
 		}
 	}
 }

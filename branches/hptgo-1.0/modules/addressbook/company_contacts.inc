@@ -96,7 +96,7 @@ if ($count > 0)
 		echo '<td>'.mail_to($ab->f('email'), $ab->f('email')).'</td>';
 		echo '<td>'.$ab->f('home_phone').'</a></td>';
 		echo '<td>'.$ab->f('work_phone').'</td>';
-		if ($write_permission)
+		if ($GO_SECURITY->has_permission($GO_SECURITY->user_id,$ab->f('acl_write')))
 			echo "<td><a href='javascript:div_confirm_action(\"javascript:delete_contact(".$ab->f('id').")\",\"".div_confirm_id($strDeletePrefix."'".$name."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$name."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
 		echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 	}
