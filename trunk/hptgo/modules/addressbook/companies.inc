@@ -141,7 +141,7 @@ if ($myab->query("SELECT * FROM ab_addressbooks WHERE id='$addressbook_id'") &&
 			}
 			else
 			{
-				@$myab->query("INSERT INTO ab_new_companies (addressbook_id,company_id) VALUES('$addressbook_id','$id')");
+				@$myab->query("REPLACE INTO ab_new_companies (addressbook_id,company_id) VALUES('$addressbook_id','$id')");
 				$new_companies[$id] = 1;
 			}
 		}
