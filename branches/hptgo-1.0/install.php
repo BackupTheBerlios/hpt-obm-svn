@@ -1242,7 +1242,7 @@ Vui lòng kiểm tra lại và đảm bảo là không ai được phép sửa c
 Trong Linux, hãy thực hiện:<br/>
 <font color="#003399"><i>
 $ chown -R someuser:someuser <?php echo $GO_CONFIG->root_path; ?><br />
-$ chmod 644 <?php echo $GO_CONFIG->root_path; ?><br />
+$ chmod 755 <?php echo $GO_CONFIG->root_path; ?><br />
 $ chmod 644 <?php echo $GO_CONFIG->root_path; ?>Group-Office.php
 
 </i></font>
