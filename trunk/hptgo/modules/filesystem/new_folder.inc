@@ -29,7 +29,7 @@ option) any later version.
 			<?php echo $strName; ?>:
 			</td>
 			<td>
-			<input type="text" class="textbox" name="name" value="<?php if (isset($_POST['name'])) echo $_POST['name']; ?>" maxlength="100" size="30" />
+			<input type="text" class="textbox" name="name" value="<?php if (isset($_POST['name'])) echo htmlspecialchars($_POST['name']); ?>" maxlength="100" size="30" />
 			</td>
 		</tr>
 		<tr>

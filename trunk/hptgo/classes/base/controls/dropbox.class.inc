@@ -185,7 +185,7 @@ class dropbox
 	  }
 	}
 	$return_str.=  '>';
-	$return_str.=  $this->text[$i];
+	$return_str.=  htmlspecialchars($this->text[$i]);
 	$return_str.=  '</option>';
       }
     }

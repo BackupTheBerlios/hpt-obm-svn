@@ -193,7 +193,7 @@ if(count($regions) == 0)
 					{
 						$output_lines .= '<tr><td width="30%">'.date($date_format, $holidays->f('date')).'</td><td width="60%">'.$holidays->f('name').'</td>';
 						$output_lines .= '<td><a href=\'javascript:edit_holiday('.$holidays->f('id').')\' title="'.$strEdit.' \''.htmlspecialchars($holidays->f('name')).'\'"><img src="'.$GO_THEME->images['edit'].'" border="0" /></a></td>';
-						$output_lines .= '<td><a href=\'javascript:delete_holiday('.$holidays->f('id').', "'.$holidays->f('name').'")\' title="'.$strDeleteItem.' \''.htmlspecialchars($holidays->f('name')).'\'"><img src="'.$GO_THEME->images['delete'].'" border="0" /></a></td></tr>';
+						$output_lines .= '<td><a href=\'javascript:delete_holiday('.$holidays->f('id').', "'.div_confirm_id($holidays->f('name')).'")\' title="'.$strDeleteItem.' \''.htmlspecialchars($holidays->f('name')).'\'"><img src="'.$GO_THEME->images['delete'].'" border="0" /></a></td></tr>';
 					}
 				}else
 				{
@@ -244,9 +244,9 @@ if(count($regions) == 0)
 
 
 <script type="text/javascript">
-function delete_holiday(holiday_id, holiday_name)
+function delete_holiday(holiday_id, holiday_name_id)
 {
-	if (confirm("<?php echo $strDeletePrefix; ?>'"+holiday_name+"'<?php echo $strDeleteSuffix; ?>"))
+	if (confirm("<?php echo $strDeletePrefix; ?>'"+div_confirm_text(holiday_name_id)+"'<?php echo $strDeleteSuffix; ?>"))
 	{
 		document.forms[0].task.value='delete_holiday';
 		document.forms[0].holiday_id.value=holiday_id;

@@ -358,7 +358,7 @@ class project_task extends db {
              '&return_to2='.rawurlencode($link_back);
       echo '<td><b><a href="'.$url.'" class="normal">'.$this->name.'</a></b></td>';
     }
-    else echo '<td>'.$this->name.'</td>';
+    else echo '<td>'.htmlspecialchars($this->name).'</td>';
   }
 
   function print_members($member_ids, $member_names, $member_list) {

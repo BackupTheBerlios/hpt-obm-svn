@@ -227,7 +227,7 @@ function uploadFile($userfile, $maxsize, $upload_dir)
 				$middle_name = $profile["middle_name"] == '' ?'' : $profile["middle_name"].' ';
 	      		$name = $profile["last_name"].' '.$middle_name.$profile["first_name"];
 
-    	  		echo '<tr><td align="right" nowrap>'.$acc.'</td><td nowrap>&nbsp;&nbsp;'.$name.'</td></tr>';
+    	  		echo '<tr><td align="right" nowrap>'.$acc.'</td><td nowrap>&nbsp;&nbsp;'.htmlspecialchars($name).'</td></tr>';
 		  	}
 		}
 	}

@@ -181,7 +181,7 @@ if ($todo_id > 0 && $task != 'save_todo')
 	}
 
 	$todo['reminder'] = ($todo['remind_time'] > 0) ? true : false;
-	$title = htmlspecialchars($todo['name']);
+	$title = $todo['name'];
 }else
 {
 	$title = $sc_new_app;

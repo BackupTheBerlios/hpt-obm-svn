@@ -259,7 +259,7 @@ for($row=0;$row<$rows;$row++)
       {
 	if (isset($events['backgrounds'][$new_date][$hour_of_day]))
 	{
-	  $style = ' style="background-color: #'.$events['backgrounds'][$new_date][$hour_of_day].'"';
+	  $style = 'background-color: #'.$events['backgrounds'][$new_date][$hour_of_day];
 	}else
 	{
 	  $style = '';
@@ -268,11 +268,21 @@ for($row=0;$row<$rows;$row++)
 	{
 	  if ($event_addable) {
 	    if ($new_date > date('Ymd', time()) || ($new_date == date('Ymd', time()) && $hour_of_day >= date('H',time()))) {
+	      if ($style != '')
+	        $style = " style=\"$style;cursor:pointer\"";
+	      else
+	        $style = " style=\"cursor:pointer\"";
 	      echo '<td onmouseover="javascript:glow_row(\''.$current_row.'_'.$hour_of_day.'\');" onmouseout="javascript:unglow_row(\''.$current_row.'_'.$hour_of_day.'\');" onclick="document.location=\'event.php?calendar_id='.$calendar_id.'&day='.$new_day.'&month='.$new_month.'&year='.$new_year.'&hour='.$hour_of_day.((strpos($calendar_view_id,"view:") === 0 && $merged_view) ? '&merged_view='.substr($calendar_view_id,strlen("view:")) : '').'\'" height="100%"'.$style.'>&nbsp;';
-	    } else
+	    } else {
+	      if ($style != '')
+	        $style = " style=\"$style\"";
 	      echo '<td onmouseover="javascript:glow_row(\''.$current_row.'_'.$hour_of_day.'\');" onmouseout="javascript:unglow_row(\''.$current_row.'_'.$hour_of_day.'\');" onclick="alert(\''.$strNoPastEvent.'\')" height="100%"'.$style.'>&nbsp;';
-	  } else
+	    }
+	  } else {
+	    if ($style != '')
+	      $style = " style=\"$style\"";
 	    echo '<td onmouseover="javascript:glow_row(\''.$current_row.'_'.$hour_of_day.'\');" onmouseout="javascript:unglow_row(\''.$current_row.'_'.$hour_of_day.'\');" onclick="alert(\''.$strNotAddEvent.'\')" height="100%"'.$style.'>&nbsp;';
+	  }
 	}
 
       }

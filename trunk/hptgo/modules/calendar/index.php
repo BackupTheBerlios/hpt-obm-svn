@@ -314,10 +314,10 @@ if (!$print) {
       while($cal->next_record())
       {
       	if (!isset($subscribed))
-			$dropbox->add_value('calendar:'.$cal->f('id'), cut_string($cal->f('name'),20));
+			$dropbox->add_value('calendar:'.$cal->f('id'), $cal->f('name'));
 		else
 			if (in_array($cal->f('id'),$subscribed))
-				$dropbox->add_value('calendar:'.$cal->f('id'), cut_string($cal->f('name'),20));
+				$dropbox->add_value('calendar:'.$cal->f('id'), ($cal->f('name')));
       }
       
     }
@@ -334,10 +334,10 @@ if (!$print) {
       while($cal->next_record())
       {
 	if (!isset($views_subscribed))
-	  $dropbox->add_value('view:'.$cal->f('id'), cut_string($cal->f('name'),20));
+	  $dropbox->add_value('view:'.$cal->f('id'), $cal->f('name'));
 	else
 	  if (in_array($cal->f('id'),$views_subscribed))
-	    $dropbox->add_value('view:'.$cal->f('id'), cut_string($cal->f('name'),20));
+	    $dropbox->add_value('view:'.$cal->f('id'), $cal->f('name'));
       }		    
     }
     $dropbox->print_dropbox("calendar_view_id", $calendar_view_id, 'onchange="javascript:change_calendar()"');

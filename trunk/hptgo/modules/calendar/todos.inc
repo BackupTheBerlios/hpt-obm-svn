@@ -218,7 +218,7 @@ if ($count == 0)
 					'set_completed(this.value);" '.$check.'></td>'.
 					'<td width="8">'.$priority.'</td>'.
 					'<td width="100%"><a class="'.$class.'" href="'.$calendar_module_url.'todo.php?todo_id='.$todos->f('id').
-					'&return_to='.urlencode($link_back).'" '.$overlib->print_overlib($title).'">'.$todos->f('name').'</a></td>'.
+					'&return_to='.urlencode($link_back).'" '.$overlib->print_overlib($title).'">'.htmlspecialchars($todos->f('name')).'</a></td>'.
 					"<td><a href='javascript:div_confirm_action(\"javascript:delete_todo(".
 					$todos->f('id').")\",\"".div_confirm_id($strDeletePrefix."'".
 					$todos->f('name')."'".$strDeleteSuffix).

@@ -616,16 +616,16 @@ function show_profile($user_id, $linktext='', $class='normal', $return_to='')
       $style = '';
     }
     $link = "<a ".$style." href=\"".$ab_module['url']."contact.php?contact_id=".$contact['id']."&return_to=".urlencode($return_to)."\" class=\"".$class."\" title=\"".$strShowProfile."\">";
-    $link .= $linktext."</a>\n";
+    $link .= htmlspecialchars($linktext)."</a>\n";
   }else
   {
     if ($GO_SECURITY->user_is_visible($user_id))
     {
       $link = '<a href="'.$GO_CONFIG->control_url.'user.php?id='.$user_id.'&return_to='.urlencode($return_to).'" class="'.$class.'" title="'.$strShowProfile.'">';
-      $link .= $linktext."</a>\n";
+      $link .= htmlspecialchars($linktext)."</a>\n";
     }else
     {
-      $link = $linktext;
+      $link = htmlspecialchars($linktext);
     }
 
   }
@@ -678,7 +678,7 @@ function show_contact($contact_id, $linktext='', $return_to='')
     $link = "<a ".$style." href=\"".$ab_module['url'].
       "contact.php?contact_id=".$contact_id."&return_to=".
       urlencode($return_to)."\" class=\"normal\" title=\"".$strShowProfile."\">";
-    $link .= $linktext."</a>\n";
+    $link .= htmlspecialchars($linktext)."</a>\n";
   }else
   {
     $link = '';

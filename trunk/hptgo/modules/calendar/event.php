@@ -894,7 +894,7 @@ echo '<input type="hidden" name="link_back" value="'.$link_back.'" />';
 //address_string used by the addressbok selector
 echo '<input type="hidden" name="address_string" value="" />';
 
-$tabtable = new tabtable('event_table', htmlspecialchars($title), '600', '400', '120', '', true, 'left', 'top', 'event_form');
+$tabtable = new tabtable('event_table', ($title), '600', '400', '120', '', true, 'left', 'top', 'event_form');
 if ($event_id > 0)
 {
 

@@ -111,6 +111,7 @@ if ($view_id > 0)
 	$view['end_hour'] = isset($_POST['view_end_hour']) ? $_POST['view_end_hour'] : '20';
 	$view['name'] = isset($_POST['name']) ? smartstrip($_POST['name']) : '';
 	$title = $cal_new_view;
+	$has_write_permission = true;
 }
 
 $tabtable = new tabtable('view', $title, '100%', '400', '120', '', true);
@@ -229,7 +230,7 @@ if (isset($feedback))
 			echo '</td><td>'.show_profile($cal->f('user_id')).'</td></tr>';
 		} else {
 			if ($check) {
-				echo '<tr><td>'.$cal->f('name');
+				echo '<tr><td>'.htmlspecialchars($cal->f('name'));
 				echo '</td><td>'.show_profile($cal->f('user_id')).'</td></tr>';
 			}
 		}
