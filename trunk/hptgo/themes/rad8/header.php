@@ -21,25 +21,29 @@ function get_object(name)
 
 function Bold_Text(id,imgfile)
 {
-	if (obj = get_object(id))
+	if (obj = get_object("text_"+id))
 	{
 		if ( prevId != '')
-			if (pre_obj = get_object(prevId) )
+			if (pre_obj = get_object("text_"+prevId) )
 			{
 				//pre_obj.style.fontWeight = prevFontWeight;
 				pre_obj.style.color = prevcolor;
+				get_object("icon_"+prevId).style.color = prevcolor;
 				document.getElementById("left_modon"+prevId).src="<?php echo "images/menu/modoff_begin.gif";?>";
 				document.getElementById("right_modon"+prevId).src="<?php echo "images/menu/modoff_end.gif";?>";
-				document.getElementById("bg_"+prevId).className="Menu_modoff";
+				document.getElementById("icon_bg_"+prevId).className="Menu_modoff";
+				document.getElementById("text_bg_"+prevId).className="Menu_modoff";
 			}
 		//prevFontWeight = obj.style.fontWeight;
 		prevcolor = obj.style.color;
 		//obj.style.fontWeight = 'bold';
 		obj.style.color = '#0869b5';
+		get_object("icon_"+id).style.color = '#0869b5';
 		document.getElementById("modicon").src=imgfile;
 		document.getElementById("left_modon"+id).src="<?php echo "images/menu/modon_begin.gif";?>";
 		document.getElementById("right_modon"+id).src="<?php echo "images/menu/modon_end.gif";?>";
-		document.getElementById("bg_"+id).className="Menu_modon";
+		document.getElementById("icon_bg_"+id).className="Menu_modon";
+		document.getElementById("text_bg_"+id).className="Menu_modon";
 	}
 	prevId = id;
 }
@@ -116,8 +120,10 @@ function Bold_Text(id,imgfile)
 					echo '<img id="left_modon'.$module['id'].'" src="images/menu/modoff_begin.gif">';
 					echo '</td>';	
 					
-					echo '<td id="bg_'.$module['id'].'" class="Menu_modoff" border="0" align="center" valign="middle" nowrap height="28">';
-					echo '<a id="'.$module['id'].'"  onClick="javascript:Bold_Text(\''.$module['id'].'\',\''.$GO_THEME->images[$module['id']].'\')" href="'.$module['url'].'" target="main">&nbsp;&nbsp;'.$lang_var.'&nbsp;&nbsp;</a>';
+					echo '<td id="icon_bg_'.$module['id'].'" class="Menu_modoff" border="0" align="center" valign="middle" nowrap height="28">';
+					echo '<a id="icon_'.$module['id'].'"  onClick="javascript:Bold_Text(\''.$module['id'].'\',\''.$GO_THEME->images[$module['id']].'\')" href="'.$module['url'].'" target="main"><img src="'.$GO_THEME->images['mod_'.$module['id']].'" border="0" width="22" height="22" /></a></td>';
+					echo '<td id="text_bg_'.$module['id'].'" class="Menu_modoff" border="0" align="center" valign="middle" nowrap height="28">';
+					echo '<a id="text_'.$module['id'].'"  onClick="javascript:Bold_Text(\''.$module['id'].'\',\''.$GO_THEME->images[$module['id']].'\')" href="'.$module['url'].'" target="main">&nbsp;'.$lang_var.'&nbsp;</a>';
 					echo '</td>';	
 					
 					echo '<td border="0" align="center" valign="middle" nowrap height="28">';
