@@ -292,6 +292,11 @@ class filesystem extends db
     }
   }
 
+  function has_read_permission2($user_id, $path)
+  {
+    return $this->has_read_permission($user_id,$path) || $this->has_write_permission($user_id,$path);
+  }
+
   function has_read_permission($user_id, $path)
   {
     if ($this->disable_go_permissions || $this->is_owner($user_id, $path))
@@ -627,7 +632,7 @@ class filesystem extends db
 	if (is_dir($folder_path) && $item != "." && $item != ".." &&
 	  $item != $GO_CONFIG->name_of_sharedir && !(strpos($item,".") === 0) )
 	{
-	  if ($this->has_read_permission($user_id,$folder_path))
+	  if ($this->has_read_permission2($user_id,$folder_path))
 	  {
 	    //echo "Got $folder_path<br/>\n";
 	    $folder['path'] = $folder_path;
@@ -842,7 +847,7 @@ class filesystem extends db
       $modified_earlier_then = time();
     }
 
-    if($this->has_read_permission($GO_SECURITY->user_id, $path))
+    if($this->has_read_permission2($GO_SECURITY->user_id, $path))
     {
       $folders = $this->get_folders($path);
       while ($folder = array_shift($folders))

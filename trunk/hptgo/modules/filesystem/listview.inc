@@ -47,7 +47,7 @@ if (!$is_project_folder) {
     $parent_path = dirname($path);
   if ($parent_path)
   {
-    if ($fs->has_read_permission($GO_SECURITY->user_id, $parent_path))
+    if ($fs->has_read_permission2($GO_SECURITY->user_id, $parent_path))
     {
       echo '<td class="ModuleIcons">';
       echo '<a class="small" href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($parent_path).'"><img src="'.$GO_THEME->images['uplvl_big'].'" border="0" height="32" width="32" /><br />'.$fbUpLevel.'</a></td>';
@@ -211,8 +211,9 @@ while ($folder = array_shift($folders))
   echo '<td><input onclick="javascript:item_click(this)" type="checkbox" name="folders[]" value="'.$folder['path'].'" /></td>';
   if ($fs->is_common_folder($folder['path']))
     $is_system_folder = $fs->is_system_folder($folder['path']);
-  if (($fs->is_common_folder($folder['path']) && $is_system_folder) ||
-      (!$fs->is_common_folder($folder['path']) && $fs->get_share($folder['path'])))
+  if (($fs->is_common_folder($folder['path']) && $is_system_folder))
+    $folder_image = $GO_THEME->images['system_folder'];
+  else if (!$fs->is_common_folder($folder['path']) && $fs->get_share($folder['path']))
   {
     $folder_image = $GO_THEME->images['shared_folder'];
   }else

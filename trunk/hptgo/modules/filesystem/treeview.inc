@@ -25,6 +25,8 @@ $image['opened_folder'] = '<img src="'.$GO_THEME->images['folderopen'].'" border
 $image['closed_folder'] = '<img src="'.$GO_THEME->images['folderclosed'].'" border="0" height="22" width="24" align="absmiddle" />';
 $image['opened_folder_shared'] = '<img src="'.$GO_THEME->images['shared_folder_open'].'" border="0" height="22" width="24" align="absmiddle" />';
 $image['closed_folder_shared'] = '<img src="'.$GO_THEME->images['shared_folder_closed'].'" border="0" height="22" width="24" align="absmiddle" />';
+$image['opened_system_folder'] = '<img src="'.$GO_THEME->images['system_folder_open'].'" border="0" height="22" width="24" align="absmiddle" />';
+$image['closed_system_folder'] = '<img src="'.$GO_THEME->images['system_folder_closed'].'" border="0" height="22" width="24" align="absmiddle" />';
 function print_filesystem($folders, $images='', $arguments='')
 {
 	global $image, $path, $GO_SECURITY, $group_folders;
@@ -35,7 +37,7 @@ function print_filesystem($folders, $images='', $arguments='')
 	for ($i=0;$i<$count;$i++)
 	{
     if (is_group_folder($group_folders, $folders[$i]['path']) ||
-		  $fs->has_read_permission($GO_SECURITY->user_id, $folders[$i]['path']))
+		  $fs->has_read_permission2($GO_SECURITY->user_id, $folders[$i]['path']))
 //		if ($fs->has_read_permission($GO_SECURITY->user_id, $folders[$i]['path']))
 		{
 			$subfolders = $fs->get_folders($folders[$i]['path']);
@@ -78,24 +80,22 @@ function print_filesystem($folders, $images='', $arguments='')
 
 		if ($folders[$i]['path'] == $path)
 		{
-			if (($fs->is_common_folder($folders[$i]['path']) && $is_system_folder) ||
-					(!$fs->is_common_folder($folders[$i]['path']) && $fs->get_share($folders[$i]['path'])))
+			if (!$fs->is_common_folder($folders[$i]['path']) && $fs->get_share($folders[$i]['path']))
 			{
 				$folder_image = $image['opened_folder_shared'];
-			}else
-			{
+			}else if ($fs->is_common_folder($folders[$i]['path']) && $is_system_folder)
+				$folder_image = $image['opened_system_folder'];
+			else
 				$folder_image = $image['opened_folder'];
-			}
 		}else
 		{
-			if (($fs->is_common_folder($folders[$i]['path']) && $is_system_folder) ||
-					(!$fs->is_common_folder($folders[$i]['path']) && $fs->get_share($folders[$i]['path'])))
+			if (!$fs->is_common_folder($folders[$i]['path']) && $fs->get_share($folders[$i]['path']))
 			{
 				$folder_image = $image['closed_folder_shared'];
-			}else
-			{
+			}else if ($fs->is_common_folder($folders[$i]['path']) && $is_system_folder)
+				$folder_image = $image['closed_system_folder'];
+			else
 				$folder_image = $image['closed_folder'];
-			}
 
 		}
 
@@ -121,7 +121,7 @@ function print_common_filesystem($folders, $images='', $arguments='')
 	$count = count($folders);
 	for ($i=0;$i<$count;$i++)
 	{
-		if ($fs->has_read_permission($GO_SECURITY->user_id, $folders[$i]['path']))
+		if ($fs->has_read_permission2($GO_SECURITY->user_id, $folders[$i]['path']))
 		{
 			$subfolders = $fs->get_visible_folders($GO_SECURITY->user_id,$folders[$i]['path']);
 			$subfolders_count = count($subfolders);
@@ -166,21 +166,22 @@ function print_common_filesystem($folders, $images='', $arguments='')
 
 		if ($folders[$i]['path'] == $path)
 		{
-			if (($fs->is_common_folder($folders[$i]['path']) && $is_system_folder) ||
-					(!$fs->is_common_folder($folders[$i]['path']) && $fs->get_share($folders[$i]['path'])))
+			if ((!$fs->is_common_folder($folders[$i]['path']) && $fs->get_share($folders[$i]['path'])))
 			{
 				$folder_image = $image['opened_folder_shared'];
-			}else
-			{
+			}else if ($fs->is_common_folder($folders[$i]['path']) && $is_system_folder)
+				$folder_image = $image['opened_system_folder'];
+			else {
 				$folder_image = $image['opened_folder'];
 			}
 		}else
 		{
-			if (($fs->is_common_folder($folders[$i]['path']) && $is_system_folder) ||
-					(!$fs->is_common_folder($folders[$i]['path']) && $fs->get_share($folders[$i]['path'])))
+			if ((!$fs->is_common_folder($folders[$i]['path']) && $fs->get_share($folders[$i]['path'])))
 			{
 				$folder_image = $image['closed_folder_shared'];
-			}else
+			}else if ($fs->is_common_folder($folders[$i]['path']) && $is_system_folder)
+				$folder_image = $image['closed_system_folder'];
+			else
 			{
 				$folder_image = $image['closed_folder'];
 			}
@@ -265,7 +266,7 @@ if (!$fs->get_share($folder['path']) &&
     $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
 	$fs->add_share($GO_SECURITY->user_id,$folder['path']);
 
-if ($fs->has_read_permission($GO_SECURITY->user_id,$folder['path']))
+if ($fs->has_read_permission2($GO_SECURITY->user_id,$folder['path']))
 	print_common_filesystem(array($folder),'',$arguments);
 else
 {

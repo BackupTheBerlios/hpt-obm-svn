@@ -509,7 +509,7 @@ switch ($task)
     {
       while ($file = smartstrip(array_shift($_POST['files'])))
       {
-	if ($fs->has_read_permission($GO_SECURITY->user_id, $file))
+	if ($fs->has_read_permission2($GO_SECURITY->user_id, $file))
 	{
 		$tmp_file = $GO_CONFIG->tmpdir.md5(uniqid(time()));
 		if (copy($file, $tmp_file))
