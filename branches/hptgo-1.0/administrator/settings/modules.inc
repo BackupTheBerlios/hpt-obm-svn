@@ -45,22 +45,22 @@ while($module = array_shift($modules))
 			{
 				if ($description = $xpath->getData("/module[1]/description[1]"))
 				{
-					echo '<tr><td valign="top">'.$strDescription.':</td><td>'.text_to_html(trim(htmlspecialchars($description))).'</td></tr>';
+					echo '<tr><td valign="top" nowrap>'.$strDescription.':</td><td>'.text_to_html(trim(htmlspecialchars($description))).'</td></tr>';
 				}
 				if ($version = $xpath->getData("/module[1]/version[1]"))
 				{
-					echo '<tr><td>'.$strVersion.':</td><td>'.trim($version).'</td></tr>';
+					echo '<tr><td nowrap>'.$strVersion.':</td><td>'.trim($version).'</td></tr>';
 				}
 				if ($status = $xpath->getData("/module[1]/status[1]"))
 				{
-					echo '<tr><td>'.$strStatus.':</td><td>'.trim($status).'</td></tr>';
+					echo '<tr><td nowrap>'.$strStatus.':</td><td>'.trim($status).'</td></tr>';
 				}
 				if ($releaseDate = $xpath->getData("/module[1]/releaseDate[1]"))
 				{
-					echo '<tr><td>'.$strReleaseDate.':</td><td>'.db_date_to_date(trim($releaseDate)).'</td></tr>';
+					echo '<tr><td nowrap>'.$strReleaseDate.':</td><td>'.db_date_to_date(trim($releaseDate)).'</td></tr>';
 				}
 				
-				echo '<tr><td valign="top">'.$strAuthors.':</td><td>';
+				echo '<tr><td valign="top" nowrap>'.$strAuthors.':</td><td>';
 				$i=1;
 				while ($author = $xpath->getAttributes("/module[1]/authors[1]/author[$i]"))
 				{
