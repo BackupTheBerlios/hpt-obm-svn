@@ -78,6 +78,7 @@ echo '<input type="hidden" name="calendar_id" value="'.$calendar_id.'" />';
 echo '<input type="hidden" name="task" value="'.$task.'" />';
 echo '<input type="hidden" name="close_action" value="false" />';
 echo '<input type="hidden" name="return_to" value="'.$return_to.'" />';
+echo '<input type="hidden" name="link_back" value="'.$link_back.'" />';
 echo '<input type="hidden" name="delete_view_id" value="" />';
 
 $dropbox = new dropbox();
