@@ -235,8 +235,8 @@ class GO_USERS extends base_users {
       $cellular, $country, $state, $city, $zip, $address,
       $company, $work_country, $work_state, $work_city,
       $work_zip, $work_address, $work_fax, $homepage,
-      $department, $function, $locale_code='', $theme='',
-      $user_id=-1) {
+      $department, $function, $locale_code='', $theme='', $start_module='',
+      $visible=true, $user_id=-1) {
     global $GO_CONFIG;
 
     //don't forget to get preferences with new method.

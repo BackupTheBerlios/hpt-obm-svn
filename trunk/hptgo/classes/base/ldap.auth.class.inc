@@ -93,6 +93,8 @@ class GO_AUTH
 		'', //function
 		'', //language
 		'', //theme
+		'', // start module
+		true, //visible
 		$user_id ) )
 	  {
 	    die('FATAL ERROR: Failed adding LDAP user to Group-Office');

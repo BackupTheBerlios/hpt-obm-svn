@@ -350,7 +350,7 @@ class base_users extends db
       $home_phone, $fax, $cellular, $country, $state, $city, $zip, $address,
       $company, $work_country, $work_state, $work_city, $work_zip,
       $work_address, $work_fax, $homepage, $department, $function,
-      $language='', $theme='', $visible=true, $user_id=-1 ) {
+      $language='', $theme='', $start_module='', $visible=true, $user_id=-1 ) {
     return false;
   }
 

@@ -141,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 	  $city, $zip, $address, $company, $work_country,
 	  $work_state, $work_city, $work_zip, $work_address,
 	  $work_fax, $homepage, $department, $function,
-	  $_POST['language'], $_POST['theme'], isset($_POST['visible'])
+	  $_POST['language'], $_POST['theme'], '',isset($_POST['visible'])
 	  ))
     {
       if (isset($_POST['create_email']))

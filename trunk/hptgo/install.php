@@ -286,6 +286,7 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 	    '',			// Function
 	    '',			// Language
 	    '',			// Theme
+	    '',			// Start Module
 	    true,		// Visible to everybody?      
 	    $new_user_id
 	      );
