@@ -218,8 +218,8 @@ switch ($task) {
 echo '<input type="hidden" name="post_action" value="template" />';
 echo '<table border="0" cellspacing="0" cellpadding="1" width="100%">';
 echo '<tr><td>'.
-       '<table border="0" cellpadding="2" cellspacing="0">'.
-         '<tr><td colspan="2">'.$pm_category.':</td><td colspan="5">';
+       '<table border="0" cellpadding="2" cellspacing="0" width="550">'.
+         '<tr><td align="right">'.$pm_category.':</td><td colspan="2">';
 
 $db->query('SELECT * FROM pmCatalog');
 $count = $db->num_rows();
@@ -254,8 +254,7 @@ $legend = '<table border="0" cellspacing="1" cellpadding="0" width="180" bgcolor
             '</table>'.
           '</td></tr>'.
           '</table>';
-echo '</td><td colspan="2" rowspan="2">&nbsp;</td><td rowspan="3">&nbsp;&nbsp;&nbsp;</td>'.
-     '<td rowspan="3">'.$legend.'</td></tr>';
+echo '</td><td rowspan="3" align="right">'.$legend.'</td></tr>';
 
 $db->query('SELECT * FROM task_templates WHERE cat_id='.$cat_id);
 $count = $db->num_rows();
@@ -266,16 +265,19 @@ while ($db->next_record()) {
   if ($template_id == $db->f('id'))
     $template_name = $db->f('name');
 }
-echo '<tr><td colspan="2">&nbsp;</td><td><a href="javascript:add_template()" class="normal">'.$pm_new_template.'</a></tr>';
-echo '<tr><td colspan="2">'.$pm_process_template.':</td><td colspan="5">';
+echo '<tr><td>&nbsp;</td>'.
+     '<td colspan="2">'.
+     '<a href="javascript:add_template()" class="normal">'.$pm_new_template.'</a></td>'.
+     '</tr>';
+echo '<tr><td align="right">'.$pm_process_template.':</td><td>';
 echo '<input type="hidden" name="template_name" value="'.$template_name.'" />';
 $template->print_dropbox('template_id', $template_id,
     'onchange="javascript:frm.submit()"', false, '10', '200');
-echo '</td>';
-echo '<td><a href="javascript:edit_template()" title="'.$cmdEdit.'">'.$editor.'</a></td>';
-echo "<td><a href=\"javascript:delete_template('$pm_ConfirmDeleteTemplate')\" title=\"$cmdDelete\">$trash</a></td>";
+echo '</td><td width="60">'.
+     '<a href="javascript:edit_template()" title="'.$cmdEdit.'">'.$editor.'</a>'.
+     '<a href="javascript:delete_template()" title="'.$cmdDelete.'">'.$trash.'</a></td>';
 echo '</tr></table>';
-echo '<table border="0" cellpadding="2" cellspacing="0">';
+echo '<table border="0" cellpadding="2" cellspacing="0" width="550">';
 
 if ($count > 0) {
   $db->query('SELECT * FROM task_template_'.$template_id.' ORDER BY task_order');
@@ -456,7 +458,7 @@ echo '<input id="task_edit" type="text" class="textbox" '.
      'name="task_name" value="" maxlength="255" />';
 echo '<input id="task_days" type="text" class="textbox" '.
      'style="position: absolute; visibility: hidden; display: none; width: 30px;" '.
-     'name="task_time" value="" maxlength="3" align="right" />';
+     'name="task_time" value="" maxlength="3" style="text-align: right;" align="right" />';
 echo '<input type="hidden" name="task_predecessors" value="" />';
 ?>
 <script type="text/javascript">
@@ -821,16 +823,16 @@ function edit_template()
 function add_template()
 {
   name = prompt("<?php echo $pm_AddTemplate; ?>", "");
-  if (name != '') {
+  if (name != null && name != '') {
     frm.task.value = 'add_template';
     frm.template_name.value = name;
     frm.submit();
   }
 }
 
-function delete_template(msg)
+function delete_template()
 {
-  if (confirm(msg + "'" + frm.template_name.value + "' ?")) {
+  if (confirm("<?php echo $pm_ConfirmDeleteTemplate; ?>" + "'" + frm.template_name.value + "' ?")) {
     frm.task.value = 'delete_template';
     frm.submit();
   }
