@@ -38,7 +38,7 @@ CREATE TABLE `ab_companies` (
   `id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `addressbook_id` int(11) NOT NULL default '0',
-  `name` varchar(50) NOT NULL default '',
+  `name` varchar(100) NOT NULL default '',
   `address` varchar(100) NOT NULL default '',
   `zip` varchar(10) NOT NULL default '',
   `city` varchar(50) NOT NULL default '',

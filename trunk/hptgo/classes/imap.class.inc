@@ -298,6 +298,20 @@ function mail_mimesplit($header, $body) {
   }   
 }
 
+function mail_mimesubme($part) {
+  $headDelimiter = "\r\n\r\n";
+  $delLength = strlen($headDelimiter);
+
+  // get head & body of the current part
+  $endOfHead = strpos( $part, $headDelimiter);
+  $head = substr($part, 0, $endOfHead);
+  $body = substr($part, $endOfHead + $delLength, strlen($part));
+ 
+  $returnParts['header'] = $head;
+  $returnParts['body'] = $body;
+  return $returnParts;
+}
+
 // returns an array with all parts that are
 // subparts of the given part
 // if no subparts are found, return the body of
@@ -312,6 +326,7 @@ function mail_mimesub($part) {
   $head = substr($part, 0, $endOfHead);
   $body = substr($part, $endOfHead + $delLength, strlen($part));
  
+  $returnParts['header'] = $head;
   // check whether it is a message according to rfc822
   if (stristr($head, "Content-Type: message/rfc822")) {
     $part = substr($part, $endOfHead + $delLength, strlen($part));
@@ -518,7 +533,9 @@ function mail_fetchparts($msgNo) {
       }
       $this->mail["parts"] = array();
       $headers = $this->mail_fetchparts($uid);
-      $this->get_parts($structure, $preferred_type,0,$headers);
+      $body = imap_body($this->conn,$uid,FT_UID);
+      $header = imap_fetchheader($this->conn,$uid,FT_UID);
+      $this->get_parts($structure, $preferred_type,'',$header,$body);
 
       //$this->print_structure($structure);
 
@@ -544,9 +561,8 @@ function mail_fetchparts($msgNo) {
      private function to get all the parts from a message.
    */
 
-  function get_parts($mimeobj,$preferred_type = "html", $section = 0,$headers)
+  function get_parts($mimeobj,$preferred_type = "html", $section = '',$header,$body,$skip = false)
   {
-
     if (isset($mimeobj->type))
     {
       $type = $this->get_mime_type($mimeobj->type);
@@ -589,6 +605,30 @@ function mail_fetchparts($msgNo) {
     $x=0;
     if (isset($mimeobj->parts))
     {
+      // split $body into sections
+      if (stristr($header,"Content-Type: message/rfc822"))
+      {
+	$headDelimiter = "\r\n\r\n";
+	$delLength = strlen($headDelimiter);
+
+	// get head & body of the current part
+	$endOfHead = strpos( $body, $headDelimiter);
+	$header = substr($body, 0, $endOfHead);
+	$body = substr($body, $endOfHead + $delLength, strlen($body));
+	
+	//echo "\n<br>822HEADER $nsection<br>\n.".$header."\n<br>EHEADER $nsection<br>\n";
+	//echo "\n<br>822BODY $nsection<br>\n.".$body."\n<br>EBODY $nsection<br>\n";
+      }
+      else
+        $newParts = $this->mail_mimesplit($header, $body);
+/*
+	echo "\n<br>HEADER<br>\n";
+	echo $header;
+	echo "\n<br>END HEADER<br>\n";
+	echo "\n<br>BODY<br>\n";
+	echo $body;
+	echo "\n<br>END BODY<br>\n";
+*/
       for($x=0;$x<count($mimeobj->parts);$x++)
       {
 	if ($mimeobj->subtype == "ALTERNATIVE" && $preferred_type == "html")
@@ -602,44 +642,42 @@ function mail_fetchparts($msgNo) {
 	  }
 	}
 
-	// If we are in the root of the object increment by whole integers
-
-	if($section == 0)
-	{
-	  $nsection = $x + 1;
-	}else if(($pos = strrpos($section, ".")) && ($mimeobj->parts[0]->type != TYPEMULTIPART || $mimeobj->parts[0]->subtype != 'RELATED'))
-	{
-	  $subsection = (int) substr($section, $pos+1)+$x;
-	  if ($subsection == '')
-	  {
-	    $subsection = '0';
-	  }
-	  $nsection = substr($section, 0, $pos) .	"." . ($subsection + 1);
-	}else
-	{
-	  $nsection = $section;
-	}
-
-	// If there are more parts to the part about to be processed reference it as a header with ".0"
-	// but only if the child of this child isn't MULTIPART
-
-	if(isset($mimeobj->parts[$x]->parts) && count($mimeobj->parts[$x]->parts))
-	{
 	  // Funny really, if a mime section is a inline message that has a multipart body you reference the message
 	  // mime section with "2" the inline message header with "2.0" and the subsections with	"2.x"
 	  // However if the mime section is a inline message with only 1 part then you reference the
 	  // mime section in the message with 2.0 and the	inline message body with 2.1
 
-	  if(!($mimeobj->parts[$x]->type == TYPEMESSAGE && $mimeobj->parts[$x]->parts[0]->type ==	TYPEMULTIPART))
+	if (!$skip)
 	  {
-	    $nsection .= ".0";
-	  }else
-	  {
-	    $nsection .= "";
+	    $nsection = ($section == '' ? $x+1 : $section.".".($x+1));
 	  }
+	else { $nsection = $section; /*echo "SKIP $nsection";*/ }
+	//echo "[$x]";
+	if(isset($mimeobj->parts[$x]->parts) && 
+	   count($mimeobj->parts[$x]->parts) &&
+	   $mimeobj->parts[$x]->type == TYPEMESSAGE &&
+	   $mimeobj->parts[$x]->parts[0]->type == TYPEMULTIPART && section != '')
+	  {
+	    $skip = true;
+	  }
+	else
+	    $skip = false;
+	if (isset($newParts))
+	{
+		//echo "{"."$section-$nsection-".$type."/".$mimeobj->subtype."}";
+		// separate sub{header,body}
+		//echo "\n<br>PART ".count($newParts)." $x<br>\n.".substr($newParts[$x],0,100)."\n<br>EPART $x<br>\n";
+		$parts = $this->mail_mimesubme($newParts[$x]);
+		while (substr($parts['header'],0,2) == "\r\n") $parts['header'] = substr($parts['header'],2);
+		//echo "\n<br>HEADER $nsection<br>\n.".$parts['header']."\n<br>EHEADER $nsection<br>\n";
+		//echo "\n<br>BODY $nsection<br>\n.".substr($parts['body'],0,100)."\n<br>EBODY $nsection<br>\n";
+		$this->get_parts($mimeobj->parts[$x],$preferred_type, $nsection ,$parts['header'], $parts['body'] ,$skip);
+		//echo "{ return }";
 	}
-
-	$this->get_parts($mimeobj->parts[$x],$preferred_type, $nsection,$headers);
+	else
+	{
+		$this->get_parts($mimeobj->parts[$x],$preferred_type, $nsection ,$header, $body ,$skip);
+	}
 
 	if ($mimeobj->subtype == "ALTERNATIVE" && $preferred_type == "plain") $x++;
 
@@ -653,11 +691,9 @@ function mail_fetchparts($msgNo) {
     {
       $section = "1";
     }
-
     if ($type != "multipart" && $full_mime_type)
     {
       // try to get content-disposition header
-      $header = $this->mail_fetchpart($headers,$section);
       if ($header != '')
       {
 	$header = strtolower($header);
@@ -683,10 +719,6 @@ function mail_fetchparts($msgNo) {
 		$line_parts = explode(":",$line);
 		$header[$line_parts[0]] = $line_parts[1];
 	}
-      }
-      if (eregi('message', $full_mime_type))
-      {
-	$section++;
       }
       $bytes = isset($mimeobj->bytes) ? $mimeobj->bytes : 0;
       $tmp = Array(
