@@ -110,7 +110,7 @@ function Bold_Text(id,imgfile)
 				echo "\n<!-- ".$module['id']." -->\n";
 				if ($module['enable'] && 
 				($GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read']) ||
-				$GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read'])))
+				$GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_write'])))
 				{
 					$GO_THEME->images[$module['id']] = isset($GO_THEME->images[$module['id']]) ? $GO_THEME->images[$module['id']] : $GO_THEME->images['unknown'];
 					if ($show_text)
