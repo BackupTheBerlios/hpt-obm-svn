@@ -69,15 +69,29 @@ class calendar extends db
 
   function add_view($user_id, $name, $start_hour, $end_hour, $type)
   {
+    global $GO_SECURITY;
+    $acl_read = $GO_SECURITY->get_new_acl('view read: '.$name);
+    $acl_write = $GO_SECURITY->get_new_acl('view write: '.$name);
+    if ($acl_read <= 0 || $acl_write < 0)
+      return false;
     $view_id = $this->nextid("cal_views");
 
     if ($view_id > 0)
     {
-      $sql = "INSERT INTO cal_views (id, user_id, name, start_hour, end_hour, type) ".
-	"VALUES ('$view_id', '$user_id', '$name', '$start_hour', '$end_hour', '$type')";
-      $this->query($sql);
+      $sql = "INSERT INTO cal_views (id, user_id, name, start_hour, end_hour, type, acl_read, acl_write) ".
+	"VALUES ('$view_id', '$user_id', '$name', '$start_hour', '$end_hour', '$type', '$acl_read', '$acl_write')";
+      if ($this->query($sql))
+      {
+	$GO_SECURITY->add_user_to_acl($user_id,$acl_write);
+	return $view_id;
+      }
       return $view_id;
-    }	
+    }
+    else
+    {
+      $GO_SECURITY->delete_acl($acl_read);
+      $GO_SECURITY->delete_acl($acl_write);
+    }
     return false;
   }
 
@@ -99,6 +113,16 @@ class calendar extends db
   function get_views($user_id)
   {
     $sql = "SELECT * FROM cal_views WHERE user_id='$user_id'";
+    $this->query($sql);
+    return $this->num_rows();
+  }
+
+  function get_authorised_views($user_id)
+  {
+    $sql = "SELECT DISTINCT cal_views.* FROM cal_views, acl, users_groups WHERE ".
+      "(cal_views.acl_read = acl.acl_id OR cal_views.acl_write = acl.acl_id ".
+      ") AND ( ( acl.group_id = users_groups.group_id AND users_groups.user_id = ".$user_id." AND acl.user_id = 0 ) OR (".
+      "acl.group_id = 0 AND acl.user_id = ".$user_id." ) ) ORDER BY cal_views.name ASC";
     $this->query($sql);
     return $this->num_rows();
   }

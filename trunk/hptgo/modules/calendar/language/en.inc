@@ -219,6 +219,7 @@ $subjectEventInvitation = '[Calendar] You are invited to event %s';
 
 $sc_subscribed = 'Subscribed';
 $sc_choice_calendar_msg = 'You must choose at least 1 calendar !';
+$sc_choice_view_msg = 'You must choose at least 1 view !';
 
 $sc_no_ok_in_past = 'This event is done';
 

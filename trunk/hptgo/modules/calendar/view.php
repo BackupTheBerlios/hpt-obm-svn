@@ -59,6 +59,16 @@ if ($task == 'save')
 				{
 					$feedback = "<p class=\"Error\">".$strSaveError."</p>";
 				}
+				else
+				{
+					$db = new db();
+					$db->query('INSERT INTO cal_view_subscriptions VALUES ("'.$GO_SECURITY->user_id.'","'.$view_id.'")');
+					if ($_POST['close'] == 'true')
+					{
+						header('Location: '.$return_to);
+						exit();
+					}
+				}
 			}
 		}
 	}else
@@ -109,6 +119,13 @@ if ($view_id > 0)
 
 $tabtable = new tabtable('view', $title, '100%', '400', '120', '', true);
 
+if ($view_id > 0) {
+  $tabtable->add_tab('view', $strProperties);
+  $tabtable->add_tab('read_permissions', $strReadRights);
+  $tabtable->add_tab('write_permissions', $strWriteRights);
+}
+
+
 if ($tabtable->get_active_tab_id() == 'holidays')
 {
 	$datepicker = new date_picker();
@@ -124,6 +141,24 @@ echo '<input type="hidden" name="type" value="merged" />';
 echo '<input type="hidden" name="return_to" value="'.$return_to.'" />';
 
 $tabtable->print_head();
+switch ($tabtable->get_active_tab_id()) {
+ case 'read_permissions':
+   $read_only = ($view['user_id'] == $GO_SECURITY->user_id) ? false : true;
+   print_acl($view['acl_read'], $read_only);
+   echo '<br /><br />';
+   echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+   $button = new button($cmdClose,"javascript:document.location='".$return_to."'");
+   break;
+
+ case 'write_permissions':
+   $read_only = ($view['user_id'] == $GO_SECURITY->user_id) ? false : true;
+   print_acl($view['acl_write'], $read_only);
+   echo '<br /><br />';
+   echo '&nbsp;&nbsp;&nbsp;&nbsp;';
+   $button = new button($cmdClose,"javascript:document.location='".$return_to."'");
+   break;
+
+ default:
 ?>
 <table border="0" cellpadding="5" cellspacing="0">
 <?php
@@ -206,7 +241,7 @@ if (isset($feedback))
 </table>
 
 <?php
-
+}
 $tabtable->print_foot();
 echo '</form>';
 require($GO_THEME->theme_path.'footer.inc');

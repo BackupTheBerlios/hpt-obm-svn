@@ -320,20 +320,29 @@ if (!$print) {
 				$dropbox->add_value('calendar:'.$cal->f('id'), cut_string($cal->f('name'),20));
       }
       
-      if($cal->get_views($GO_SECURITY->user_id))
-      {
-	      $dropbox->add_optgroup($cal_views);
-	      #$dropbox->add_value('','----- '.$cal_views.' -----');
-	      while($cal->next_record())
-	      {
-	      	$dropbox->add_value('view:'.$cal->f('id'), cut_string($cal->f('name'),20));
-	      }		    
-	    }
-      $dropbox->print_dropbox("calendar_view_id", $calendar_view_id, 'onchange="javascript:change_calendar()"');
-      echo '</td></tr>';
-			
     }
     
+    if($cal->get_authorised_views($GO_SECURITY->user_id))
+    {
+      $db = new db();
+      $db->query('SELECT view_id FROM cal_view_subscriptions WHERE user_id="'.$GO_SECURITY->user_id.'"');		
+      while ($db->next_record())
+	$views_subscribed[] = $db->f('view_id');
+
+      $dropbox->add_optgroup($cal_views);
+      #$dropbox->add_value('','----- '.$cal_views.' -----');
+      while($cal->next_record())
+      {
+	if (!isset($views_subscribed))
+	  $dropbox->add_value('view:'.$cal->f('id'), cut_string($cal->f('name'),20));
+	else
+	  if (in_array($cal->f('id'),$views_subscribed))
+	    $dropbox->add_value('view:'.$cal->f('id'), cut_string($cal->f('name'),20));
+      }		    
+    }
+    $dropbox->print_dropbox("calendar_view_id", $calendar_view_id, 'onchange="javascript:change_calendar()"');
+    echo '</td></tr>';
+			
     if(isset($view) && $view)
     {
 //      echo '<tr><td><h3>'.$title.'</h3></td><td>';
