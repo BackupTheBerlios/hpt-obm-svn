@@ -227,7 +227,7 @@ if ($msg_count > 0)
 	continue;
       }
 
-      $class = ' class="Table4"';
+      $class = ' class="Table5"';
       $image = '<img src="'.$GO_THEME->images['newmail'].'" border="0" width="16" height="16" />';
     }else
     {
@@ -240,7 +240,7 @@ if ($msg_count > 0)
       }
       if($mail->f('uid')==$uid)
       {
-	$class = ' class="Table5"';
+	$class = ' class="Table4"';
       }else
       {
 	$class = ' class="Table1"';
