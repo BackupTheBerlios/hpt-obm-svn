@@ -87,7 +87,8 @@ CREATE TABLE `pmProjects` (
   `probability` tinyint(4) NOT NULL default '0',
   `fee_id` int(11) NOT NULL default '0',
   `budget` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`id`),
+  `task_template_id` int(11) NOT NULL default '0',
+  `cat_id` int(11) NOT NULL default '0',
   KEY `id` (`id`),
   KEY `contact_id` (`contact_id`),
   KEY `user_id` (`user_id`)
@@ -119,5 +120,66 @@ CREATE TABLE `pm_settings` (
   `sort_field` varchar(20) NOT NULL default '',
   `sort_order` varchar(20) NOT NULL default '',
   `show_projects` tinyint(4) NOT NULL default '0',
+  `show_catalog` int(11) NOT NULL default '0',
   PRIMARY KEY  (`user_id`)
 ) TYPE=MyISAM;
+
+# --------------------------------------------------------
+
+#
+# Table structure for table `pmCatalog`
+#
+
+CREATE TABLE `pmCatalog` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` char(100) NOT NULL default '',
+  PRIMARY KEY  (`id`)
+) TYPE=MyISAM COMMENT='Project catalog';
+
+# --------------------------------------------------------
+
+#
+# Table structure for table `pmStatus`
+#
+
+CREATE TABLE `pmStatus` (
+  `cat_id` int(11) NOT NULL default '0',
+  `value` int(11) NOT NULL default '0',
+  `name` char(50) NOT NULL default '',
+  PRIMARY KEY  (`cat_id`,`value`)
+) TYPE=MyISAM;
+
+# --------------------------------------------------------
+
+#
+# Table structure for table `task_templates`
+#
+
+CREATE TABLE `task_templates` (
+  `id` int(11) NOT NULL auto_increment,
+  `cat_id` int(11) NOT NULL default '0',
+  `name` char(128) default NULL,
+  PRIMARY KEY  (`id`)
+) TYPE=MyISAM AUTO_INCREMENT=12 ;
+
+# --------------------------------------------------------
+
+#
+# Table structure for table `task`
+#
+
+CREATE TABLE `task` (
+  `task_project_id` int(8) NOT NULL default '0',
+  `task_id` int(8) NOT NULL default '0',
+  `task_name` varchar(255) default NULL,
+  `task_predecessors` varchar(255) default NULL,
+  `task_time` int(4) default NULL,
+  `task_person_id` tinyint(4) default NULL,
+  `task_status` tinyint(4) default NULL,
+  `task_comment` blob,
+  `task_approved` char(1) default NULL,
+  `task_level` tinyint(4) default NULL,
+  `task_approved_date` datetime default NULL,
+  PRIMARY KEY  (`task_project_id`,`task_id`)
+) TYPE=MyISAM;
+

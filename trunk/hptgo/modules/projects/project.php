@@ -515,10 +515,11 @@ switch($tabtable->get_active_tab_id())
       if ($project_id <= 0) {
         $db->query('SELECT * FROM pmCatalog');
         $catalog = new dropbox();
-        while ($db->next_record())
-          $catalog->add_value($db->f('id'), $db->f('name'));
         $cat_id = $_REQUEST['catalog'];
-        if (!isset($cat_id)) $cat_id = 1;
+        while ($db->next_record()) {
+          $catalog->add_value($db->f('id'), $db->f('name'));
+	  if (!isset($cat_id)) $cat_id = $db->f('id');
+	}
         $db->query("SELECT * FROM task_templates WHERE cat_id=$cat_id ORDER BY id");
         $task_templates = new dropbox();
         $task_templates->add_value(0, ' ');
