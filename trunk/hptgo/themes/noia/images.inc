@@ -267,6 +267,8 @@ $images['products'] = 'buttons/sale.gif';
 $images['product_category'] = 'buttons/product_category.gif';
 $images['accessory_category'] = 'buttons/accessory_category.gif';
 $images['quotation'] = 'buttons/quotation.gif';
+$images['statistic'] = 'buttons/statistic.gif';
+
 $images['create_quotation'] = 'buttons/create_quotation.gif';
 $images['cart'] = 'buttons/cart.gif';
 $images['cart16'] = 'buttons/cart16.gif';
