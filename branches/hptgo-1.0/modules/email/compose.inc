@@ -10,6 +10,12 @@
    option) any later version.
  */
 
+/*
+   Modifer: Dao Hai Lam <lamdh@hptvietnam.com.vn>
+   Version: 1.1 Release date: 15 October 2004
+   Note: Customized version for HPT Open Business Management v1.0
+ */
+
 //reset attachments array in case user aborted a message or changed format
 if ($_SERVER['REQUEST_METHOD'] != "POST" || $sendaction=='load_template')
 {
@@ -500,38 +506,58 @@ if (isset($feedback)) echo $feedback;
 <input type="hidden" name="num_attach" value="<?php if (isset($_SESSION['num_attach'])) echo $_SESSION['num_attach']; ?>" />
 <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $GO_CONFIG->max_attachment_size; ?>" />
 
-<table  cellspacing="2" cellpadding="1" border="0" width="100%">
+<table cellspacing="2" cellpadding="1" border="0" width="720">
 
   <?php
 if ($count > 0)
 {
   if (isset($mail_cc) && trim($mail_cc) != '') {
     $cc_style = 'visibility: visible;';
-    $cc_toggle = $ml_cmd_hide.' CC';
+    $cc_span_style = 'visibility: hidden; display: none;';
   } else {
     $cc_style = 'visibility: hidden; display: none;';
-    $cc_toggle = $ml_cmd_show.' CC';
+    $cc_span_style = 'visibility: visible;';
   }
   if (isset($mail_bcc) && trim($mail_bcc) != '') {
     $bcc_style = 'visibility: visible;';
-    $bcc_toggle = $ml_cmd_hide.' BCC';
+    $bcc_span_style = 'visibility: hidden; display: none;';
   } else {
     $bcc_style = 'visibility: hidden; display: none;';
-    $bcc_toggle = $ml_cmd_show.' BCC';
+    $bcc_span_style = 'visibility: visible;';
   }
+  $cc_span = '<span id="Add_CC" style="position: relative; '.$cc_span_style.'">'.
+             '<a href="javascript:show_field(\'CC\')" class="normal">'.
+             '<img src="cc.png" border="0" title="'.$ml_cmd_show.' CC" align="absmiddle" />'.
+             '</a>&nbsp;</span>';
+  $bcc_span = '<span id="Add_BCC" style="position: relative; '.$bcc_span_style.'">'.
+              '<a href="javascript:show_field(\'BCC\')" class="normal">'.
+              '<img src="bcc.png" border="0" title="'.$ml_cmd_show.' BCC" align="absmiddle" />'.
+              '</a></span>';
 
-  echo '<tr><td>'.$ml_from.':</td><td>';
+  echo '<tr><td>'.$ml_from.':</td><td nowrap>';
   $dropbox = new dropbox();
   $dropbox->add_arrays($ids, $names);
   $dropbox->print_dropbox('mail_from',$mail_from, 'onchange="javascript:change_mail_from()"');
-  echo '</td>'.
-       '<td>'.
-       '<a href="javascript:toggle_field(\'CC\')" class="normal">'.
-         '<span id="Toggle_CC">'.$cc_toggle.'</span></a>'.
-       '&nbsp;&nbsp;'.
-       '<a href="javascript:toggle_field(\'BCC\')" class="normal">'.
-         '<span id="Toggle_BCC">'.$bcc_toggle.'</span></a>'.
-       '</td></tr>';
+  echo '&nbsp;&nbsp;'.$ml_priority.': ';
+  $priority = isset($_POST['priority']) ? $_POST['priority'] : '3';
+
+  $dropbox = new dropbox();
+  $dropbox->add_value('1',$ml_high);
+  $dropbox->add_value('3',$ml_normal);
+  $dropbox->add_value('5',$ml_low);
+  $dropbox->print_dropbox('priority',$priority);
+  $notification_check = isset($_POST['notification']) ? true : false;
+
+  if ($wysiwyg) {
+    echo '&nbsp;&nbsp;'.$ml_format.':&nbsp;';
+    $dropbox = new dropbox();
+    $dropbox->add_value('text/PLAIN', 'TEXT');
+    $dropbox->add_value('text/HTML', 'HTML');
+    $dropbox->print_dropbox('content_type',$content_type, 'onchange="javascript:change_format()"');
+  } else {
+    echo '<input type="hidden" value="text/PLAIN" name="content_type" />';
+  }
+  echo '</td></tr>';
 
   $db = new db();
   $db->query('SELECT first_name, middle_name, last_name, email FROM users');
@@ -566,180 +592,192 @@ if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_gr
 {
   echo '<input type="hidden" name="mailing_group_id" value="'.$mailing_group_id.'" />';
   echo '<tr><td>'.$ml_to.': </td><td>'.$mailing_group['name'].'</td></tr>';
-}else
-{
+} else {
   ?>
     <tr>
-    <td>
+    <td nowrap>
     <?php
     if ($ab_module)
     {
-      echo 	'<a class="normal" href="'.
-	$ab->select_contacts('document.sendform.mail_to',
-	    $GO_MODULES->url.'add_contacts.php').'">';
-
-      echo 	'<img src="'. $GO_THEME->images['addressbook_small'].
-	'" width="16" height="16" border="0" align="absmiddle" '.
-	'style="padding-right: 3px;" />'. $ml_to.'</a> :';
-    }else
-    {
-      echo $ml_to.':';
+      echo '<a class="normal" href="'.$ab->select_contacts('document.sendform.mail_to',
+           $GO_MODULES->url.'add_contacts.php').'">';
+      echo '<img src="'.$GO_THEME->images['addressbook_small'].
+           '" width="16" height="16" border="0" align="absmiddle" '.
+           'style="padding-right: 3px;" />'.$ml_to.'</a>: ';
+    } else {
+      echo $ml_to.': ';
     }
     ?>
       </td>
-      <td colspan="2">
-      <input class="textbox" type="text" name="mail_to" size="95" value="<?php echo (isset($mail_to) ? htmlspecialchars($mail_to) : ''); ?>" onkeydown="return display_list(event);" onblur="cleanup(event);" />
+      <td>
+      <input class="textbox" type="text" name="mail_to" size="98" value="<?php echo (isset($mail_to) ? htmlspecialchars($mail_to) : ''); ?>" onkeydown="return display_list(event);" onblur="cleanup(event);" style="width: 600px;" />
+      </td>
+      <td width="60" nowrap>
+      <?php echo $cc_span.$bcc_span; ?>
       </td>
       </tr>
       <tr id="CC" style="<?php echo $cc_style; ?>">
-      <td>
+      <td nowrap>
       <?php
       if ($ab_module)
       {
-	echo 	'<a class="normal" href="'.
-	  $ab->select_contacts('document.sendform.mail_cc',
-	      $GO_MODULES->url.'add_contacts.php').'">';
-
-	echo 	'<img src="'. $GO_THEME->images['addressbook_small'].
-	  '" width="16" height="16" border="0" align="absmiddle" '.
-	  'style="padding-right: 3px;" />CC</a> :';
-      }else
-      {
-	echo 'CC :';
+        echo '<a class="normal" href="'.$ab->select_contacts('document.sendform.mail_cc',
+             $GO_MODULES->url.'add_contacts.php').'">';
+        echo '<img src="'. $GO_THEME->images['addressbook_small'].
+             '" width="16" height="16" border="0" align="absmiddle" '.
+             'style="padding-right: 3px;" />CC</a>: ';
+      } else {
+        echo 'CC: ';
       }
       ?>
 	</td>
-	<td colspan="2">
-	<input class="textbox" type="text" id="mail_cc" name="mail_cc" size="95" value="<?php echo (isset($mail_cc) ? htmlspecialchars($mail_cc) : '') ?>" onkeydown="return display_list(event);" onblur="cleanup(event);" />
+	<td>
+	<input class="textbox" type="text" id="mail_cc" name="mail_cc" size="98" value="<?php echo (isset($mail_cc) ? htmlspecialchars($mail_cc) : '') ?>" onkeydown="return display_list(event);" onblur="cleanup(event);" style="width: 600px;" />
 	</td>
+  <td>
+     <a href="javascript:hide_field('CC')"><img src="close.png" border="0" /></a>
+  </td>
 	</tr>
 	<tr id="BCC" style="<?php echo $bcc_style; ?>">
-	<td>
+	<td nowrap>
 	<?php
 	if ($ab_module)
 	{
-	  echo 	'<a class="normal" href="'.
-	    $ab->select_contacts('document.sendform.mail_bcc',
-		$GO_MODULES->url.'add_contacts.php').'">';
-
-	  echo 	'<img src="'. $GO_THEME->images['addressbook_small'].
-	    '" width="16" height="16" border="0" align="absmiddle" '.
-	    'style="padding-right: 3px;" />BCC</a> :';
-	}else
-	{
-	  echo 'BCC :';
-	}
+    echo '<a class="normal" href="'.$ab->select_contacts('document.sendform.mail_bcc',
+         $GO_MODULES->url.'add_contacts.php').'">';
+    echo '<img src="'. $GO_THEME->images['addressbook_small'].
+         '" width="16" height="16" border="0" align="absmiddle" '.
+         'style="padding-right: 3px;" />BCC</a>: ';
+	} else {
+	  echo 'BCC: ';
+  }
 	?>
-	  </td>
-	  <td colspan="2">
-    <input class="textbox" type="text" id="mail_bcc" name="mail_bcc" size="95" value="<?php echo (isset($mail_bcc) ? htmlspecialchars($mail_bcc) : '') ?>" onkeydown="return display_list(event);" onblur="cleanup(event);" /></td>
+    </td>
+    <td>
+    <input class="textbox" type="text" id="mail_bcc" name="mail_bcc" size="98" value="<?php echo (isset($mail_bcc) ? htmlspecialchars($mail_bcc) : '') ?>" onkeydown="return display_list(event);" onblur="cleanup(event);" style="width: 600px;" />
+    </td>
+    <td>
+        <a href="javascript:hide_field('BCC')"><img src="close.png" border="0" /></a>
+    </td>
 	  </tr>
 	  <?php
 }//endif mailing_group_id
 ?>
 <tr>
-<td ><?php echo $ml_subject ?> : </td>
-<td colspan="2"><input class="textbox" type="text" name="mail_subject" size="95" value="<?php echo (isset($mail_subject) ? htmlspecialchars($mail_subject) : '') ?>" /></td>
+<td nowrap><?php echo $ml_subject ?>: </td>
+<td><input class="textbox" type="text" name="mail_subject" size="98" value="<?php echo (isset($mail_subject) ? htmlspecialchars($mail_subject) : '') ?>" style="width: 600px;" /></td>
 </tr>
+<!--
 <tr>
-<td ><?php echo $ml_attachment ?> : </td>
-<td colspan="2" nowrap>
-<input class="textbox" type="file" name="mail_att" maxlength="200" size="30" value="" />
+<td>&nbsp;</td>
 <?php
-$button = new button($ml_attach, 'javascript:attach()');
-echo '&nbsp;&nbsp;';
-if ($module = $GO_MODULES->get_module('filesystem'))
+echo '<td>';
+if ($ab_module && $mailing_group_id == 0 &&
+    $ab->get_subscribed_addressbooks($GO_SECURITY->user_id) > 0)
 {
-  if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read']) || $GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_write']))
-  {
-    $button = new button($ml_online_files, "javascript:popup('select_file.php','600','400')", 120);
-  }
-}
-?>
-</td>
-</tr>
-<tr>
-<td valign="top"><?php echo $ml_priority ?> : </td>
-<td valign="top">
-<?php
-$priority = isset($_POST['priority']) ? $_POST['priority'] : '3';
-
-$dropbox = new dropbox();
-$dropbox->add_value('1',$ml_high);
-$dropbox->add_value('3',$ml_normal);
-$dropbox->add_value('5',$ml_low);
-$dropbox->print_dropbox('priority',$priority);
-$notification_check = isset($_POST['notification']) ? true : false;
-?>
-&nbsp;&nbsp;
-</td>
-<?php
-echo '<td valign="top" ';
-if ($wysiwyg) echo 'rowspan="2"';
-echo '>';
-$checkbox = new checkbox('notification', 'true', $ml_notification, $notification_check);
-
-if ($ab_module && $mailing_group_id == 0 && $ab->get_subscribed_addressbooks($GO_SECURITY->user_id) > 0)
-{
-  echo '<br />';
   $subscribed_addressbooks = new dropbox();
   $subscribed_addressbooks->add_value('0', $ml_add_recievers);
 
   while ($ab->next_record())
-  {
     $subscribed_addressbooks->add_value($ab->f('id'), $ab->f('name'));
-  }
   $subscribed_addressbooks->print_dropbox('add_recievers', $add_recievers);
 }
 ?>
 </td>
 </tr>
-  <?php
-if ($wysiwyg)
-{
-  echo '<tr><td>'.$ml_format.':</td><td>';
-  $dropbox = new dropbox();
-  $dropbox->add_value('text/PLAIN', 'text');
-  $dropbox->add_value('text/HTML', 'HTML');
-  $dropbox->print_dropbox('content_type',$content_type, 'onchange="javascript:change_format()"');
-  echo '</td><td></td></tr>';
-}else
-{
-  echo '<input type="hidden" value="text/PLAIN" name="content_type" />';
-}
-
-if (isset($_SESSION['num_attach']) && ($_SESSION['num_attach'] > 0))
-{
-  echo '<tr><td colspan="3">';
-  echo '<table border="0" cellspacing="2"><tr>';
-  $totalsize = 0;
-  $splitter=0;
-  $count = 0;
-  for ($i=1;$i<=$_SESSION['num_attach'];$i++)
-  {
-    if ($_SESSION['attach_array'][$i]->disposition == 'attachment')
+-->
+<tr>
+<td colspan="3">&nbsp;</td>
+</tr>
+<tr>
+<td colspan="3">
+<table cellspacing="0" cellpadding="0" border="0">
+<tr><td nowrap>
+<?php
+$button = new button($ml_send,"javascript:send()");
+echo '&nbsp;&nbsp;';
+$button = new button($cmdCancel,"javascript:window.close()");
+?>
+</td><td align="right" width="100%">
+<?php $checkbox = new checkbox('notification', 'true', $ml_notification, $notification_check); ?>
+&nbsp;&nbsp;&nbsp;&nbsp;
+<span id="attach_button">
+<?php
+$button = new button($ml_attachment, 'javascript:show_attach()');
+?>
+</span>
+<span id="attach_dialog" style="visibility: hidden; display: none; position: absolute; z-index: 999">
+  <table cellpadding="1" cellspacing="0" border="0" bgcolor="black" width="250">
+  <tr><td>
+    <table cellspacing="0" cellpadding="0" border="0" bgcolor="#CCCCCC" width="100%">
+    <?php
+    $count = 0;
+    $totalsize = 0;
+    $attach_list = new dropbox();
+    $att_table = '<table cellspacing="1" cellpadding="3" border="0" width="100%">';
+    for ($i = 1; $i <= $_SESSION['num_attach']; $i++)
     {
-      $count++;
-      $splitter++;
-      $totalsize += $_SESSION['attach_array'][$i]->file_size;
-      $att_name = imap_mime_header_decode($_SESSION['attach_array'][$i]->file_name);
-      echo '<td><table border="0" cellpadding="0" cellspacing="0"><tr><td><input type="checkbox" name="file'.$i.'" /></td><td><img border="0" width="16" height="16" src="'.$GO_CONFIG->control_url.'icon.php?extension='.get_extension($_SESSION['attach_array'][$i]->file_name).'&mime='.urlencode($_SESSION['attach_array'][$i]->file_mime).'" /></td><td nowrap>&nbsp;'.htmlentities($att_name[0]->text).' ('.format_size($_SESSION['attach_array'][$i]->file_size).'); </td></tr></table></td>';
-      if ($splitter=="2")
+      if ($_SESSION['attach_array'][$i]->disposition == 'attachment')
       {
-	echo "</tr><tr>\n";
-	$splitter=0;
+        $count++;
+        $totalsize += $_SESSION['attach_array'][$i]->file_size;
+        $att_name = imap_mime_header_decode($_SESSION['attach_array'][$i]->file_name);
+        $att_table .= '<tr bgcolor="white">'.
+                      '<td><img border="0" width="16" height="16" src="'.$GO_CONFIG->control_url.'icon.php?extension='.get_extension($_SESSION['attach_array'][$i]->file_name).'&mime='.urlencode($_SESSION['attach_array'][$i]->file_mime).'" /></td>';
+        $att_table .= '<td width="100%">'.$att_name[0]->text.'</td>';
+        $att_table .= '<td align="right" nowrap>'.
+                      format_size($_SESSION['attach_array'][$i]->file_size).'</td>';
+        $att_table .= '<td><a href="javascript:delete_attach('.$i.')">'.
+                      '<img src="'.$GO_THEME->images['delete'].'" border="0" />'.
+                      '</a></td>';
+        $att_table .= '</tr>';
       }
     }
-  }
-  if ($count > 0)
-  {
-    echo '<tr><td>';
-    $button = new button($cmdDelete, 'javascript:delete_attach()');
-    echo '</td><td>'.$ml_total_size.' : '.format_size($totalsize).'</td></tr></table>';
-  }
-}
-echo '</td></tr>';
-?>
+    if ($count == 0)
+      $att_table .= '<tr bgcolor="white">'.
+                    '<td align="center"><i>'.$ml_attachment_empty.'</i></td></tr>';
+    $att_table .= '</table>';
+    echo '<tr class="TableHead2" height="20">'.
+         '<td><img src="attach.png" border="0" /></td>'.
+         '<td nowrap>&nbsp;'.$ml_attachment.': '.$count.' file'.($count > 1 ? 's' : '').'</td>'.
+         '<td nowrap align="right">&nbsp;&nbsp;&nbsp;&nbsp;'.
+         $ml_total_size.': '.format_size($totalsize).'&nbsp;</td>'.
+         '</tr>'.
+         '<tr><td colspan="3" width="100%">'.$att_table.'</td></tr>';
+    ?>
+    <tr bgcolor="white">
+    <td colspan="3" nowrap>
+      <table border="0" cellpadding="3" cellspacing="0" width="100%">
+      <tr><td align="center">
+      <?php
+      $button = new button($ml_attach, 'javascript:attach()');
+      echo '&nbsp;&nbsp;';
+      if ($module = $GO_MODULES->get_module('filesystem'))
+      {
+        if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read']) ||
+            $GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_write']))
+        {
+          $button = new button($ml_online_files,
+              "javascript:popup('select_file.php','600','400')", 120);
+        }
+      }
+      ?>
+      </td></tr>
+      <tr><td align="center">
+      <input class="textbox" type="file" name="mail_att" maxlength="200" size="22" value="" />
+      </td></tr>
+      </table>
+    </td>
+    </tr>
+    </table>
+  </td></tr>
+  </table>
+</span>
+</td>
+</tr>
+</table>
+</td>
+</tr>
 <tr>
 <td colspan="3" width="100%" height="100%">
 <?php
@@ -748,18 +786,22 @@ $htmlarea->print_htmlarea(stripslashes(htmlspecialchars($mail_body)));
 </td>
 </tr>
 <tr>
-<td align="center" colspan="3">
+<td colspan="3">
 <?php
 echo $mail_list;
 $button = new button($ml_send,"javascript:send()");
 echo '&nbsp;&nbsp;';
 $button = new button($cmdCancel,"javascript:window.close()");
 ?>
+<input type="hidden" name="attach_dialog_visible" value="" />
+<input type="hidden" name="delete_attached_file" value="" />
+<!--
+<input class="textbox" type="file" name="mail_att" maxlength="200" size="3" value="" style="visibility: hidden; opacity: 0; filter:alpha(opacity: 0);" />
+-->
 </td>
 </tr>
 </table>
 </form>
-
 
 <script type="text/javascript">
 <!--
@@ -767,6 +809,7 @@ var emails = ['<?php echo implode("','", $emails); ?>'];
 var fnames = ['<?php echo implode("','", $fnames); ?>'];
 var agent = navigator.userAgent.toLowerCase();
 var is_ie = ((agent.indexOf("msie") != -1) && (agent.indexOf("opera") == -1));
+var dialog = document.getElementById('attach_dialog');
 
 function validate()
 {
@@ -793,12 +836,12 @@ function send()
   if (document.sendform.sendaction.value != 'send')
   {
     <?php
-      if ($mailing_group_id == 0) echo 'if (validate()){';
+    if ($mailing_group_id == 0) echo 'if (validate()){';
     ?>
 
     document.sendform.sendaction.value = "send";
     <?php
-	  if (isset($uid) && $uid > 0)
+    if (isset($uid) && $uid > 0)
     {
       echo 'document.sendform.uid.value="'.$uid.'";';
     }
@@ -820,285 +863,380 @@ function send()
   }
 }
 
-  function attach()
-  {
-    if (document.sendform.mail_att.value != "")
-    {
-      <?php
-	if ($content_type == 'text/HTML')
-	{
-	  echo 'document.sendform.onsubmit();';
-	}
-      ?>
-	document.sendform.sendaction.value = "add";
-      document.sendform.submit();
-    }
-  }
-
-  function change_format()
-  {
-    if (confirm('<?php echo $ml_loose_changes; ?>'))
-    {
-      <?php
-	if (isset($uid) && $uid > 0)
-	{
-	  echo 'document.sendform.uid.value="'.$uid.'";';
-	}
-      if ($content_type == 'text/HTML')
-      {
-	echo 'document.sendform.onsubmit();';
-      }
-      ?>
-	document.sendform.mail_body.value='';
-      document.sendform.sendaction.value = 'change_format';
-      document.sendform.submit();
-    }
-  }
-
-  function change_mail_from()
+function attach()
+{
+  if (document.sendform.mail_att.value != "")
   {
     <?php
       if ($content_type == 'text/HTML')
       {
-	echo 'document.sendform.onsubmit();';
+        echo 'document.sendform.onsubmit();';
       }
     ?>
-      document.sendform.sendaction.value = 'change_mail_from';
+    document.sendform.sendaction.value = "add";
     document.sendform.submit();
   }
+}
 
-  function delete_attach()
+function show_attach()
+{
+  if (dialog.style.visibility == 'visible') {
+    hide_attach();
+    return;
+  }
+  var button = document.getElementById('attach_button');
+  var p = get_position(button);
+  dialog.style.top = p.y + button.offsetHeight;
+  dialog.style.left = '-1000px';
+  dialog.style.display = '';
+  dialog.style.visibility = 'visible';
+  document.sendform.attach_dialog_visible.value = '1';
+  dialog.style.left = (p.x + 100 - dialog.offsetWidth) + "px";
+}
+
+function hide_attach()
+{
+  dialog.style.display = 'none';
+  dialog.style.visibility = 'hidden';
+  document.sendform.attach_dialog_visible.value = '0';
+}
+
+function change_format()
+{
+  if (confirm('<?php echo $ml_loose_changes; ?>'))
   {
-    document.sendform.sendaction.value = "delete";
     <?php
-      if ($content_type == 'text/HTML')
-      {
-	echo 'document.sendform.onsubmit();';
-      }
-    ?>
-      document.sendform.submit();
-  }
-
-  function toggle_field(name)
-  {
-    var field = document.getElementById(name);
-    var link = document.getElementById("Toggle_"+name);
-    if (field.style.visibility == 'hidden') {
-      field.style.display = '';
-      field.style.visibility = 'visible';
-      link.innerHTML = '<?php echo $ml_cmd_hide; ?>'+' '+name;
-    }
-    else {
-      field.style.display = 'none';
-      field.style.visibility = 'hidden';
-      link.innerHTML = '<?php echo $ml_cmd_show; ?>'+' '+name;
-    }
-  }
-
-  function get_position(element)
-  {
-    var elem = element, tagname = "", x = 0, y = 0;
-
-    while ((typeof(elem) == "object") && (typeof(elem.tagName) != "undefined"))
+    if (isset($uid) && $uid > 0)
     {
-      y += elem.offsetTop;
-      x += elem.offsetLeft;
-      tagname = elem.tagName.toUpperCase();
-
-      if (tagname == "BODY") elem = 0;
-      if (typeof(elem) == "object")
-        if (typeof(elem.offsetParent) == "object")
-          elem=elem.offsetParent;
+      echo 'document.sendform.uid.value="'.$uid.'";';
     }
+    if ($content_type == 'text/HTML')
+    {
+      echo 'document.sendform.onsubmit();';
+    }
+    ?>
+    document.sendform.mail_body.value='';
+    document.sendform.sendaction.value = 'change_format';
+    document.sendform.submit();
+  }
+}
 
-    position = new Object();
-    position.x = x;
-    position.y = y;
-    return position;
+function change_mail_from()
+{
+  <?php
+    if ($content_type == 'text/HTML')
+    {
+      echo 'document.sendform.onsubmit();';
+    }
+  ?>
+    document.sendform.sendaction.value = 'change_mail_from';
+  document.sendform.submit();
+}
+
+function delete_attach(n)
+{
+  document.sendform.sendaction.value = "delete";
+  <?php
+    if ($content_type == 'text/HTML')
+    {
+      echo 'document.sendform.onsubmit();';
+    }
+  ?>
+  document.sendform.delete_attached_file.value = n;
+  document.sendform.submit();
+}
+
+function show_field(name)
+{
+  var field = document.getElementById(name);
+  var link = document.getElementById("Add_"+name);
+  if (field.style.visibility == 'hidden') {
+    field.style.display = '';
+    field.style.visibility = 'visible';
+    link.style.display = 'none';
+    link.style.visibility = 'hidden';
+  }
+  hide_attach();
+}
+
+function hide_field(name)
+{
+  var field = document.getElementById(name);
+  var link = document.getElementById("Add_"+name);
+  if (field.style.visibility == 'visible') {
+    field.style.display = 'none';
+    field.style.visibility = 'hidden';
+    link.style.display = '';
+    link.style.visibility = 'visible';
+  }
+  hide_attach();
+}
+
+function get_position(element)
+{
+  var elem = element, tagname = "", x = 0, y = 0;
+
+  while ((typeof(elem) == "object") && (typeof(elem.tagName) != "undefined"))
+  {
+    y += elem.offsetTop;
+    x += elem.offsetLeft;
+    tagname = elem.tagName.toUpperCase();
+
+    if (tagname == "BODY") elem = 0;
+    if (typeof(elem) == "object")
+      if (typeof(elem.offsetParent) == "object")
+        elem=elem.offsetParent;
   }
 
-  function get_target(event)
-  {
-    if (event == null)
-      event = window.event;
+  position = new Object();
+  position.x = x;
+  position.y = y;
+  return position;
+}
 
-    if (event == null)
-      return null;
+function get_target(event)
+{
+  if (event == null)
+    event = window.event;
 
-    if (event.srcElement != null)
-      return event.srcElement;
+  if (event == null)
+    return null;
 
-    var r = event.target;
-    while (r && r.nodeType != 1)
-      r = r.parentNode;
+  if (event.srcElement != null)
+    return event.srcElement;
 
-    return r;
+  var r = event.target;
+  while (r && r.nodeType != 1)
+    r = r.parentNode;
+
+  return r;
+}
+
+var sel_top = 0;
+var sel_idx = 0;
+var sel_row = null;
+var sel_emails = null;
+
+function highlight(r)
+{
+  restore();
+  sel_row = document.getElementById('sel_'+r);
+  sel_row.style.backgroundColor = '#CCCCCC';
+  sel_idx = r;
+}
+
+function restore()
+{
+  if (sel_row) {
+    sel_row.style.backgroundColor = 'white';
+    sel_row = null;
   }
+}
 
-  var sel_idx = 0;
-  var sel_row = null;
-  var sel_emails = null;
+var field = null;
+function add_email(r)
+{
+  var s = '';
+  var m = field.value.split(',');
+  for (i = 0; i < m.length - 1; i++)
+    s += m[i].replace(/^\s+|\s+$/g, '') + ', ';
+  s += sel_emails[r] + ', ';
+  field.value = s;
+  hide_maillist();
+}
 
-  function highlight(r)
-  {
-    sel_row = document.getElementById('sel_'+r);
-    sel_row.style.backgroundColor = '#CCCCCC';
-    sel_idx = r;
+function cancel_event(e)
+{
+  e.returnValue = false;
+  if (e.preventDefault) e.preventDefault();
+}
+
+function show_sel(n)
+{
+  sel = document.getElementById('sel_'+n);
+  sel.style.display = '';
+  sel.style.visibility = 'visible';
+}
+
+function hide_sel(n)
+{
+  sel = document.getElementById('sel_'+n);
+  sel.style.display = 'none';
+  sel.style.visibility = 'hidden';
+}
+
+function adjust_sel(n)
+{
+  restore();
+  sel_idx += n;
+  if (sel_idx >= sel_emails.length) {
+    sel_idx = 0;
+    if (sel_top > 0) {
+      for (i = 0; i < 4; i++) show_sel(i);
+      for (i = 4; i < sel_emails.length; i++) hide_sel(i);
+    }
+    sel_top = 0;
   }
-
-  function restore()
-  {
-    if (sel_row) {
-      sel_row.style.backgroundColor = 'white';
-      sel_row = null;
+  else
+  if (sel_idx >= sel_top + 4) {
+    sel_top = sel_idx - 3;
+    for (i = 0; i < sel_top; i++) hide_sel(i);
+    for (i = sel_top; i < sel_top + 4; i++) show_sel(i);
+    for (i = sel_top + 4; i < sel_emails.length; i++) hide_sel(i);
+  }
+  else
+  if (sel_idx < 0) {
+    sel_idx = sel_emails.length - 1;
+    sel_top = sel_idx - 3;
+    if (sel_top < 0)
+      sel_top = 0;
+    else {
+      for (i = 0; i < sel_top; i++) hide_sel(i);
+      for (i = sel_top; i < sel_emails.length; i++) show_sel(i);
     }
   }
-
-  var field = null;
-  function add_email(r)
-  {
-    var s = '';
-    var m = field.value.split(',');
-    for (i = 0; i < m.length - 1; i++)
-      s += m[i].replace(/^\s+|\s+$/g, '') + ', ';
-    s += sel_emails[r] + ', ';
-    field.value = s;
-    hide_maillist();
+  else
+  if (sel_idx < sel_top) {
+    sel_top = sel_idx;
+    for (i = 0; i < sel_top; i++) hide_sel(i);
+    for (i = sel_top; i < sel_top + 4; i++) show_sel(i);
+    for (i = sel_top + 4; i < sel_emails.length; i++) hide_sel(i);
   }
+  highlight(sel_idx);
+}
 
-  function cancel_event(e)
-  {
-    e.returnValue = false;
-    if (e.preventDefault) e.preventDefault();
-  }
-
-  var ml_visible = false;
-  function display_list(e)
-  {
-    if (ml_visible)
-    switch (e.keyCode) {
-      case 9: // tab
-      case 13: // enter
-      case 39: // right arrow
-        add_email(sel_idx);
-        cancel_event(e);
-        return false;
-      case 35: // home
-        restore();
-        highlight(sel_idx = sel_emails.length - 1);
-        return false;
-      case 36: // home
-        restore();
-        highlight(sel_idx = 0);
-        return false;
-      case 38: // up
-        restore();
-        sel_idx = sel_idx - 1;
-        if (sel_idx < 0) sel_idx = sel_emails.length - 1;
-        highlight(sel_idx);
-        return false;
-      case 40: // down
-        restore();
-        sel_idx = sel_idx + 1;
-        if (sel_idx >= sel_emails.length) sel_idx = 0;
-        highlight(sel_idx);
-        return false;
-      case 27: // esc
-      case 44: // comma
-      case 188:
-        hide_maillist();
-        return false;
-    }
-
-    var f = get_target(e);
-    var m = f.value.split(',');
-    var n = emails.length;
-    var ml = document.getElementById('maillist');
-
-    field = f;
-    switch (e.keyCode) {
-      case 0: // unknown
-      case 9: // tab
-      case 16: // shift
-      case 17: // ctrl
-      case 18: // alt
-      case 20: // caps-lock
-      case 27: // esc
-        return true;
-      case 8: // backspace
-        m = m[m.length - 1].replace(/.$/g, '');
-        break;
-      default:
-        m = m[m.length - 1] + String.fromCharCode(e.keyCode);
-    }
-    m = m.replace(/^\s+|\s+$/g, '').toLowerCase();
-    if (m == '' || m.length < 2) {
+var up_btn = '<a href="javascript:adjust_sel(-1)"><img src="up.png" border="0" /></a>';
+var dn_btn = '<a href="javascript:adjust_sel(1)"><img src="down.png" border="0" /></a>';
+var ml_visible = false;
+function display_list(e)
+{
+  if (ml_visible)
+  switch (e.keyCode) {
+    case 9: // tab
+    case 13: // enter
+    case 39: // right arrow
+      add_email(sel_idx);
+      cancel_event(e);
+      return false;
+    case 35: // end
+      adjust_sel(sel_emails.length - sel_idx - 1);
+      return false;
+    case 36: // home
+      adjust_sel(-sel_idx);
+      return false;
+    case 38: // up
+      adjust_sel(-1);
+      return false;
+    case 40: // down
+      adjust_sel(1);
+      return false;
+    case 27: // esc
+    case 44: // comma
+    case 188:
       hide_maillist();
+      return false;
+  }
+
+  var f = get_target(e);
+  var m = f.value.split(',');
+  var n = emails.length;
+  var ml = document.getElementById('maillist');
+
+  field = f;
+  switch (e.keyCode) {
+    case 0: // unknown
+    case 9: // tab
+    case 16: // shift
+    case 17: // ctrl
+    case 18: // alt
+    case 20: // caps-lock
+    case 27: // esc
       return true;
-    }
-
-    var contents = "";
-    sel_emails = new Array();
-    for (i = 0; i < n; i++) {
-      var name = fnames[i].toLowerCase();
-      var match = name.indexOf(m) == 0;
-      if (!match) {
-        var j = 0;
-        name = name.split(' ');
-        while (!match && j < name.length)
-          match = name[j++].indexOf(m) == 0;
-        if (!match) {
-          var em = emails[i].toLowerCase();
-          match = em.indexOf(m) == 0;
-        }
-      }
-
-      if (match) {
-        var z = sel_emails.length;
-        var fn_add_email = 'javascript:add_email('+z+')';
-        var mouse_events = 'onmouseover="highlight('+z+')" onmouseout="restore()" '+
-                           'onclick="'+fn_add_email+'"';
-        contents += '<tr id="sel_'+z+'" '+mouse_events+'>'+
-          '<td nowrap>&nbsp;'+fnames[i]+'&nbsp;</td>'+
-          '<td nowrap>&lt;'+emails[i]+'&gt;</td></tr>';
-        sel_emails[z] = emails[i];
-      }
-    }
-
-    if (contents != '') {
-      var p = get_position(field);
-      var mc = document.getElementById('maillist_contents');
-      mc.innerHTML = '<table cellspacing="0" cellpadding="0" border="0" bgcolor="white">'
-        +contents+'</table>';
-      ml.style.top = (p.y + field.offsetHeight) + "px";
-      ml.style.left = p.x + "px";
-      ml.style.display = '';
-      ml.style.visibility = 'visible';
-      highlight(sel_idx = 0);
-      ml_visible = true;
-    }
-    else if (ml_visible) {
-      hide_maillist();
-    }
-
+    case 8: // backspace
+      m = m[m.length - 1].replace(/.$/g, '');
+      break;
+    default:
+      m = m[m.length - 1] + String.fromCharCode(e.keyCode);
+  }
+  m = m.replace(/^\s+|\s+$/g, '').toLowerCase();
+  if (m == '' || m.length < 1) {
+    hide_maillist();
     return true;
   }
 
-  function hide_maillist()
-  {
-    ml_visible = false;
-    ml = document.getElementById('maillist');
-    ml.style.display = 'none';
-    ml.style.visibility = 'hidden';
-    field.focus();
+  var contents = "";
+  sel_emails = new Array();
+  for (i = 0; i < n; i++) {
+    var name = fnames[i].toLowerCase();
+    var match = name.indexOf(m) == 0;
+    if (!match) {
+      var j = 0;
+      name = name.split(' ');
+      while (!match && j < name.length)
+        match = name[j++].indexOf(m) == 0;
+      if (!match) {
+        var em = emails[i].toLowerCase();
+        match = em.indexOf(m) == 0;
+      }
+    }
+
+    if (match) {
+      var z = sel_emails.length;
+      var fn_add_email = 'javascript:add_email('+z+')';
+      var mouse_events = 'onmouseover="highlight('+z+')" onmouseout="restore()" '+
+                         'onclick="'+fn_add_email+'"';
+      var v = z < 4 ? 'style="visibility: visible;"' : 'style="visibility: hidden; display: none;"';
+      contents += '<tr id="sel_'+z+'" '+mouse_events+' '+v+'>'+
+        '<td nowrap>&nbsp;'+fnames[i]+'&nbsp;</td>'+
+        '<td nowrap>&lt;'+emails[i]+'&gt;</td></tr>';
+      sel_emails[z] = emails[i];
+    }
   }
 
-  function cleanup(e)
-  {
-    var f = get_target(e);
-    var s = f.value.replace(/^\s+|\s+$|,\s+$/g, '');
-    if (f.value != s) f.value = s;
+  if (contents != '') {
+    var p = get_position(field);
+    var mc = document.getElementById('maillist_contents');
+    contents = '<table cellspacing="0" cellpadding="0" border="0" bgcolor="white" width="320">'
+               +contents+
+               '</table>';
+    var updn = sel_emails.length > 4 ? '<td>'+up_btn+'<br/><br/>'+dn_btn+'</td>' : '';
+    contents = '<table cellspacing="2" cellpadding="1" border="0" bgcolor="white">'+
+               '<tr><td rowspan="4">'+contents+'</td>'+updn+'</tr>'+
+               '</table>';
+    mc.innerHTML = contents;
+    ml.style.top = (p.y + field.offsetHeight) + "px";
+    ml.style.left = p.x + "px";
+    ml.style.display = '';
+    ml.style.visibility = 'visible';
+    highlight(sel_idx = 0);
+    ml_visible = true;
+  }
+  else if (ml_visible) {
+    hide_maillist();
   }
 
-  //-->
-  </script>
+  return true;
+}
+
+function hide_maillist()
+{
+  ml_visible = false;
+  ml = document.getElementById('maillist');
+  ml.style.display = 'none';
+  ml.style.visibility = 'hidden';
+  field.focus();
+}
+
+function cleanup(e)
+{
+  var f = get_target(e);
+  var s = f.value.replace(/^\s+|\s+$|,\s+$/g, '');
+  if (f.value != s) f.value = s;
+}
+
+<?php
+if ($_REQUEST['attach_dialog_visible'] == '1')
+  echo 'window.setTimeout("show_attach()", 1000);';
+?>
+//-->
+</script>
