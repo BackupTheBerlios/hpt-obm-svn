@@ -295,7 +295,7 @@ if (!$print) {
     <input type="hidden" name="link_back" value="<?php echo $link_back; ?>" />
     <input type="hidden" name="calendar_id" value="<?php echo $calendar_id; ?>" />
     <input type="hidden" name="view_id" value="<?php echo $view_id; ?>" />
-    <table width="1" border="0" cellpadding="0" cellspacing="0" >
+    <table width="1" border="0" cellpadding="0" cellspacing="0">
       <tr>
         <td>
     <?php
@@ -360,8 +360,8 @@ if (!$print) {
     echo '</table>';
     ?>    
 		</td>
-        <td>&nbsp;</td>
-        <td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td valign="bottom">
 <?php		
 //Chinh dong LICH va XEM	
 
@@ -429,7 +429,7 @@ $timezone_offset = $_SESSION['GO_SESSION']['timezone']+$dst_offset;
 
 if(!$print)
 {
-  echo '<table border="0" cellpadding="0" cellspacing="0"><tr height="28"><td><h3>';
+  echo '<table border="0" valign="bottom" cellpadding="0" cellspacing="0"><tr height="28"><td><h3>';
   echo $sc_view.':&nbsp;</h3></td><td>';
   $dropbox = new dropbox();
   $dropbox->add_value('1', '1 '.$sc_day);
@@ -518,7 +518,7 @@ if(!$print)
 
     <tr>
     <td class="cal_todos">
-	<div id="date_picker1_container"></div>
+	<div id="date_picker1_container"></div><br>
     <?php
 
     $_REQUEST['max_rows'] = isset($_REQUEST['max_rows']) ? $_REQUEST['max_rows'] : 5;

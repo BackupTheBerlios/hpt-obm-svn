@@ -102,7 +102,6 @@ $dropbox->add_value(SHOW_RESPONSIBLE, $cal_show_responsible);
 $dropbox->print_dropbox('show_todos', $cal_settings['show_todos'], 'onchange="javascript:document.forms[0].submit();"', false, 10, 200);
 
 echo '</td></tr></table>';
-
 switch ($cal_settings['show_todos'])
 {
 	case SHOW_ALL:
@@ -297,6 +296,7 @@ if ($count == 0)
 	}
 
 	echo '</table>';
+
 }
 ?>
 <script type="text/javascript">
