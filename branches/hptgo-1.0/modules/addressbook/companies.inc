@@ -169,12 +169,12 @@ if ($myab->query("SELECT * FROM ab_addressbooks WHERE id='$addressbook_id'") &&
 			}
 		}
 		
-		$db = new db();
-		$db->query('SELECT name FROM users_groups ug, groups g WHERE g.name="Admins" AND ug.group_id=g.id AND ug.user_id='.$GO_SECURITY->user_id);
+		//$db = new db();
+		//$db->query('SELECT name FROM users_groups ug, groups g WHERE g.name="Admins" AND ug.group_id=g.id AND ug.user_id='.$GO_SECURITY->user_id);
 
-		$isAdmin = ($db->num_rows()>0?true:false);
+		//$isAdmin = ($db->num_rows()>0?true:false);
 
-		if ($GO_SECURITY->user_id != $owner || $isAdmin)
+		//if ($GO_SECURITY->user_id != $owner || $isAdmin)
 		{
 			echo '<td class="TableHead2" align="center"><a class="TableHead2" href="javascript:_sort(\'company_id\',\''.$new_sort_order.'\');">'.$strNew.'</a>';
 			if ($ab_settings['sort_companies_field'] == 'company_id')
@@ -212,7 +212,7 @@ if ($count > 0)
 
 		print_config_content($order, $ab, $constCompaniesPage);		
 		
-		if ($isAdmin)
+		//if ($isAdmin)
 		{
 			if (isset($new_companies))
 			{
