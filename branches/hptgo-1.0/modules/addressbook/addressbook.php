@@ -265,7 +265,10 @@ switch($tabtable->get_active_tab_id())
 		{
 			echo '<tr><td colspan="2" class="Error">'.$feedback.'</td></tr>';
 		}
-		echo '<tr><td>'.$strName.':</td><td><input type="text" class="textbox" name="name" value="'.$name.'" size="40" /></td></tr></table>';
+		if ($write_permission)
+			echo '<tr><td>'.$strName.':</td><td><input type="text" class="textbox" name="name" value="'.$name.'" size="40" /></td></tr></table>';
+		else
+			echo '<tr><td>'.$strName.':</td><td>'.htmlspecialchars($name).'</td></tr></table>';
 		echo '<br />';
 		if ($write_permission)
 		{
