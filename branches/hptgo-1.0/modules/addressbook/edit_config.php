@@ -33,7 +33,7 @@ switch ($task) {
 			$db->query("INSERT INTO ab_config VALUES('$page', '$user', '$com', '$order_all')");
 			
 	case 'return_to':		
-		require('../../lib/tkdlib.php');
+		require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 		switch ($page)
 		{
 			case $constContactsPage:
@@ -103,7 +103,7 @@ echo '<tr class="TableHead2" height="20">';
 echo '<td align="center" width="20">#</td>';
 echo '<td width="320" colspan="99" nowrap>'.$ab_category_name.'</td></tr>';
 
-require "../../lib/tkdlib.php";
+require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 $mi = new move_item();
 
 $value = 1;

@@ -75,7 +75,7 @@ $spliter = '<tr><td colspan="100" height="1"><img src="'.$GO_THEME->images['cccc
 echo '<tr class="TableHead2" height="20">';
 echo '<td width="340" colspan="99" nowrap>'.$ab_category_name.'</td></tr>';
 
-require "../../lib/tkdlib.php";
+require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 $mi = new move_item();
 
 $value = 1;

@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 		}
 		require($GO_THEME->theme_path.'header.inc');
 		
-		require('../../lib/tkdlib.php');
+		require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 		if ( $getevent['end_time']<=time() )
 			alert($sc_no_ok_in_past);
 
@@ -78,7 +78,7 @@ if ($event && $_REQUEST['email'] != '')
 		{
 			require($GO_THEME->theme_path.'header.inc');
 
-			require('../../lib/tkdlib.php');
+			require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 			if ( $getevent['end_time']<=time() )
 					alert($sc_no_ok_in_past);
 
@@ -159,7 +159,7 @@ if ($event && $_REQUEST['email'] != '')
 		{
 			require($GO_THEME->theme_path.'header.inc');
 			
-			require('../../lib/tkdlib.php');
+			require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 			if ( $getevent['end_time']<=time() )
 				alert($sc_no_ok_in_past);
 
@@ -173,7 +173,7 @@ if ($event && $_REQUEST['email'] != '')
 	{
 		require($GO_THEME->theme_path.'header.inc');
 		
-		require('../../lib/tkdlib.php');
+		require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 		if ( $getevent['end_time']<=time() )
 			alert($sc_no_ok_in_past);
 		
@@ -187,7 +187,7 @@ if ($event && $_REQUEST['email'] != '')
 {
 	require($GO_THEME->theme_path.'header.inc');
 	
-	require('../../lib/tkdlib.php');
+	require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 	if ( $getevent['end_time']<=time() )
 		alert($sc_no_ok_in_past);
 

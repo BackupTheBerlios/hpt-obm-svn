@@ -261,7 +261,7 @@ echo '</td>';
 
 //echo '<table border="0" cellspacing="0" cellpadding="0" width="100%">';
 //echo '<tr>';
-require('../../lib/tkdlib.php');
+require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 $order = print_config_title($constCompaniesPage);
 for ($i=0; $i<count($order); $i++)
 {
