@@ -225,4 +225,5 @@ $sc_no_ok_in_past = 'Sự kiện này đã qua';
 $cmdShowSubscribed = 'Xem lịch đã chọn';
 $cmdShowOwned = 'Xem lịch của mình';
 $strSaveOk = "Đã thêm sự kiện %s.";
+$error_invalid_hour_range = "Giờ bắt đầu không được lớn hơn giờ kết thúc";
 ?>

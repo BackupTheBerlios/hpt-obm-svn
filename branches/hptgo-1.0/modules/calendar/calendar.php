@@ -55,6 +55,12 @@ switch($task)
 		$name = smart_addslashes(trim($_POST['name']));
 		if ($name != "")
 		{
+			if ($_POST['calendar_start_hour'] > $_POST['calendar_end_hour'])
+			{
+				$feedback = '<p class="Error">'.$error_invalid_hour_range.'</p>';
+			}
+			else
+			{
 			if ($calendar_id > 0)
 			{
 				$existing_calendar = $cal->get_calendar_by_name($name);
@@ -93,6 +99,7 @@ switch($task)
 						$feedback = "<p class=\"Error\">".$strSaveError."</p>";
 					}
 				}
+			}
 			}
 		}else
 		{
