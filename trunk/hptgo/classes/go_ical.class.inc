@@ -26,7 +26,7 @@ class go_ical extends calendar
 	/**
 	* Events
 	* @var array
-	*/
+	*/ 
 	var $events = array();
 	/**
 	* DateTime format
