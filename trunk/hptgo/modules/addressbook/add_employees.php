@@ -14,7 +14,7 @@ require("../../Group-Office.php");
 $GO_SECURITY->authenticate();
 $GO_MODULES->authenticate('addressbook');
 
-require($GO_MODULES->path."classes/addressbook.class.inc");
+require($GO_MODULES->class_path."addressbook.class.inc");
 $ab = new addressbook();
 
 if (isset($_REQUEST['company_id']) && $_REQUEST['company_id'] > 0)

@@ -18,7 +18,7 @@ $GO_MODULES->authenticate('addressbook');
 require($GO_LANGUAGE->get_language_file('addressbook'));
 
 //load contact management class
-require($GO_MODULES->path."classes/addressbook.class.inc");
+require($GO_MODULES->class_path."addressbook.class.inc");
 $ab = new addressbook();
 
 $return_to = (isset($_REQUEST['return_to']) && $_REQUEST['return_to'] != '') ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];

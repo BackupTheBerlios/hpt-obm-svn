@@ -26,6 +26,68 @@ class addressbook extends db
     $this->db();
   }
 
+  function parse_address($address)
+  {
+  	$address = trim($address);
+
+  	$address_arr['housenumber'] = '';
+		$address_arr['street'] = $address;
+				
+  	if($address != '')
+  	{
+			$last_space = strrpos($address, ' ');
+			
+			if($last_space !== false)
+			{
+				$address_arr['housenumber'] = substr($address, $last_space+1);
+				$address_arr['street'] = substr($address, 0, $last_space);
+				
+			}
+		}
+  	return $address_arr;  
+  }
+  
+  function get_addressinfo($zip)
+  {
+  	$sql = "SELECT * FROM ab_zipcodes WHERE zip LIKE '$zip%'";
+  	$this->query($sql);
+  	if($this->next_record())
+  	{
+  		return $this->Record;
+  	}
+  	return false;
+  }
+  
+  function address_format($contact_id)
+  {
+  	if($contact = $this->get_contact($contact_id))
+  	{
+  		$middle_name = $contact['middle_name'] == '' ? '' : $contact['middle_name'].' ';
+		  $name = $contact['first_name'].' '.$middle_name.$contact['last_name'];
+		  
+		  $address = $name.'<br />';
+		  
+		  if($contact['address'] != '')
+		  {
+		  	$address .= $contact['address'].'<br />';
+		  }
+		  if($contact['zip'] != '')
+		  {
+		  	$address .=	$contact['zip'].' ';
+			}
+			if($contact['city'] != '')
+		  {
+		  	$address .= $contact['city'].'<br />';
+		  }
+		  if($contact['country'] != '')
+		  {
+		  	$address .= $contact['country'].'<br />';
+		  }
+		  return $address;
+  	}  	
+  	return false;
+  }
+  
   /**
    * Save contact sort preferences of user $user_id.
    *
@@ -197,13 +259,25 @@ class addressbook extends db
    *
    * @return addressbook id or false.
    */
-  function get_default_addressbook($user_id)
+  function get_default_addressbook($user_id,$auto_add=true)
   {
+    global $GO_SECURITY;
     $sql = "SELECT addressbook_id FROM ab_subscribed WHERE user_id='$user_id' AND standard='1'";
     $this->query($sql);
     if($this->next_record())
     {
       return $this->f('addressbook_id');
+    }elseif($auto_add)
+    {
+			$new_ab_name = $_SESSION['GO_SESSION']['name'];
+			$x = 1;
+			while($this->get_addressbook_by_name($new_ab_name))
+			{
+				$new_ab_name = $_SESSION['GO_SESSION']['name'].' ('.$x.')';
+				$x++;
+			}
+			$addressbook_id = $this->add_addressbook($GO_SECURITY->user_id, addslashes($new_ab_name));
+			return $addressbook_id;
     }
     return false;
   }
@@ -274,7 +348,7 @@ class addressbook extends db
 
 	$this->subscribe($user_id, $addressbook_id);
 
-	if (!$this->get_default_addressbook($user_id))
+	if (!$this->get_default_addressbook($user_id,false))
 	{
 	  $this->set_default_addressbook($user_id, $addressbook_id);
 	}

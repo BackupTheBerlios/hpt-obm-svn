@@ -20,7 +20,7 @@ $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 $return_to = (isset($_REQUEST['return_to']) && $_REQUEST['return_to'] != '') ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
 
 //load contact management class
-require($GO_MODULES->path."classes/addressbook.class.inc");
+require($GO_MODULES->class_path."addressbook.class.inc");
 $ab = new addressbook();
 
 switch($task)
