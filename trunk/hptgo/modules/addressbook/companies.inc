@@ -195,10 +195,10 @@ if ($count > 0)
 	while($ab->next_record())
 	{
 
-		echo '<tr>';// id="'.$ab->f("id").'" '.(isset($new_companies[$ab->f('id')]) ? 'class="TableInside2"': '').' >';
+		echo '<tr id="'.$ab->f("id").'" '.(isset($new_companies[$ab->f('id')]) ? 'class="TableInside2"': '').' >';
 		
 //		echo '<td width="16"><input id="'.addslashes($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
-		echo '<td width="16"><input type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
+		echo '<td width="16"><input id="C_'.$ab->f('id').'" type="checkbox" onclick="javascript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
 
 		echo '<td><a class="normal" href="'.$GO_MODULES->url.'company.php?company_id='.$ab->f('id').'&return_to='.rawurlencode($link_back).'">'.htmlspecialchars($ab->company_name($parents)).' </a></td>';
 		
@@ -216,7 +216,7 @@ if ($count > 0)
 		{
 			if (isset($new_companies))
 			{
-				echo '<td align="center"><input type="checkbox" onchange="javacript:document.forms[0].reviewed.value=\''.$ab->f('id').'\';document.forms[0].submit()" '.(isset($new_companies[$ab->f('id')]) ? 'checked' : '').' /></td>';
+				echo '<td align="center"><input name="dummy" value="dummy" type="checkbox" onchange="javacript:document.forms[0].reviewed.value=\''.$ab->f('id').'\';document.forms[0].submit()" '.(isset($new_companies[$ab->f('id')]) ? 'checked' : '').' /></td>';
 			}
 		}
 

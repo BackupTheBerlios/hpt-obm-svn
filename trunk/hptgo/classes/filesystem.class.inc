@@ -135,20 +135,21 @@ class filesystem extends db
     $home_path = $GO_CONFIG->file_storage_path.'projects/';
     global $GO_MODULES,$GO_SECURITY;
     $project = $GO_MODULES->get_module('projects');
-    if ($project && 
-	ereg('^'.$home_path.'/*([0-9]*)/([0-9]*)/*',$path,$matches) &&
-	($GO_SECURITY->has_permission($GO_SECURITY->user_id, $project['acl_read']) ||
-	 $GO_SECURITY->has_permission($GO_SECURITY->user_id, $project['acl_write'])))
-    {
-      require_once($project['class_path'].'projects.class.inc');
-      require_once($project['class_path'].'task.class.inc');
-      $prjs = new projects();
-      $prj = $prjs->get_project($matches[1]);
-      $db = new db();
-      $db->query("SELECT task_person_id FROM task WHERE task_project_id=".(int)$matches[1]." AND task_id=".(int)$matches[2]);
-      if ($GO_SECURITY->user_id == $prj['user_id'] ||
-      	($db->num_rows() && $db->next_record() && $db->f('task_person_id') == $GO_SECURITY->user_id))
-	return true;
+    if ($project && ereg('^'.$home_path.'/*([0-9]*)/([0-9]*)/*',$path,$matches)) {
+      if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $project['acl_read']))
+        return true;
+      if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $project['acl_write']))
+      {
+        require_once($project['class_path'].'projects.class.inc');
+        require_once($project['class_path'].'task.class.inc');
+        $prjs = new projects();
+        $prj = $prjs->get_project($matches[1]);
+        $db = new db();
+        $db->query("SELECT task_person_id FROM task WHERE task_project_id=".(int)$matches[1]." AND task_id=".(int)$matches[2]);
+        if ($GO_SECURITY->user_id == $prj['user_id'] ||
+            ($db->next_record() && $db->f('task_person_id') == $GO_SECURITY->user_id))
+           return true;
+      }
     }
 
 

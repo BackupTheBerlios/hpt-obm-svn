@@ -69,6 +69,7 @@ $pm_status = 'Status';
 $pm_category = 'Category';
 $pm_process_template = 'Process template';
 $pm_new_category = 'New Category';
+$pm_new_template = 'New Template';
 
 $pm_status_values[0] = 'Discontinued';
 $pm_status_values[1] = 'Offer';
@@ -112,6 +113,16 @@ $pm_task_status = 'Status';
 $pm_task_approved = 'Check';
 $pm_task_document = 'Doc';
 $pm_task_level = 'Level';
+
+$pm_task_duration = 'Duration';
+$pm_task_planning = 'Planning';
+$pm_task_reality  = 'Reality';
+$pm_task_advance  = 'Advance';
+$pm_task_latency  = 'Latency';
+$pm_task_start    = 'Start';
+$pm_task_stop     = 'Stop';
+$pm_task_days     = 'days';
+$pm_task_day      = 'day';
 
 $pm_task_comments = 'Comments';
 $pm_task_new_comments = 'Type new comments here';

@@ -13,7 +13,7 @@
 $projects_module_url = isset($projects_module_url) ? $projects_module_url : $GO_MODULES->url;
 echo '<a href="javascript:add_category()" class="normal">'.$pm_new_category.'</a><br /><br />';
 
-if (!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
+if (!$GO_MODULES->write_permissions) {
 	header('Location: '.$GO_CONFIG->host.'error_docs/403.php');
 	exit();
 }

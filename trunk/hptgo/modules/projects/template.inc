@@ -12,7 +12,7 @@
 
 require_once($GO_MODULES->class_path.'task.class.inc');
 
-if (!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
+if (!$GO_MODULES->write_permissions) {
 	header('Location: '.$GO_CONFIG->host.'error_docs/403.php');
 	exit();
 }
@@ -173,11 +173,11 @@ while ($db->next_record()) {
   if ($template_id == $db->f('id'))
     $template_name = $db->f('name');
 }
-echo '<tr><td colspan="2">&nbsp;</td><td><a href="javascript:add_template()" class="normal">Tạo quy trình mới</a></tr>';
+echo '<tr><td colspan="2">&nbsp;</td><td><a href="javascript:add_template()" class="normal">'.$pm_new_template.'</a></tr>';
 echo '<tr><td colspan="2">'.$pm_process_template.':</td><td colspan="5">';
 echo '<input type="hidden" name="template_name" value="'.$template_name.'" />';
 $template->print_dropbox('template_id', $template_id,
-    'onchange="javascript:document.forms[0].submit()"', false, '10', '200');
+    'onchange="javascript:frm.submit()"', false, '10', '200');
 echo '</td>';
 echo '<td><a href="javascript:edit_template()" title="'.$cmdEdit.'">'.$editor.'</a></td>';
 echo "<td><a href=\"javascript:delete_template('$pm_ConfirmDeleteTemplate')\" title=\"$cmdDelete\">$trash</a></td>";
@@ -290,56 +290,57 @@ $button = new button('Update', 'javascript:update_task()');
 ?>
 
 <script type="text/javascript">
+var frm = document.forms[0];
 
 function move_task(task_value, action)
 {
-  document.forms[0].task.value = 'change_task_order';
-  document.forms[0].task_value.value = task_value;
-  document.forms[0].task_change.value = action;
-  document.forms[0].submit();
+  frm.task.value = 'change_task_order';
+  frm.task_value.value = task_value;
+  frm.task_change.value = action;
+  frm.submit();
 }
 
 function delete_task(task_name, task_value)
 {
   if (confirm(task_name)) {
-    document.forms[0].task.value = 'delete_task';
-    document.forms[0].task_value.value = task_value;
-    document.forms[0].submit();
+    frm.task.value = 'delete_task';
+    frm.task_value.value = task_value;
+    frm.submit();
   }
 }
 
 function set_edit(name, pre, days, task_value)
 {
-  document.forms[0].task_name.value = name;
-  document.forms[0].task_time.value = days;
-  document.forms[0].task_predecessors.value = pre;
-  document.forms[0].task_value.value = task_value;
+  frm.task_name.value = name;
+  frm.task_time.value = days;
+  frm.task_predecessors.value = pre;
+  frm.task_value.value = task_value;
   document.location.hash='edit';
 }
 
 function add_task()
 {
-  if (document.forms[0].task_name.value != '') {
-    document.forms[0].task.value = 'add_task';
-    document.forms[0].submit();
+  if (frm.task_name.value != '') {
+    frm.task.value = 'add_task';
+    frm.submit();
   }
 }
 
 function update_task()
 {
-  if (document.forms[0].task_name.value != '') {
-    document.forms[0].task.value = 'update_task';
-    document.forms[0].submit();
+  if (frm.task_name.value != '') {
+    frm.task.value = 'update_task';
+    frm.submit();
   }
 }
 
 function edit_template()
 {
-  name = prompt("<?php echo $pm_EditTemplate; ?>", document.forms[0].template_name.value);
+  name = prompt("<?php echo $pm_EditTemplate; ?>", frm.template_name.value);
   if (name != '') {
-    document.forms[0].task.value = 'update_template';
-    document.forms[0].catalog_name.value = name;
-    document.forms[0].submit();
+    frm.task.value = 'update_template';
+    frm.catalog_name.value = name;
+    frm.submit();
   }
 }
 
@@ -347,24 +348,24 @@ function add_template()
 {
   name = prompt("<?php echo $pm_AddTemplate; ?>", "");
   if (name != '') {
-    document.forms[0].task.value = 'add_template';
-    document.forms[0].template_name.value = name;
-    document.forms[0].submit();
+    frm.task.value = 'add_template';
+    frm.template_name.value = name;
+    frm.submit();
   }
 }
 
 function delete_template(msg)
 {
-  if (confirm(msg + "'" + document.forms[0].template_name.value + "' ?")) {
-    document.forms[0].task.value = 'delete_template';
-    document.forms[0].submit();
+  if (confirm(msg + "'" + frm.template_name.value + "' ?")) {
+    frm.task.value = 'delete_template';
+    frm.submit();
   }
 }
 
 function change_category()
 {
-  document.forms[0].template_name.value = '';
-  document.forms[0].template_id.value = 0;
-  document.forms[0].submit();
+  frm.template_name.value = '';
+  frm.template_id.selectedIndex = -1;
+  frm.submit();
 }
 </script>

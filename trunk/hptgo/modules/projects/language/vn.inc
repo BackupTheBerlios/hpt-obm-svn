@@ -69,6 +69,7 @@ $pm_status = 'Trạng thái';
 $pm_category = 'Loại dự án';
 $pm_process_template = 'Quy trình chuẩn';
 $pm_new_category = 'Tạo loại dự án mới';
+$pm_new_template = 'Tạo quy trình mới';
 
 $pm_days = 'ngày';
 $pm_delay = 'Trễ';
@@ -112,6 +113,16 @@ $pm_task_status = 'Trạng thái';
 $pm_task_approved = 'Duyệt';
 $pm_task_document = 'Tài liệu';
 $pm_task_level = 'Cấp';
+
+$pm_task_duration = 'Thời gian';
+$pm_task_planning = 'Dự kiến';
+$pm_task_reality  = 'Thực tế';
+$pm_task_advance  = 'Sớm';
+$pm_task_latency  = 'Trễ';
+$pm_task_start    = 'Bắt đầu';
+$pm_task_stop     = 'Kết thúc';
+$pm_task_days     = 'ngày';
+$pm_task_day      = 'ngày';
 
 $pm_task_comments = 'Chú thích';
 $pm_task_new_comments = 'Thêm chú thích mới';

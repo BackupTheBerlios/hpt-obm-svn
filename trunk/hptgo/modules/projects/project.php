@@ -613,7 +613,6 @@ switch($tabtable->get_active_tab_id())
             $pstate = $project_id < 1 ? STATUS_OFFER : $projects->f('status');
             echo "<tr><td>$pm_status:</td><td><b>".$pm_status_values[$pstate]."</b></td></tr>";
             echo '<tr><td>'.$pm_progress.':</td><td>'.$progress.'%</td></tr>';
-            echo '<tr><td colspan="2">&nbsp;</td></tr>';
 
             echo '<tr><td>'.$pm_budget.':</td><td><input type="text" class="textbox" size="10" name="budget" value="'.$budget.'" maxlength="50" /> '.$_SESSION['GO_SESSION']['currency'].'</td></tr>';
           }else
@@ -639,7 +638,6 @@ switch($tabtable->get_active_tab_id())
             $status = $pm_status_values[$projects->f('status')];
             echo $status.'</td></tr>';
             echo '<tr><td>'.$pm_progress.':</td><td>'.$progress.'%</td></tr>';
-            echo '<tr><td colspan="2">&nbsp;</td></tr>';
             echo '<tr><td>'.$pm_budget.':</td><td>'.$budget.' '.$_SESSION['GO_SESSION']['currency'].'</td></tr>';
           }
 
@@ -657,19 +655,16 @@ switch($tabtable->get_active_tab_id())
             }
             $disabled = ($project_id < 1 || $project['user_id'] == $GO_SECURITY->user_id) ? '' : 'disabled';
             $dropbox->print_dropbox('fee_id', $fee_id, $disabled);
-            echo '</td><td colspan="2">&nbsp;</td></tr>';
           }else
           {
             echo '<input type="hidden" name="fee_id" value="0" />';
           }
 
-          echo '<tr><td colspan="2">&nbsp;</td></tr>';
           if ($project_id > 0)
           {
             echo '<tr><td>'.$strOwner.':</td><td>'.show_profile($project['user_id']).'</td></tr>';
             echo '<tr><td>'.$strCreatedAt.':</td><td>'.date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $project['ctime']+($_SESSION['GO_SESSION']['timezone']*3600)).'</td><tr>';
             echo '<tr><td>'.$strModifiedAt.':</td><td>'.date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'], $project['mtime']+($_SESSION['GO_SESSION']['timezone']*3600)).'</td><tr>';
-            echo '<tr><td colspan="2">&nbsp;</td></tr>';
           }
           ?>
                   <tr>
