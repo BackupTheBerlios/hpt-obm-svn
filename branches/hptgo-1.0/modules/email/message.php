@@ -259,7 +259,7 @@ if ($to == "")
 {
   $to = $ml_no_reciepent;
 }
-echo $to;
+echo htmlspecialchars($to);
 ?>
 </td>
 </tr>
@@ -278,7 +278,7 @@ if (isset($content["cc"]))
   if ($cc != '')
   {
     echo '<tr><td valign="top"><b>Cc:</b>&nbsp;</td><td>';
-    echo $cc;
+    echo htmlspecialchars($cc);
     echo '</td></tr>';
   }
 }
@@ -296,7 +296,7 @@ if (isset($content["bcc"]))
   if ($bcc != '')
   {
     echo '<tr><td valign="top"><b>Bcc:</b>&nbsp;</td><td>';
-    echo $bcc;
+    echo htmlspecialchars($bcc);
     echo '</td></tr>';
   }
 }
