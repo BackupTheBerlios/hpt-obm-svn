@@ -15,8 +15,10 @@ $project_acl_write = $project['acl_write'];
 $pstart_date = $project['start_date'];
 $pstop_date = $project['end_date'];
 $project_id = isset($_GET['project_id']) ? $_GET['project_id'] : '0';
-$projects->query("SELECT user_id, last_name, middle_name, first_name FROM acl, users ".
-                 "WHERE acl.acl_id=$project_acl_write AND acl.user_id=users.id");
+$projects->query("SELECT DISTINCT id as user_id, last_name, middle_name, first_name".
+                 " FROM acl, users, users_groups ".
+                 "WHERE acl.acl_id=$project_acl_write".
+                 " AND ((acl.user_id=users.id AND acl.group_id=0) OR (acl.user_id=0 AND users.id=users_groups.user_id AND users_groups.group_id=acl.group_id))");
 while ($projects->next_record()) {
   $middle_name = $projects->f('middle_name');
   if (isset($middle_name))
@@ -24,7 +26,7 @@ while ($projects->next_record()) {
   $member_ids[] = $projects->f('user_id');
   $member_names[] = $projects->f('last_name') . $middle_name . $projects->f('first_name');
   $member_list[$projects->f('user_id')] = 
-  $projects->f('last_name') . $middle_name . $projects->f('first_name');
+    $projects->f('last_name') . $middle_name . $projects->f('first_name');
 }
 
 $tasks = load_project_task($projects, $project_id);
