@@ -20,6 +20,7 @@ class htmlarea
   var $rows;
   var $width;
   var $browser_is_supported = false;
+  var $button_controls = array();
 
   function get_styles($style)
   {
@@ -105,7 +106,7 @@ function add_button($id, $tooltip, $image, $textmode, $action)
     config.registerButton("'.$id.'",  "'.$tooltip.'", "'.$image.'", '.$textmode.', '.$action.');
   ';
   $button['id'] = $id;
-  $this->buttons[] = $button;
+  $this->button_controls[] = $button;
 }
 
 function add_font($name, $family)
@@ -195,6 +196,30 @@ function get_header($name, $width='600px', $height='400px', $rows='0', $pagestyl
     config = editor.config;
     config.killWordOnPaste=true;
     ';
+
+  // This is a hacking way to solve the layout temporarilly
+  // Begin of hacking block
+  if (count($this->button_controls) > 0) {
+    $header .= 'config.toolbar = [
+	[ "fontname", "space",
+	  "fontsize", "space",
+	  "formatblock", "space",
+	  "bold", "italic", "underline", "strikethrough", "separator",
+	  "subscript", "superscript", "separator",
+	  "copy", "cut", "paste", "space", "undo", "redo" ],
+	[ "justifyleft", "justifycenter", "justifyright", "justifyfull", "separator",
+	  "lefttoright", "righttoleft", "separator",
+	  "orderedlist", "unorderedlist", "outdent", "indent", "separator",
+	  "forecolor", "hilitecolor", "separator",
+	  "inserthorizontalrule", "createlink", "insertimage", "go_image",
+          "inserttable", "htmlmode", "separator",
+	  "popupeditor", "separator", "showhelp", "about" ]
+	];';
+  }
+  foreach ($this->button_controls as $b) {
+    $header .= $b['code'];
+  }
+  // End of hacking block
 
     if ($width <= 0)
     {
