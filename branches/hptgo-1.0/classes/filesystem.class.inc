@@ -99,7 +99,7 @@ class filesystem extends db
         $prjs = new projects();
         $prj = $prjs->get_project($matches[1]);
         $db = new db();
-        $db->query("SELECT task_person_id FROM task WHERE task_project_id=".(int)$matches[1]." AND task_id=".(int)$matches[2]);
+        $db->query("SELECT task_person_id FROM task WHERE task_project_id='".(int)$matches[1]."' AND task_id='".(int)$matches[2])."'";
         if ($GO_SECURITY->user_id == $prj['user_id'] ||
             ($db->next_record() && $db->f('task_person_id') == $GO_SECURITY->user_id))
            return true;
@@ -184,9 +184,9 @@ class filesystem extends db
   {
     global $GO_SECURITY;
     $sql = "SELECT DISTINCT fsShares.user_id FROM fsShares, acl, users_groups WHERE (".
-      "fsShares.acl_read = acl.acl_id OR fsShares.acl_write = acl.acl_id AND fsShares.user_id != ".$user_id.
-      ") AND ( ( acl.group_id = users_groups.group_id AND users_groups.user_id = ".$user_id." AND acl.user_id = 0 ) OR (".
-      "acl.group_id = 0 AND acl.user_id = ".$user_id." ) )";
+      "fsShares.acl_read = acl.acl_id OR fsShares.acl_write = acl.acl_id AND fsShares.user_id != '".$user_id.
+      "') AND ( ( acl.group_id = users_groups.group_id AND users_groups.user_id = '".$user_id."' AND acl.user_id = '0' ) OR (".
+      "acl.group_id = '0' AND acl.user_id = '".$user_id."' ) )";
     $this->query($sql);
     return $this->num_rows();
   }

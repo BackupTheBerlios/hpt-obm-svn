@@ -30,7 +30,7 @@ switch ($task) {
   break;
 }
 
-$db->query("SELECT category_id FROM ab_cate_companies WHERE company_id = $company_id");
+$db->query("SELECT category_id FROM ab_cate_companies WHERE company_id = '$company_id'");
 if ($db->num_rows() > 0)
 	while ($db->next_record())
 		$arrCategory[]=$db->f("category_id");
@@ -42,7 +42,7 @@ echo '<tr><td>';
 echo '<table border="0" cellpadding="2" cellspacing="0">';
 echo '<tr><td>&nbsp;</td></tr>';
 
-$db->query('SELECT * FROM ab_categories WHERE parent_id = "0" ORDER BY category');
+$db->query("SELECT * FROM ab_categories WHERE parent_id = '0' ORDER BY category");
 $count = $db->num_rows();
 
 $move_task_up = '<img src="'.$GO_THEME->images['task_up'].'" border="0">';

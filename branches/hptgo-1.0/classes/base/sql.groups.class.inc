@@ -78,7 +78,7 @@ class GO_GROUPS extends base_groups
     if ( $user_id )
     {
       return $this->query("INSERT INTO users_groups (user_id,group_id)".
-	 			 " VALUES ($user_id, $group_id)");
+	 			 " VALUES ('$user_id', '$group_id')");
 	 	}
     return false;
   }

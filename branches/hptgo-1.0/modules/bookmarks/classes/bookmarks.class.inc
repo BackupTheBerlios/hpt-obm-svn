@@ -81,8 +81,8 @@ class bookmarks extends db
 						"INNER JOIN acl ON (bm_bookmarks.acl_read = acl.acl_id OR ".
 						"bm_bookmarks.acl_write = acl.acl_id) ".
 						"LEFT JOIN users_groups ON (acl.group_id=users_groups.group_id) ".
-						"WHERE ((users_groups.user_id=".$user_id." AND acl.user_id=0) ".
-						"OR (acl.group_id = 0 AND acl.user_id = ".$user_id.")) ".
+						"WHERE ((users_groups.user_id='".$user_id."' AND acl.user_id='0') ".
+						"OR (acl.group_id = '0' AND acl.user_id = '".$user_id."')) ".
 						"AND catagory_id='$catagory_id' ORDER BY name ASC";
 
 		$this->query($sql);
@@ -166,8 +166,8 @@ class bookmarks extends db
 		}
 
 		$sql .= ") LEFT JOIN users_groups ON (acl.group_id=users_groups.group_id) ".
-						"WHERE ((users_groups.user_id=".$user_id." AND acl.user_id=0) ".
-						"OR (acl.group_id = 0 AND acl.user_id = ".$user_id.")) ".
+						"WHERE ((users_groups.user_id='".$user_id."' AND acl.user_id='0') ".
+						"OR (acl.group_id = '0' AND acl.user_id = '".$user_id."')) ".
 						"ORDER BY name ASC";
 		$this->query($sql);
 		return $this->num_rows();

@@ -23,8 +23,8 @@ $is_new_project = true;
 function update_all_tasks($projects, $project_id) {
   // Disapprove all bypassed tasks if parent tasks are not approved
   $projects->query("SELECT * FROM task".
-                   " WHERE task_project_id=$project_id".
-                   " AND task_status=".TASK_BYPASS.
+                   " WHERE task_project_id='$project_id'".
+                   " AND task_status='".TASK_BYPASS."'".
                    " ORDER BY task_id");
   $t = array();
   $a = array();
@@ -39,7 +39,7 @@ function update_all_tasks($projects, $project_id) {
     if ($pids == '0') continue;
 
     $projects->query("SELECT task_approved FROM task".
-                     " WHERE task_project_id=$project_id AND task_id IN ($pids)");
+                     " WHERE task_project_id='$project_id' AND task_id IN ($pids)");
 
     $approved = true;
     while ($projects->next_record())
@@ -50,21 +50,21 @@ function update_all_tasks($projects, $project_id) {
 
     if ($approved) {
       if (!$a[$id])
-        $projects->query("UPDATE task SET task_approved=1".
-                         " WHERE task_project_id=$project_id AND task_id=$id");
+        $projects->query("UPDATE task SET task_approved='1'".
+                         " WHERE task_project_id='$project_id' AND task_id='$id'");
     }
     else {
       if ($a[$id])
-        $projects->query("UPDATE task SET task_approved=0".
-                         " WHERE task_project_id=$project_id AND task_id=$id");
+        $projects->query("UPDATE task SET task_approved='0'".
+                         " WHERE task_project_id='$project_id' AND task_id='$id'");
     }
   }
 
   unset($t); unset($a);
   // Reset done & ongoing tasks to waiting state if parent tasks are not approved
   $projects->query("SELECT * FROM task".
-                   " WHERE task_project_id=$project_id".
-                   " AND task_status IN (".TASK_DONE.",".TASK_ONGOING.")".
+                   " WHERE task_project_id='$project_id'".
+                   " AND task_status IN ('".TASK_DONE."','".TASK_ONGOING."')".
                    " ORDER BY task_id");
   $t = array();
   $a = array();
@@ -79,7 +79,7 @@ function update_all_tasks($projects, $project_id) {
 
     if ($pids == '0') continue;
     $projects->query("SELECT task_approved FROM task".
-                     " WHERE task_project_id=$project_id AND task_id IN ($pids)");
+                     " WHERE task_project_id='$project_id' AND task_id IN ($pids)");
 
     $approved = true;
     while ($projects->next_record())
@@ -89,7 +89,7 @@ function update_all_tasks($projects, $project_id) {
       }
 
     if (!$approved) {
-      $projects->query("UPDATE task SET task_approved=0, task_status=".TASK_WAITING.
+      $projects->query("UPDATE task SET task_approved=0, task_status='".TASK_WAITING."'".
                        " WHERE task_project_id=$project_id AND task_id=$id");
     }
   }
@@ -104,8 +104,8 @@ function update_all_tasks($projects, $project_id) {
     $a = " AND task_id NOT IN ($a)";
 
   $projects->query("SELECT * FROM task".
-                   " WHERE task_project_id=$project_id".
-                   " AND task_status=".TASK_WAITING. $a .
+                   " WHERE task_project_id='$project_id'".
+                   " AND task_status='".TASK_WAITING."'". $a .
                    " ORDER BY task_id");
   $t = array();
 
@@ -117,7 +117,7 @@ function update_all_tasks($projects, $project_id) {
   foreach ($t as $id => $pids) {
     if ($pids == '0') continue;
     $projects->query("SELECT task_approved FROM task".
-                     " WHERE task_project_id=$project_id AND task_id IN ($pids)");
+                     " WHERE task_project_id='$project_id' AND task_id IN ($pids)");
     $approved = true;
     while ($projects->next_record())
       if ($projects->f('task_approved') == 0) {
@@ -125,8 +125,8 @@ function update_all_tasks($projects, $project_id) {
         break;
       }
     if ($approved)
-      $projects->query("UPDATE task SET task_status=".TASK_ONGOING.
-                       " WHERE task_project_id=$project_id AND task_id=$id");
+      $projects->query("UPDATE task SET task_status='".TASK_ONGOING."'".
+                       " WHERE task_project_id='$project_id' AND task_id=$id");
   }
 }
 
@@ -136,7 +136,7 @@ function load_project_task($projects, $project_id) {
   $tasks = array();
   $project_task_list = array();
 
-  $projects->query("SELECT status, task_template_id FROM pmProjects WHERE id=$project_id");
+  $projects->query("SELECT status, task_template_id FROM pmProjects WHERE id='$project_id'");
   if (!$projects->next_record()) {
     $pstate = STATUS_OFFER;
     $template_id = 0;
@@ -148,13 +148,13 @@ function load_project_task($projects, $project_id) {
 
   update_all_tasks($projects, $project_id);
 
-  $projects->query("SELECT * FROM task WHERE task_project_id=$project_id ORDER BY task_order");
+  $projects->query("SELECT * FROM task WHERE task_project_id='$project_id' ORDER BY task_order");
 
   // Copy from Template if first time
   if (!$projects->next_record() && $template_id > 0) {
     $projects->query("INSERT INTO task SELECT $project_id, task_template_$template_id.* ".
                      "FROM task_template_$template_id");
-    $projects->query("SELECT * FROM task WHERE task_project_id=$project_id  ORDER BY task_order");
+    $projects->query("SELECT * FROM task WHERE task_project_id='$project_id'  ORDER BY task_order");
     $projects->next_record();
   }
 
@@ -622,8 +622,8 @@ class project_task extends db {
     }
 
     // Update db here
-    $this->query("UPDATE task SET task_status=" . $this->status . $changed_date .
-                 " WHERE task_id=".$this->id." AND task_project_id=".$this->project_id);
+    $this->query("UPDATE task SET task_status='" . $this->status ."'" . $changed_date .
+                 " WHERE task_id='".$this->id."' AND task_project_id='".$this->project_id."'");
 
 
     if ($status == TASK_ONGOING || $status == TASK_DONE) {
@@ -665,7 +665,7 @@ class project_task extends db {
         $mail->WordWrap = 50;
         $mail->IsHTML(true);
 
-        $this->query("SELECT * FROM task WHERE task_id=".$this->id." AND task_project_id=".$this->project_id);
+        $this->query("SELECT * FROM task WHERE task_id='".$this->id."' AND task_project_id='".$this->project_id."'");
         $this->next_record();
         $task_name = $this->f('task_name');
         $task_person_id = $this->f('task_person_id');
@@ -673,7 +673,7 @@ class project_task extends db {
 
         $db->query('SELECT * '.
           'FROM pmProjects '.
-  	  'WHERE id="'.$this->project_id.'" ');
+  	  "WHERE id='".$this->project_id."'");
         $db->next_record();
 
         $task_url = $GO_CONFIG->full_url.'index.php?return_to='.$GO_CONFIG->full_url.'modules/projects/project.php?task=show_task_status&project_id='.$this->project_id.'&task_id='.$this->id.'&task_status='.$status;
@@ -697,11 +697,11 @@ class project_task extends db {
           $db->query('SELECT users.* '.
             'FROM users,pmProjects '.
   	    'WHERE users.id=pmProjects.user_id '.
-  	    'AND pmProjects.id="'.$this->project_id.'"');
+  	    "AND pmProjects.id='".$this->project_id."'");
         else
           $db->query('SELECT * '.
             'FROM users '.
-  	    'WHERE id="'.$task_person_id.'"');
+  	    "WHERE id='".$task_person_id."'");
         $db->next_record();
         $mail->AddAddress($db->f('email'));
 
@@ -726,8 +726,8 @@ class project_task extends db {
       $today = "NULL";
     }
     // Updata db here
-    $this->query("UPDATE task SET task_approved_date=$today, task_approved=".($approved?'1':'0').
-                 " WHERE task_id=".$this->id." AND task_project_id=".$this->project_id);
+    $this->query("UPDATE task SET task_approved_date=$today, task_approved='".($approved?'1':'0')."'".
+                 " WHERE task_id='".$this->id."' AND task_project_id='".$this->project_id."'");
 
     // Update project status
     unset($s);
@@ -743,19 +743,19 @@ class project_task extends db {
       }
     }
     if (isset($s))
-      $this->query("UPDATE pmProjects SET status=$s, probability=100 ".
-                   'WHERE id='.$this->project_id);
+      $this->query("UPDATE pmProjects SET status='$s', probability='100' ".
+                   "WHERE id='".$this->project_id."'");
   }
 
   function set_days($ndays) {
-    $this->query("UPDATE task SET task_time=$ndays ".
-                 "WHERE task_id=".$this->id." AND task_project_id=".$this->project_id);
+    $this->query("UPDATE task SET task_time='$ndays' ".
+                 "WHERE task_id='".$this->id."' AND task_project_id='".$this->project_id."'");
   }
 
   function add_comments($new_comments) {
     smart_addslashes($new_comments);
     $this->query("UPDATE task SET task_comment=CONCAT(task_comment,'$new_comments') ".
-                 "WHERE task_id=".$this->id." AND task_project_id=".$this->project_id);
+                 "WHERE task_id='".$this->id."' AND task_project_id='".$this->project_id."'");
   }
 
   function find_start_date() {

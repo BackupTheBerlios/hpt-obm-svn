@@ -174,8 +174,8 @@ class addressbook extends db
   {
     $sql = "SELECT DISTINCT ab_addressbooks.* FROM ab_addressbooks, acl, users_groups WHERE (".
       "ab_addressbooks.acl_read = acl.acl_id OR ab_addressbooks.acl_write = acl.acl_id".
-      ") AND ( ( acl.group_id = users_groups.group_id AND users_groups.user_id = ".$user_id." AND acl.user_id = 0 ) OR (".
-      "acl.group_id = 0 AND acl.user_id = ".$user_id." ) ) ORDER BY name ASC";
+      ") AND ( ( acl.group_id = users_groups.group_id AND users_groups.user_id = '".$user_id."' AND acl.user_id = '0' ) OR (".
+      "acl.group_id = '0' AND acl.user_id = '".$user_id."' ) ) ORDER BY name ASC";
     $this->query($sql);
     return $this->num_rows();
   }
@@ -396,8 +396,8 @@ class addressbook extends db
     $sql = "SELECT DISTINCT * FROM ab_contacts ".
       "INNER JOIN acl ON (ab_contacts.acl_read = acl.acl_id OR ab_contacts.acl_write = acl.acl_id) ".
       "LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
-      " WHERE ((users_groups.user_id = ".$user_id." AND acl.user_id = 0 ) OR (".
-      "acl.group_id = 0 AND acl.user_id = ".$user_id.")) ";
+      " WHERE ((users_groups.user_id = '".$user_id."' AND acl.user_id = '0' ) OR (".
+      "acl.group_id = '0' AND acl.user_id = '".$user_id."')) ";
     "AND ab_contacts.addressbook_id='$addressbook_id' ".
       "ORDER BY $sort $direction";
 
@@ -462,8 +462,8 @@ class addressbook extends db
       "LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
       "LEFT JOIN ab_groups ON (ab_contacts.group_id=ab_groups.id) ".
       "LEFT JOIN ab_companies ON (ab_contacts.company_id=ab_companies.id) ".
-      " WHERE ((users_groups.user_id = ".$user_id." AND acl.user_id = 0 ) OR (".
-      "acl.group_id = 0 AND acl.user_id = ".$user_id.")) ".
+      " WHERE ((users_groups.user_id = '".$user_id."' AND acl.user_id = 0 ) OR (".
+      "acl.group_id = '0' AND acl.user_id = '".$user_id."')) ".
       "AND ab_contacts.addressbook_id='$addressbook_id' ".
       "ORDER BY ab_contacts.first_name, ab_contacts.last_name ASC";
 
@@ -485,8 +485,8 @@ class addressbook extends db
     $sql = "SELECT DISTINCT ab_contacts.* FROM ab_contacts ".
       "INNER JOIN acl ON (ab_contacts.acl_read = acl.acl_id OR ab_contacts.acl_write = acl.acl_id) ".
       "LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
-      "WHERE ((users_groups.user_id = ".$user_id." AND acl.user_id = 0 ) OR (".
-      "acl.group_id = 0 AND acl.user_id = ".$user_id.")) ".
+      "WHERE ((users_groups.user_id = '".$user_id."' AND acl.user_id = '0' ) OR (".
+      "acl.group_id = '0' AND acl.user_id = '".$user_id."')) ".
       "AND ab_contacts.addressbook_id='$addressbook_id' ".
       "AND ab_contacts.group_id='$group_id' ".
       "ORDER BY $sort $direction";

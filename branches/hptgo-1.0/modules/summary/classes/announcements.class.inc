@@ -68,9 +68,9 @@ class announcements extends db
 		$sql = "SELECT DISTINCT sum_announcements.* FROM sum_announcements ".
 				"INNER JOIN acl ON (sum_announcements.acl_id= acl.acl_id) ".
 				"LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
-				"WHERE ((users_groups.user_id = ".$_SESSION['GO_SESSION']['user_id']." AND acl.user_id = 0 ) OR (".
-				"acl.group_id = 0 AND acl.user_id = ".$_SESSION['GO_SESSION']['user_id'].")) ".
-				"AND (sum_announcements.due_time>".get_gmt_time()." OR sum_announcements.due_time=0) ORDER BY mtime ASC";
+				"WHERE ((users_groups.user_id = '".$_SESSION['GO_SESSION']['user_id']."' AND acl.user_id = '0' ) OR (".
+				"acl.group_id = '0' AND acl.user_id = '".$_SESSION['GO_SESSION']['user_id']."')) ".
+				"AND (sum_announcements.due_time>'".get_gmt_time()."' OR sum_announcements.due_time='0') ORDER BY mtime ASC";
 
 		$this->query($sql);
 		return $this->num_rows();

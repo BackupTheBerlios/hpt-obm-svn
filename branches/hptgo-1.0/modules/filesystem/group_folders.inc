@@ -35,8 +35,8 @@ function get_group_folders($uid, $level)
 				$GO_GROUPS->query(
 					"SELECT users.id, users.username, users.first_name, users.middle_name , users.last_name ".
 					"FROM users, users_groups ".
-					"WHERE users.id=users_groups.user_id AND users.id <> $uid ".
-					"AND users_groups.group_id=$gid");
+					"WHERE users.id=users_groups.user_id AND users.id <> '$uid' ".
+					"AND users_groups.group_id='$gid'");
 				while ($GO_GROUPS->next_record())
 				{
 					$staff_middle_name = $GO_GROUPS->f('middle_name');

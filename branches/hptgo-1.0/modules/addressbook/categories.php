@@ -31,7 +31,7 @@ switch ($task) {
 		{
 			if (!isset($db_child))
 				$db_child = new db();
-			$db_child->query("DELETE FROM ab_cate_companies WHERE category_id = ".$db->f("category_id"));
+			$db_child->query("DELETE FROM ab_cate_companies WHERE category_id = '".$db->f("category_id"))."'";
 		}
 
 	  $db->query("DELETE FROM ab_categories WHERE parent_id = '$id' OR category_id = '$id'");		
@@ -42,8 +42,8 @@ switch ($task) {
 	  $id = $_REQUEST['id'];
       $category = $_REQUEST['category'];
 	  
-      $db->query("UPDATE ab_categories SET category='$category', parent_id = $parent ".
-                 "WHERE category_id=$id");
+      $db->query("UPDATE ab_categories SET category='$category', parent_id = '$parent' ".
+                 "WHERE category_id='$id'");
     break;
   case 'add_status':
 	$parent = $_REQUEST['parent'];
@@ -58,7 +58,7 @@ echo '<tr><td>';
 echo '<table border="0" cellpadding="2" cellspacing="0">';
 echo '<tr><td>&nbsp;</td></tr>';
 
-  $db->query('SELECT * FROM ab_categories WHERE parent_id = "0" ORDER BY category');
+  $db->query("SELECT * FROM ab_categories WHERE parent_id = '0' ORDER BY category");
   $count = $db->num_rows();
 
 $move_task_up = '<img src="'.$GO_THEME->images['task_up'].'" border="0">';
@@ -146,7 +146,7 @@ echo "$ab_category : <br />";
 echo '<input type="text" class="textbox" name="category" value="" maxlength="50" />&nbsp;&nbsp;';
 //style="width: 350px;" 
 
-$db->query('SELECT * FROM ab_categories WHERE parent_id = "0" ORDER BY category');
+$db->query("SELECT * FROM ab_categories WHERE parent_id = '0' ORDER BY category");
 $count = $db->num_rows();
 $catalog = new dropbox();
 $catalog_name = '';

@@ -104,7 +104,7 @@
 		global $GO_SECURITY;
 		
 		$db = new db();
-		$db->query("SELECT order_fields FROM ab_config WHERE page=".$page." AND user_id='".$GO_SECURITY->user_id."'"); 
+		$db->query("SELECT order_fields FROM ab_config WHERE page='".$page."' AND user_id='".$GO_SECURITY->user_id."'"); 
 		if ($db->next_record()) {
 			$order = explode(",",$db->f('order_fields'));
 			return $order;
@@ -144,7 +144,7 @@
 				break;
 				case 'company_id':
 				case 'parent':
-					$db->query('SELECT name FROM ab_companies WHERE id = '.(int)$ab->f($order[$i]));
+					$db->query("SELECT name FROM ab_companies WHERE id = '".(int)$ab->f($order[$i])."'");
 					echo '<td nowrap> '.empty_to_stripe($db->next_record()?$db->f('name'):'').' </td>';
 				break;
 				case '':break;

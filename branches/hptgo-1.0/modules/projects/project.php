@@ -262,7 +262,7 @@ switch ($task)
       if (!isset($tid_time) || $tid_time == 0)
         $tid_time = '';
       else
-        $tid_time = ', task_time='.$tid_time;
+        $tid_time = ", task_time='$tid_time'";
 
       $task_folder = "$project_folder/$tid";
       if ($is_new_project) {
@@ -271,12 +271,12 @@ switch ($task)
       }
 
       $projects->query("SELECT * FROM task ".
-                       "WHERE task_id=$tid AND task_project_id=$project_id");
+                       "WHERE task_id='$tid' AND task_project_id='$project_id'");
       $projects->next_record();
       $old_person_id = $projects->f('task_person_id');
 
-      $projects->query("UPDATE task SET task_person_id=$tpid $tid_time ".
-                       "WHERE task_id=$tid AND task_project_id=$project_id");
+      $projects->query("UPDATE task SET task_person_id='$tpid' $tid_time ".
+                       "WHERE task_id='$tid' AND task_project_id='$project_id'");
 
       if ($tpid != $old_person_id && $tpid != $responsible_user_id) {
         notify_relevant_members($project_id,$tid,$tpid,true);
@@ -360,20 +360,20 @@ switch ($task)
     break;
 
   case 'drop_project':
-    $projects->query("UPDATE pmProjects SET status=".STATUS_DROP.",probability=0".
-                     " WHERE id=$project_id");
+    $projects->query("UPDATE pmProjects SET status='".STATUS_DROP."',probability='0'".
+                     " WHERE id='$project_id'");
     $active_tab = 0;
     break;
 
   case 'recover_project':
     $projects->query("SELECT max(task_level) AS level FROM task ".
-                     "WHERE task_project_id=$project_id AND task_approved=1");
+                     "WHERE task_project_id='$project_id' AND task_approved='1'");
     $pstatus = STATUS_OFFER;
     if ($projects->num_rows() > 0 && $projects->next_record())
       $pstatus = $projects->f('level');
     if (!isset($pstatus)) $pstatus = STATUS_OFFER;
-    $projects->query("UPDATE pmProjects SET status=$pstatus,probability=100 ".
-                     "WHERE id=$project_id");
+    $projects->query("UPDATE pmProjects SET status='$pstatus',probability='100' ".
+                     "WHERE id='$project_id'");
     $active_tab = 0;
     break;
 }
@@ -551,11 +551,11 @@ switch($tabtable->get_active_tab_id())
         echo '</td></tr>';
       }
       else {
-        $db->query('SELECT * FROM pmCatalog WHERE id='.$project['cat_id']);
+        $db->query("SELECT * FROM pmCatalog WHERE id='{$project['cat_id']}'");
         $db->next_record();
         $catalog = $db->f('name');
         $db->query('SELECT * FROM task_templates '.
-                   'WHERE id='.$project['task_template_id']);
+                   "WHERE id='".$project['task_template_id']."'");
         $db->next_record();
         echo "<tr><td>$pm_category:</td><td><b>$catalog&nbsp;&nbsp;-&nbsp;&nbsp;".$db->f('name').'</b></td></tr>';
       }
@@ -581,15 +581,15 @@ switch($tabtable->get_active_tab_id())
           $pm_status_values = array();
           if ($project_id > 0) {
             $db->query('SELECT count(task_id) as total_task '.
-                       'FROM task WHERE task.task_project_id='.$project_id);
+                       "FROM task WHERE task.task_project_id='$project_id'");
             $db->next_record();
             $total_task = $db->f('total_task');
             $db->query('SELECT count(task_approved) as total_task_approved '.
-                       'FROM task WHERE task_project_id='.$project_id.' AND task_approved=1');
+                       "FROM task WHERE task_project_id='$project_id' AND task_approved='1'");
             $db->next_record();
             $total_task_approved = $db->f('total_task_approved');
             $progress = round($total_task_approved * 100 / $total_task);
-            $db->query('SELECT * FROM pmStatus WHERE cat_id='.$projects->f('cat_id'));
+            $db->query("SELECT * FROM pmStatus WHERE cat_id='".$projects->f('cat_id')."'");
             while ($db->next_record())
               $pm_status_values[$db->f('value')] = $db->f('name');
           }
@@ -838,7 +838,7 @@ function notify_relevant_members($project_id,$task_id,$person_id,$assigned = tru
         $mail->WordWrap = 50;
         $mail->IsHTML(true);
 
-        $db->query("SELECT * FROM task WHERE task_id=".$task_id." AND task_project_id=".$project_id);
+        $db->query("SELECT * FROM task WHERE task_id='".$task_id."' AND task_project_id='".$project_id."'");
         $db->next_record();
         $task_name = $db->f('task_name');
         $task_person_id = $db->f('task_person_id');
@@ -846,7 +846,7 @@ function notify_relevant_members($project_id,$task_id,$person_id,$assigned = tru
 
         $db->query('SELECT * '.
           'FROM pmProjects '.
-  	  'WHERE id="'.$project_id.'" ');
+  	  "WHERE id='".$project_id."'");
         $db->next_record();
 
         $task_url = $GO_CONFIG->full_url.'modules/projects/project.php?task=show_task_status&project_id='.$project_id.'&task_id='.$task_id.'&task_status='.(isset($status) ? $status : '');
@@ -870,11 +870,11 @@ function notify_relevant_members($project_id,$task_id,$person_id,$assigned = tru
           $db->query('SELECT users.* '.
             'FROM users,pmProjects '.
   	    'WHERE users.id=pmProjects.user_id '.
-  	    'AND pmProjects.id="'.$project_id.'"');
+  	    "AND pmProjects.id='".$project_id."'");
         else
           $db->query('SELECT * '.
             'FROM users '.
-  	    'WHERE id="'.$task_person_id.'"');
+  	    "WHERE id='".$task_person_id."'");
         $db->next_record();
         $mail->AddAddress($db->f('email'));
 

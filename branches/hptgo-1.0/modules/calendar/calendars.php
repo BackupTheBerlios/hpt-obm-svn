@@ -46,7 +46,7 @@ switch ($task)
 	$GO_SECURITY->delete_acl($calendar['acl_read']);
       }
     }
-    $db->query('SELECT calendar_id FROM cal_config WHERE user_id="'.$GO_SECURITY->user_id.'"');		
+    $db->query("SELECT calendar_id FROM cal_config WHERE user_id='".$GO_SECURITY->user_id."'");
     while ($db->next_record())
       $subscribed[] = $db->f('calendar_id');
     break;
@@ -61,11 +61,11 @@ switch ($task)
     break;
 
 	case 'subscribe':
-		$db->query('DELETE FROM cal_config WHERE user_id="'.$GO_SECURITY->user_id.'"');
+		$db->query("DELETE FROM cal_config WHERE user_id='".$GO_SECURITY->user_id."'");
 		
 		$subscribed = $_REQUEST['subscribed'];
 		for ($i=0; $i<sizeof($subscribed); $i++)
-			$db->query('INSERT INTO cal_config VALUES ("'.$GO_SECURITY->user_id.'","'.$subscribed[$i].'")');
+			$db->query("INSERT INTO cal_config VALUES ('".$GO_SECURITY->user_id."','".$subscribed[$i]."')");
     	if ($_POST['close_action'] == 'true')
     	{
       		header('Location: '.$return_to);
@@ -74,7 +74,7 @@ switch ($task)
 	break;
 	
 	default:
-		$db->query('SELECT calendar_id FROM cal_config WHERE user_id="'.$GO_SECURITY->user_id.'"');		
+		$db->query("SELECT calendar_id FROM cal_config WHERE user_id='".$GO_SECURITY->user_id."'");		
 		while ($db->next_record())
 			$subscribed[] = $db->f('calendar_id');
 }

@@ -574,7 +574,7 @@ if ($count > 0)
   }
   $db->query('SELECT first_name, middle_name, last_name, email '.
              'FROM ab_contacts '.
-             'WHERE ab_contacts.user_id='.$GO_SECURITY->user_id);
+             "WHERE ab_contacts.user_id='".$GO_SECURITY->user_id."'");
   while ($db->next_record()) {
     $em = strtolower($db->f('email'));
     if ($em != '' && !in_array($em, $emails)) {
