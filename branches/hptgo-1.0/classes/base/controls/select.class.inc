@@ -16,7 +16,6 @@ class select
   var $name;
   var $type;
   var $form_name;
-  var $type;
 
   var $name_field_value;
   var $name_field;
