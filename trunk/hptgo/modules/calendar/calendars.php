@@ -103,7 +103,7 @@ $tabtable->print_head();
 <td>
 <table border="0" cellpadding="3" cellspacing="0">
 <tr><td colspan="1" height="25">
-<a href="calendar.php" class="normal"><?php echo $cmdAdd; ?></a></td>
+<a href="calendar.php?return_to=<?php echo rawurlencode($link_back); ?>" class="normal"><?php echo $cmdAdd; ?></a></td>
 <td colspan="4" align="right"><?php echo "$sc_view: "; $dropbox->print_dropbox('view_type', $view_type, 'onchange="frm.submit()"'); ?>
 </td></tr>
   <?php

@@ -36,4 +36,12 @@ echo '<body ';
 if (isset($GO_HEADER['body_arguments'])) echo ' '.$GO_HEADER['body_arguments'];
 echo '><div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>';
 ?>
+<?php
+	if (isset($debug_enabled) && $debug_enabled == "HELPME")
+	{
+		echo "Page: ".__FILE__."<br/>";
+		echo "Return to:".htmlspecialchars($return_to)."<br/>";
+		echo "Link back:".htmlspecialchars($link_back)."<br/>";
+	}
+?>
 <!--Einde header-->

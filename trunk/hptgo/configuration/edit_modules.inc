@@ -166,6 +166,8 @@ function save_modules(close)
 {
   document.forms[0].task.value='save';
   document.forms[0].close.value=close;
+  for (var i = 0;i < document.forms[0].check.length;i++)
+  	document.forms[0].check[i].disabled = false;
   document.forms[0].submit();
 }
 

@@ -71,6 +71,14 @@ class tabtable
   }
 
   /**
+   * Return the url query string so that we can restore the state of the tabtable.
+   */
+  function get_link_back()
+  {
+  	return $this->id.'='.$this->active_tab;
+  }
+
+  /**
    * Set css info. FIXME
    */
   function set_classnames($table, $tab, $active_tab, $tab_background)

@@ -209,7 +209,7 @@ if (!$print) {
 	var m = calendar.date.getMonth()+1;     // integer, 0..11
 	var d = calendar.date.getDate();      // integer, 1..31
 	// redirect...
-	window.location = "index.php?calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day="+d+"&month="+m+"&year="+y;
+	window.location = "index.php?calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day="+d+"&month="+m+"&year="+y+"&return_to=<?php echo rawurlencode($return_to); ?>";
       }
     };
 
@@ -231,7 +231,7 @@ if (!$print) {
   	
     <table border="0" cellpadding="0" cellspacing="0">
     <tr>
-    <td class="ModuleIcons"><a href="event.php<?php if (strpos($calendar_view_id,"view:") === 0 && $merged_view) echo '?merged_view='.substr($calendar_view_id,strlen("view:"));?>" class="small"><img src="<?php echo $GO_THEME->images['cal_compose']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_new_app; ?></a></td>
+    <td class="ModuleIcons"><a href="event.php?return_to=<?php echo rawurlencode($link_back);?><?php if (strpos($calendar_view_id,"view:") === 0 && $merged_view) echo '&merged_view='.substr($calendar_view_id,strlen("view:"));?>" class="small"><img src="<?php echo $GO_THEME->images['cal_compose']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_new_app; ?></a></td>
     <td class="ModuleIcons">
 		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?show_days=1&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>" 
 		class=
@@ -280,8 +280,8 @@ if (!$print) {
 			} ?>
 		>
 		<img src="<?php echo $GO_THEME->images['cal_list']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_list_view; ?></a></td>
-    <td class="ModuleIcons"><a href="views.php?return_to=<?php echo $_SERVER['REQUEST_URI']; ?>" class="small"><img src="<?php echo $GO_THEME->images['cal_view']; ?>" border="0" width="32" height="32" /><br /><?php echo $cal_views; ?></a></td>
-    <td class="ModuleIcons"><a href="calendars.php?return_to=<?php echo $_SERVER['REQUEST_URI']; ?>" class="small"><img src="<?php echo $GO_THEME->images['cal_calendar']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_calendars; ?></a></td>
+    <td class="ModuleIcons"><a href="views.php?return_to=<?php echo rawurlencode($link_back); ?>" class="small"><img src="<?php echo $GO_THEME->images['cal_view']; ?>" border="0" width="32" height="32" /><br /><?php echo $cal_views; ?></a></td>
+    <td class="ModuleIcons"><a href="calendars.php?return_to=<?php echo rawurlencode($link_back); ?>" class="small"><img src="<?php echo $GO_THEME->images['cal_calendar']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_calendars; ?></a></td>
     <td class="ModuleIcons"><a href="<?php echo $_SERVER['REQUEST_URI']; ?>" class="small"><img src="<?php echo $GO_THEME->images['cal_refresh']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_refresh; ?></a></td>
     <td class="ModuleIcons"><a href="javascript:popup('<?php echo $GO_MODULES->url; ?>index.php?print=true&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&merged_view=<?php echo $merged_view; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>','','')" class="small"><img src="<?php echo $GO_THEME->images['cal_print']; ?>" border="0" width="32" height="32" /><br /><?php echo $cmdPrint; ?></a></td>
     </tr>

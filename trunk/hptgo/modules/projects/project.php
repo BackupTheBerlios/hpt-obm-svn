@@ -140,7 +140,7 @@ switch ($task)
     $end_date = date_to_unixtime($_GET['end_date']);
 
     $name = smart_addslashes(trim($_GET['name']));
-    $task_template_id = $_GET['task_template_id'];
+    $task_template_id = isset($_GET['task_template_id']) ? $_GET['task_template_id'] : 0;
     if ($project_id > 0)
     {
       if ($name == '')
@@ -160,7 +160,7 @@ switch ($task)
               $start_date,
               $end_date,
               $_GET['responsible_user_id'],
-              $_GET['probability'],
+              isset($_GET['probability']) ? $_GET['probability'] : 0,
               $_GET['fee_id'],
               $_GET['budget']))
         {

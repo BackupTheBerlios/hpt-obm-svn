@@ -106,7 +106,7 @@ if (count($events) > 0)
       $title = $sc_start_at.': '.date($date_format, $event['start_time']).'<br />'.
 	$sc_end_at.': '.date($date_format, $event['end_time']);
 
-      if ($ab_module && $event['contact_id'] > 0 && $contact = $ab->get_contact($event['contact_id']))
+      if (isset($ab_module) && $ab_module && $event['contact_id'] > 0 && $contact = $ab->get_contact($event['contact_id']))
       {
 	$middle_name = $contact['middle_name'] == '' ? '' : $contact['middle_name'].' ';
 	$contact_name = $contact['last_name'].' '.$middle_name.$contact['first_name'];
