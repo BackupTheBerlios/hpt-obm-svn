@@ -172,7 +172,7 @@ function <?=$this->id?>_change_list(first, max_rows)
 		echo '</tr>';
 	}
 
-	function print_line($values,$attr = null)
+	function print_line($values,&$attr)
 	{
 		if (!isset($attr) || !is_array($attr))
 			$attr = array();
@@ -283,7 +283,7 @@ function <?=$this->id?>_change_list(first, max_rows)
 	}
 }
 
-function attributes_implode($attrs)
+function attributes_implode(&$attrs)
 {
 	$tdattr = '';
 	if (isset($attrs) && is_array($attrs))
@@ -294,7 +294,7 @@ function attributes_implode($attrs)
 	return $tdattr;
 }
 
-function htmltag($tag,$values = null,$attr_index = 'attributes')
+function htmltag($tag,&$values,$attr_index = 'attributes')
 {
 	if ($tag != '')
 		$html = '<';
