@@ -81,7 +81,8 @@ DROP TABLE IF EXISTS `cal_events_calendars`;
 CREATE TABLE `cal_events_calendars` (
   `calendar_id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
-  KEY `calendar_id` (`calendar_id`,`event_id`)
+ PRIMARY KEY  (`calendar_id`,`event_id`),
+ KEY `calendar_id` (`calendar_id`,`event_id`)
 ) TYPE=MyISAM;
 
 # --------------------------------------------------------
@@ -130,8 +131,8 @@ CREATE TABLE `cal_reminders` (
   `user_id` int(11) NOT NULL default '0',
   `event_id` int(11) NOT NULL default '0',
   `remind_time` int(11) NOT NULL default '0',
-  PRIMARY KEY  (`user_id`,`event_id`,`remind_time`),
- KEY `user_id` (`user_id`),
+ PRIMARY KEY  (`user_id`,`event_id`,`remind_time`),
+  KEY `user_id` (`user_id`),
   KEY `remind_time` (`remind_time`)
 ) TYPE=MyISAM;
 
@@ -197,6 +198,8 @@ CREATE TABLE `cal_views` (
   `start_hour` tinyint(4) NOT NULL default '0',
   `end_hour` tinyint(4) NOT NULL default '0',
   `type` varchar(10) NOT NULL default '',
+  `acl_read` int(11) NOT NULL default '0',
+  `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
@@ -218,6 +221,13 @@ CREATE TABLE cal_config (
   user_id int(11) unsigned NOT NULL default '0',
   calendar_id int(11) unsigned NOT NULL default '0',
   PRIMARY KEY  (calendar_id,user_id)
+) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS `cal_view_subscriptions`;
+CREATE TABLE cal_view_subscriptions (
+  user_id int(11) unsigned NOT NULL default '0',
+  view_id int(11) unsigned NOT NULL default '0',
+  PRIMARY KEY  (view_id,user_id)
 ) TYPE=MyISAM;
 
       

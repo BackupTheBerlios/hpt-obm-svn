@@ -8,3 +8,4 @@ DROP TABLE IF EXISTS `cal_views`;
 DROP TABLE IF EXISTS `cal_settings`;
 DROP TABLE IF EXISTS `cal_todos`;
 DROP TABLE IF EXISTS `cal_config`;
+DROP TABLE IF EXISTS `cal_view_subscriptions`;
