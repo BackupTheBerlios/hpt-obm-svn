@@ -6,7 +6,7 @@ header('Content-Type: text/html; charset='.$charset);
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo $charset; ?>" />
 <link href="<?php echo $GO_THEME->theme_url.'style.css'; ?>" rel="stylesheet" type="text/css" />
-<script language="JavaScript" src="<?php echo $GO_THEME->theme_path;?>../Bold_Text.js"></script>
+<script language="JavaScript" src="<?php echo $GO_THEME->theme_url;?>../Bold_Text.js"></script>
 </head>
 <body marginwidth="0" marginheight="0" leftmargin="0" topmargin="0">
 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="FooterBar">
