@@ -9,15 +9,15 @@
    Free Software Foundation; either version 2 of the License, or (at your
    option) any later version.
 
-   This function creates a Group-Office.php file from the template Group-Office.tpl and fills it with values from a $GO_CONFIG object
+   This function creates a OBMConfig.php file from the template OBMConfig.tpl and fills it with values from a $GO_CONFIG object
  */
 
 function save_config($config)
 {
-  if ( !$fp = fopen($config->root_path.'Group-Office.tpl', 'r') ) {
+  if ( !$fp = fopen($config->root_path.'OBMConfig.tpl', 'r') ) {
     exit( "Failed to open config template" );
   }
-  $config_data = fread($fp, filesize($config->root_path.'Group-Office.tpl'));
+  $config_data = fread($fp, filesize($config->root_path.'OBMConfig.tpl'));
   if (strlen( $config_data ) == 0 ) {
     exit( "Failed to read from config template" );
   }
@@ -73,7 +73,7 @@ function save_config($config)
   $config_data = str_replace('%mime_types_file%', $config->mime_types_file, $config_data);
   $config_data = str_replace('%auth_sources%', $config->auth_sources, $config_data);
 
-  if (!$fp = fopen($config->root_path.'Group-Office.php', 'w+'))
+  if (!$fp = fopen($config->root_path.'OBMConfig.php', 'w+'))
   {
     exit("Failed to open config file");
   }elseif(!fwrite($fp, $config_data))
@@ -120,17 +120,17 @@ if ($script_path == '')
   exit();
 }
 
-//the root_path of Group-Office is the path of this script without install.php
+//the root_path of OBMConfig is the path of this script without install.php
 $root_path = str_replace('install.php', '',$script_path);
 
 //check ifconfig exists and if the config file is writable
-$config_exists = file_exists('Group-Office.php');
-if ($config_exists && !is_writable('Group-Office.php'))
+$config_exists = file_exists('OBMConfig.php');
+if ($config_exists && !is_writable('OBMConfig.php'))
 {
   print_head();
-  echo 'The configuration file Group-Office.php exists in '.$root_path.' but is not writable. If you wish to make changes then you have to make Group-Office.php writable during the configuration process.';
+  echo 'The configuration file OBMConfig.php exists in '.$root_path.' but is not writable. If you wish to make changes then you have to make OBMConfig.php writable during the configuration process.';
   echo '<br /><br />Correct this and refresh this page.';
-  echo '<br /><br /><font color="#003399"><i>$ chmod 777 '.$root_path.'Group-Office.php<br /></i></font>';
+  echo '<br /><br /><font color="#003399"><i>$ chmod 777 '.$root_path.'OBMConfig.php<br /></i></font>';
   print_foot();
   exit();
 }elseif(!$config_exists && !is_writable($root_path))
@@ -157,8 +157,8 @@ if ($config_exists && !is_writable('Group-Office.php'))
 //if we can write and config file doesn't exist create a default config file
 if (!$config_exists)
 {
-  $tpl_file = str_replace('install.php', 'Group-Office.tpl',$script_path);
-  $GO_CONFIG_file = str_replace('install.php', 'Group-Office.php',$script_path);
+  $tpl_file = str_replace('install.php', 'OBMConfig.tpl',$script_path);
+  $GO_CONFIG_file = str_replace('install.php', 'OBMConfig.php',$script_path);
   if ( !$fp = fopen($tpl_file, 'r') ) {
     exit( "Failed to open config template" );
   }
@@ -1335,17 +1335,17 @@ print_head();
 ?>
 Installation complete!<br />
 <br />
-Please make sure Group-Office.php is not writable anymore now.<br />
+Please make sure OBMConfig.php is not writable anymore now.<br />
 <br />
 <font color="#003399"><i>
 $ chown -R someuser:someuser <?php echo $GO_CONFIG->root_path; ?><br />
 $ chmod 644 <?php echo $GO_CONFIG->root_path; ?><br />
-$ chmod 644 <?php echo $GO_CONFIG->root_path; ?>Group-Office.php
+$ chmod 644 <?php echo $GO_CONFIG->root_path; ?>OBMConfig.php
 
 </i></font>
 <br />
 <br />
-If you don't have shell access then you should download Group-Office.php, delete Group-Office.php
+If you don't have shell access then you should download OBMConfig.php, delete OBMConfig.php
 from the server and upload it back to the server. This way you change the ownership to your account.
 <br />
 <br /> 
