@@ -219,6 +219,7 @@ $images['filesystem'] = 'buttons/menu_filesystem.png';
 $images['notes'] = 'buttons/menu_notes.png';
 $images['projects'] = 'buttons/menu_projects.png';
 $images['search']		= 'buttons/menu_search.png';
+$images['opentts']		= 'buttons/menu_helpdesk.png';
 $images['ab_companies'] = 'buttons/ab_companies.png';
 $images['ab_add_company'] = 'buttons/ab_add_company.png';
 

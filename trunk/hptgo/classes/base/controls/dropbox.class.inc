@@ -78,16 +78,23 @@ class dropbox
 
   function print_dropbox($name, $selected_field='', $attributes='', $multiple=false, $size='10', $width='0')
   {
+	echo $this->get_dropbox($name, $selected_field, $attributes, $multiple, $size, $width);	
+  }
+
+
+  function get_dropbox($name, $selected_field='', $attributes='', $multiple=false, $size='10', $width='0')
+  {
+    $return_str='';
     $multiple_str = $multiple ? ' multiple="true" size="'.$size.'"' : '';
 
     $optgroup_open = false;
-    echo '<select name="'.$name.'" class="textbox"'.$multiple_str.' '.$attributes;
+    $return_str.= '<select name="'.$name.'" class="textbox"'.$multiple_str.' '.$attributes;
 
     if ($width > 0)
     {
-      echo 'style="width: '.$width.'"';
+      $return_str.=  'style="width: '.$width.'"';
     }
-    echo '>';
+    $return_str.=  '>';
 
 
     for ($i=0;$i<count($this->value);$i++)
@@ -96,41 +103,42 @@ class dropbox
       {
 	if ($optgroup_open == true)
 	{
-	  echo '</optgroup>';
+	  $return_str.=  '</optgroup>';
 	}else
 	{
 	  $optgroup_open = true;
 	}
-	echo '<optgroup label="'.$this->optgroup[$i].'">';
+	$return_str.=  '<optgroup label="'.$this->optgroup[$i].'">';
       }
 
       if ($this->text[$i] != '')
       {
-	echo '<option value="'.$this->value[$i].'"';
+	$return_str.=  '<option value="'.$this->value[$i].'"';
 
 	if ($multiple)
 	{
 	  if (in_array($this->value[$i], $selected_field))
 	  {
-	    echo ' selected';
+	    $return_str.=  ' selected';
 	  }
 	}else
 	{
 	  if ($this->value[$i] == $selected_field)
 	  {
-	    echo ' selected';
+	    $return_str.=  ' selected';
 	  }
 	}
-	echo '>';
-	echo $this->text[$i];
-	echo '</option>';
+	$return_str.=  '>';
+	$return_str.=  $this->text[$i];
+	$return_str.=  '</option>';
       }
     }
     if ($optgroup_open == true)
     {
-      echo '</optgroup>';
+      $return_str.=  '</optgroup>';
     }
-    echo '</select>';
+    $return_str.=  '</select>';
+  return  $return_str;
   }
 }
 ?>

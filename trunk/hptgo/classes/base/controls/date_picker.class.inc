@@ -26,6 +26,12 @@ class date_picker
 
   function print_date_picker($name, $date_format, $set_date='', $flat_div_id='', $flat_callbackfunction='', $arguments='', $disabled=false)
   {
+	echo  $this->get_date_picker($name, $date_format, $set_date, $flat_div_id, $flat_callbackfunction, $arguments, $disabled);
+  }
+
+  function get_date_picker($name, $date_format, $set_date='', $flat_div_id='', $flat_callbackfunction='', $arguments='', $disabled=false)
+  {
+	$str_return='';
     //dirty hack for mysql default date
     if ($set_date == '00-00-0000')
     {
@@ -39,18 +45,18 @@ class date_picker
 
     if ($flat_div_id == '')
     {
-      echo '<input class="textbox" type="text" id="'.$name.'_input" name="'.$name.'" value="'.$set_date.'" '.$arguments.' />'.
+      $str_return.='<input class="textbox" type="text" id="'.$name.'_input" name="'.$name.'" value="'.$set_date.'" '.$arguments.' />'.
 	'<input type="button" name="'.$name.'_button" id="'.$name.'_button" value="..."';
       if ($disabled)
       {
-	echo ' disabled';
+	$str_return.=' disabled';
       }
-      echo '/>';
+      $str_return.='/>';
     }
 
     $first_weekday = $_SESSION['GO_SESSION']['first_weekday']==""?0:$_SESSION['GO_SESSION']['first_weekday'];
 
-    echo '<script type="text/javascript">
+    $str_return.='<script type="text/javascript">
       var calendar = Calendar.setup(
 	  {
 firstDay  : '.$first_weekday.',
@@ -59,17 +65,18 @@ ifFormat    : "'.$date_format.'",';
 
 if ($set_date != '')
 {
-echo 'date :  "'.str_replace('-','/',$set_date).'",';
+$str_return.='date :  "'.str_replace('-','/',$set_date).'",';
 }
 
 if ($flat_div_id != '')
 {
-echo 'flat : "'.$flat_div_id.'", flatCallback : '.$flat_callbackfunction;
+$str_return.='flat : "'.$flat_div_id.'", flatCallback : '.$flat_callbackfunction;
 }else
 {
-echo 'button      : "'.$name.'_button"';
+$str_return.='button      : "'.$name.'_button"';
 }
-echo '});</script>';
+$str_return.='});</script>';
+return $str_return;
       }
 
 function convert_date_format($php_date_format)

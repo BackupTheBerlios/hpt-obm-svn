@@ -14,7 +14,6 @@ class select
 {
   var $value;
   var $name;
-  var $type;
   var $form_name;
   var $type;
 
@@ -31,6 +30,11 @@ class select
   }
 
   function print_link($text)
+  {
+    echo $this->get_link($text);
+  }
+
+  function get_link($text)
   {
     global $GO_THEME, $GO_CONFIG;
 
@@ -49,12 +53,13 @@ class select
 	  '&name_field=document.'.$this->form_name.'.'.$this->name_field).
 	'&pass_value=id&handler_base64_encoded=true\',\'600\',\'400\');';
 
-    echo 	'<a class="normal" href="'.$link.'"><img align="bsmiddle" src="'.
+    return '<a class="normal" href="'.$link.'"><img align="bsmiddle" src="'.
       $GO_THEME->images['addressbook_small'].'" width="16" height="16" '.
       'border="0" style="margin-right: 5px;" />'.$text.'</a>';
   }
 
-  function print_field()
+
+  function get_field()
   {
     global $GO_THEME, $GO_CONFIG, $strDeleteItem, $GO_USERS;
 
@@ -76,22 +81,28 @@ class select
 	  $middle_name = $contact['middle_name'] == '' ? '' : $contact['middle_name'].' ';
 	  if (!empty($contact['company_name']))
 		  $name_field_value = htmlspecialchars($contact['last_name'].' '.$middle_name.$contact['first_name'] . ' / ' . $contact['company_name']);
-	  else	
-	  	$name_field_value = htmlspecialchars($contact['last_name'].' '.$middle_name.$contact['first_name']);
+	  else
+		$name_field_value = htmlspecialchars($contact['last_name'].' '.$middle_name.$contact['first_name']);
 	}
       }
     }
-    echo 	'<input type="hidden" value="'.$this->value.'" name="'.$this->name.'" />'.
+    $return_string= '<input type="hidden" value="'.$this->value.'" name="'.$this->name.'" />'.
       '<input type="text" name="'.$this->name_field.'" class="textbox" style="width: 300px;" value="'.$name_field_value.'" disabled />';
 
-    echo 	'<a href="javascript:clear_'.$this->name.'()" title="'.$strDeleteItem.
+    $return_string.= 	'<a href="javascript:clear_'.$this->name.'()" title="'.$strDeleteItem.
       '"><img src="'.$GO_THEME->images['delete'].'" align="absmiddle" border="0"></a>';
 
-    echo 	'<script type="text/javascript">'.
+    $return_string.=  	'<script type="text/javascript">'.
       'function clear_'.$this->name.'(){'.
 	'document.'.$this->form_name.'.'.$this->name.'.value="";'.
 	  'document.'.$this->form_name.'.'.$this->name_field.'.value="";}'.
 	  '</script>';
+	return $return_string;
+  }
+
+  function print_field()
+  {
+    echo $this->get_field();
   }
 }
 ?>

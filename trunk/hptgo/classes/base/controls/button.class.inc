@@ -12,9 +12,15 @@
 
 class button
 {
-  function button($text, $action, $size='100')
+  function button($text=null, $action=null, $size='100')
   {
-    echo '<input type="button" class="button" style="width: '.$size.'px;" value="'.$text.'" onclick="'.$action.'" onmouseover="javascript:this.className=\'button_mo\';" onmouseout="javascript:this.className=\'button\';" />';
+       if ($text){
+       echo $this->get_button($text, $action, $size);
+       }
+  }
+  function get_button($text, $action, $size='100')
+  {
+    return '<input type="button" class="button" style="width: '.$size.'px;" value="'.$text.'" onclick="'.$action.'" onmouseover="javascript:this.className=\'button_mo\';" onmouseout="javascript:this.className=\'button\';" />';
   }
 }
 ?>
