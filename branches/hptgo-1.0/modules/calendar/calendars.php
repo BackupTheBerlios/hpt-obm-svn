@@ -10,6 +10,10 @@
    option) any later version.
  */
 
+define(SHOW_ALL, 0);
+define(SHOW_OWN, 1);
+define(SHOW_SUB, 2);
+
 require("../../Group-Office.php");
 
 $GO_SECURITY->authenticate();
@@ -23,7 +27,7 @@ $post_action = isset($_REQUEST['post_action']) ? $_REQUEST['post_action'] : '';
 $task = isset($_POST['task']) ? $_POST['task'] : '';
 $return_to = isset($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
 $link_back = isset($_REQUEST['link_back']) ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
-$show_all = isset($_REQUEST['show_all']) ? $_REQUEST['show_all'] : 0;
+$view_type = isset($_REQUEST['view_type']) ? $_REQUEST['view_type'] : 0;
 
 $calendar_id = isset($_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : 0;
 $db = new db();
@@ -86,18 +90,22 @@ echo '<input type="hidden" name="task" value="'.$task.'" />';
 echo '<input type="hidden" name="close_action" value="false" />';
 echo '<input type="hidden" name="return_to" value="'.$return_to.'" />';
 echo '<input type="hidden" name="link_back" value="'.$link_back.'" />';
-echo '<input type="hidden" name="show_all" value="'.$show_all.'" />';
+//echo '<input type="hidden" name="view_type" value="'.$view_type.'" />';
 
-$jscript = $show_all ? '_show_subscribed()' : '_show_all()';
-$cmdText = $show_all ? $cmdShowSubscribed : $cmdShowAll;
-
+$dropbox = new dropbox();
+$dropbox->add_value(0, $cmdShowAll);
+$dropbox->add_value(1, $cmdShowOwned);
+$dropbox->add_value(2, $cmdShowSubscribed);
 $tabtable->print_head();
 ?>
 <table border="0" cellpadding="10">
 <tr>
 <td>
 <table border="0" cellpadding="3" cellspacing="0">
-<tr><td colspan="2" height="25"><a href="calendar.php" class="normal"><?php echo $cmdAdd; ?></a></td><td colspan="3" align="right"><a href="javascript:<?php echo $jscript; ?>" class="normal"><?php echo $cmdText; ?></a></td></tr>
+<tr><td colspan="1" height="25">
+<a href="calendar.php" class="normal"><?php echo $cmdAdd; ?></a></td>
+<td colspan="4" align="right"><?php echo "$sc_view: "; $dropbox->print_dropbox('view_type', $view_type, 'onchange="frm.submit()"'); ?>
+</td></tr>
   <?php
 if (isset($feedback))
 {
@@ -115,13 +123,25 @@ if ($calendar_count > 0)
   while ($cal->next_record())
   {
   	$checked = '';
-  	if (!isset($subscribed))
-		$checked = 'checked';
-	else
-	{
-		if ( in_array($cal->f('id'),$subscribed) ) 
+	$uid = $cal->f('user_id');
+	if (!isset($subscribed)) {
+		if ($uid == $GO_SECURITY->user_id)
 			$checked = 'checked';
-		elseif (!$show_all) continue;
+		elseif ($view_type != SHOW_ALL) continue;
+	}
+	else {
+		$go_next = true;
+		if (in_array($cal->f('id'),$subscribed))
+			$checked = 'checked';
+		switch ($view_type) {
+			case SHOW_OWN:
+				$go_next = $uid == $GO_SECURITY->user_id;
+				break;
+			case SHOW_SUB:
+				$go_next = $checked == 'checked';
+				break;
+		}
+		if (!$go_next) continue;
 	}
 	
 	$subscr_count++;		
@@ -132,7 +152,10 @@ if ($calendar_count > 0)
     echo '<td nowrap>'.show_profile($cal->f("user_id")).'&nbsp;</td>';
     echo '<td align="center"><input type="checkbox" id="subscribed" name="subscribed[]" value="'.$cal->f('id').'" '.$checked.'></td>';	
     echo '<td><a href="calendar.php?calendar_id='.$cal->f("id").'&return_to='.rawurlencode($link_back).'" title="'.$strEdit.' \''.htmlspecialchars(addslashes($cal->f("name"))).'\'"><img src="'.$GO_THEME->images['edit'].'" border="0" /></a></td>';
-    echo "<td><a href='javascript:delete_calendar(\"".$cal->f("id")."\",\"".rawurlencode($strDeletePrefix."'".addslashes($cal->f("name"))."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".htmlspecialchars($cal->f("name"))."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td></tr>\n";
+	if ($cal->f('user_id') != $GO_SECURITY->user_id)
+		echo "<td>&nbsp;</td></tr>\n";
+	else
+    	echo "<td><a href='javascript:delete_calendar(\"".$cal->f("id")."\",\"".rawurlencode($strDeletePrefix."'".addslashes($cal->f("name"))."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".htmlspecialchars($cal->f("name"))."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td></tr>\n";
   }
 }
 echo '</table>';
@@ -148,40 +171,35 @@ $button = new button($cmdClose,"javascript:document.location='".$return_to."'");
 </table>
 
 <script type="text/javascript">
-function _show_all()
-{
-  document.forms[0].show_all.value='1';
-  document.forms[0].submit();
-}
+var frm = document.forms[0];
 
-function _show_subscribed()
+function _set_view_type()
 {
-  document.forms[0].show_all.value='0';
-  document.forms[0].submit();
+	frm.submit();
 }
 
 function delete_calendar(calendar_id, message)
 {
-  if (confirm(unescape(message)))
-  {
-    document.forms[0].delete_calendar_id.value = calendar_id;
-    document.forms[0].task.value='delete_calendar';
-    document.forms[0].submit();
-  }
+	if (confirm(unescape(message)))
+	{
+		frm.delete_calendar_id.value = calendar_id;
+		frm.task.value = 'delete_calendar';
+		frm.submit();
+	}
 }
 
 function _save(task, close, count, msg)
 {
 	have_check = false;
-	if (count==1)
+	if (count == 1)
 	{
-		if (document.forms[0].subscribed.checked == true)
+		if (frm.subscribed.checked == true)
 			have_check = true;
 	}
 	else
 	{
-		for (i=0; i<count; i++)
-			if (document.forms[0].subscribed[i].checked == true)
+		for (i = 0; i < count; i++)
+			if (frm.subscribed[i].checked == true)
 				have_check = true;
 	}
 	
@@ -191,16 +209,16 @@ function _save(task, close, count, msg)
 		return;
 	}
 	
-	document.forms[0].task.value = task;
-	document.forms[0].close_action.value = close;
-	document.forms[0].submit();
+	frm.task.value = task;
+	frm.close_action.value = close;
+	frm.submit();
 }
 
 function save_calendar(close_me)
 {
-  document.forms[0].close_action.value=close_me;
-  document.forms[0].task.value = 'save_calendar';
-  document.forms[0].submit();
+  frm.close_action.value = close_me;
+  frm.task.value = 'save_calendar';
+  frm.submit();
 }
 </script>
 <?php
