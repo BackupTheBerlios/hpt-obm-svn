@@ -67,7 +67,7 @@
 *
 *  // 24. M&auml;rz 2004 version 1.15 (-fix update-)
 *  
-*  @pakage pop3.class.inc
+*  @package pop3.class.inc
 *  @author Jointy <bestmischmaker@web.de>
 *  create 07. May 2003
 *  last change 26. July 2003
@@ -122,19 +122,19 @@ class POP3 {
 */
     var $log_file;
 /**
-* ???
-* @var ???
+* Log file handle
+* @var int
 */
     var $log_fp;
 
 /**
-* ???
-* @var ???
+* File hanlde
+* @var int
 */
     var $file_fp;
 /**
-* ???
-* @var ???
+* Socket handle
+* @var int
 */
     var $mysql_socket;
 
@@ -434,7 +434,7 @@ class POP3 {
     * @access	public
 	* @param	int		$msg_number	Mail number
 	* @param	string	$lines		Lines
-	* @retunr	mixed	HTML string if success, otherwise : FALSE	
+	* @return	mixed	HTML string if success, otherwise : FALSE	
     */
     function get_top( $msg_number , $lines = "0" )
     {
