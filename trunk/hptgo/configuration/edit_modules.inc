@@ -35,7 +35,7 @@ switch ($task) {
       echo 'parent.location="'.$GO_CONFIG->host.'index.php?return_to='.urlencode($return_to).'";';
     }else
     {
-      echo 'parent.footer.location="'.$GO_THEME->theme_url.'footer.php";';
+      echo 'parent.location="'.$GO_CONFIG->host.'index.php?return_to='.urlencode($return_to).'";';
     }
     echo '</script>';
 		break;
