@@ -42,10 +42,12 @@ $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 $project_id = isset($_REQUEST['project_id']) ? $_REQUEST['project_id'] : 0;
 
 $link_back = (isset($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
-if ($_SESSION['return_to']['pid'] != $project_id) {
+if ($_SESSION['return_to']['pid'] != $project_id ||
+    $_SESSION['return_to']['mod'] != $_SESSION['GO_SESSION']['active_module']) {
   $return_to = isset($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
   $_SESSION['return_to']['pid'] = $project_id;
   $_SESSION['return_to']['url'] = $return_to;
+  $_SESSION['return_to']['mod'] = $_SESSION['modules']['active_module'];
 }
 else {
   $return_to = $_SESSION['return_to']['url'];
