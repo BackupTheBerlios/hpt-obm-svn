@@ -866,7 +866,8 @@ function notify_relevant_members($project_id,$task_id,$person_id,$assigned = tru
         $mail->From = $db->f('email');
         $mail->Sender = $db->f('email');
 
-        if (!$mail->Send()) echo "Failed: ".$mail->ErrorInfo;
+        //if (!$mail->Send()) echo "Failed: ".$mail->ErrorInfo;
+        $mail->Send();
         //$mail->Send();
       }
 }
