@@ -305,7 +305,7 @@ class addressbook extends db
     return $this->query($sql);
   }
 
-  function search_contacts($user_id, $query, $field='last_name', $addressbook_id=0)
+  function search_contacts($user_id, $query, $field='last_name', $addressbook_id=0,$first=0,$max_rows=0)
   {
     $query = str_replace('*', '%', $query);
 
@@ -329,8 +329,13 @@ class addressbook extends db
     if ($query == 'Đ%')
       $sql .= " OR $field LIKE 'đ%' ";
     $sql .=  ") ORDER BY ab_contacts.first_name ASC, ab_contacts.last_name ASC";
+    if ($max_rows != 0) {
+      $this->query($sql);
+      $count = $this->num_rows();
+      $sql .= " LIMIT $first, $max_rows";
+    }
     $this->query($sql);
-    return $this->num_rows();
+    return isset($count) ? $count : $this->num_rows();
   }
 
   function get_contacts_by_birth_day($interval_start, $interval_end)
@@ -338,7 +343,7 @@ class addressbook extends db
 	
   }
 
-  function search_companies($user_id, $query, $field='name', $addressbook_id=0, $category=-1)
+  function search_companies($user_id, $query, $field='name', $addressbook_id=0, $category=-1,$first=0,$max_rows=0)
   {
     $query = str_replace('*', '%', $query);
 
@@ -367,8 +372,13 @@ class addressbook extends db
     if ($query == 'Đ%')
       $sql .= " OR $field LIKE 'đ%' ";
     $sql .=  ") ORDER BY ab_companies.name ASC";
+    if ($max_rows != 0) {
+      $this->query($sql);
+      $count = $this->num_rows();
+      $sql .= " LIMIT $first, $max_rows";
+    }
     $this->query($sql);
-    return $this->num_rows();
+    return isset($count) ? $count : $this->num_rows();
   }
 
   function get_contacts($addressbook_id, $sort = "name", $direction = "ASC", $user_id=0)
