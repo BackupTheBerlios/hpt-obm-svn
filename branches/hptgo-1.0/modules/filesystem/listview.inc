@@ -179,28 +179,28 @@ if ($GO_CONFIG->window_mode == 'normal')
 echo '<td valign="top" width="100%">';
 echo '<table border="0" cellspacing="0" cellpadding="0" width="100%"><tr>';
 echo '<td class="TableHead2" width="16"><input type="checkbox" onclick="javascript:invert_selection()" name="dummy" /></td>';
-echo '<td class="TableHead2" nowrap><a href="'.$_SERVER['PHP_SELF'].'?path='.$urlencoded_path.'&new_sort_field=basename&new_sort_order='.$new_sort_order.'">'.$strName.'</a>';
+echo '<td class="TableHead2" nowrap><a class="TableHead2" href="'.$_SERVER['PHP_SELF'].'?path='.$urlencoded_path.'&new_sort_field=basename&new_sort_order='.$new_sort_order.'">'.$strName.'</a>';
 if ($fs_settings['sort_field'] == 'basename')
 {
   echo $sort_arrow;
 }
 echo '</td>';
 
-echo '<td class="TableHead2" nowrap><a href="'.$_SERVER['PHP_SELF'].'?path='.$urlencoded_path.'&new_sort_field=filemimefriendly&new_sort_order='.$new_sort_order.'">'.$strType.'</a>';
+echo '<td class="TableHead2" nowrap><a class="TableHead2" href="'.$_SERVER['PHP_SELF'].'?path='.$urlencoded_path.'&new_sort_field=filemimefriendly&new_sort_order='.$new_sort_order.'">'.$strType.'</a>';
 if ($fs_settings['sort_field'] == 'filemimefriendly')
 {
   echo $sort_arrow;
 }
 echo '</td>';
 
-echo '<td class="TableHead2" nowrap align="right"><a  href="'.$_SERVER['PHP_SELF'].'?path='.$urlencoded_path.'&new_sort_field=filesize&new_sort_order='.$new_sort_order.'">'.$strSize.'</a>';
+echo '<td class="TableHead2" nowrap align="right"><a class="TableHead2" href="'.$_SERVER['PHP_SELF'].'?path='.$urlencoded_path.'&new_sort_field=filesize&new_sort_order='.$new_sort_order.'">'.$strSize.'</a>';
 if ($fs_settings['sort_field'] == 'filesize')
 {
   echo $sort_arrow;
 }
 echo '</td>';
 
-echo '<td class="TableHead2" nowrap><a href="'.$_SERVER['PHP_SELF'].'?path='.$urlencoded_path.'&new_sort_field=filemtime&new_sort_order='.$new_sort_order.'">'.$strModified.'</a>';
+echo '<td class="TableHead2" nowrap><a class="TableHead2" href="'.$_SERVER['PHP_SELF'].'?path='.$urlencoded_path.'&new_sort_field=filemtime&new_sort_order='.$new_sort_order.'">'.$strModified.'</a>';
 if ($fs_settings['sort_field'] == 'filemtime')
 {
   echo $sort_arrow;
