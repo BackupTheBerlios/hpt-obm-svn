@@ -32,54 +32,73 @@ $month = date("m", $time);
 
 $date = date($_SESSION['GO_SESSION']['date_format'], $time);
 
-$tabtable = new tabtable('projects_tab', $lang_modules['projects'], '100%', '400');
-$tabtable->add_tab('projects.inc', $lang_modules['projects']);
-if ($GO_MODULES->write_permissions) {
-  $tabtable->add_tab('template.inc', $pm_process_template);
-  $tabtable->add_tab('category.inc', $pm_category);
-}
-/*
-$tabtable->add_tab('load.inc', $pm_load);
-$tabtable->add_tab('fees.inc', $pm_fees);
-*/
 
-switch($post_action)
-{
-	case 'projects':
-		$tabtable->set_active_tab(0);
-	break;
-
-	case 'template':
-		if ($GO_MODULES->write_permissions)
-			$tabtable->set_active_tab(1);
-	break;
-
-	case 'category':
-		if ($GO_MODULES->write_permissions)
-			$tabtable->set_active_tab(2);
-	break;
-
-	case 'fees':
-		$tabtable->set_active_tab(2);
-	break;
-}
-if ($tabtable->get_active_tab_id() == 'load.inc')
-{
-	$datepicker = new date_picker();
-	$GO_HEADER['head'] = $datepicker->get_header();
-}
 
 require($GO_THEME->theme_path."header.inc");
 
+?>
+
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+
+<?php
+     
+  echo '<td class="ModuleIcons">';
+  echo '<a href="'.$projects_module['url'].'index.php?page=projects&return_to='.rawurlencode($link_back).'"><img src="'.$GO_THEME->images['project'].'" border="0" height="32" width="32" /><br />'.$pm_project.'</a></td>';
+  
+  echo '<td class="ModuleIcons">';
+  echo '<a href="'.$projects_module['url'].'project.php?contact_id='.$contact_id.'&return_to='.rawurlencode($link_back).'"><img src="' .$GO_THEME->images['pr_new_project'].'" border="0" height="32" width="32" /><br />' .$pm_new_project.'</a></td>';
+
+  echo '<!-- ';    
+  
+  
+  echo '<td class="ModuleIcons">';
+  echo '<img src="'.$GO_THEME->images['pr_load'].'" border="0" height="32" width="32" /><br />'.$pm_load.'</td>';
+    
+  echo '<td class="ModuleIcons">';
+  echo '<img src="'.$GO_THEME->images['pr_fees'].'" border="0" height="32" width="32" /><br />'.$pm_total_fee.'</td>';
+ 
+  echo '-->';
+  
+  if ($GO_MODULES->write_permissions) {
+  echo '<td class="ModuleIcons">';
+  echo '<a href="'.$projects_module['url'].'index.php?page=config&return_to='.rawurlencode($link_back).'"><img src="'.$GO_THEME->images['pr_fees'].'" border="0" height="32" width="32" /><br />'.$pm_config.'</a></td>';
+}    
+ 
+?>
+</tr>
+</table>
+
+<?php
 echo '<form name="projects_form" method="get" action="'.$_SERVER['PHP_SELF'].'">';
 echo '<input type="hidden" name="task" />';
 
-$tabtable->print_head();
 echo '<br />';
 
 if (isset($feedback)) echo $feedback;
-require($tabtable->get_active_tab_id());
-$tabtable->print_foot();
+switch ($_REQUEST['page'])
+{
+	case 'config':
+		if ($GO_MODULES->write_permissions)
+		{
+		$tabtable = new tabtable('projects_tab', $pm_config, '100%', '400','120','&page=config');
+			$tabtable->add_tab('template.inc', $pm_process_template);
+			$tabtable->add_tab('category.inc', $pm_category);
+		$tabtable->print_head();
+		require($tabtable->get_active_tab_id());
+		$tabtable->print_foot();
+		}
+	break;
+
+	case 'projects':
+		require('projects.inc');
+	break;
+	  
+	default:
+		require('projects.inc');
+	break;
+}
+
 echo '</form>';
 require($GO_THEME->theme_path."footer.inc");
 ?>

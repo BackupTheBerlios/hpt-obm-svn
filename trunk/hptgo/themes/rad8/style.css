@@ -45,7 +45,6 @@ a.todo_late:hover{
 	font-size: 11px;
 	text-align: center;
 }
-
 a.ModuleIcons:link, a.ModuleIcons:visited, a.ModuleIcons:active {
 	color: #ccc;
 	font-family: tahoma, arial, helvetica, sans-serif;
@@ -58,7 +57,6 @@ a.ModuleIcons:link, a.ModuleIcons:visited, a.ModuleIcons:active {
 	padding-right: 10px;
 	padding-left: 7px;
 }
-
 a.ModuleIcons:hover {
 	color: yellow;
 	text-decoration: none;
@@ -72,7 +70,6 @@ a.ModuleIcons:hover {
 	font-size: 10px;
 	text-align: right;
 }
-
 a.ModuleIcons1:link, a.ModuleIcons1:visited, a.ModuleIcons1:active {
 	color: #000;
 	font-family: tahoma, arial, helvetica, sans-serif;
@@ -84,7 +81,6 @@ a.ModuleIcons1:link, a.ModuleIcons1:visited, a.ModuleIcons1:active {
 	padding: 2px;
 	padding-right: 5px;
 }
-
 a.ModuleIcons1:hover {
 	color: #0869b5;
 	text-decoration: none;

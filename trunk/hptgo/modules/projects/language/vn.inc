@@ -15,7 +15,7 @@ $pm_project_data = 'Projectdata from';
 $pm_load= 'Xem báo cáo';
 $pm_enter_data = 'Enter data';
 $pm_value = 'Giá trị';
-$pm_too_old = 'Bạn không được phép nhập dữ liệu cũ hơn 01 tuần';
+// $pm_too_old = 'Bạn không được phép nhập dữ liệu cũ hơn 01 tuần';
 
 $pm_task = 'Công việc';
 
@@ -177,4 +177,5 @@ $mailTaskAssigneeJoined = '<html><body>Bạn được chọn thực hiện một
 $pm_show_as = 'Xem kiểu';
 $pm_list = 'Danh sách';
 $pm_graph = 'Đồ thị';
+$pm_config = 'Cấu hình';
 ?>

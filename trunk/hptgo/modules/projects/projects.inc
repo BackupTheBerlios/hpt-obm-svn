@@ -45,7 +45,7 @@ $first = isset($_REQUEST['first']) ? $_REQUEST['first'] : 0;
 //check if we are included from the addressbook and if we have a contact related to us
 $projects_module_url = isset($projects_module_url) ? $projects_module_url : $GO_MODULES->url;
 $contact_id = isset($contact_id) ? $contact_id : 0;
-echo '<a href="'.$projects_module_url.'project.php?contact_id='.$contact_id.'&return_to='.rawurlencode($link_back).'" class="normal">'.$pm_new_project.'</a><br /><br />';
+//echo '<a href="'.$projects_module_url.'project.php?contact_id='.$contact_id.'&return_to='.rawurlencode($link_back).'" class="normal">'.$pm_new_project.'</a><br /><br />';
 
 /*
 if ($timer = $projects->get_timer($GO_SECURITY->user_id))

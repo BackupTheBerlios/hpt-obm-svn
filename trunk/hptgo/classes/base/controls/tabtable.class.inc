@@ -166,6 +166,7 @@ class tabtable
    */
   function print_head()
   {
+  
     $active_tab_ref = $this->id;
 
     if ($this->tab_direction == 'vertical')
@@ -176,6 +177,7 @@ class tabtable
     }
 
     $tab_count = count($this->tabs);
+    
     if ($tab_count > 0 && $this->submit_form)
     {
       echo '

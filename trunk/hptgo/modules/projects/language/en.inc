@@ -171,4 +171,5 @@ $mailTaskAssigneeJoined  = '<html><body>Bạn được chọn thực hiện côn
 $pm_show_as = 'Show as';
 $pm_list = 'List';
 $pm_graph = 'Graph';
+$pm_config = 'Configuration';
 ?>
