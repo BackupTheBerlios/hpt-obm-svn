@@ -68,9 +68,8 @@ switch ($task) {
     if ($status_value > 1) {
       $db->query("DELETE FROM pmStatus ".
                  "WHERE cat_id=$cat_id AND value=$status_value");
-      $status_value = $status_value + 1;
       $db->query("UPDATE pmStatus SET value=value-1 ".
-                 "WHERE cat_id=$cat_id AND value=$status_value");
+                 "WHERE cat_id=$cat_id AND value>$status_value");
     }
     break;
   case 'update_status':
@@ -82,9 +81,14 @@ switch ($task) {
     }
     break;
   case 'add_status':
-    $last_value = $_REQUEST['last_value'];
     $status_name = $_REQUEST['status_name'];
-    $db->query("INSERT INTO pmStatus VALUES($cat_id, $last_value, '$status_name')");
+    $status_value = $_REQUEST['status_value'] + 0;
+    if (isset($status_name)) $status_name = trim($status_name);
+    if ($status_value > 1) {
+      $db->query("UPDATE pmStatus SET value=value+1 ".
+                 "WHERE cat_id=$cat_id AND value>=$status_value");
+      $db->query("INSERT INTO pmStatus VALUES($cat_id, $status_value, '$status_name')");
+    }
     break;
 }
 
@@ -105,122 +109,245 @@ while ($db->next_record()) {
     $catalog_name = $db->f('name');
 }
 echo '<input type="hidden" name="catalog_name" value="'.$catalog_name.'" />';
-$catalog->print_dropbox('cat_id', $cat_id,
-  'onchange="javascript:document.forms[0].submit()"', false, '10', '200');
+$catalog->print_dropbox('cat_id', $cat_id, 'onchange="javascript:frm.submit()"', false, '10', '200');
 echo '</td>';
 echo '<td><a href="javascript:edit_category()" title="'.$pm_EditCategory.'">'.$editor.'</a></td>';
-echo "<td><a href=\"javascript:delete_category('$pm_ConfirmDeleteCategory')\" title=\"$pm_DeleteCategory\">$trash</a></td>";
+echo '<td><a href="javascript:delete_category()" title="'.$pm_DeleteCategory.'">'.$trash.'</a></td>';
 echo '</tr></table>';
-echo '<table border="0" cellpadding="2" cellspacing="0">';
+echo '<table border="0" cellpadding="2" cellspacing="0" width="400">';
 
 if ($count > 0) {
   $db->query('SELECT * FROM pmStatus WHERE cat_id='.$cat_id.' ORDER BY value');
   $count = $db->num_rows();
 }
 
+$pm_insert_status = 'Insert new status';
+
 $move_task_up = '<img src="'.$GO_THEME->images['task_up'].'" border="0">';
 $move_task_dn = '<img src="'.$GO_THEME->images['task_dn'].'" border="0">';
 $move_space = '<img src="'.$GO_THEME->images['task_space'].'" border="0" width="16" height="12">';
-$spliter = '<tr><td colspan="100" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
+$insert_btn = '<td align="center">'.
+              '<span id="insert_[id]">'.
+                 '<a href="javascript:insert_status([id])">'.
+                 '<img src="'.$GO_THEME->images['add_project_task'].'"'.
+                 ' border="0" height="8" width="8" title="'.$pm_insert_status.'" /></a>'.
+              '</span></td>';
+$spliter_cell = '<td colspan="99" height="1">'.
+                '<img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" />'.
+                '</td>';
+$spliter_line = '<tr><td>&nbsp;</td>'.$spliter_cell.'</tr>';
+$spliter = '<tr>'.$insert_btn.$spliter_cell.'</tr>';
+$empty_row = '<tr id="row_[id]" style="visibility: hidden; display: none;">'.
+             '<td align="center"><a href="javascript:submit_status()">'.
+             '<img src="'.$GO_THEME->images['task_pre_save'].'" border="0" title="Save" />'.
+             '</td>'.
+             '<td colspan="97"><span id="status_new_[id]">&nbsp;</span></td>'.
+             '<td align="center"><a href="javascript:submit_status()">'.
+             '<img src="'.$GO_THEME->images['task_pre_save'].'" border="0" title="Save" />'.
+             '</td>'.
+             '<td align="center">'.
+             '<a href="javascript:hide_editor()">'.
+             '<img src="'.$GO_THEME->images['task_edit_cancel'].'" border="0" title="Cancel" />'.
+             '</a></td>'.
+             '</td>'.
+             '</tr>'.
+             '<tr id="spliter_[id]" style="visibility: hidden; display: none;">'.
+             '<td>&nbsp;</td>'.$spliter_cell.
+             '</tr>';
 
 echo '<tr class="TableHead2" height="20">';
 echo '<td align="center" width="20">#</td>';
 echo '<td width="320" colspan="99" nowrap>'.$strName.'</td></tr>';
 
-$value = 1;
+echo '<tr><td align="center">1</td><td colspan="99">'.$pm_status_begin.'</td></tr>';
+echo str_replace('[id]', 2, $spliter);
+echo str_replace('[id]', 2, $empty_row);
 if ($count > 0)
 {
-  echo '<tr><td align="center">1</td><td colspan="99">'.$pm_status_begin.'</td></tr>';
-  echo $spliter;
-  while ($db->next_record())
-  {
+  while ($db->next_record()) {
     $value = $db->f('value');
     $name = $db->f('name');
     $delitem = sprintf($pm_ConfirmDeleteStatus, $name);
     $delitem_hint = "$strDeleteItem '$name'";
     echo '<tr>';
     echo '<td align="center">'.$value.'</td>';
-    echo "<td colspan=\"97\" nowrap><a href='javascript:set_edit(\"$name\", $value)'>$name</a></td>";
+    echo '<td colspan="97" nowrap><span id="status_'.$value.'">'.
+         "<a href='javascript:set_edit(\"$name\", $value)'>$name</a>".
+         '</span></td>';
     if ($count == 1)
-      echo '<td width="36" align="center">&nbsp;</a></td>';
-    elseif ($value == 2)
-      echo '<td width="36" align="center">'.$move_space.'<a href="javascript:move_status('.$value.', 1)" title="'.$delitem_hint.'">'.$move_task_dn.'</a></td>';
-    elseif ($value == $count+1)
-      echo '<td width="36" align="center"><a href="javascript:move_status('.$value.', -1)">'.$move_task_up.'</a>'.$move_space.'</td>';
-    else
-      echo '<td width="36" align="center"><a href="javascript:move_status('.$value.', -1)">'.$move_task_up.' <a href="javascript:move_status('.$value.', 1)">'.$move_task_dn.'</td>';
+      $move_up_link = $move_dn_link = '';
+    elseif ($value == 2) {
+      $move_up_link = $move_space;
+      $move_dn_link = '<a href="javascript:move_status('.$value.', 1)">'.$move_task_dn.'</a>';
+    }
+    elseif ($value == $count+1) {
+      $move_up_link = '<a href="javascript:move_status('.$value.', -1)">'.$move_task_up.'</a>';
+      $move_dn_link = $move_space;
+    }
+    else {
+      $move_up_link = '<a href="javascript:move_status('.$value.', -1)">'.$move_task_up.'</a>';
+      $move_dn_link = '<a href="javascript:move_status('.$value.', 1)">'.$move_task_dn.'</a>';
+    }
+    echo '<td width="36" align="center">'.$move_up_link.'&nbsp;'.$move_dn_link.'</td>';
     echo "<td><a href='javascript:delete_status(\"$delitem\",$value)'>$trash</a></td>";
     echo '</tr>';
 
-    echo $spliter;
+    echo str_replace('[id]', $value + 1, $spliter);
+    echo str_replace('[id]', $value + 1, $empty_row);
   }
-  echo '<tr><td>&nbsp;</td><td colspan="99">'.$pm_status_done.'</td></tr>';
-  echo $spliter;
-  echo '<tr><td>&nbsp;</td><td colspan="99">'.$pm_status_drop.'</td></tr>';
-  echo $spliter;
 }
-else {
-  echo '<tr><td colspan="99">&nbsp;</td></tr>';
-  echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
-}
+echo '<tr><td>&nbsp;</td><td colspan="99">'.$pm_status_done.'</td></tr>';
+echo $spliter_line;
+echo '<tr><td>&nbsp;</td><td colspan="99">'.$pm_status_drop.'</td></tr>';
+echo $spliter_line;
 echo '<input type="hidden" name="last_value" value="'.($value+1).'" />';
 echo '</table></td></tr></table>';
-echo '<br />';
-echo 'Trạng thái:<br />';
-echo '<input type="text" class="textbox" style="width: 350px;" name="status_name" value="" maxlength="50" /><br /><br />&nbsp;&nbsp;';
-$button = new button('Add', 'javascript:add_status()');
-echo '&nbsp;&nbsp;';
-$button = new button('Update', 'javascript:update_status()');
+echo '<input id="status_edit" type="text" class="textbox" '.
+     'style="position: absolute; visibility: hidden; display: none; width: 300px;" '.
+     'name="status_name" value="" maxlength="50" /><br /><br />';
 ?>
 
 <script type="text/javascript">
+var agent = navigator.userAgent.toLowerCase();
+var is_ie = ((agent.indexOf("msie") != -1) && (agent.indexOf("opera") == -1));
+var frm = document.forms[0];
+
+function key_hanlder(e)
+{
+  if (is_ie) e = window.event;
+  switch (e.keyCode) {
+    case 13:
+      submit_status();
+      break;
+    case 27:
+      hide_editor();
+      break;
+  }
+  return true;
+}
+
+document.onkeypress = key_hanlder;
 
 function move_status(status_value, action)
 {
-  document.forms[0].task.value = 'change_status_order';
-  document.forms[0].status_value.value = status_value;
-  document.forms[0].status_change.value = action;
-  document.forms[0].submit();
+  frm.task.value = 'change_status_order';
+  frm.status_value.value = status_value;
+  frm.status_change.value = action;
+  frm.submit();
 }
 
 function delete_status(status_name, status_value)
 {
   if (confirm(status_name)) {
-    document.forms[0].task.value = 'delete_status';
-    document.forms[0].status_value.value = status_value;
-    document.forms[0].submit();
+    frm.task.value = 'delete_status';
+    frm.status_value.value = status_value;
+    frm.submit();
   }
 }
 
-function set_edit(name, status_value)
+var row = null;
+var spliter = null;
+var insert_btn = null;
+var status_edit = document.getElementById('status_edit');
+
+function get_position(element)
 {
-  document.forms[0].status_name.value = name;
-  document.forms[0].status_value.value = status_value;
+  var elem = element, tagname = "", x = 0, y = 0;
+
+  while ((typeof(elem) == "object") && (typeof(elem.tagName) != "undefined"))
+  {
+    y += elem.offsetTop;
+    x += elem.offsetLeft;
+    tagname = elem.tagName.toUpperCase();
+
+    if (tagname == "BODY") elem = 0;
+    if (typeof(elem) == "object")
+      if (typeof(elem.offsetParent) == "object")
+        elem=elem.offsetParent;
+  }
+
+  position = new Object();
+  position.x = x;
+  position.y = y;
+  return position;
 }
 
-function add_status()
+function show_editor(container, editor, value)
 {
-  if (document.forms[0].status_name.value != '') {
-    document.forms[0].task.value = 'add_status';
-    document.forms[0].submit();
+  p = get_position(container);
+  editor.style.top = p.y + "px";
+  editor.style.left = p.x + "px";
+  editor.style.display = '';
+  editor.style.visibility = 'visible';
+  editor.value = value;
+  editor.focus();
+  if (value != null && value != '')
+    editor.select();
+}
+
+function hide_editor()
+{
+  task_action = null;
+  status_edit.blur();
+  status_edit.style.display = 'none';
+  status_edit.style.visibility = 'hidden';
+  status_edit.value = '';
+  if (insert_btn) {
+    insert_btn.style.visibility = 'visible';
+    insert_btn = null;
+    row.style.display = 'none';
+    row.style.visibility = 'hidden';
+    row = null;
+    spliter.style.display = 'none';
+    spliter.style.visibility = 'hidden';
+    spliter = null;
   }
 }
 
-function update_status()
+function insert_status(p)
 {
-  if (document.forms[0].status_name.value != '') {
-    document.forms[0].task.value = 'update_status';
-    document.forms[0].submit();
-  }
+  hide_editor();
+
+  frm.status_value.value = p;
+  frm.task.value = 'add_status';
+
+  insert_btn = document.getElementById("insert_"+p);
+  insert_btn.style.visibility = 'hidden';
+
+  row = document.getElementById("row_"+p);
+  row.style.display = '';
+  row.style.visibility = 'visible';
+
+  spliter = document.getElementById("spliter_"+p);
+  spliter.style.display = '';
+  spliter.style.visibility = 'visible';
+
+  show_editor(document.getElementById("status_new_"+p), status_edit, "", null, 0);
+}
+
+function set_edit(name, p)
+{
+  hide_editor();
+
+  frm.status_value.value = p;
+  frm.task.value = 'update_status';
+
+  show_editor(document.getElementById("status_"+p), status_edit, name, null, 0);
+}
+
+function submit_status()
+{
+  if (frm.status_name.value != '')
+    frm.submit();
 }
 
 function edit_category()
 {
-  name = prompt("<?php echo $pm_EditCategory; ?>", document.forms[0].catalog_name.value);
+  name = prompt("<?php echo $pm_EditCategory; ?>", frm.catalog_name.value);
   if (name != '') {
-    document.forms[0].task.value = 'update_catalog';
-    document.forms[0].catalog_name.value = name;
-    document.forms[0].submit();
+    frm.task.value = 'update_catalog';
+    frm.catalog_name.value = name;
+    frm.submit();
   }
 }
 
@@ -228,17 +355,17 @@ function add_category()
 {
   name = prompt("<?php echo $pm_AddCategory; ?>", "");
   if (name != '') {
-    document.forms[0].task.value = 'add_catalog';
-    document.forms[0].catalog_name.value = name;
-    document.forms[0].submit();
+    frm.task.value = 'add_catalog';
+    frm.catalog_name.value = name;
+    frm.submit();
   }
 }
 
-function delete_category(msg)
+function delete_category()
 {
-  if (confirm(msg + "'" + document.forms[0].catalog_name.value + "' ?")) {
-    document.forms[0].task.value = 'delete_catalog';
-    document.forms[0].submit();
+  if (confirm("<?php echo $pm_ConfirmDeleteCategory;?>" + "'" + frm.catalog_name.value + "' ?")) {
+    frm.task.value = 'delete_catalog';
+    frm.submit();
   }
 }
 
