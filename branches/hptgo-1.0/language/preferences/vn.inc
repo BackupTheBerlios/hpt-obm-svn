@@ -23,4 +23,8 @@ $pref_first_weekday = 'Ngày đầu tiên trong tuần';
 
 //2.05
 $adjust_to_dst = 'Tự động thay đổi giờ theo Daylight Savings Time';
+$pref_show_text = 'Hiện tên chức năng';
+$menu_preferences_tab = "Cấu hình chung";
+$menu_modules_tab = "Chức năng";
+$pref_module_name = 'Chức năng';
 ?>
