@@ -74,10 +74,10 @@ while($module = array_shift($modules))
 		$GO_THEME->images[$module['name']] = isset($GO_THEME->images['mod_'.$module['name']]) ? $GO_THEME->images['mod_'.$module['name']] : $GO_THEME->images['unknown'];
 		echo '<td><a href="module.php?module_id='.$module['name'].'&return_to='.$link_back.'" ><img style="margin-right: 5px;" src="'.$GO_THEME->images[$module['name']].'" border="0" width="32" height="32" align="absmiddle" />'.$lang_var.'</a></td><td>'.$module_info['version'].'</td><td '.$overlib->print_overlib(htmlspecialchars($tooltip)).'>'.cut_string(htmlspecialchars($module_info['description']),60).'</td><td>';
 	//echo '<input type="checkbox" id="enable_'.$module['name'].'" name="enable[]" value="'.$module['name'].'" checked />';
-	echo '-';
+	echo '&nbsp;';
 	echo '</td><td>';
 	echo '<input type="checkbox" id="install_'.$module['name'].'" name="install[]" value="'.$module['name'].'"/>';
-	echo'</td><td>-</td>';
+	echo'</td><td></td>';
 		echo '</tr>';
 		echo '<tr><td height="1" colspan="100"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 	}
@@ -121,7 +121,7 @@ while($module = array_shift($modules))
 		'<td '.$overlib->print_overlib(htmlspecialchars($tooltip)).'>'.cut_string(htmlspecialchars($module_info['description']),60).'</td>'.
   '<td>';
 	echo '<input type="checkbox" id="enable_'.$module['id'].'" name="enable[]" value="'.$module['id'].'" '.($module['enable'] ? 'checked' : '').'/>';
-  echo '</td><td>-</td><td>';
+  echo '</td><td></td><td>';
 	echo '<input type="checkbox" id="uninstall_'.$module['id'].'" name="uninstall[]" value="'.$module['id'].'" />';
 	echo '</td></tr>';
 	echo '<tr><td height="1" colspan="100"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
