@@ -3,14 +3,14 @@
 <tr>
 	<td valign="top">
 	<table border="0" cellpadding="0" cellspacing="3">
-<?php if ($company_id > 0) { /* When adding new company, addressbook is not specified yet, so disable this thing.*/?>
+<?php //if ($company_id > 0) { /* When adding new company, addressbook is not specified yet, so disable this thing.*/?>
 	<tr>
 		<td align="right" nowrap>
 		<?php echo $strParentCompany; ?>:&nbsp;
 		</td>
 		<td><?php $parent_dropbox->print_dropbox('parent_id',$company['parent_id']);?></td>
 	</tr>
-<?php } ?>
+		<?php //} ?>
 
 	<tr>
 		<td align="right" nowrap>
@@ -139,54 +139,9 @@
 		<td colspan="2">&nbsp;</td>
 	</tr>
 	<?php
-	//get all writable user addressbooks and add them to a dropdownbox
-	$ab->get_subscribed_addressbooks($GO_SECURITY->user_id);
-	$subscribed_addressbooks = new dropbox();
-	while ($ab->next_record())
-	{
-		if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $ab->f('acl_write')))
-		{
-			//remember the first ab that is writable
-			if(!isset($first_writable_ab))
-			{
-				$first_writable_ab = $ab->f('id');
-			}
-			$subscribed_addressbooks->add_value($ab->f('id'), $ab->f('name'));
-
-		}
-	}
-
-	//get the given addressbook_id
-	if ($addressbook_id > 0)
-	{
-		 $addressbook = $ab->get_addressbook($addressbook_id);
-	}
-
-	//if there was no or a read only addressbook given then change to the first writable
-	if (!isset($addressbook) || !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_write']))
-	{
-		//there is no writable addressbook so add one
-		if (!isset($first_writable_ab))
-		{
-			$ab_name = $_SESSION['GO_SESSION']['name'];
-			$new_ab_name = $ab_name;
-			$x = 1;
-			while($ab->get_addressbook_by_name($new_ab_name))
-			{
-				$new_ab_name = $ab_name.' ('.$x.')';
-				$x++;
-			}
-			$addressbook_id = $ab->add_addressbook($GO_SECURITY->user_id, $new_ab_name);
-			$subscribed_addressbooks->add_value($addressbook_id, $new_ab_name);
-		}else
-		{
-			$addressbook_id = $first_writable_ab;
-		}
-	}
-
 	//print the writable addressbooks
 	echo '<tr><td align="right">'.$ab_addressbook.':</td><td>';
-	$subscribed_addressbooks->print_dropbox('addressbook_id', $addressbook_id);
+	$subscribed_addressbooks->print_dropbox('addressbook_id', $subscribed_addressbook_id,' onchange=document.forms[0].submit()');
 	echo '</td></tr>';
 	?>
 	</table>

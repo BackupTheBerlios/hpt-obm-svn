@@ -42,6 +42,53 @@ if (isset($_REQUEST['new_sort_direction']))
 	$_COOKIE['contact_direction'] = $_REQUEST['new_sort_direction'];
 }
 
+	//get all writable user addressbooks and add them to a dropdownbox
+	$ab->get_subscribed_addressbooks($GO_SECURITY->user_id);
+	$subscribed_addressbooks = new dropbox();
+	while ($ab->next_record())
+	{
+		if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $ab->f('acl_write')))
+		{
+			//remember the first ab that is writable
+			if(!isset($first_writable_ab))
+			{
+				$first_writable_ab = $ab->f('id');
+			}
+			$subscribed_addressbooks->add_value($ab->f('id'), $ab->f('name'));
+
+		}
+	}
+
+	//get the given addressbook_id
+	if ($addressbook_id > 0)
+	{
+		 $addressbook = $ab->get_addressbook($addressbook_id);
+	}
+
+	//if there was no or a read only addressbook given then change to the first writable
+	if (!isset($addressbook) || !$GO_SECURITY->has_permission($GO_SECURITY->user_id, $addressbook['acl_write']))
+	{
+		//there is no writable addressbook so add one
+		if (!isset($first_writable_ab))
+		{
+			$ab_name = $_SESSION['GO_SESSION']['name'];
+			$new_ab_name = $ab_name;
+			$x = 1;
+			while($ab->get_addressbook_by_name($new_ab_name))
+			{
+				$new_ab_name = $ab_name.' ('.$x.')';
+				$x++;
+			}
+			$subscribed_addressbook_id = $ab->add_addressbook($GO_SECURITY->user_id, $new_ab_name);
+			$subscribed_addressbooks->add_value($subscribed_addressbook_id, $new_ab_name);
+		}
+	}
+
+	if ($addressbook_id > 0)
+		$subscribed_addressbook_id = $addressbook_id;
+	if (isset($first_writable_ab) && (!isset($subscribed_addressbook_id) || $subscribed_addressbook_id == 0))
+		$subscribed_addressbook_id = $first_writable_ab;
+
 //save
 switch($task)
 {
@@ -242,7 +289,7 @@ if ($company_id == 0 || $task == 'save_company')
 
 }
 
-	$addressbook_id = $company['addressbook_id'];
+	$addressbook_id = $subscribed_addressbook_id > 0 ? $subscribed_addressbook_id : $company['addressbook_id'];
 	$cp = new addressbook();
 	$parent_dropbox = new dropbox();
 	$company['parent_id'] = 0;

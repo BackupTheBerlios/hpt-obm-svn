@@ -703,7 +703,7 @@ class addressbook extends db
 	    $this->next_record() &&
 	    $GO_SECURITY->user_id != $this->f('user_id'))
 	{
-	  $this->query("INSERT INTO ab_new_companies (addressbook_id,company_id) VALUES('$addressbook_id','$company_id')");
+	  @$this->query("REPLACE INTO ab_new_companies (addressbook_id,company_id) VALUES('$addressbook_id','$company_id')");
 	}
 
 	return $company_id;
@@ -729,7 +729,7 @@ class addressbook extends db
       if ($this->query("SELECT * FROM ab_addressbooks WHERE id='$addressbook_id'") && 
 	  $this->next_record() && $GO_SECURITY->user_id != $this->f('user_id'))
       {	
-	@$this->query("INSERT INTO ab_new_companies (addressbook_id,company_id) VALUES('$addressbook_id','$company_id')");
+	@$this->query("REPLACE INTO ab_new_companies (addressbook_id,company_id) VALUES('$addressbook_id','$company_id')");
       }
       return true;
     }
