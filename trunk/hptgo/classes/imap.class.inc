@@ -11,6 +11,17 @@
    option) any later version.
  */
 
+function quoted_to_ncr($matches)
+{
+  if (!isset($matches[2]) || $matches[2] == '') {
+    $n = hexdec($matches[1]);
+    if ($n > 127 && $n < 256)
+      return '&#'.$n.';';
+  }
+  return $matches[0];
+}
+
+
 class imap
 {
   var $conn;
@@ -923,8 +934,14 @@ function view_part($uid, $part_no, $transfer)
   $text = imap_fetchbody($this->conn, $uid, $part_no, FT_UID);
   if ($transfer == 'BASE64')
     $str = imap_base64($text);
-  elseif($transfer == 'QUOTED-PRINTABLE')
+  elseif($transfer == 'QUOTED-PRINTABLE') {
+    $patterns = array("/=20\r\n/", "/=3D/", "/=\r\n/", "/\r\n/");
+    $replaces = array(' ', '=', '', '');
+    $text = preg_replace ($patterns, $replaces, $text);
+    $patterns = array("/=([0-9A-F]{2})(=[0-9A-F]{2})*/");
+    $text = preg_replace_callback ($patterns, "quoted_to_ncr", $text);
     $str = quoted_printable_decode($text);
+  }
   else
     $str = $text;
 
