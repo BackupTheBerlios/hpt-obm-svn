@@ -136,7 +136,7 @@ class db {
    *
    * The positive number is returned by <i> mysql_query() </i> function
    */
-   $Query_ID = 0;
+  var $Query_ID = 0;
 
   /**
    * The class constructor
