@@ -313,3 +313,29 @@ CREATE TABLE `tp_templates` (
   `acl_write` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM;
+
+#
+# Table structure for table 'ab_cate_companies'
+#
+
+DROP TABLE IF EXISTS `ab_cate_companies`;
+CREATE TABLE ab_cate_companies (
+  company_id int(11) unsigned NOT NULL default '0',
+  category_id int(11) unsigned NOT NULL default '0',
+  PRIMARY KEY  (company_id,category_id)
+) TYPE=MyISAM;
+
+
+
+#
+# Table structure for table 'ab_categories'
+#
+
+DROP TABLE IF EXISTS `ab_categories`;
+CREATE TABLE ab_categories (
+  category_id int(11) unsigned NOT NULL auto_increment,
+  category varchar(50) NOT NULL default '',
+  parent_id int(11) unsigned default '0',
+  PRIMARY KEY  (category_id)
+) TYPE=MyISAM;
+
