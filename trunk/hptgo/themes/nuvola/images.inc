@@ -245,6 +245,7 @@ $images['sum_calendar'] = 'buttons/sum_calendar.png';
 $images['unknown'] = 'buttons/unknown.png';
 
 $images['doc'] = 'doc.gif';
+$images['doc_red'] = 'doc_red.gif';
 $images['doc_disable'] = 'doc_disable.gif';
 $images['checked'] = 'checked.gif';
 $images['drop'] = 'drop.gif';

@@ -264,9 +264,10 @@ switch ($task)
       $projects->query("UPDATE task SET task_person_id=$tpid $tid_time ".
                        "WHERE task_id=$tid AND task_project_id=$project_id");
 
-      if ($tpid != $old_person_id) {
-      notify_relevant_members($project_id,$tid,$tpid,true);
-      notify_relevant_members($project_id,$tid,$old_person_id,false);
+      if ($tpid != $old_person_id && $tpid != $responsible_user_id) {
+        notify_relevant_members($project_id,$tid,$tpid,true);
+        if ($old_person_id != $responsible_user_id)
+          notify_relevant_members($project_id,$tid,$old_person_id,false);
       }
       // Write
       $acl_write_pfolder = $GO_SECURITY->get_acl_id("write: $task_folder");
