@@ -574,7 +574,7 @@ function confirm_delete()
 	  break;
 
 	default:
-	  if (confirm("'.$strDeletePrefix.' "+count+" '.$ml_messages2 . $strThis .$strDeleteSuffix.'"))
+	  if (confirm("'.$strDeletePrefix.' "+count+" '.$ml_message .$strDeleteSuffix.'"))
 	  {
 	    document.forms[0].form_action.value=\'delete\';
 	    document.forms[0].submit();
