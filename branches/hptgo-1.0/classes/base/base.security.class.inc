@@ -106,7 +106,14 @@ class base_security extends db
     {
       if (!isset($_COOKIE['GO_UN']) || !isset($_COOKIE['GO_PW']) || $_COOKIE['GO_UN'] =='' || $_COOKIE['GO_PW'] == '' || !$GO_AUTH->login($_COOKIE['GO_UN'], $_COOKIE['GO_PW'], $auth_sources[$GO_AUTH_SOURCE_KEY]))
       {
-	header('Location: '.$GO_CONFIG->host.'index.php?return_to='.urlencode($_SERVER['REQUEST_URI']));
+	//header('Location: '.$GO_CONFIG->host.'index.php?return_to='.urlencode($_SERVER['REQUEST_URI']));
+?>
+<html><head></head><body>
+<script language="javascript">
+window.top.location="<?php echo $GO_CONFIG->host.'index.php?return_to='.rawurlencode($_SERVER['REQUEST_URI']);?>";
+</script>
+</body></html>
+<?php
 	exit();
       }
     }
