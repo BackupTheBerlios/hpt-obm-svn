@@ -106,7 +106,7 @@ $sc_hour = 'giờ';
 $sc_hours = 'giờ';
 $sc_day = 'ngày';
 $sc_days = 'ngày';
-$sc_week = 'Tuần';
+$sc_week = 'tuần';
 $sc_weeks = 'tuần';
 $sc_reminder_set_to_early = "'Nhắc nhở' không thể xuất hiện trước một cái đã có. Hãy thu ngắn thời gian nhắc hoặc kéo dài chu kỳ lặp.";
 $sc_cycle_start_later = 'Ngày bắt đầu trễ hơn hoặc bằng ngày kết thúc.';
@@ -153,7 +153,7 @@ $sc_months = 'tháng';
 $sc_private_event = 'Sự kiện cá nhân';
 $sc_calendar_exists = 'Lịch công tác bị trùng tên';
 //translate
-$sc_month = 'Tháng';
+$sc_month = 'tháng';
 $sc_view = 'Xem';
 $sc_calendar = 'Lịch';
 $sc_default = 'Mặc định';
