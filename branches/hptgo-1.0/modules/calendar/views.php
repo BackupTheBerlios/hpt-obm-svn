@@ -138,7 +138,7 @@ if ($view_count > 0) {
     if ($cal->f('user_id') != $GO_SECURITY->user_id)
       echo "<td>&nbsp;</td></tr>\n";
     else
-      echo "<td><a href='javascript:delete_view(\"".$cal->f("id")."\",\"".rawurlencode($strDeletePrefix."'".addslashes($cal->f("name"))."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".htmlspecialchars($cal->f("name"))."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td></tr>\n";
+      echo "<td><a href='javascript:delete_view(\"".$cal->f("id")."\",\"".div_confirm_id($strDeletePrefix."'".addslashes($cal->f("name"))."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".htmlspecialchars($cal->f("name"))."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td></tr>\n";
 }
 }
 echo '</table><br /><br/>';
@@ -156,7 +156,7 @@ echo '</form>';
 var frm = document.forms[0];
 function delete_view(view_id, message)
 {
-  if (confirm(unescape(message)))
+  if (div_confirm(message))
   {
     frm.delete_view_id.value = view_id;
     frm.task.value = "delete_view";

@@ -122,7 +122,7 @@ if (!function_exists('imap_open'))
 				echo '<td>'.$email->f("host").'</a></td>';
 				echo '<td>'.$email->f('email').'</td>';
 				echo '<td><a href="account.php?account_id='.$email->f('id').'&return_to='.urlencode($link_back).'" title="'.$strEdit.' '.$email->f('host').'"><img src="'.$GO_THEME->images['edit'].'" border="0" /></a></td>';
-				echo "<td><a href=\"javascript:delete_account('".$email->f("id")."','".smart_addslashes($strDeletePrefix."'".$email->f("host")."'".$strDeleteSuffix)."')\" title=\"".$strDeleteItem." '".$email->f("host")."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
+				echo "<td><a href=\"javascript:delete_account('".$email->f("id")."','".div_confirm_id($strDeletePrefix."'".$email->f("host")."'".$strDeleteSuffix)."')\" title=\"".$strDeleteItem." '".$email->f("host")."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
 //				echo "<td><a href='javascript:delete_account_".$email->f("id")."()' title=\"".$strDeleteItem." '".$email->f("host")."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
 				echo '</tr>';
 			}
@@ -148,7 +148,7 @@ if (!function_exists('imap_open'))
 <script type="text/javascript" language="javascript">
 function delete_account(account_id, message)
 {
-	if (confirm(unescape(message)))
+	if (div_confirm(message))
 	{
 		document.forms[0].delete_account_id.value = account_id;
 		document.forms[0].submit();

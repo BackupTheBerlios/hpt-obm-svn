@@ -155,7 +155,7 @@ if ($calendar_count > 0)
 	if ($cal->f('user_id') != $GO_SECURITY->user_id)
 		echo "<td>&nbsp;</td></tr>\n";
 	else
-    	echo "<td><a href='javascript:delete_calendar(\"".$cal->f("id")."\",\"".rawurlencode($strDeletePrefix."'".addslashes($cal->f("name"))."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".htmlspecialchars($cal->f("name"))."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td></tr>\n";
+    	echo "<td><a href='javascript:delete_calendar(\"".$cal->f("id")."\",\"".div_confirm_id($strDeletePrefix."'".addslashes($cal->f("name"))."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".htmlspecialchars($cal->f("name"))."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td></tr>\n";
   }
 }
 echo '</table>';
@@ -178,9 +178,9 @@ function _set_view_type()
 	frm.submit();
 }
 
-function delete_calendar(calendar_id, message)
+function delete_calendar(calendar_id, message_id)
 {
-	if (confirm(unescape(message)))
+	if (div_confirm(message_id))
 	{
 		frm.delete_calendar_id.value = calendar_id;
 		frm.task.value = 'delete_calendar';

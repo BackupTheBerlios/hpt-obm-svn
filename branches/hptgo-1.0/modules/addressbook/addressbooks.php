@@ -135,7 +135,7 @@ $tabtable->print_head();
 						$GO_THEME->images['edit'].'" border="0" /></a></td>';
 			if ($ab->f('user_id') == $GO_SECURITY->user_id)
 				echo "<td>&nbsp;<a href='javascript:delete_addressbook(\"".$ab->f("id").
-						"\",\"".rawurlencode($strDeletePrefix."'".
+						"\",\"".div_confirm_id($strDeletePrefix."'".
 						addslashes($ab->f("name"))."'".$strDeleteSuffix).
 						"\")' title=\"".$strDeleteItem." '".
 						htmlspecialchars($ab->f("name"))."'\"><img src=\"".
@@ -158,9 +158,9 @@ $tabtable->print_foot();
 ?>
 </form>
 <script type="text/javascript" language="javascript">
-function delete_addressbook(addressbook_id, message)
+function delete_addressbook(addressbook_id, message_id)
 {
-	if (confirm(unescape(message)))
+	if (div_confirm(message_id))
 	{
 		document.forms[0].delete_addressbook_id.value = addressbook_id;
 		document.forms[0].task.value='delete_addressbook';
