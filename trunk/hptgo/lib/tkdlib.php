@@ -125,6 +125,11 @@
 	{
 		echo '<script language="javascript"> document.location = "'.$url.'" </script>';
 	}
+	
+	function alert($msg)
+	{
+		echo '<script language="javascript"> alert("'.$msg.'") </script>';
+	}
  
 	function account_manager($acl_id)
 	{

@@ -643,7 +643,7 @@ if ($task == 'save_event')
 	      $event_id.'&member=false&email='.$participants[$i].
 	      '" class="blue">'.$sc_decline.'</a></p>';
 			 $mail->Body = $mail_body.$nouser_link;
-			 
+
 	     $mail->ClearAllRecipients();
 	     $mail->AddAddress($participants[$i]);
 
