@@ -170,7 +170,7 @@ class GO_GROUPS extends base_groups
   }
 
   /**
-	* Check's if a user owns a group
+	* Check's if a user is group owner of group $group_id
 	*
 	* @param	int			$user_id	The user ID
 	* @param	int			$group_id	The group ID
@@ -190,6 +190,16 @@ class GO_GROUPS extends base_groups
     }
   }
 
+  /**
+	* Get group leader for a group.
+	* This function does not check if $user_id is really the group leader of
+	* group $group_id. In fact, it just query first name, middle name and last name of the user :P
+	*
+	* @param	int			$group_id	The group ID
+	* @param	int			$user_id	The user ID of group leader
+	* @access public
+	* @return bool	
+	*/
   function get_group_leader($group_id, $user_id)
   {
     error_log("$group_id ==> $user_id");
@@ -201,6 +211,14 @@ class GO_GROUPS extends base_groups
     return false;
   }
 
+  /**
+	* Set group leader for a group.
+	*
+	* @param	int			$group_id	The group ID
+	* @param	int			$user_id	The user ID of group leader
+	* @access public
+	* @return bool	
+	*/
   function set_group_leader($group_id, $user_id)
   {
     $sql = "UPDATE groups SET groups.leader_id='$user_id' ".
@@ -208,6 +226,14 @@ class GO_GROUPS extends base_groups
     return $this->query($sql);
   }
 
+  /**
+	* Check if user $user_id is group leader of group $group_id
+	*
+	* @param	int			$group_id	The group ID
+	* @param	int			$user_id	The user ID of group leader
+	* @access public
+	* @return bool	
+	*/
   function is_group_leader($group_id, $user_id)
   {
     $sql = "SELECT * FROM groups WHERE groups.id='$group_id' AND groups.leader_id='$user_id'";
@@ -215,6 +241,14 @@ class GO_GROUPS extends base_groups
     return $this->num_rows() > 0;
   }
 
+  /**
+	* Do query all groups (group_id,name) which user $user_id belongs to.
+	*
+	* @param	int			$group_id	The group ID
+	* @param	int			$user_id	The user ID of group leader
+	* @access public
+	* @return bool
+	*/
   function get_user_groups($user_id)
   {
     $sql = "SELECT group_id, name FROM groups, users_groups ".
@@ -224,7 +258,7 @@ class GO_GROUPS extends base_groups
   }
 
   /**
-	* Check's if a user is a member of a group
+	* Check's if user $user_id is a member of group $group_id
 	*
 	* @param	int			$user_id	The user ID
 	* @param	int			$group_id	The group ID
