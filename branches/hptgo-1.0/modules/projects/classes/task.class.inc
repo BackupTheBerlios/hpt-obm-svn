@@ -10,10 +10,10 @@
    option) any later version.
  */
 
-define(TASK_WAITING, 3);
-define(TASK_ONGOING, 2);
-define(TASK_DONE,    1);
-define(TASK_BYPASS,  0);
+define('TASK_WAITING', 3);
+define('TASK_ONGOING', 2);
+define('TASK_DONE',    1);
+define('TASK_BYPASS',  0);
 
 $today = 0;
 $max_task_id = 0;
