@@ -165,33 +165,18 @@ class projects extends db
       $filter = ' AND status >= '.STATUS_BEGIN;
     else
       $filter = ' AND status = '.$filter;
-    
 
     $sql = "SELECT DISTINCT pmProjects.* FROM pmProjects ".
       "INNER JOIN acl ON (pmProjects.acl_read = acl.acl_id OR pmProjects.acl_write = acl.acl_id) ".
       "LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) WHERE ((".
       "users_groups.user_id = ".$user_id." AND acl.user_id = 0 ) OR (".
       "acl.group_id = 0 AND acl.user_id = ".$user_id."))".$filter;
-    /*
-    if ($filter != '')
-    {
-      if ($filter == '0')
-      {
-        $sql .= " AND status > -1 AND status < 100";
-      }else
-      {
-        $sql .= " AND status='$filter'";
-      }
-    }
-    */
 
     if ($catalog > 0)
       $sql .= " AND cat_id=$catalog";
 
     if ($contact_id > 0)
-    {
       $sql .= " AND contact_id='$contact_id' ";
-    }
 
     $sql .= " GROUP BY pmProjects.id ORDER BY $sort $direction";
 
@@ -204,33 +189,18 @@ class projects extends db
         "LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) WHERE ((".
         "users_groups.user_id = ".$user_id." AND acl.user_id = 0 ) OR (".
         "acl.group_id = 0 AND acl.user_id = ".$user_id."))";
-      if ($filter != '')
-      {
-        if ($filter == '0')
-        {
-          $sql2 .= " AND status > -1 AND status < 100";
-        }else
-        {
-          $sql2 .= " AND status='$filter'";
-        }
-      }
-      if ($contact_id > 0)
-      {
-        $sql2 .= " AND contact_id='$contact_id'";
-      }
+
+      if ($filter != '') $sql2 .= $filter;
+      if ($contact_id > 0) $sql2 .= " AND contact_id='$contact_id'";
 
       $sql2 .= " GROUP BY pmProjects.id";
       $this->query($sql2);
 
       $count = $this->num_rows();
-      if ($count > 0)
-      {
-        $this->query($sql);
-      }
+      if ($count > 0) $this->query($sql);
       return $count;
 
-    }else
-    {
+    } else {
       $this->query($sql);
       return $this->num_rows();
     }
