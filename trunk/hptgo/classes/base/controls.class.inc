@@ -23,4 +23,5 @@ require_once($GO_CONFIG->class_path."base/controls/dropbox.class.inc" );
 require_once($GO_CONFIG->class_path."base/controls/htmlarea.class.inc" );
 require_once($GO_CONFIG->class_path."base/controls/tabtable.class.inc" );
 require_once($GO_CONFIG->class_path."base/controls/datagrid.class.inc" );
+require_once($GO_CONFIG->class_path."base/controls/listview.class.inc" );
 ?>
