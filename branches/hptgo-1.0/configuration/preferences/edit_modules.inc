@@ -43,7 +43,7 @@ $com_string = $user_modules_properties[0];
 $show_text = isset($user_modules_properties[1]) ? $user_modules_properties[1] == '1' : true;
 
 if ($com_string == '') {
-	$res = array_keys($module_map);
+	$res = isset($module_map) && is_array($module_map) ? array_keys($module_map) : array();
 	$com = $res;
 } else {
 	$com = explode(' ',$com_string);

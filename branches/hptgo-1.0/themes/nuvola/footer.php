@@ -60,9 +60,10 @@ function Bold_Text(id)
 			$a = explode(':',$user['modules']);
 			$show_text = isset($a[1]) ? $a[1] == '1' : true;
 			$module_list = $a[0];
-			if ($module_list == '')
+			if ($module_list == '' && isset($module_map) && is_array($module_map))
 				$module_list = implode(' ',array_keys($module_map));
 
+			if ($module_list != '') {
 			$module_list = explode(' ',$module_list);
 			foreach ($module_list as $module)
 			{
@@ -79,6 +80,7 @@ function Bold_Text(id)
 					if (strcasecmp($lang_modules[$_SESSION['GO_SESSION']['start_module']], $lang_var)==0) // set bold text for default screen
 						echo "<script language='javascript'>Bold_Text('".$module['id']."');</script>";
 				}
+			}
 			}
 		?>
 	</tr>

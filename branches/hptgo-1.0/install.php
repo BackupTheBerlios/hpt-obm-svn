@@ -109,7 +109,7 @@ if (isset($_SERVER['SCRIPT_FILENAME']) && $_SERVER['SCRIPT_FILENAME'] != '')
   $script_path = stripslashes($_SERVER['SCRIPT_FILENAME']);
 }else
 {
-  $script_path = stripslashes($_SERVER['PATH_TRANSLATED']);
+  $script_path = stripslashes(str_replace('\\','/',$_SERVER['PATH_TRANSLATED']));
 }
 if ($script_path == '')
 {
@@ -179,7 +179,7 @@ if (!$config_exists)
   $config_data = str_replace('%root_path%', addslashes($root_path), $config_data);
   $config_data = str_replace('%language%', 'nl', $config_data);
   $config_data = str_replace('%first_weekday%', '1', $config_data);
-  $config_data = str_replace('%tmpdir%', '/tmp/', $config_data);
+  $config_data = str_replace('%tmpdir%', (getenv('TEMP') ? getenv('TEMP') : '/tmp/'), $config_data);
   $config_data = str_replace('%theme%', 'crystal', $config_data);
   $config_data = str_replace('%allow_themes%', 'true', $config_data);
   $config_data = str_replace('%allow_password_change%', 'true', $config_data);
