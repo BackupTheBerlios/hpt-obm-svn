@@ -81,7 +81,7 @@ $droplist->print_dropbox('seperator',$seperator);
 <td>
 <br />
 <?php
-$button = new button($cmdOk, "javascript:document.forms[0].task.value='export';document.forms[0].submit();");
+$button = new button($cmdOk, "javascript:document.forms[0].task.value='export';document.forms[0].submit();document.forms[0].task.value='';");
 echo '&nbsp;&nbsp;';
 $button = new button($cmdClose, "javascript:document.location='".$return_to."'");
 ?>
