@@ -98,6 +98,7 @@ $pm_no_projects = 'No projects found.';
 $pm_days = 'days';
 $pm_delay = 'Delay';
 $pm_remain = 'Remain';
+$pm_predict_delay = 'Predicted Delay';
 
 $pm_task_status_values[0] = 'Bypass';
 $pm_task_status_values[1] = 'Done';

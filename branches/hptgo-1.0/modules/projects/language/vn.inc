@@ -74,6 +74,7 @@ $pm_new_template = 'Tạo quy trình mới';
 $pm_days = 'ngày';
 $pm_delay = 'Trễ';
 $pm_remain = 'Còn';
+$pm_predict_delay = 'Ước đoán trễ';
 
 $pm_status_values[0] = 'Đã huỷ';
 $pm_status_values[1] = 'Khảo sát';
