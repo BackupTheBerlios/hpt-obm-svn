@@ -178,6 +178,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       header('Location: '.$return_to);
       exit();
     }
+    $profile = $GO_USERS->get_user($_REQUEST['id']);
+    if (isset($_POST['visible']))
+    {
+      if (!$GO_SECURITY->group_in_acl($GO_CONFIG->group_everyone,$profile['acl_id']))
+        $GO_SECURITY->add_group_to_acl($GO_CONFIG->group_everyone,$profile['acl_id']);
+    }
+    else
+    {
+      if ($GO_SECURITY->group_in_acl($GO_CONFIG->group_everyone,$profile['acl_id']))
+        $GO_SECURITY->delete_group_from_acl($GO_CONFIG->group_everyone,$profile['acl_id']);
+    }
   }else
   {
     $feedback ="<p class='Error'>".$errors_in_form."</p>";
@@ -411,6 +422,12 @@ if (isset($val->error["name"]))
     </table>
     </td>
     </tr>
+    <tr><td>
+	  <?php
+	  $check = $GO_SECURITY->group_in_acl($GO_CONFIG->group_everyone,$profile['acl_id']);
+	  $checkbox = new checkbox('visible', 'true', $registration_visibility, $check); 
+		?>
+    </td></tr>
     <tr>
     <td colspan="2">
     <h2><?php echo $ac_login_info; ?></h2>
