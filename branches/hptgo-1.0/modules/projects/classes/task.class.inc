@@ -182,6 +182,7 @@ class project_task extends db {
   var $is_passed = false;
 
   var $doc_path = "";
+  var $doc_url = '';
 
   function project_task($projects, $pstate) {
     global $GO_SECURITY, $GO_USERS, $GO_CONFIG, $responsible_user_id;
@@ -207,7 +208,6 @@ class project_task extends db {
     $this->is_manager = $GO_SECURITY->user_id == $responsible_user_id;
     $this->is_passed = $this->status <= TASK_DONE;
 
-    $user = $GO_USERS->get_user($responsible_user_id);
     $this->doc_path = $GO_CONFIG->file_storage_path . 'projects/' .
       $this->project_id . '/' . $this->id;
   }
@@ -243,10 +243,11 @@ class project_task extends db {
         echo "<td>".$pm_task_status_values[$this->status]."</td>";
     }
     echo "<td align=\"center\">".($this->approved ? "<img border=\"0\" src=\"".$GO_THEME->images['checked']."\"/>" : "&nbsp;")."</td>";
-    if ($this->level == -1) {
-      $url = $_SERVER['PHP_SELF'] . "?task=show_task_doc".
+    $url = $_SERVER['PHP_SELF'] . "?task=show_task_doc".
              "&project_id=".$this->project_id.
              "&task_id=".$this->id."&task_status=show_doc";
+
+    if ($this->level == -1) {
       if ($this->is_owner || $this->is_manager)
         echo "<td align=\"center\"><a href=\"$url\">".
            "<img border=\"0\" src=\"".$GO_THEME->images['doc']."\"/></a></td>";
@@ -254,8 +255,14 @@ class project_task extends db {
         echo "<td align=\"center\">".
            "<img border=\"0\" src=\"".$GO_THEME->images['doc_disable']."\"/></td>";
     }
-    else
-      echo "<td>&nbsp;</td>";
+    else {
+      if ($this->is_owner || $this->is_manager)
+        echo "<td align=\"center\"><a href=\"$url\">".
+           "<img border=\"0\" src=\"".$GO_THEME->images['doc_red']."\"/></a></td>";
+      else
+        echo "<td align=\"center\">".
+           "<img border=\"0\" src=\"".$GO_THEME->images['doc_disable']."\"/></td>";
+    }
     echo "</tr>";
   }
   
@@ -374,6 +381,7 @@ class project_task extends db {
          "<input type=\"hidden\" name=\"task_cuser\" value=\"$user\"></td></tr>";
 
     if ($this->status >= TASK_ONGOING) {
+      echo "<tr><td>&nbsp;</td></tr>";
       echo "<tr><td>$pm_task_new_comments:</td></tr>";
       echo "<tr><td><textarea class=\"textbox\" name=\"task_comments\"".
          " rows=\"4\" cols=\"60\" wrap=\"soft\"></textarea></td></tr>";
@@ -382,15 +390,20 @@ class project_task extends db {
   }
 
   function print_formated_comments() {
+    global $GO_THEME;
+
     $comments = $this->comments;
     $data = strtok($comments, "\xFF");
     while ($data) {
-      if ($data == "") continue;
-      list($time, $who, $text) = explode("|", $data);
-      echo "<tr class=\"ProjectComment2\"><td><i>($time)</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
-        "<b>$who</b></td></tr>";
-      $text = str_replace("\n", "<br>", $text);
-      echo "<tr class=\"ProjectComment1\"><td>$text</td></tr>";
+      if ($data != '') {
+        list($time, $who, $text) = explode("|", $data);
+        echo "<tr class=\"ProjectComment2\"><td height=\"20\"><i>($time)</i>&nbsp;&nbsp;-&nbsp;&nbsp;".
+             "<b>$who</b></td></tr>";
+        $text = str_replace("\n", "<br>", $text);
+        echo '<tr><td height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
+        echo "<tr class=\"ProjectComment1\" height=\"20\"><td>$text</td></tr>";
+        echo '<tr><td height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
+      }
       $data = strtok("\xFF");
     }
   }
