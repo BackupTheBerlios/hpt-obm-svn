@@ -12,10 +12,9 @@ option) any later version.
 
 require_once('../../Group-Office.php');
 require($GO_LANGUAGE->get_language_file('filesystem'));
-$module = $GO_MODULES->get_module('projects');
-$GO_HANDLER = $module['url'].'index.php';
+$module = $GO_MODULES->get_module('filesystem');
+$GO_HANDLER = $module['url'].'download.php';
 $GO_CONFIG->window_mode = 'projects';
 $target_frame = '_self';
-$module = $GO_MODULES->get_module('filesystem');
 require($module['path'].'index.php');
 ?>

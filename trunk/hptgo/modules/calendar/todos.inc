@@ -101,7 +101,7 @@ $dropbox->add_value(SHOW_OWN, $cal_show_own);
 $dropbox->add_value(SHOW_RESPONSIBLE, $cal_show_responsible);
 $dropbox->print_dropbox('show_todos', $cal_settings['show_todos'], 'onchange="javascript:document.forms[0].submit();"', false, 10, 200);
 
-echo '<td></tr></table>';
+echo '</td></tr></table>';
 
 switch ($cal_settings['show_todos'])
 {

@@ -247,8 +247,12 @@ class project_task extends db {
       $url = $_SERVER['PHP_SELF'] . "?task=show_task_doc".
              "&project_id=".$this->project_id.
              "&task_id=".$this->id."&task_status=show_doc";
-      echo "<td align=\"center\"><a href=\"$url\">".
+      if ($this->is_owner || $this->is_manager)
+        echo "<td align=\"center\"><a href=\"$url\">".
            "<img border=\"0\" src=\"".$GO_THEME->images['doc']."\"/></a></td>";
+      else
+        echo "<td align=\"center\">".
+           "<img border=\"0\" src=\"".$GO_THEME->images['doc_disable']."\"/></td>";
     }
     else
       echo "<td>&nbsp;</td>";
@@ -405,7 +409,7 @@ class project_task extends db {
     echo "</td>";
     echo "<td align=\"center\">".($this->approved ? "<img border=\"0\" src=\"".$GO_THEME->images['checked']."\"/>" : "&nbsp;")."</td>";
     echo "</tr>";
-    echo "<tr><td>&nbsp;</td></tr>";
+    echo "<tr><td>&nbsp;{$this->doc_path}</td></tr>";
     echo "<tr><td colspan=\"8\"><iframe src=\""."folder.php?path=".$this->doc_path."\" width=720 height=300>".
          "</iframe></td></tr>";
   }
