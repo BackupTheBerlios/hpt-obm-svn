@@ -785,20 +785,52 @@ function format_size($size, $decimals = 1)
 
 function cut_string($string, $maxlength)
 {
-  if (strlen($string) > $maxlength)
+  $utf8_skip_data = array(
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+    2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,
+    3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,5,5,5,5,6,6,1,1
+  );
+
+  if (false) // use utf-8 encoding
   {
-    $temp = substr($string,0,$maxlength-3);
+    if (strlen($string) <= $maxlength)
+      return $string;
+    $len = 0;
+    while ($len < $maxlength-3)
+    {
+      $len += $utf8_skip_data[ord($string[$len])];
+    }
+    $temp = substr($string,0,$len);
     if ($pos = strrpos($temp, ' '))
     {
       return substr($temp,0,$pos).'...';
     }else
     {
-      return $temp = substr($string,0,$maxlength-3).'...';
+      return $temp.'...';
     }
-
-  }else
+  }
+  else
   {
-    return $string;
+    if (strlen($string) > $maxlength)
+    {
+      $temp = substr($string,0,$maxlength-3);
+      if ($pos = strrpos($temp, ' '))
+      {
+        return substr($temp,0,$pos).'...';
+      }else
+      {
+        return $temp = substr($string,0,$maxlength-3).'...';
+      }
+ 
+    }else
+    {
+      return $string;
+    }
   }
 }
 
