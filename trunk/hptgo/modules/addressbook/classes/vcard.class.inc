@@ -46,12 +46,21 @@ define("WORD_WRAP_UNIX", chr(10));
 define("CHAR_WSP", chr(32));
 define("CHAR_HTAB", chr(9));
 
+/**
+* vCard support added to addressbooks (currently only import possible)
+* @author Georg Lorenz <georg@lonux.de>
+* @version 0.99 Release date: 17 May 2004
+* @since OBM 1.0 
+*/
 class vcard extends addressbook {
     var $instance;
     var $nested;
     var $version;
     var $revision;
 
+/**
+* Contructor
+*/
     function vcard()
     {
         $this->instance = array();
@@ -61,7 +70,12 @@ class vcard extends addressbook {
         $this->addressbook();
     } 
 
-    /*get the data from vcf-file and save to database (import)*/
+/**
+* Get the data from vcf-file and save to database (import)
+* @param 	$file	
+* @param	int		$user_id	User ID
+* @param
+*/
     function import($file, $user_id, $addressbook_id, $vnconv)
     {
         if ($content = $this->_get_file_content($file)) {

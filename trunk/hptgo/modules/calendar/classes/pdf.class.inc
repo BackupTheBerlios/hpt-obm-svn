@@ -30,7 +30,13 @@ class pdf extends XFPDF
 {
   var $cell;
   var $vnconv;
-  
+
+	/**
+	* Constructor
+	* @param	string	$orientation
+	* @param	string	$unit
+	* @param	string	$format
+	*/  
   function pdf($orientation='L',$unit='mm',$format='A4')
   {
 	$this->FPDF($orientation,$unit,$format);

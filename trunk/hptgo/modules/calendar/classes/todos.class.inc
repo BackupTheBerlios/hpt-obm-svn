@@ -19,11 +19,32 @@ define('SHOW_RESPONSIBLE', '2');
 
 class todos extends db
 {
+	/**
+	* Constructor
+	*/
 	function todos()
 	{
 		$this->db();
 	}
 
+	/**
+	* Add a new todo
+	* @param	int		$user_id
+	* @param	int		$contact_id
+	* @param	int		$res_user_id
+	* @param	string	$start_time
+	* @param	string	$due_time
+	* @param	int		$status
+	* @param	int		$priority
+	* @param	string	$completion_time
+	* @param	string	$remind_time
+	* @param	bool	$remind_style
+	* @param	string	$name
+	* @param	string	$description
+	* @param	string	$location
+	* @param	string	$background
+	* @return	bool
+	*/
 	function add_todo($user_id, $contact_id, $res_user_id, $start_time,
 										$due_time, $status, $priority, $completion_time,
 										$remind_time, $remind_style, $name, $description,
@@ -47,6 +68,24 @@ class todos extends db
 		return false;
 	}
 
+	/**
+	* Update a todo
+	* @param	int		$todo_id
+	* @param	int		$contact_id
+	* @param	int		$res_user_id
+	* @param	string	$start_time
+	* @param	string	$due_time
+	* @param	int		$status
+	* @param	int		$priority
+	* @param	string	$completion_time
+	* @param	string	$remind_time
+	* @param	bool	$remind_style
+	* @param	string	$name
+	* @param	string	$description
+	* @param	string	$location
+	* @param	string	$background
+	* @return	bool
+	*/
 	function update_todo($todo_id, $contact_id, $res_user_id, $start_time,
 											$due_time, $status, $priority, $completion_time,
 											$remind_time, $remind_style, $name, $description,
@@ -64,6 +103,11 @@ class todos extends db
 		return $this->query($sql);
 	}
 
+	/**
+	* Set completed
+	* @param	int		$todo_id
+	* @return	bool
+	*/
 	function set_completed($todo_id)
 	{
 		$sql = 	"UPDATE cal_todos SET completion_time='".get_gmt_time()."' ".
@@ -71,6 +115,11 @@ class todos extends db
 		return $this->query($sql);
 	}
 
+	/**
+	* Set uncomplete
+	* @param	int		$todo_id
+	* @return	bool
+	*/
 	function set_uncompleted($todo_id)
 	{
 		$sql = 	"UPDATE cal_todos SET completion_time='0' ".
@@ -78,12 +127,22 @@ class todos extends db
 		return $this->query($sql);
 	}
 
+	/**
+	* Delete a todo
+	* @param	int		$todo_id
+	* @return	bool
+	*/
 	function delete_todo($todo_id)
 	{
 		$sql = "DELETE FROM cal_todos WHERE id='$todo_id'";
 		return $this->query($sql);
 	}
 
+	/**
+	* Get a todo
+	* @param	int		$todo_id
+	* @return	mixed	array if success, false otherwise
+	*/
 	function get_todo($todo_id)
 	{
 		$sql = "SELECT * FROM cal_todos WHERE id='$todo_id'";
@@ -95,6 +154,16 @@ class todos extends db
 		return false;
 	}
 
+	/**
+	* Get todos
+	* @param	bool	$complete_only
+	* @param	int		$user_id
+	* @param	int		$res_user_id
+	* @param	int		$contact_id
+	* @param	int		$start
+	* @param	int		$offset
+	* @return	int		Number of records
+	*/
 	function get_todos($completed_only=true, $user_id=0, $res_user_id=0,
 											$contact_id=0, $start=0, $offset=0)
 	{
@@ -168,6 +237,10 @@ class todos extends db
 		}
 	}
 	
+	/**
+	* Get todos for today
+	* @return	int		Number of records
+	*/
 	function get_todos_for_today()
 	{
 		$local_time = get_time();
@@ -184,6 +257,11 @@ class todos extends db
 		return $this->num_rows();		
 	}
 
+	/**
+	* Get todos to remind
+	* @param	int		$user_id
+	* @return	int		Number of records
+	*/
 	function get_todos_to_remind($user_id)
 	{
 		$sql = 	"SELECT * FROM cal_todos WHERE ".
@@ -194,6 +272,11 @@ class todos extends db
 		return $this->num_rows();
 	}
 
+	/**
+	* Set reminder
+	* @param	int		$todo_id
+	* @return	bool
+	*/
 	function set_reminded($todo_id)
 	{
 		$sql = "UPDATE cal_todos SET remind_time=0 WHERE id='$todo_id'";

@@ -26,6 +26,11 @@ class addressbook extends db
     $this->db();
   }
 
+	/**
+	* Parse address array
+	* @param	string	$address
+	* @return	array
+	*/
   function parse_address($address)
   {
   	$address = trim($address);
@@ -47,6 +52,9 @@ class addressbook extends db
   	return $address_arr;  
   }
   
+  /**
+  * No use
+  */
   function get_addressinfo($zip)
   {
   	$sql = "SELECT * FROM ab_zipcodes WHERE zip LIKE '$zip%'";
@@ -58,6 +66,11 @@ class addressbook extends db
   	return false;
   }
   
+  /**
+  * Parse a HTML address string
+  * @param	int		$contact_id
+  * @return	string
+  */
   function address_format($contact_id)
   {
   	if($contact = $this->get_contact($contact_id))
@@ -91,7 +104,10 @@ class addressbook extends db
   /**
    * Save contact sort preferences of user $user_id.
    *
-   * @return true/false.
+   * @param		int		$user_id
+   * @param		string	$sort_field
+   * @param		string	$sort_order
+   * @return 	bool	true/false.
    */
   function set_contacts_sorting($user_id, $sort_field, $sort_order)
   {
@@ -103,7 +119,10 @@ class addressbook extends db
   /**
    * Save company sort preferences of user $user_id.
    *
-   * @return true/false.
+   * @param		int		$user_id
+   * @param		string	$sort_field
+   * @param		string	$sort_order
+   * @return	bool	true/false.
    */
   function set_companies_sorting($user_id, $sort_field, $sort_order)
   {
@@ -115,7 +134,10 @@ class addressbook extends db
   /**
    * Save user sort preferences of user $user_id.
    *
-   * @return true/false.
+   * @param		int		$user_id
+   * @param		string	$sort_field
+   * @param		string	$sort_order
+   * @return	bool	true/false.
    */
   function set_users_sorting($user_id, $sort_field, $sort_order)
   {
@@ -127,7 +149,13 @@ class addressbook extends db
   /**
    * Save user/contact/company search preferences of user $user_id.
    *
-   * @return true/false.
+   * @param		int		$user_id
+   * @param		string	$search_type
+   * @param		string	$search_contacts_field
+   * @param		string	$search_companies_field
+   * @param		string	$search_user_field
+   * @param		int		$search_addressbook_id
+   * @return	bool	true/false.
    */
   function set_search($user_id, $search_type, $search_contacts_field, 
       $search_companies_field, $search_users_field,$search_addressbook_id)
@@ -145,7 +173,8 @@ class addressbook extends db
    * Get user/contact/company search/sort preferences of user $user_id.
    * Add new one if there is no preferences for the user.
    *
-   * @return the setting record.
+   * @param		int		$user_id
+   * @return	array	the setting record.
    */
   function get_settings($user_id)
   {
@@ -170,7 +199,15 @@ class addressbook extends db
    * Return an URL (javascript url exactly) that calls open_addressbook()
    * or die() if contact_selector is not enabled.
    *
-   * @return the link string or die().
+   * @param		string	$target_field
+   * @param		string	$handler_file
+   * @param		bool	$multiselect
+   * @param		bool	$require_email_address
+   * @param		bool	$show_users
+   * @param		bool	$show_contact
+   * @param		bool	$show_companies
+   * @param		string	$pass_value
+   * @return	string	the link string or die().
    */
   function select_contacts($target_field, $handler_file, $multiselect='true',
       $require_email_address='true', $show_users='true',
@@ -257,7 +294,9 @@ class addressbook extends db
    * Get default addressbook of user $user_id.
    * That is the addressbook in ab_subscribed table with standard field=1
    *
-   * @return addressbook id or false.
+   * @param		int		$user_id
+   * @param		bool	$auto_add
+   * @return 	mixed	addressbook id or false.
    */
   function get_default_addressbook($user_id,$auto_add=true)
   {
@@ -285,7 +324,9 @@ class addressbook extends db
   /**
    * Set default addressbook $addressbook_id for  user $user_id
    *
-   * @return true if successful, false otherwise.
+   * @param		int		$user_id
+   * @param		int		$addressbook_id
+   * @return	bool	true if successful, false otherwise.
    */
   function set_default_addressbook($user_id, $addressbook_id)
   {
@@ -300,7 +341,7 @@ class addressbook extends db
   /**
    * Get all addressbooks, sorted by name.
    *
-   * @return number of addressbooks.
+   * @return	int		number of addressbooks.
    */
   function get_addressbooks()
   {
@@ -312,7 +353,8 @@ class addressbook extends db
   /**
    * Get all addressbooks of user $user_id.
    *
-   * @return number of addressbooks.
+   * @param		int		$user_id
+   * @return	int		number of addressbooks.
    */
   function get_user_addressbooks($user_id)
   {
@@ -329,7 +371,9 @@ class addressbook extends db
    * Add new addressbook named $name for user $user_id
    * Addressbook id is from nextid "ab_addressbooks".
    *
-   * @return the addressbook id or false.
+   * @param		int		$user_id
+   * @param		string	$name
+   * @return	mixed	the addressbook id or false.
    */
   function add_addressbook($user_id, $name)
   {
@@ -364,7 +408,9 @@ class addressbook extends db
 
   /**
    * Update name of addressbook $addressbook_id 
-   * return true if successful, false otherwise.
+   * @param		int		$addressbook
+   * @param		string	$name
+   * return		bool	true if successful, false otherwise.
    */
   function update_addressbook($addressbook_id, $name)
   {
@@ -374,7 +420,8 @@ class addressbook extends db
 
   /**
    * Get addressbook by name $name.
-   * Return the record of the addressbook, false otherwise.
+   * @param		string	$name
+   * Return		mixed	the record of the addressbook, false otherwise.
    */
   function get_addressbook_by_name($name)
   {
@@ -391,6 +438,8 @@ class addressbook extends db
 
   /**
    * Delete addressbook $addressbook_id
+   * @param		int		$addressbook_id
+   * @return	bool	true if success, false otherwise
    */
   function delete_addressbook($addressbook_id)
   {
@@ -425,7 +474,8 @@ class addressbook extends db
 
   /**
    * Get addressbook $addressbook_id.
-   * Return the record of the addressbook, false otherwise.
+   * @param		int		$addressbook_id
+   * @return	mixed	the record of the addressbook, false otherwise.
    */
   function get_addressbook($addressbook_id)
   {
@@ -440,7 +490,8 @@ class addressbook extends db
 
   /**
    * Get all subscribed addressbook of user $user_id.
-   * Return number of addressbooks.
+   * @param		int		$user_id
+   * @return	int		number of addressbooks.
    */
   function get_subscribed_addressbooks($user_id)
   {
@@ -451,7 +502,9 @@ class addressbook extends db
 
   /**
    * Subscribe addressbook $addressbook_id to user $user_id.
-   * Return true if successful, false otherwise.
+   * @param		int		$user_id
+   * @param		int		$addressbook_id
+   * @return		bool	true if successful, false otherwise.
    */
   function subscribe($user_id, $addressbook_id)
   {
@@ -461,7 +514,9 @@ class addressbook extends db
 
   /**
    * Check if user $user_id has subscribed addressbook $addressbook_id.
-   * Return the addressbook record, false otherwise.
+   * @param		int		$user_id
+   * @param		int		$addressbook_id
+   * @return	mixed	the addressbook record, false otherwise.
    */
   function is_subscribed($user_id, $addressbook_id)
   {
@@ -472,7 +527,8 @@ class addressbook extends db
 
   /**
    * Unsubscribe all addressbooks from user $user_id.
-   * Return true if successful, false otherwise.
+   * @param		int		$user_id
+   * @return	bool	true if successful, false otherwise.
    */
   function unsubscribe_all($user_id)
   {
@@ -482,7 +538,9 @@ class addressbook extends db
 
   /**
    * Unsubscribe addressbook $addressbook_id from user $user_id.
-   * Return true if successful, false otherwise.
+   * @param		int		$user_id
+   * @param		int		$addressbook_id
+   * @return	bool	true if successful, false otherwise.
    */
   function unsubscribe($user_id, $addressbook_id)
   {
@@ -494,14 +552,13 @@ class addressbook extends db
    * Get contacts whose field $field match query string $query in addressbook $addressbook_id. 
    * Only get $max_rows contacts starting from $first.
    *
-   * @param
-   * $user_id whose addressbooks will be searched for.
-   * $query the pattern to be matched. '*' represents an abitrary string (will be replaced by % in the function).
-   * $field Default is 'last_name'
-   * $addressbook_id the addressbook to be searched for. Default is all subscribed addressbooks of user $user_id (zero value)
-   * $first .
-   * $max_rows the number of contacts. Default is all contacts (zero value).
-   * @return the number of all selected contacts (assuming $first=0 and $max_rows=0)
+   * @param		int		$user_id		Whose addressbooks will be searched for.
+   * @param		string	$query			The pattern to be matched. '*' represents an abitrary string (will be replaced by % in the function).
+   * @param		string	$field			Default is 'last_name'
+   * @param		int		$addressbook_id	The addressbook to be searched for. Default is all subscribed addressbooks of user $user_id (zero value)
+   * @param		int		$first
+   * @param		int		$max_rows		The number of contacts. Default is all contacts (zero value).
+   * @return	int		The number of all selected contacts (assuming $first=0 and $max_rows=0)
    */
   function search_contacts($user_id, $query, $field='last_name', $addressbook_id=0,$first=0,$max_rows=0)
   {
@@ -538,6 +595,8 @@ class addressbook extends db
 
   /**
    * Unimplemented function. 
+   * @param		string	$interval_start
+   * @param		string	$interval_end
    */
   function get_contacts_by_birth_day($interval_start, $interval_end)
   {
@@ -548,15 +607,14 @@ class addressbook extends db
    * Get companies whose field $field match query string $query in addressbook $addressbook_id. 
    * Only get $max_rows companies starting from $first.
    *
-   * @param
-   * $user_id whose addressbooks will be searched for.
-   * $query the pattern to be matched. '*' represents an abitrary string (will be replaced by % in the function).
-   * $field Default is 'last_name'
-   * $addressbook_id the addressbook to be searched for. Default is all subscribed addressbooks of user $user_id (zero value)
-   * $category limit the search in this category or search in all categories (value -1, also the default value)
-   * $first .
-   * $max_rows the number of companies. Default is all companies (zero value).
-   * @return the number of all selected contacts (assuming $first=0 and $max_rows=0)
+   * @param		int		$user_id		Whose addressbooks will be searched for.
+   * @param		string	$query			The pattern to be matched. '*' represents an abitrary string (will be replaced by % in the function).
+   * @param		string	$field			Default is 'last_name'
+   * @param		int		$addressbook_id	The addressbook to be searched for. Default is all subscribed addressbooks of user $user_id (zero value)
+   * @param		int		$category		Limit the search in this category or search in all categories (value -1, also the default value)
+   * @param		int		$first
+   * @param		int		$max_rows		The number of companies. Default is all companies (zero value).
+   * @return	int		The number of all selected contacts (assuming $first=0 and $max_rows=0)
    */
   function search_companies($user_id, $query, $field='name', $addressbook_id=0, $category=-1,$first=0,$max_rows=0)
   {
@@ -599,11 +657,11 @@ class addressbook extends db
   /**
    * Get all authorised contacts from addressbook $addressbook_id of user $user_id, sorted by $sort with order $direction.
    *
-   * $addressbook_id addressbook id.
-   * $sort sort field.
-   * $direction sort direction (ASC or DESC).
-   * $user default is 0 (current user).
-   * @return the number of contacts.
+   * @param		int		$addressbook_id		Addressbook id.
+   * @param		string	$sort				Sort field.
+   * @param		string	$direction			Sort direction (ASC or DESC).
+   * @param		int		$user				Default is 0 (current user).
+   * @return 	int		the number of contacts.
    */
   function get_contacts($addressbook_id, $sort = "name", $direction = "ASC", $user_id=0)
   {
@@ -632,7 +690,9 @@ class addressbook extends db
   /**
    * Get all contacts of addressbook $addressbook_id, user $user_id.
    *
-   * @return number of contacts.
+   * @param		int		$user_id
+   * @param		int		$addressbook_id
+   * @return	int		number of contacts.
    */
   function get_user_contacts($user_id, $addressbook_id)
   {
@@ -643,7 +703,9 @@ class addressbook extends db
   /**
    * Get all companies of addressbook $addressbook_id, user $user_id.
    *
-   * @return number of companies.
+   * @param		int		$user_id
+   * @param		int		$addressbook_id
+   * @return 	int		number of companies.
    */
   function get_user_companies($user_id, $addressbook_id)
   {
@@ -654,12 +716,12 @@ class addressbook extends db
   /**
    * Get a range of contacts associated with company $company_id, sorted by field $sort.
    *
-   * $company_id the company id
-   * $sort sorted field.
-   * $direction sort direction.
-   * $start the first contact of the range.
-   * $offset number of contacts of the range.
-   * @return number of all contacts (independent with $start/$offset).
+   * @param		int		$company_id		The company id
+   * @param		string	$sort			Sorted field.
+   * @param		string	$direction		Sort direction.
+   * @param		int		$start			The first contact of the range.
+   * @param		int		$offset			Number of contacts of the range.
+   * @return	int		Number of all contacts (independent with $start/$offset).
    */
   function get_company_contacts($company_id, $sort="name", $direction="ASC", $start, $offset)
   {
@@ -695,9 +757,9 @@ class addressbook extends db
   /**
    * Get all contact-related information from addressbook $addressbook_id of user $user_id.
    * 
-   * @param $addressbook_id Addressbook id.
-   *        $user_id        User id. Default is the current user.
-   * @return number of contacts.
+   * @param		int		$addressbook_id		Addressbook id.
+   * @param		int		$user_id        	User id. Default is the current user.
+   * @return 	int		number of contacts.
    */
   function get_contacts_for_export($addressbook_id, $user_id=0)
   {
@@ -725,12 +787,12 @@ class addressbook extends db
   /**
    * Get all authorised contacts of group $group_id, addressbook $addressbook_id, $user_id, sorted by $sort with direction $direction.
    * 
-   * @param $addressbook_id
-   * @param $group_id
-   * @param $sort sort field (default is 'name', which consists of first name and last name)
-   * @param $direction default is ASC.
-   * @param $user_id Default is the current user.
-   * @return the number of contacts.
+   * @param		int		$addressbook_id
+   * @param		int		$group_id
+   * @param		string	$sort				Sort field (default is 'name', which consists of first name and last name)
+   * @param		string	$direction			Default is ASC.
+   * @param		int		$user_id			Default is the current user.
+   * @return	int							the number of contacts.
    */
   function get_contacts_group($addressbook_id, $group_id, $sort = "name", $direction = "ASC", $user_id=0)
   {
@@ -758,7 +820,9 @@ class addressbook extends db
   /**
    * Get all contacts that contact name is $name from $addressbook_id.
    *
-   * @return the record or false. 
+   * @param		int		$addressbook_id
+   * @param		string	$name
+   * @return	mixed	the record or false. 
    */
   function get_contact_by_name($addressbook_id, $name)
   {
@@ -774,7 +838,8 @@ class addressbook extends db
   /**
    * Get contact $contact_id that associated with a company.
    * 
-   * @return the record contains both contact (overrided with some company information) or false.
+   * @param		int		$contact_id
+   * @return	mixed	the record contains both contact (overrided with some company information) or false.
    */
   function get_contact($contact_id)
   {
@@ -797,36 +862,36 @@ class addressbook extends db
    * Add a new contact.
    * Contact id is created from nextid "contacts"
    * 
-   * @param $source_id if this contact is created from user ID then $source_id is ID
-   * @param $user_id
-   * @param $addressbook_id
-   * @param $first_name
-   * @param $middle_name
-   * @param $last_name
-   * @param $initials
-   * @param $title
-   * @param $sex
-   * @param $birthday
-   * @param $email
-   * @param $work_phone default is empty
-   * @param $home_phone default is empty
-   * @param $fax default is empty
-   * @param $cellular default is empty
-   * @param $country default is empty
-   * @param $state default is empty
-   * @param $city default is empty
-   * @param $zip default is empty
-   * @param $address default is empty
-   * @param $company_id Default is zero (no company)
-   * @param $work_fax default is empty
-   * @param $department default is empty
-   * @param $function default is empty
-   * @param $comment default is empty
-   * @param $group_id Default is zero (Group "other")
-   * @param $color default is empty
-   * @param $acl_read
-   * @param $acl_write
-   * @return the new contact id or false.
+   * @param		int		$source_id		if this contact is created from user ID then $source_id is ID
+   * @param		int		$user_id
+   * @param		int		$addressbook_id
+   * @param		string	$first_name
+   * @param		string	$middle_name
+   * @param		string	$last_name
+   * @param		string	$initials
+   * @param		string	$title
+   * @param		string	$sex
+   * @param		string	$birthday
+   * @param		string	$email
+   * @param		string	$work_phone		default is empty
+   * @param		string	$home_phone		default is empty
+   * @param		string	$fax			default is empty
+   * @param		string	$cellular		default is empty
+   * @param		string	$country		default is empty
+   * @param 	string	$state			default is empty
+   * @param 	string	$city			default is empty
+   * @param 	string	$zip			default is empty
+   * @param 	string	$address		default is empty
+   * @param 	int		$company_id		Default is zero (no company)
+   * @param 	string	$work_fax		default is empty
+   * @param 	string	$department		default is empty
+   * @param 	string	$function		default is empty
+   * @param 	string	$comment		default is empty
+   * @param 	int		$group_id		Default is zero (Group "other")
+   * @param 	string	$color			default is empty
+   * @param 	int		$acl_read
+   * @param 	int		$acl_write
+   * @return	mixed					the new contact id or false.
    */
   function add_contact($source_id, $user_id, $addressbook_id, $first_name, $middle_name, $last_name, $initials, $title, $sex, $birthday, $email, $work_phone="", $home_phone="", $fax="", $cellular="", $country="", $state="", $city="", $zip="", $address="", $company_id=0, $work_fax = "", $department="", $function="", $comment="", $group_id=0, $color='', $acl_read, $acl_write)
   {
@@ -854,33 +919,33 @@ class addressbook extends db
   /**
    * Update contact with id $id. 
    *
-   * @param $id contact id
-   * @param $addressbook_id
-   * @param $first_name
-   * @param $middle_name
-   * @param $last_name
-   * @param $initials
-   * @param $title
-   * @param $sex
-   * @param $birthday
-   * @param $email
-   * @param $work_phone
-   * @param $home_phone
-   * @param $fax
-   * @param $cellular
-   * @param $country
-   * @param $state
-   * @param $city
-   * @param $zip
-   * @param $address
-   * @param $company_id
-   * @param $work_fax
-   * @param $department
-   * @param $function
-   * @param $comment default is empty
-   * @param $group_id default is zero (group "other")
-   * @param $color
-   * @return true/false.
+   * @param 	int		$id contact id
+   * @param 	int		$addressbook_id
+   * @param 	string	$first_name
+   * @param 	string	$middle_name
+   * @param 	string	$last_name
+   * @param 	string	$initials
+   * @param 	string	$title
+   * @param 	string	$sex
+   * @param 	string	$birthday
+   * @param 	string	$email
+   * @param 	string	$work_phone
+   * @param 	string	$home_phone
+   * @param 	string	$fax
+   * @param 	string	$cellular
+   * @param 	string	$country
+   * @param 	string	$state
+   * @param 	string	$city
+   * @param 	string	$zip
+   * @param 	string	$address
+   * @param 	int		$company_id
+   * @param 	string	$work_fax
+   * @param 	string	$department
+   * @param 	string	$function
+   * @param 	string	$comment 	default is empty
+   * @param 	int		$group_id	default is zero (group "other")
+   * @param 	string	$color
+   * @return 	bool	true/false.
    */
   function update_contact($id, $addressbook_id, $first_name, $middle_name, $last_name, $initials, $title, $sex, $birthday, $email, $work_phone, $home_phone, $fax, $cellular, $country, $state, $city, $zip, $address, $company_id, $work_fax, $department, $function, $comment='', $group_id='0', $color)
   {
@@ -901,7 +966,8 @@ class addressbook extends db
   /**
    * Delete contact $contact_id.
    * 
-   * Return true/false.
+   * @param		int		$contact_id
+   * @return 	bool	true/false.
    */
   function delete_contact($contact_id)
   {
@@ -918,7 +984,9 @@ class addressbook extends db
   /**
    * Check if contact $id is created from user $user_id.
    * 
-   * @return the contact record or false.
+   * @param		int		$user_id
+   * @param		int		$id
+   * @return	mixed	the contact record or false.
    */
   function user_is_contact($user_id, $id)
   {
@@ -941,7 +1009,9 @@ class addressbook extends db
   /**
    * Check if user $user_id is in contacts of addressbook $addressbook_id.
    * 
-   * @return true/false.
+   * @param		int		$user_id
+   * @param		int		$addressbook_id
+   * @return 	bool	true/false.
    */
   function user_is_in_addressbook($user_id, $addressbook_id)
   {
@@ -953,7 +1023,9 @@ class addressbook extends db
   /**
    * Get contact id whose email is $email and the contact is belonged to an addressbook of user $user_id.
    * 
-   * @return the contact id or false.
+   * @param		string	$email
+   * @param		int		$user_id
+   * @return	mixed	the contact id or false.
    * @see get_contact_profile_by_email
    */
   function get_contact_id_by_email($email, $user_id)
@@ -974,7 +1046,9 @@ class addressbook extends db
   /**
    * Get contact id whose email is $email and the contact is belonged to an addressbook of user $user_id.
    * 
-   * @return the contact record or false.
+   * @param		string	$email
+   * @param		int		$user_id
+   * @return 	mixed	the contact record or false.
    */
   function get_contact_profile_by_email($email, $user_id)
   {
@@ -992,7 +1066,8 @@ class addressbook extends db
   /**
    * Get all contact groups of addressbook $addressbook_id.
    *
-   * @return number of groups. 
+   * @param		int		$addressbook_id
+   * @return 	int		number of groups. 
    */
   function get_groups($addressbook_id)
   {
@@ -1006,7 +1081,9 @@ class addressbook extends db
    * The name will be htmlentities(ed) inside the function.
    * Group id is in nextid "ab_groups"
    *
-   * @return the group id or false.
+   * @param		int		$addressbook_id
+   * @param		string	$name
+   * @return 	mixed	the group id or false.
    */
   function add_group($addressbook_id, $name)
   {
@@ -1026,7 +1103,8 @@ class addressbook extends db
   /**
    * Delete group $group_id.
    * 
-   * @return true/false.
+   * @param		int		$group_id
+   * @return 	bool	true/false.
    */
   function delete_group($group_id)
   {
@@ -1043,7 +1121,9 @@ class addressbook extends db
   /**
    * Move contact $contact_id to group $group_id.
    *
-   * @return true/false. 
+   * @param		int		$contact_id
+   * @param		int		$group_id
+   * @return 	bool	true/false. 
    */
   function move_contact_to_group($contact_id, $group_id)
   {
@@ -1054,7 +1134,8 @@ class addressbook extends db
   /**
    * Clear group $group_id (Move all contacts in group $group_id to group "other").
    *
-   * @return true/false.
+   * @param		int		$group_id
+   * @return	bool	true/false.
    */
   function clear_group($group_id)
   {
@@ -1065,7 +1146,9 @@ class addressbook extends db
   /**
    * Rename group $group_id with new name $name.
    * 
-   * @return true/false.
+   * @param		int		$group_id
+   * @param		string	$name
+   * @return 	bool	true/false.
    */
   function change_group_name($group_id, $name)
   {
@@ -1076,7 +1159,8 @@ class addressbook extends db
   /**
    * Get the record of group $group_id.
    * 
-   * @return the group record or false.
+   * @param		int		$group_id
+   * @return 	mixed	the group record or false.
    */
   function get_group($group_id)
   {
@@ -1092,7 +1176,9 @@ class addressbook extends db
   /**
    * Get group by name $name in addressbook $addressbook_id.
    * 
-   * @return the group record or false.
+   * @param		int		$addressbook_id
+   * @param		string	$name
+   * @return 	mixed	the group record or false.
    */
   function get_group_by_name($addressbook_id, $name)
   {
@@ -1108,7 +1194,9 @@ class addressbook extends db
   /**
    * Add contact $contact_id to company $company_id.
    *
-   * @return true/false.
+   * @param		int		$contact_id
+   * @param		int		$company_id
+   * @return 	bool	true/false.
    */
   function add_contact_to_company($contact_id, $company_id)
   {
@@ -1120,27 +1208,27 @@ class addressbook extends db
    * Company id is from nextid "ab_companies".
    * If $user_id is not the current user, $company_id will be added to ab_new_companies.
    * 
-   * @param $addressbook_id
-   * @param $user_id
-   * @param $name
-   * @param $shortname
-   * @param $engname
-   * @param $relation_date
-   * @param $address
-   * @param $zip
-   * @param $city
-   * @param $state
-   * @param $country
-   * @param $email
-   * @param $phone
-   * @param $fax
-   * @param $homepage
-   * @param $bank_no,
-   * @param $vat_no
-   * @param $acl_read
-   * @param $acl_write
-   * @param $parent_id
-   * @return the new company id or false.
+   * @param 	int		$addressbook_id
+   * @param 	int		$user_id
+   * @param 	string	$name
+   * @param 	string	$shortname
+   * @param 	string	$engname
+   * @param 	string	$relation_date
+   * @param 	string	$address
+   * @param 	string	$zip
+   * @param 	string	$city
+   * @param 	string	$state
+   * @param 	string	$country
+   * @param 	string	$email
+   * @param 	string	$phone
+   * @param 	string	$fax
+   * @param 	string	$homepage
+   * @param 	string	$bank_no,
+   * @param 	string	$vat_no
+   * @param 	int		$acl_read
+   * @param 	int		$acl_write
+   * @param 	int		$parent_id
+   * @return 	mixed	the new company id or false.
    */
   function add_company($addressbook_id, $user_id, $name, $shortname, $engname, $relation_date,
   	$address, $zip, $city, $state, $country, $email, $phone, $fax, $homepage, $bank_no,
@@ -1175,24 +1263,25 @@ class addressbook extends db
    * Update information of company $company_id.
    * If $user_id is not the current user, $company_id will be added to ab_new_companies.
    *
-   * @param $company_id
-   * @param $addressbook_id
-   * @param $name
-   * @param $shortname
-   * @param $engname
-   * @param $relation_date
-   * @param $address
-   * @param $zip,$city
-   * @param $state
-   * @param $country
-   * @param $email
-   * @param $phone
-   * @param $fax
-   * @param $homepage
-   * @param $bank_no
-   * @param $vat_no
-   * @param $parent_id
-   * @return true/false.
+   * @param 	int		$company_id
+   * @param 	int		$addressbook_id
+   * @param 	string	$name
+   * @param 	string	$shortname
+   * @param 	string	$engname
+   * @param 	string	$relation_date
+   * @param 	string	$address
+   * @param 	string	$zip
+   * @param		string	$city
+   * @param 	string	$state
+   * @param 	string	$country
+   * @param 	string	$email
+   * @param 	string	$phone
+   * @param 	string	$fax
+   * @param 	string	$homepage
+   * @param 	string	$bank_no
+   * @param 	string	$vat_no
+   * @param 	int		$parent_id
+   * @return 	bool	true/false.
    */
   function update_company($company_id, $addressbook_id, $name, $shortname, $engname, $relation_date, 
   	$address, $zip,$city, $state, $country, $email, $phone, $fax,
@@ -1223,7 +1312,9 @@ class addressbook extends db
   /**
    * Get company record of the company named $name in addressbook $addressbook_id.
    *
-   * @return the company record or false.
+   * @param		int		$addressbook_id
+   * @param		string	$name
+   * @return 	mixed	the company record or false.
    */
   function get_company_by_name($addressbook_id, $name)
   {
@@ -1239,7 +1330,8 @@ class addressbook extends db
   /**
    * Get company record of company $company_id.
    * 
-   * @return the company record or false.
+   * @param		int		$company_id
+   * @return 	mixed	the company record or false.
    */
   function get_company($company_id)
   {
@@ -1256,13 +1348,13 @@ class addressbook extends db
    * Get a range of companies.
    * If $user_id is the addressbook owner, then ab_new_companies will be fetched too.
    * 
-   * @param $addressbook_id the addressbook storing companies
-   * @param $sort sort field. default is 'name' (both last_name and first_name)
-   * @param $direction sort direction. default is 'ASC'
-   * @param $start the begin of the range.
-   * @param $offset the size of the range (default is zero, all companies)
-   * @param $user_id the user that gets these information (default is the current user)
-   * @return the number of all companies.
+   * @param 	int		$addressbook_id		The addressbook storing companies
+   * @param 	string	$sort				Sort field. default is 'name' (both last_name and first_name)
+   * @param 	string	$direction 			Sort direction. default is 'ASC'
+   * @param 	int		$start 				The begin of the range.
+   * @param 	int		$offset 			The size of the range (default is zero, all companies)
+   * @param 	int		$user_id 			The user that gets these information (default is the current user)
+   * @return 	int		The number of all companies.
    */
   function get_companies($addressbook_id, $sort='name', $direction='ASC', $start=0, $offset=0, $user_id=0)
   {
@@ -1333,9 +1425,9 @@ class addressbook extends db
   /**
    * Get companiy parents in addressbook_ $addressbook_id of user $user_id.
    *
-   * @param $addressbook_id
-   * @param $user_id default is zero (the current user).
-   * @return the array of parent companies whose keys is ids, values is array of ('id', 'parent', 'name')
+   * @param 	int		$addressbook_id
+   * @param 	int		$user_id 		Default is zero (the current user).
+   * @return 	array	the array of parent companies whose keys is ids, values is array of ('id', 'parent', 'name')
    */
   function get_companies_parents($addressbook_id, $user_id=0)
   {
@@ -1360,9 +1452,9 @@ class addressbook extends db
   /**
    * Get all companies whose name match pattern '%$name%' in addressbook $addressbook_id.
    *
-   * @param $name the company name.
-   * @param $addressbook_id addressbook_id.
-   * @return number of companies.
+   * @param 	string	$name			The company name.
+   * @param 	int		$addressbook_id	Addressbook_id.
+   * @return 	int		Number of companies.
    */
   function search_company($name, $addressbook_id)
   {
@@ -1374,9 +1466,9 @@ class addressbook extends db
   /**
    * Get the company whose name is $name in addressbook $addressbook_id.
    *
-   * @param $name the company name.
-   * @param $addressbook_id addressbook_id.
-   * @return the company record or false.
+   * @param 	string	$name			the company name.
+   * @param 	int		$addressbook_id	addressbook_id.
+   * @return 	mixed	the company record or false.
    */
   function get_company_id_by_name($name, $addressbook_id)
   {
@@ -1409,8 +1501,8 @@ class addressbook extends db
   /**
    * Delete user's contacts and user's addressbooks.
    * 
-   * @param $user_id.
-   * @return none
+   * @param 	int		$user_id
+   * @return 	none
    */
   function delete_user($user_id)
   {
@@ -1430,8 +1522,8 @@ class addressbook extends db
   /**
    * Get the full company name including parent names.
    * 
-   * @param $parents if not null, parent company info will be retrieved from $parents.
-   * @return the full name.
+   * @param 	int		$parents		if not null, parent company info will be retrieved from $parents.
+   * @return 	string	the full name.
    * @see get_companies_parents
    */
   function company_name($parents = null)
@@ -1473,8 +1565,8 @@ class addressbook extends db
   /**
    * Get all parent companies' links of company $company_id.
    * 
-   * @param $company_id
-   * @return the html string.
+   * @param 	int		$company_id
+   * @return 	string	the html string.
    */
   function parent_companies_urls($company_id)
   {
@@ -1498,14 +1590,14 @@ class addressbook extends db
   /**
    * Get companies by parent company.
 
-   * @param $addressbook_id
-   * @param $parent
-   * @param $sort
-   * @param $direction
-   * @param $start
-   * @param $offset
-   * @param $user_id
-   * @return number of all companies by parent company.
+   * @param 	int		$addressbook_id
+   * @param 	int		$parent
+   * @param 	string	$sort
+   * @param 	string	$direction
+   * @param 	int		$start
+   * @param 	int		$offset
+   * @param 	int		$user_id
+   * @return 	int		number of all companies by parent company.
    */
   function get_companies_by_parent($addressbook_id,$parent,$sort='name', $direction='ASC', $start=0, $offset=0,$user_id=0)
   {
@@ -1551,9 +1643,9 @@ class addressbook extends db
   /**
    * Get count of companies whose parent is $parent.
    * 
-   * @param $addressbook_id
-   * @param $parent
-   * @return the count.
+   * @param 	int		$addressbook_id
+   * @param 	int		$parent
+   * @return 	int		the count.
    */
   function get_count_by_parent($addressbook_id,$parent)
   {

@@ -23,19 +23,35 @@ define('DB_TIME_FORMAT', 'H:i:00');
 
 class calendar extends db
 {
+  /**
+  * @var array
+  */
   var $events = array();
+  /**
+  * @var array
+  */
   var $all_day_events = array();
+  /**
+  * @var array
+  */
   var $backgrounds = array();
 	
+  /**
+  * Constructor
+  */
   function calendar()
   {
     $this->db();
   }
-  /*
-     takes a sting YYYY-MM-DD HH:MM in GMT time and converts it to an array with
-     hour, min etc. with	a timezone offset. If 0000 or 00 is set in a date
-     (not time) then it will be replaced with current locale	date.
-   */
+
+  /**
+  *   takes a sting YYYY-MM-DD HH:MM in GMT time and converts it to an array with
+  *   hour, min etc. with	a timezone offset. If 0000 or 00 is set in a date
+  *   (not time) then it will be replaced with current locale	date.
+  * @param	string	$datetime_stamp
+  * @param	string	$timezone_offset
+  * @return	array
+  */
   function explode_datetime($datetime_stamp, $timezone_offset)
   {
     $local_time = get_time();
@@ -67,6 +83,14 @@ class calendar extends db
     return $result;
   }
 
+	/**
+	* Add a new view (group calendar)
+	* @param	int		$user_id
+	* @param	string	$name
+	* @param	string	$start_hour
+	* @param	string	$end_hour
+	* @param	string	$type
+	*/
   function add_view($user_id, $name, $start_hour, $end_hour, $type)
   {
     global $GO_SECURITY;
@@ -95,6 +119,15 @@ class calendar extends db
     return false;
   }
 
+	/**
+	* Update a view
+	* @param	int		$view_id
+	* @param	string	$name
+	* @param	string	$start_hour
+	* @param	string	$end_hour
+	* @param	string	$type
+	* @return	bool	
+	*/
   function update_view($view_id, $name, $start_hour, $end_hour, $type)
   {
     $sql = "UPDATE cal_views SET name='$name', start_hour='$start_hour', ".
@@ -102,6 +135,11 @@ class calendar extends db
     return $this->query($sql);
   }
 
+	/**
+	* Delete a view
+	* @param	int		$view_id
+	* @return	bool
+	*/
   function delete_view($view_id)
   {
     if($this->query("DELETE FROM cal_views_calendars WHERE view_id='$view_id'"))
@@ -110,6 +148,11 @@ class calendar extends db
     }
   }
 
+	/**
+	* Get views
+	* @param	int		$user_id
+	* @return	bool
+	*/
   function get_views($user_id)
   {
     $sql = "SELECT * FROM cal_views WHERE user_id='$user_id'";
@@ -117,6 +160,11 @@ class calendar extends db
     return $this->num_rows();
   }
 
+	/**
+	* Get authorised views
+	* @param	int		$user_id
+	* @return	int		Number of rows
+	*/
   function get_authorised_views($user_id)
   {
     $sql = "SELECT DISTINCT cal_views.* FROM cal_views, acl, users_groups WHERE ".
@@ -127,6 +175,11 @@ class calendar extends db
     return $this->num_rows();
   }
 
+	/**
+	* Get a view by view ID
+	* @param	int		$view_id
+	* @return	mixed	array if success, false otherwise
+	*/
   function get_view($view_id)
   {
     $sql = "SELECT * FROM cal_views WHERE id='$view_id'";
@@ -138,6 +191,11 @@ class calendar extends db
     return false;
   }
 
+	/**
+	* Get view calendars
+	* @param	int		$view_id
+	* @return	mixed	array if success, false otherwise
+	*/
   function get_view_calendars($view_id)
   {
     $cal = new calendar;
@@ -157,6 +215,11 @@ class calendar extends db
     return false;
   }
 
+	/**
+	* Get view calendar ids
+	* @param	int		$view_id
+	* @return	mixed	array if success, false otherwise
+	*/
   function get_view_calendar_ids($view_id)
   {
     $cal = new calendar;
@@ -176,6 +239,12 @@ class calendar extends db
     return false;
   }
 
+	/**
+	* Add calendar to view (group)
+	* @param	int		$calendar_id
+	* @param	int		$view_id
+	* @return	bool
+	*/
   function add_calendar_to_view($calendar_id, $view_id)
   {
     $sql = "INSERT INTO cal_views_calendars (view_id, calendar_id) ".
@@ -183,12 +252,24 @@ class calendar extends db
     return $this->query($sql);
   }
 
+	/**
+	* Remove a calendar from view (group)
+	* @param	int		$calendar_id
+	* @param	int		$view_id
+	* @return	bool
+	*/
   function remove_calendar_from_view($calendar_id, $view_id)
   {
     $sql = "DELETE FROM cal_views_calendars WHERE calendar_id='$calendar_id' AND view_id='$view_id'";
     return $this->query($sql);
   }
 
+	/**
+	* Calendar is in view (group)
+	* @param	int		$calendar_id
+	* @param	int		$view_id
+	* @return	bool
+	*/
   function calendar_is_in_view($calendar_id, $view_id)
   {
     $sql = "SELECT * FROM cal_views_calendars WHERE calendar_id='$calendar_id' AND view_id='$view_id'";
@@ -196,6 +277,12 @@ class calendar extends db
     return $this->next_record();
   }
 
+	/**
+	* Get view by name
+	* @param	int		$user_id
+	* @param	string	$name
+	* @return	mixed	array if success, false otherwise
+	*/
   function get_view_by_name($user_id, $name)
   {
     $sql = "SELECT * FROM cal_views WHERE user_id='$user_id' AND name='$name'";
@@ -207,6 +294,11 @@ class calendar extends db
     return false;
   }
 
+	/**
+	* Get calendars of user who has ID be $user_id
+	* @param	int		$user_id
+	* @return	array
+	*/
   function user_has_calendar($user_id)
   {
     $sql = "SELECT id FROM cal_calendars WHERE user_id='$user_id'";
@@ -214,6 +306,12 @@ class calendar extends db
     return $this->next_record();
   }
 
+	/**
+	* Add a participant
+	* @param	int		$event_id
+	* @param	string	$email
+	* @param	int		$user_id
+	*/
   function add_participant($event_id, $email, $user_id = 0)
   {
     $id = $this->nextid("cal_participants");
@@ -235,12 +333,23 @@ class calendar extends db
     }
   }
 
+	/**
+	* Remove a participants
+	* @param	int		#event_id
+	* @return	bool	
+	*/
   function remove_participants($event_id)
   {
     $sql = "DELETE FROM cal_participants WHERE event_id='$event_id'";
     return $this->query($sql);
   }
 
+	/**
+	* Get participants by $event_id and $email
+	* @param	int		$event_id
+	* @param	string	$email
+	* @return	array
+	*/
   function is_participant($event_id, $email)
   {
     $sql = "SELECT id FROM cal_participants WHERE event_id='$event_id' AND email='$email'";
@@ -248,6 +357,11 @@ class calendar extends db
     return $this->next_record();
   }
 
+	/**
+	* Get participants by $event_id
+	* @param	int		$event_id
+	* @return	int		Number of rows
+	*/
   function get_participants($event_id)
   {
     $sql = "SELECT * FROM cal_participants WHERE event_id='$event_id' ORDER BY email ASC" ;
@@ -255,18 +369,36 @@ class calendar extends db
     return $this->num_rows();
   }
 
+	/**
+	* Set default calendar
+	* @param	int		$user_id
+	* @param	int		$calendar_id
+	* @return	bool
+	*/
   function set_default_calendar($user_id, $calendar_id)
   {
     $sql = "UPDATE cal_settings SET default_cal_id='$calendar_id' WHERE user_id='$user_id'";
     return $this->query($sql);
   }
-  
+
+	/**
+	* Set default view
+	* @param	int		$user_id
+	* @param	int		$calendar_id
+	* @param	int		$view_id
+	* @return	bool
+	*/
   function set_default_view($user_id, $calendar_id, $view_id)
   {
   	$sql = "UPDATE cal_settings SET default_cal_id='$calendar_id', default_view_id='$view_id' WHERE user_id='$user_id'";
     return $this->query($sql);
   }
 
+	/**
+	* Get settings
+	* @param	int		$user_id
+	* @return	array
+	*/
   function get_settings($user_id)
   {
     $this->query("SELECT * FROM cal_settings WHERE user_id='$user_id'");
@@ -279,13 +411,26 @@ class calendar extends db
       return $this->get_settings($user_id);
     }		
   }
-
+	
+	/**
+	* Set show days
+	* @param	int		$user_id
+	* @param	int		$show_days
+	* @return	bool
+	*/
   function set_show_days($user_id, $show_days)
   {
     $sql = "UPDATE cal_settings SET show_days='$show_days' WHERE user_id='$user_id'";
     return $this->query($sql);
   }
 
+	/**
+	* Set todo view
+	* @param	int		$user_id
+	* @param	bool	$hide_completed_todos
+	* @param	int		$show_todos
+	* @return	bool
+	*/
   function set_todo_view($user_id, $hide_completed_todos, $show_todos)
   {
     $sql = "UPDATE cal_settings SET hide_completed_todos='$hide_completed_todos',".
@@ -293,6 +438,14 @@ class calendar extends db
     return $this->query($sql);
   }
 
+	/**
+	* Add a new calendar
+	* @param	int		$user_id
+	* @param	string	$name
+	* @param	string	$start_hour
+	* @param	string	$end_hour
+	* @return	mixed	calendar_id if success, false otherwise
+	*/
   function add_calendar($user_id, $name, $start_hour, $end_hour)
   {
     global $GO_SECURITY;
@@ -320,6 +473,10 @@ class calendar extends db
     return false;
   }
 
+	/**
+	* Delete a calendar
+	* @param	int		$calendar_id
+	*/
   function delete_calendar($calendar_id)
   {
     global $GO_SECURITY;
@@ -354,13 +511,25 @@ class calendar extends db
     $this->query($sql);
   }
 
+	/**
+	* Update a calendar
+	* @param	int		$calendar_id
+	* @param	string	$name
+	* @param	string	$start_hour
+	* @param	string	$end_hour
+	* @return	bool
+	*/
   function update_calendar($calendar_id, $name, $start_hour, $end_hour)
   {
     $sql = "UPDATE cal_calendars SET name='$name', start_hour='$start_hour', end_hour='$end_hour' WHERE id='$calendar_id'";
     return $this->query($sql);
   }
 
-
+	/**
+	* Get a calendar
+	* @param	int		$calendar_id
+	* @return	mixed	
+	*/
   function get_calendar($calendar_id)
   {
     $sql = "SELECT * FROM cal_calendars WHERE id='$calendar_id'";
@@ -374,6 +543,11 @@ class calendar extends db
     }
   }
 
+	/**
+	* Get calendar by name
+	* @param	string	$name
+	* @return	array if success, false otherwise
+	*/
   function get_calendar_by_name($name)
   {
     $sql = "SELECT * FROM cal_calendars WHERE name='$name'";
@@ -387,6 +561,11 @@ class calendar extends db
     }
   }
 
+	/**
+	* Get calendars by user_id
+	* @param	int		$user_id
+	* @return	int		Number of rows
+	*/
   function get_user_calendars($user_id)
   {
     $sql = "SELECT * FROM cal_calendars WHERE user_id='$user_id' ORDER BY name ASC";
@@ -394,6 +573,10 @@ class calendar extends db
     return $this->num_rows();
   }
 
+	/**
+	* Get calendars
+	* @return	int		Number of rows
+	*/
   function get_calendars()
   {
     $sql = "SELECT * FROM cal_calendars ORDER BY name ASC";
@@ -401,6 +584,10 @@ class calendar extends db
     return $this->num_rows();
   }
 
+	/**
+	* Get authorised calendars
+	* @return	int		Number of rows
+	*/
   function get_authorised_calendars($user_id)
   {
     $sql = "SELECT DISTINCT cal_calendars.* FROM cal_calendars, acl, users_groups WHERE (".
@@ -411,12 +598,25 @@ class calendar extends db
     return $this->num_rows();
   }
 
+	/**
+	* Set event status
+	* @param	int		$event_id
+	* @param	int		$status
+	* @param	string	$email
+	* @return	bool
+	*/
   function set_event_status($event_id, $status, $email)
   {
     $sql = "UPDATE cal_participants SET status='$status' WHERE email='$email' AND event_id='$event_id'";
     return $this->query($sql);
   }
 
+	/**
+	* Get event status
+	* @param	int		$event_id
+	* @param	string	$email
+	* @return	mixed	status (int) id success, false otherwise
+	*/
   function get_event_status($event_id, $email)
   {
     $sql = "SELECT status FROM cal_participants WHERE email='$email' AND event_id='$event_id'";
@@ -433,6 +633,34 @@ class calendar extends db
 
   /*
      Times in GMT!
+   */
+   /**
+   * Add a new event
+   * @param		int		$user_id
+   * @param		string	$start_time
+   * @param		string	$end_time
+   * @param		bool	$all_day_event
+   * @param		string	$name
+   * @param		string	$description
+   * @param		int		$contact_id
+   * @param		int		$reminder
+   * @param		string	$location
+   * @param		string	$background
+   * @param		int		$repeat_type
+   * @param		int		$repeat_end_time
+   * @param		int		$month_time
+   * @param		bool	$repeat_forever
+   * @param		int		$repeat_every
+   * @param		bool	$mon
+   * @param		bool	$tue
+   * @param		bool	$wed
+   * @param		bool	$thu
+   * @param		bool	$fri		 
+   * @param		bool	$sat
+   * @param		bool	$sun
+   * @param		int		$acl_read
+   * @param		int		$acl_write
+   * @return	mixed	$event_id if success, false otherwise
    */
   function add_event($user_id, $start_time, $end_time, $all_day_event, $name,
       $description, $contact_id, $reminder, $location,
@@ -465,6 +693,32 @@ class calendar extends db
     return false;
   }
 
+	/**
+	* Update a event
+   * @param		int		$event_id
+   * @param		string	$start_time
+   * @param		string	$end_time
+   * @param		bool	$all_day_event
+   * @param		string	$name
+   * @param		string	$description
+   * @param		int		$contact_id
+   * @param		int		$reminder
+   * @param		string	$location
+   * @param		string	$background
+   * @param		int		$repeat_type
+   * @param		int		$repeat_end_time
+   * @param		int		$month_time
+   * @param		bool	$repeat_forever
+   * @param		int		$repeat_every
+   * @param		bool	$mon
+   * @param		bool	$tue
+   * @param		bool	$wed
+   * @param		bool	$thu
+   * @param		bool	$fri		 
+   * @param		bool	$sat
+   * @param		bool	$sun
+   * @return	bool	
+	*/
   function update_event($event_id, $start_time, $end_time,
       $all_day_event, $name, $description, $contact_id,
       $reminder, $location, $background, $repeat_type,
@@ -487,18 +741,36 @@ class calendar extends db
     return $this->query($sql);
   }
 
+	/**
+	* Subscribe a event
+	* @param	int		$event_id
+	* @param	int		$calendar_id
+	* @return	bool	
+	*/
   function subscribe_event($event_id, $calendar_id)
   {
     $sql = "INSERT INTO cal_events_calendars (calendar_id, event_id) VALUES ('$calendar_id','$event_id')";
     return $this->query($sql);
   }
 
+	/**
+	* Unsubscribe a event
+	* @param	int		$event_id
+	* @param	int		$calendar_id
+	* @return	bool	
+	*/
   function unsubscribe_event($event_id, $calendar_id)
   {
     $sql = "DELETE FROM cal_events_calendars WHERE calendar_id='$calendar_id' AND event_id='$event_id'";
     return $this->query($sql);
   }
 
+	/**
+	* Subscribed event
+	* @param	int		$event_id
+	* @param	int		$calendar_id
+	* @return	bool	
+	*/
   function event_is_subscribed($event_id, $calendar_id)
   {
     $sql = "SELECT * FROM cal_events_calendars WHERE event_id='$event_id' AND calendar_id='$calendar_id'";
@@ -506,6 +778,11 @@ class calendar extends db
     return $this->next_record();
   }
 
+	/**
+	* Get event subscribtions
+	* @param	int		$event_id
+	* @return	int		Number of rows
+	*/
   function get_event_subscribtions($event_id)
   {
     $sql = "SELECT * FROM cal_events_calendars WHERE event_id='$event_id'";
@@ -513,6 +790,11 @@ class calendar extends db
     return $this->num_rows();
   }
 
+	/**
+	* Get calendars from event 
+	* @param	int		$event_id
+	* @return	int		Number of rows
+	*/
   function get_calendars_from_event($event_id)
   {
     $sql = "SELECT name FROM cal_calendars INNER JOIN cal_events_calendars ".
@@ -522,6 +804,13 @@ class calendar extends db
     return $this->num_rows();
   }
 
+	/**
+	* Insert reminder
+	* @param	int		$user_id
+	* @param	int		$event_id
+	* @param	string	$reminder_time
+	* @return	bool	
+	*/
   function insert_reminder($user_id, $event_id, $remind_time)
   {
     if ($remind_time != 0 && $remind_time > get_gmt_time())
@@ -530,11 +819,24 @@ class calendar extends db
       return true;
   }
 
+	/**
+	* Update a reminder
+	* @param	int		$user_id
+	* @param	int		$event_id
+	* @param	string	$reminder_time
+	* @return	bool
+	*/
   function update_reminder($user_id, $event_id, $remind_time)
   {
     return $this->query("UPDATE cal_reminders SET remind_time='$remind_time' WHERE user_id='$user_id' AND event_id='$event_id'");
   }
 
+	/**
+	* Delete a reminder
+	* @param	int		$user_id
+	* @param	int		$event_id
+	* @return	bool
+	*/
   function delete_reminder($user_id, $event_id)
   {
     return $this->query("DELETE FROM cal_reminders WHERE user_id='$user_id' AND event_id='$event_id'");
@@ -543,6 +845,13 @@ class calendar extends db
      returns next starting time of an event in GMT timezone
    */
 
+	/**
+	* Get next recurrence time
+	* @param	int		$event_id
+	* @param	int		$gmt_time
+	* @param	string	$event
+	* @return	string
+	*/ 
   function get_next_recurrence_time($event_id, $gmt_time=0, $event='')
   {
     if ($event == '')
@@ -760,7 +1069,16 @@ class calendar extends db
   /*
      Times in GMT!
    */
-
+	/**
+	* Get events
+	* @param	int		$calendar_id
+	* @param	int		$view_id
+	* @param	int		$user_id
+	* @param	int		$contact_id
+	* @param	int		$interval_start
+	* @param	int		$interval_end
+	* @return	int		Number of rows
+	*/
   function get_events($calendar_id=0, $view_id=0, $user_id=0, $contact_id=0, $interval_start=0, $interval_end=0)
   {
     $sql  = "SELECT DISTINCT cal_events.* FROM cal_events";
@@ -807,6 +1125,12 @@ class calendar extends db
     return $this->num_rows();
   }
 
+	/**
+	* Calculate repeat once
+	* @param	array	$event
+	* @param	string	$timezone_offset
+	* @return	mixed	none if success, false otherwise
+	*/
   function calculate_repeat_once($event, $timezone_offset)
   {
     //determine permissions
@@ -829,6 +1153,23 @@ class calendar extends db
 
   }
 
+	/**
+	* Get events in array
+	* @param	int		$calendar_id
+	* @param	int		$view_id
+	* @param	int		$user_id
+	* @param	int		$contact_id
+	* @param	string	$interval_start_time
+	* @param	string	$interval_end_time
+	* @param	int		$day
+	* @param	int		$month
+	* @param	int		$year
+	* @param	string	$timezone_offset
+	* @param	int		$display_start_hour
+	* @param	string	$index_date
+	* @param	bool	$index_hour
+	* @return	array
+	*/
   function get_events_in_array($calendar_id, $view_id, $user_id, $contact_id, 
 					$interval_start_time, $interval_end_time, $day, $month, $year, 
 					$timezone_offset, $display_start_hour=0, $index_date='Ymd', 
@@ -871,6 +1212,16 @@ class calendar extends db
     }
   }
 	
+	/**
+	* Add event to array
+	* @param	array	$event
+	* @param	string	$interval_start_time
+	* @param	string	$interval_end_time
+	* @param	string	$timezone_offset
+	* @param	string	$index_date
+	* @param	bool	$index_hour
+	* @param	int		$display_start_hour
+	*/
 	function add_event_to_array($event, $interval_start_time, $interval_end_time, $timezone_offset, $index_date, $index_hour, $display_start_hour)
 	{
 		if ($index_date)
@@ -966,7 +1317,19 @@ class calendar extends db
 	  }	
 	}
 
-
+	/**
+	* Calculate event
+	* @param	array	$event
+	* @param	string	$interval_start_time
+	* @param	string	$interval_end_time
+	* @param	int		$day
+	* @param	int		$month
+	* @param	int		$year
+	* @param	string	$timezone_offset
+	* @param	int		$display_start_hour
+	* @param	string	$index_date
+	* @param	bool	$index_hour
+	*/	
   function calculate_event($event, $interval_start_time, $interval_end_time, 
 						$day, $month, $year, $timezone_offset, $display_start_hour=0, 
 						$index_date='Ymd', $index_hour=true)
@@ -1413,6 +1776,10 @@ class calendar extends db
     return $this->query($sql);
   }
 
+	/**
+	* Delete a user
+	* @param	int		$user_id
+	*/
   function delete_user($user_id)
   {
     $delete = new calendar();
@@ -1439,14 +1806,23 @@ class calendar extends db
     }    
   }
 
-  
-  
+  /**
+  * Get time zones (no implement)
+  * @param	???		$vcalendar
+  */	  
   function get_timezones($vcalendar)
   {
 
   }
   
 //TODO: VTODO and attendee support
+	/**
+	* Import ical file
+	* @param	int		$user_id
+	* @param	string	$ical_file
+	* @param	int		$calendar_id
+	* @return	int		Number of record is imported
+	*/
   function import_ical_file($user_id, $ical_file, $calendar_id)
   {
     global $GO_CONFIG, $GO_SECURITY, $GO_MODULES;

@@ -16,6 +16,9 @@ class holidays extends db
 	var $in_holidays;
 	var $holidays = array();
 
+	/**
+	* Constructor
+	*/
 	function holidays()
 	{
 		global $GO_LANGUAGE;
@@ -25,6 +28,11 @@ class holidays extends db
 		$this->in_holidays = $input_holidays;
 	}
 
+	/**
+	* Get regions
+	* @param	???	$language	No use in function
+	* @return	array
+	*/
 	function get_regions($language)
 	{
 		global $GO_LANGUAGE;
@@ -42,6 +50,14 @@ class holidays extends db
 		return $regions;
 	}
 
+	/**
+	* Add holidays
+	* @param	int		$uid
+	* @param	int		$calendar_id
+	* @param	int		$year
+	* @param	string	$region
+	* @return	bool	
+	*/
 	function add_holidays($uid, $calendar_id, $year, $region)
 	{
 		if($this->generate_holidays($region, $year))
@@ -57,7 +73,16 @@ class holidays extends db
 		}
 		return true;
 	}
-
+	
+	/**
+	* Add a new holiday
+	* @param	int		$uid
+	* @param	int		$calendar_id
+	* @param	string	$region
+	* @param	string	$date
+	* @param	string	$name
+	* @return	bool	
+	*/
 	function add_holiday($uid, $calendar_id, $region, $date, $name)
 	{
 		$next_id = $this->nextid("cal_holidays");
@@ -74,6 +99,13 @@ class holidays extends db
 		return false;
 	}
 
+	/**
+	* Update a holiday
+	* @param	int		$id
+	* @param	string	$date
+	* @param	string	$name
+	* @return	bool	true if success, false otherwise
+	*/
 	function update_holiday($id, $date, $name)
 	{
 		$sql = "UPDATE cal_holidays SET date='$date', name='$name'";
@@ -81,6 +113,11 @@ class holidays extends db
 		return ($this->query($sql));
 	}
 
+	/**
+	* Delete a holiday 
+	* @param	int		$id
+	* @return	bool	true if success, false otherwise
+	*/
 	function delete_holiday($id)
 	{
 		$sql = "DELETE FROM cal_holidays WHERE id='$id'";
@@ -91,6 +128,12 @@ class holidays extends db
 			return false;
 	}
 
+	/**
+	* Delete a holiday
+	* @param	int		$uid			User ID
+	* @param	int		$calendar_id
+	* @param	string	$year
+	*/
 	function delete_holidays($uid, $calendar_id, $year="")
 	{
 		$sql = "DELETE FROM cal_holidays WHERE user_id='$uid' AND calendar_id='$calendar_id'";
@@ -109,6 +152,12 @@ class holidays extends db
 			return false;
 	}
 
+	/**
+	* Get a region
+	* @param	int		$uid
+	* @param	int		$calendar_id
+	* @return	string
+	*/
 	function get_region($uid, $calendar_id)
 	{
 		$sql = "SELECT region FROM cal_holidays WHERE user_id='$uid' AND calendar_id='$calendar_id'";
@@ -118,6 +167,13 @@ class holidays extends db
 			return $this->f('region');
 	}
 
+	/**
+	* Get a holiday
+	* @param	int		$uid			User ID
+	* @param	int		$calendar_id
+	* @param	string	$date
+	* @return	bool	true if succes, false otherwise
+	*/
 	function get_holiday($uid, $calendar_id, $date)
 	{
 		$sql = "SELECT * FROM cal_holidays WHERE user_id='$uid' AND calendar_id='$calendar_id' AND date='$date'";
@@ -129,6 +185,11 @@ class holidays extends db
 			return false;
 	}
 
+	/**
+	* Get a holiday by id
+	* @param	int		$id
+	* @return	bool	true if success, false otherwise
+	*/
 	function get_holiday_by_id($id)
 	{
 		$sql = "SELECT * FROM cal_holidays WHERE id='$id'";
@@ -140,6 +201,13 @@ class holidays extends db
 			return false;
 	}
 
+	/**
+	* Get holidays
+	* @param	int		$uid			User ID
+	* @param	int		$calendar_id	
+	* @param	string	$year
+	* @return	int		Number of rows
+	*/
 	function get_holidays($uid, $calendar_id, $year="" )
 	{
 		$sql = "SELECT * FROM cal_holidays WHERE user_id='$uid' AND calendar_id='$calendar_id'";
@@ -156,6 +224,12 @@ class holidays extends db
 		return $this->num_rows();
 	}
 
+	/**
+	* Generate holidays
+	* @param	string	$region
+	* @param	string	$year
+	* @return	true if success, false otherwise
+	*/
 	function generate_holidays($region, $year="")
 	{
 		$holidays = array();
@@ -220,7 +294,12 @@ class holidays extends db
 			return true;
 		}
 	}
-
+	
+	/**
+	* Get easter day
+	* @param	int		$year
+	* @return	string
+	*/
 	function get_easter_day($year)
 	{
 	        if($year < 2100)
@@ -253,6 +332,13 @@ class holidays extends db
 	        return mktime(0,0,0,$month,$day,$year);
 	}
 
+	/**
+	* Get a weekday
+	* @param	int		$day
+	* @param	int		$month	
+	* @param	int		$year
+	* @return	string
+	*/
 	function get_weekday($day, $month, $year)
 	{
 	        $date = getdate(mktime(0, 0, 0, $month, $day, $year));
