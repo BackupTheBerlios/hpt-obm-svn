@@ -1009,7 +1009,7 @@ function send()
     field = f;
     switch (e.keyCode) {
       case 9: // tab
-        return false;
+        return true;
       case 8: // backspace
         m = m[m.length - 1].replace(/.$/g, '');
         break;
