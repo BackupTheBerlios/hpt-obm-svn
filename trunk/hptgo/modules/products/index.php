@@ -1,4 +1,5 @@
 <?php
+	$preload_files = 'modules/products/classes/products.class.php';
 	require("../../Group-Office.php");
 		
 	$GO_SECURITY->authenticate();

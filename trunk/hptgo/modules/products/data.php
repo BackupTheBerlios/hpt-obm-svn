@@ -1,4 +1,5 @@
 <?php
+$preload_files = 'modules/products/classes/products.class.php';
 require_once('../../Group-Office.php');
 require_once('classes/products.class.php');
 $pro = new products();
