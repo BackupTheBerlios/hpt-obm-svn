@@ -484,6 +484,32 @@ a.TableHead2:hover{
 	padding: 0px;
 }
 
+.ProjectTask0{
+        background-color: #e6eff4;
+        font-family: arial, helvetica, sans-serif;
+        font-size: 12px;
+        font-weight: normal;
+        color: #000000;
+       padding: 0px;
+}
+.ProjectComment1{
+       background-color: white;
+        font-family: arial, helvetica, sans-serif;
+        font-size: 12px;
+        font-weight: normal;
+        color: #000000;
+       cursor: default;
+       padding: 2px;
+}
+.ProjectComment2{
+        background-color: #e6eff4;
+        font-family: arial, helvetica, sans-serif;
+        font-size: 12px;
+        font-weight: normal;
+        color: #000000;
+       padding: 2px;
+}
+
 
 .Error {
 	font-size: 12px;

@@ -218,7 +218,7 @@ class project_task extends db {
     if ($this->level == -1)
       echo "<tr>";
     else
-      echo "<tr class=\"TableInside2\">";
+      echo "<tr class=\"ProjectTask0\">";
 
     $id = $this->id < 10 ? "0" . $this->id : $this->id;
     echo "<td align=\"center\">$id</td>";
@@ -383,10 +383,10 @@ class project_task extends db {
     while ($data) {
       if ($data == "") continue;
       list($time, $who, $text) = explode("|", $data);
-      echo "<tr class=\"TableInside2\"><td><i>($time)</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
+      echo "<tr class=\"ProjectComment2\"><td><i>($time)</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;".
         "<b>$who</b></td></tr>";
       $text = str_replace("\n", "<br>", $text);
-      echo "<tr class=\"TableInside1\"><td>$text</td></tr>";
+      echo "<tr class=\"ProjectComment1\"><td>$text</td></tr>";
       $data = strtok("\xFF");
     }
   }
