@@ -1526,4 +1526,23 @@ function div_confirm_action($url,$string)
 {
 	return "div_confirm_action('$url',".div_confirm_id($string).")";
 }
+
+function cleanup_url($url)
+{
+	// Get the query string
+	$pos = strpos($url,'?');
+	if ($pos === false)
+		return $url;
+
+	$query = substr($url,$pos+1);
+	parse_str($query,$elements);
+	$query = '';
+	foreach ($elements as $key=>$value)
+	{
+		$query .= '&'.urlencode($key).'='.urlencode($value);
+	}
+	$query = substr($query,1);
+	return substr($url,0,$pos+1).$query;
+}
+
 ?>

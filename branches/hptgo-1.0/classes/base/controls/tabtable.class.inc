@@ -55,6 +55,14 @@ class tabtable
     $this->active_tab = isset($_REQUEST[$active_tab_ref]) ? $_REQUEST[$active_tab_ref] : 0;
   }
 
+  /**
+   * Return the url query string so that we can restore the state of the tabtable.
+   */
+  function get_link_back()
+  {
+  	return $this->id.'='.$this->active_tab;
+  }
+
   function set_classnames($table, $tab, $active_tab, $tab_background)
   {
     $this->css_table= $table;

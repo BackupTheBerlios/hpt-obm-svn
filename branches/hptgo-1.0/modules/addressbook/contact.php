@@ -282,7 +282,6 @@ echo '<input type="hidden" value="'.$contact["source_id"].'" name="source_id" />
 echo '<input type="hidden" name="task" value="" />';
 echo '<input type="hidden" name="close" value="false" />';
 echo '<input type="hidden" name="return_to" value="'.$return_to.'" />';
-echo '<input type="hidden" name="link_back" value="'.$link_back.'" />';
 echo '<input type="hidden" name="contact_id" value="'.$contact_id.'" />';
 echo '<table border="0"><tr>';
 
@@ -370,12 +369,14 @@ if ($contact_id > 0)
   $tabtable->add_tab('write_permissions', $strWriteRights);
 }
 echo '</tr></table>';
-
 $active_tab = isset($_REQUEST['active_tab']) ? $_REQUEST['active_tab'] : null;
 if (isset($active_tab))
 {
   $tabtable->set_active_tab($active_tab);
 }
+
+$link_back = cleanup_url($link_back.'&'.$tabtable->get_link_back());
+echo '<input type="hidden" name="link_back" value="'.$link_back.'" />';
 
 $tabtable->print_head();
 
@@ -415,10 +416,6 @@ switch($active_tab_id)
     $projects = new projects();
 
     $projects_module_url = $projects_module['url'];
-    if (!isset($active_tab))
-    {
-      $link_back .= '&active_tab='.$tabtable->active_tab;
-    }  
     require($projects_module['path'].'projects.inc');
     echo '<br />';
     $button = new button($cmdClose, "javascript:document.location='".$return_to."'");
@@ -430,10 +427,6 @@ switch($active_tab_id)
     require_once($notes_module['class_path'].'notes.class.inc');
     $notes = new notes();
     $notes_module_url = $notes_module['url'];
-    if (!isset($active_tab))
-    {
-      $link_back .= '&active_tab='.$tabtable->active_tab;
-    }
     require($notes_module['path'].'notes.inc');
     echo '<br />';
     $button = new button($cmdClose, "javascript:document.location='".$return_to."'");
@@ -455,10 +448,6 @@ switch($active_tab_id)
     require_once($calendar_module['class_path'].'calendar.class.inc');
     $cal = new calendar();
     $calendar_module_url = $calendar_module['url'];
-    if (!isset($active_tab))
-    {
-      $link_back .= '&active_tab='.$tabtable->active_tab;
-    }  
 
     $print = false;
     $calendar_id = 0;
@@ -500,10 +489,6 @@ switch($active_tab_id)
     require_once($calendar_module['class_path'].'todos.class.inc');
     $todos = new todos();
     $calendar_module_url = $calendar_module['url'];
-    if (!isset($active_tab))
-    {
-      $link_back .= '&active_tab='.$tabtable->active_tab;
-    }
     echo '<table border= "0"><tr><td>';
     require($calendar_module['path'].'todos.inc');
     echo '</td></tr></table>';
