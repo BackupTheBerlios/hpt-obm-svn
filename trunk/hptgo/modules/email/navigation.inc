@@ -131,9 +131,10 @@ $unseen = $mail->unseen;
  */
 $show = "from";
 $get_to_addresses = true;
-if ($mail->is_imap() && $account['sent'] != '')
+if ($mail->is_imap() && ($account['sent'] != '' || $account['draft'] != ''))
 {
-  if (strpos($mailbox, $account['sent']) === 0)
+  if (($account['sent'] != '' && strpos($mailbox, $account['sent']) === 0) ||
+      ($account['draft'] != '' && strpos($mailbox, $account['draft']) === 0))
   {
     $show = "to";
     $get_to_addresses = true;

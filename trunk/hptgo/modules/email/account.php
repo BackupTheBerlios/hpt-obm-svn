@@ -51,6 +51,7 @@ if ($task == 'save_account')
   	$novalidate_cert = isset($_REQUEST['novalidate_cert']) ? '1' : '0';
   	
     $sent = $_POST['type'] == 'pop3' ? '' : smart_addslashes($_POST['sent']);
+    $draft = $_POST['type'] == 'pop3' ? '' : smart_addslashes($_POST['draft']);
     $spam = $_POST['type'] == 'pop3' ? '' : smart_addslashes($_POST['spam']);
     $trash = $_POST['type'] == 'pop3' ? '' : smart_addslashes($_POST['trash']);
 
@@ -64,7 +65,7 @@ if ($task == 'save_account')
 	    $_POST['pass'], smart_addslashes($_POST['name']),
 	    smart_addslashes($_POST['mail_address']),
 	    smart_addslashes($_POST['signature']),
-	    $sent, $spam, $trash, $auto_check))
+	    $sent, $spam, $trash, $draft, $auto_check))
       {
 	$feedback = '<p class="Error">'.$ml_connect_failed.' \''.$_POST['host'].
 	  '\' '.$ml_at_port.': '.$_POST['port'].'</p>';
@@ -84,7 +85,7 @@ if ($task == 'save_account')
 	    smart_addslashes($_POST['name']),
 	    smart_addslashes($_POST['mail_address']),
 	    smart_addslashes($_POST['signature']),
-	    $sent, $spam, $trash, $auto_check))
+	    $sent, $spam, $trash, $draft, $auto_check))
       {
 	$feedback = '<p class="Error">'.$ml_connect_failed.' \''.
 	  $_POST['host'].'\' '.$ml_at_port.': '.$_POST['port'].'</p>'.
@@ -121,6 +122,7 @@ if (isset($_REQUEST['account_id']) && $_SERVER['REQUEST_METHOD'] != "POST")
   $spam = $account["spam"];
   $trash = $account["trash"];
   $sent = $account["sent"];
+  $sent = $account["draft"];
   $auto_check = $account['auto_check'] == '1' ? true : false;
   $use_ssl = $account['use_ssl'] == '1' ? true : false;
   $novalidate_cert = $account['novalidate_cert'] == '1' ? true : false;
@@ -139,6 +141,7 @@ if (isset($_REQUEST['account_id']) && $_SERVER['REQUEST_METHOD'] != "POST")
   $spam = $mbroot.$ml_spam;
   $trash = $mbroot.$ml_trash;
   $sent = $mbroot.$ml_sent_items;
+  $draft = $mbroot.$ml_draft_items;
   $auto_check = isset($_REQUEST['auto_check']) ? true : false;
   $use_ssl = isset($_REQUEST['use_ssl']) ? true : false;
   $novalidate_cert = isset($_REQUEST['novalidate_cert']) ? true : false;
@@ -178,6 +181,7 @@ if ($type  == 'pop3')
 
 echo '<input type="hidden" name="spam" value="'.$spam.'" />';
 echo '<input type="hidden" name="sent" value="'.$sent.'" />';
+echo '<input type="hidden" name="draft" value="'.$draft.'" />';
 echo '<input type="hidden" name="trash" value="'.$trash.'" />';
 ?>
 

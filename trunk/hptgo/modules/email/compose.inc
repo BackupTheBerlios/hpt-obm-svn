@@ -78,6 +78,73 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
     $subject = isset($content['subject']) ? $content['subject'] : $ml_no_subject;
     switch($_REQUEST['action'])
     {
+      case "edit":
+	//print_r($content);
+	//$mail_to = implode(',',$content['to']);
+      //add all recievers from this email
+
+	if (isset($content["to"]))
+	{
+	  for ($i=0;$i<sizeof($content["to"]);$i++)
+	  {
+	    $lt = strpos($content["to"][$i], "&lt") + 4;
+	    $gt = strpos($content["to"][$i], "&gt");
+
+	    $length = $gt-$lt;
+
+	    $address = trim(substr($content["to"][$i],$lt,$length));
+
+	    if ($address != "" && !in_array($address,$addresses))
+	    {
+	      $mail_to .= (isset($mail_to) && $mail_to != '' ? "," : '').$address;
+	    }
+	  }
+	}
+
+	if (isset($content["cc"]))
+	{
+	  for ($i=0;$i<sizeof($content["cc"]);$i++)
+	  {
+	    $lt = strpos($content["cc"][$i], "&lt") + 4;
+	    $gt = strpos($content["cc"][$i], "&gt");
+
+	    $length = $gt-$lt;
+
+	    $address = trim(substr($content["cc"][$i],$lt,$length));
+
+	    if ($address != "" && !in_array($address,$addresses))
+	    {
+	      if (!isset($first))
+	      {
+		$first = true;
+	      }else
+	      {
+		$mail_cc .= ',';
+	      }
+	      $mail_cc .= $address;
+	    }
+	  }
+	}
+
+	$mail_subject = $subject;
+
+	for ($i=0;$i<count($parts);$i++)
+	{
+	  if (eregi("attachment", $parts[$i]["disposition"]) && !eregi("message/RFC822", $parts[$i]["mime"]))
+	  {
+	    $file = $mail->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"]);
+
+	    $name = $parts[$i]['name'] != '' ? $parts[$i]['name'] : 'attach_'.$i;
+
+	    $tmp_file = $GO_CONFIG->tmpdir.md5(uniqid(time()));
+	    $fp = fopen($tmp_file,"wb");
+	    fwrite ($fp,$file);
+	    fclose($fp);
+	    $email->register_attachment($tmp_file, $parts[$i]["name"], $parts[$i]["size"], $parts[$i]["mime"], 'attachment', $parts[$i]["id"]);
+	  }
+	}
+      break;
+
       case "reply":
 	$mail_to = $content["reply_to"];
 	if (!stristr($subject,"Re: "))
@@ -226,7 +293,7 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
 	    !eregi("ATTACHMENT", $parts[$i]["disposition"]))
 	{
 	  $text_part = $mail->view_part($uid, $parts[$i]["number"], $parts[$i]["transfer"]);
-	  if ($_REQUEST['action'] == 'forward')
+	  if ($_REQUEST['action'] == 'forward' || $_REQUEST['action'] == 'edit')
 	  {
 	    $mail_body .= $text_part;
 	  }else
@@ -306,6 +373,7 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
       }
       $header_om .= "</font><br /><br />";
 
+      if ($_REQUEST['action'] != 'edit')
       $mail_body = $signature.'<br /><blockquote style="border:0;border-left: 2px solid #22437f; padding:0px; margin:0px; padding-left:5px; margin-left: 5px; ">'.$header_om.$mail_body.'</blockquote>';
 
     }else
@@ -332,12 +400,14 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
 	$header_om .= $strDate.": ".date($_SESSION['GO_SESSION']['date_format'].' '.$_SESSION['GO_SESSION']['time_format'],$content["udate"])."\r\n\r\n\r\n";
       }
 
+      if ($_REQUEST['action'] != 'edit') {
       if ($html_message_count > 0)
       {
 	$mail_body = $signature.$ml_html_message_attached."\r\n\r\n".$header_om.$mail_body;
       }else
       {
 	$mail_body = $signature.$header_om.$mail_body;
+      }
       }
     }
   }
@@ -709,6 +779,10 @@ $htmlarea->print_htmlarea(stripslashes(htmlspecialchars($mail_body)));
 <?php
 $button = new button($ml_send,"javascript:send()");
 echo '&nbsp;&nbsp;';
+if ($account['draft'] != '') {
+  $button = new button($ml_savedraft,"javascript:savedraft()");
+  echo '&nbsp;&nbsp;';
+}
 $button = new button($cmdCancel,"javascript:window.close()");
 ?>
 </td>
@@ -770,6 +844,24 @@ function send()
 	<?php if ($mailing_group_id == 0) echo '}'; ?>
       }
   }
+
+function savedraft()
+{
+  if (document.sendform.sendaction.value != 'savedraft') {
+    if (validate()) {
+      document.sendform.sendaction.value = "savedraft";
+<?php
+    if (isset($uid) && $uid > 0) {
+      echo 'document.sendform.uid.value="'.$uid.'";';
+    }
+    if ($content_type == 'text/HTML') {
+      echo 'document.sendform.onsubmit();';
+    }
+?>
+    document.sendform.submit();
+    }
+  }
+}
 
   function attach()
   {

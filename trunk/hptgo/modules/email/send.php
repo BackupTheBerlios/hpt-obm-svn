@@ -341,6 +341,175 @@ switch ($sendaction)
 
     break;
 
+  case 'savedraft':
+    if (!isset($_POST['mail_from']))
+    {
+      $profile = $GO_USERS->get_user($GO_SECURITY->user_id);
+      $middle_name = $profile['middle_name'] == '' ? '' : $profile['middle_name'].' ';
+      $name = $profile['last_name'].' '.$middle_name.$profile['first_name'];
+    }else
+    {
+      $profile = $email->get_account($_POST['mail_from']);
+      $name = $profile["name"];
+    }
+
+    $mail = new PHPMailer();
+    $mail->PluginDir = $GO_CONFIG->class_path.'phpmailer/';
+    $mail->SetLanguage($php_mailer_lang, $GO_CONFIG->class_path.'phpmailer/language/');
+    $mail->Priority = $_POST['priority'];
+    $mail->Sender     = $profile["email"];    
+    $mail->From     = $profile["email"];
+    $mail->FromName = $name;
+    $mail->AddReplyTo($profile["email"],$name);
+    //$mail->WordWrap = 50;
+    //$mail->Encoding = "quoted-printable";
+
+    if (isset($_POST['notification']))
+    {
+      $mail->ConfirmReadingTo = $profile["email"];
+    }
+    $html_message = $content_type == 'text/HTML' ? true : false;
+    $mail->IsHTML($html_message);
+    $mail->Subject = smartstrip(trim($mail_subject));
+
+    if (isset($_SESSION['url_replacements']))
+    {
+      while($url_replacement = array_shift($_SESSION['url_replacements']))
+      {
+	$mail_body=str_replace($url_replacement['url'], "cid:".$url_replacement['id'], $mail_body);
+      }
+      unset($_SESSION['url_replacements']);
+    }
+
+    // Getting the attachments
+    if (isset($_SESSION['attach_array']))
+    {
+      for ($i=1;$i<=$_SESSION['num_attach'];$i++)
+      {
+	// If the temporary file exists, attach it
+	$tmp_file = stripslashes($_SESSION['attach_array'][$i]->tmp_file);
+	if (file_exists($tmp_file))
+	{
+	  if ($_SESSION['attach_array'][$i]->disposition == 'attachment' || strpos($mail_body, $_SESSION['attach_array'][$i]->content_id))
+	  {
+	    if ($_SESSION['attach_array'][$i]->disposition == 'attachment')
+	    {
+	      $mail->AddAttachment($tmp_file, imap_qprint($_SESSION['attach_array'][$i]->file_name), 'base64',  $_SESSION['attach_array'][$i]->file_mime) ;
+	    }else
+	    {
+	      $mail->AddEmbeddedImage($tmp_file, $_SESSION['attach_array'][$i]->content_id, imap_qprint($_SESSION['attach_array'][$i]->file_name), 'base64',  $_SESSION['attach_array'][$i]->file_mime);
+	    }
+	  }
+	}
+      }
+    }
+    
+    $mail_to_array = cut_address(trim($mail_to), $charset);
+    $mail_cc_array = cut_address(trim($mail_cc), $charset);
+    $mail_bcc_array = cut_address(trim($mail_bcc), $charset);
+
+    if ($add_recievers > 0)
+    {
+      $add_reciever_ab = $ab->get_addressbook($add_recievers);
+    }else
+    {
+      $add_reciever_ab = false;
+    }
+
+    while ($to_address = array_shift($mail_to_array))
+    {
+      $mail->AddAddress($to_address);
+      if ($add_reciever_ab)
+      {
+	add_unknown_reciepent($to_address, $add_reciever_ab);
+      }
+    }
+    while ($cc_address = array_shift($mail_cc_array))
+    {
+      $mail->AddCC($cc_address);
+      if ($add_reciever_ab)
+      {
+	add_unknown_reciepent($cc_address, $add_reciever_ab);
+      }
+    }
+    while ($bcc_address = array_shift($mail_bcc_array))
+    {
+      $mail->AddBCC($bcc_address);
+      if ($add_reciever_ab)
+      {
+	add_unknown_reciepent($bcc_address, $add_reciever_ab);
+      }
+    }
+
+    if ($html_message)
+    {
+      $mail->Body = $html_mail_head.$mail_body.$html_mail_foot;
+      $htmlToText = new Html2Text ($mail_body);
+      $mail->AltBody = $htmlToText->get_text();
+    }else
+    {
+      $mail->Body = $mail_body;
+    }
+
+    //set Line enidng to \r\n for Cyrus IMAP
+    $mail->LE = "\r\n";
+    $mime = $mail->GetMime();
+
+    if (isset($_SESSION['attach_array']))
+    {
+      while($attachment = array_shift($_SESSION['attach_array']))
+      {
+	@unlink($attachment->tmp_file);
+      }
+    }
+    // We need to unregister the attachments array and num_attach
+    unset($_SESSION['num_attach']);
+    unset($_SESSION['attach_array']);
+
+    if ($profile["type"] == "imap")
+    {
+      $draft_folder = $profile['draft'];
+      if ($draft_folder != '')
+      {
+	require($GO_CONFIG->class_path."imap.class.inc");
+	$imap_stream = new imap();
+	if ($imap_stream->open($profile["host"], "imap", $profile["port"], $profile["username"], $GO_CRYPTO->decrypt($profile["password"]), $draft_folder, 0, $profile['use_ssl'], $profile['novalidate_cert']))
+	{
+	  if ($imap_stream->append_message($draft_folder, $mime,"\\Seen"))
+	  {
+	    if (isset($_REQUEST['action']) && ($_REQUEST['action']== "reply" || $_REQUEST['action'] == "reply_all"))
+	    {
+	      $uid = array($_REQUEST['uid']);
+	      $imap_stream->set_message_flag($_POST['mailbox'], $uid, "\\Answered");
+	    }
+	    
+	    $imap_stream->close();
+	    require($GO_THEME->theme_path."header.inc");
+	    echo "<script type=\"text/javascript\">\r\nwindow.close();\r\n</script>\r\n";
+	    require($GO_THEME->theme_path."footer.inc");
+	    exit();
+	  }
+	}
+	require($GO_THEME->theme_path."header.inc");
+	echo "<script type=\"text/javascript\">\r\nalert('".$ml_draft_items_fail."');\r\nwindow.close();\r\n</script>\r\n";
+	require($GO_THEME->theme_path.'footer.inc');
+	exit();
+      }else
+      {
+	require($GO_THEME->theme_path."header.inc");
+	echo "<script type=\"text/javascript\">\r\nwindow.close();\r\n</script>\r\n";
+	require($GO_THEME->theme_path.'footer.inc');
+	exit();
+      }
+    }else
+    {
+      require($GO_THEME->theme_path.'header.inc');
+      echo "<script type=\"text/javascript\">\r\nwindow.close();\r\n</script>\r\n";
+      require($GO_THEME->theme_path.'footer.inc');
+      exit();
+    }
+    break;
+
   case 'delete':
     // Rebuilding the attachments array with only the files the user wants to keep
     $tmp_array = array();

@@ -37,20 +37,21 @@ if ($task == 'save_account')
 	}else
 	{
 		$sent = $_POST['type'] == 'pop3' ? '' : $_POST['sent'];
+		$draft = $_POST['type'] == 'pop3' ? '' : $_POST['draft'];
 		$spam = $_POST['type'] == 'pop3' ? '' : $_POST['spam'];
 		$trash = $_POST['type'] == 'pop3' ? '' : $_POST['trash'];
 
 		$auto_check = isset($_POST['auto_check']) ? '1' : '0';
 		if (isset($_POST['account_id']))
 		{
-			if(!$email->update_account($_POST['account_id'], $_POST['type'], $_POST['host'], $_POST['port'], $mbroot, $_POST['user'], $_POST['pass'], $_POST['name'], $_POST['mail_address'], $_POST['signature'], $sent, $spam, $trash, $auto_check))
+			if(!$email->update_account($_POST['account_id'], $_POST['type'], $_POST['host'], $_POST['port'], $mbroot, $_POST['user'], $_POST['pass'], $_POST['name'], $_POST['mail_address'], $_POST['signature'], $sent, $spam, $trash, $draft, $auto_check))
 			{
 				$feedback = '<p class="Error">'.$ml_connect_failed.' \''.$_POST['host'].'\' '.$ml_at_port.': '.$_POST['port'].'</p>';
 				$feedback .= '<p class="Error">'.$email->last_error.'</p>';
 			}
 		}else
 		{
-			if(!$email_id = $email->add_account($GO_SECURITY->user_id, $_POST['type'], $_POST['host'], $_POST['port'], $mbroot, $_POST['user'], $_POST['pass'], $_POST['name'], $_POST['mail_address'], $_POST['signature'], $sent, $spam, $trash, $auto_check))
+			if(!$email_id = $email->add_account($GO_SECURITY->user_id, $_POST['type'], $_POST['host'], $_POST['port'], $mbroot, $_POST['user'], $_POST['pass'], $_POST['name'], $_POST['mail_address'], $_POST['signature'], $sent, $spam, $trash, $draft, $auto_check))
 			{
 				$feedback = '<p class="Error">'.$ml_connect_failed.' \''.$_POST['host'].'\' '.$ml_at_port.': '.$_POST['port'].'</p>';
 				$feedback .= '<p class="Error">'.$email->last_error.'</p>';

@@ -100,6 +100,11 @@ echo '<table border="0" width="100%" height="100%"><tr><td>';
 if (!$print)
 {
   echo '<table border="0" cellspacing="0" cellpadding="0"><tr><td class="ModuleIcons">';
+  if (($account['sent'] != '' && strpos($mailbox, $account['sent']) === 0) ||
+      ($account['draft'] != '' && strpos($mailbox, $account['draft']) === 0)) {
+    echo '<td class="ModuleIcons">';
+    echo "<a href=\"javascript:popup('send.php?account_id=".$account_id."&uid=".$uid."&mailbox=".urlencode($mailbox)."&action=edit','".$GO_CONFIG->composer_width."','".$GO_CONFIG->composer_height."')\"><img src=\"".$GO_THEME->images['compose']."\" border=\"0\" height=\"32\" width=\"32\" /><br />".$ml_compose."</a></td>\n";
+  }
   echo '<td class="ModuleIcons">';
   echo "<a href=\"javascript:popup('send.php?account_id=".$account_id."&uid=".$uid."&mailbox=".urlencode($mailbox)."&action=reply','".$GO_CONFIG->composer_width."','".$GO_CONFIG->composer_height."')\"><img src=\"".$GO_THEME->images['reply']."\" border=\"0\" height=\"32\" width=\"32\" /><br />".$ml_reply."</a></td>\n";
   echo '<td class="ModuleIcons">';

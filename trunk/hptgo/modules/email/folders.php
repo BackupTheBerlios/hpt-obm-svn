@@ -121,10 +121,11 @@ if ($account && $mail->open($account['host'], $account['type'],
 		}
 
 		$sent = isset($_POST['sent']) ? smart_addslashes($_POST['sent']) : '';
+		$draft = isset($_POST['draft']) ? smart_addslashes($_POST['draft']) : '';
 		$spam = isset($_POST['spam']) ? smart_addslashes($_POST['spam']) : '';
 		$trash = isset($_POST['trash']) ? smart_addslashes($_POST['trash']) : '';
 
-		$email->update_folders($account['id'], $sent, $spam, $trash);
+		$email->update_folders($account['id'], $sent, $spam, $trash, $draft);
 
 		if (isset($_POST['new_name']))
 		{
@@ -196,6 +197,24 @@ if ($account && $mail->open($account['host'], $account['type'],
 		<tr>
 			<td colspan="2">
 			<table border="0">
+			<tr>
+				<td nowrap><?php echo $ml_draft_items; ?>:</td>
+				<td>
+				<?php
+				$dropbox=new dropbox();
+				$dropbox->add_value('', $ml_disable);
+				for ($i=0;$i<$mcount;$i++)
+				{
+					if ($go_mailboxes[$i]['attributes'] != LATT_NOSELECT)
+					{
+						$dropbox->add_value($go_mailboxes[$i]['name'], 
+								str_replace('INBOX'.$go_mailboxes[$i]['delimiter'], '', $go_mailboxes[$i]['name']));
+					}
+				}
+				$dropbox->print_dropbox('draft', $account['draft']);
+				?>
+				</td>
+			</tr>
 			<tr>
 				<td nowrap><?php echo $ml_sent_items; ?>:</td>
 				<td>

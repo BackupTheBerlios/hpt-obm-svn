@@ -66,7 +66,7 @@ class email extends db
     }		
   }
 
-  function add_account($user_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $sent, $spam, $trash, $auto_check=0)
+  function add_account($user_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $sent, $spam, $trash, $draft,$auto_check=0)
   {
     global $GO_CONFIG;
 
@@ -123,6 +123,7 @@ class email extends db
 	  }
 
 	  $sent = $sent == '' ? '' : $mbroot.$sent;
+	  $draft = $draft == '' ? '' : $mbroot.$draft;
 	  $spam = $spam == '' ? '' : $mbroot.$spam;
 	  $trash = $trash == '' ? '' : $mbroot.$trash;
 
@@ -149,6 +150,26 @@ class email extends db
 		$mail->subscribe($sent);
 	      }
 	      $sent_folder = $sent;
+	    }
+	  }
+
+	  $draft_folder = '';
+	  if ($draft != '')
+	  {
+	    //create draft items folder
+	    if (!in_array($draft, $mailbox_names))
+	    {
+	      if ($mail->create_folder($draft))
+	      {
+		$draft_folder = $draft;
+	      }
+	    }else
+	    {
+	      if (!in_array($draft, $subscribed_names))
+	      {
+		$mail->subscribe($draft);
+	      }
+	      $draft_folder = $draft;
 	    }
 	  }
 
@@ -193,7 +214,7 @@ class email extends db
 	  }
 
 	  //update the special folders
-	  $this->update_folders($account_id, $sent_folder, $spam_folder, $trash_folder);
+	  $this->update_folders($account_id, $sent_folder, $spam_folder, $trash_folder, $draft_folder);
 
 	  $mailboxes =  $mail->get_mailboxes($mbroot);
 	  $subscribed =  $mail->get_subscribed($mbroot);
@@ -211,7 +232,7 @@ class email extends db
     return $this->query("UPDATE emAccounts SET auto_check='0' WHERE id='$account_id'");
   }
 
-  function update_account($account_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $sent, $spam, $trash, $auto_check=0)
+  function update_account($account_id, $type, $host, $port, $use_ssl, $novalidate_cert, $mbroot, $username, $password, $name, $email, $signature, $sent, $spam, $trash, $draft, $auto_check=0)
   {
     global $GO_CONFIG, $GO_CRYPTO;
 
@@ -269,6 +290,26 @@ class email extends db
 	  }
 	}
 
+	$draft_folder = '';
+	if ($draft != '')
+	{
+	  //create draft items folder
+	  if (!in_array($draft, $mailbox_names))
+	  {
+	    if ($mail->create_folder($draft))
+	    {
+	      $draft_folder = $draft;
+	    }
+	  }else
+	  {
+	    if (!in_array($draft, $subscribed_names))
+	    {
+	      $mail->subscribe($draft);
+	    }
+	    $draft_folder = $draft;
+	  }
+	}
+
 	$spam_folder = '';
 	if ($spam != '')
 	{
@@ -310,7 +351,7 @@ class email extends db
 	}
 
 	//update the special folders
-	$this->update_folders($account_id, $sent_folder, $spam_folder, $trash_folder);
+	$this->update_folders($account_id, $sent_folder, $spam_folder, $trash_folder, $draft_folder);
 
 	$mailboxes =  $mail->get_mailboxes($mbroot);
 	$subscribed =  $mail->get_subscribed($mbroot);
@@ -331,10 +372,11 @@ class email extends db
     return $this->query($sql);
   }
 
-  function update_folders($account_id, $sent, $spam, $trash)
+  function update_folders($account_id, $sent, $spam, $trash, $draft)
   {
     $sql = "UPDATE emAccounts SET sent='$sent', spam=".
-      "'$spam',trash='$trash' WHERE id='$account_id'";
+      "'$spam',trash='$trash',draft='$draft' ".
+      "WHERE id='$account_id'";
     return $this->query($sql);
   }
 
