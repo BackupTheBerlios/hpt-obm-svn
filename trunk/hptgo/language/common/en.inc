@@ -5,6 +5,8 @@
 $charset = 'UTF-8';
 //main language menu file register login and other non logged in pages
 //common
+$cmdCapnhat = "Update";
+
 $cmdLogin = "Login";
 $cmdSave = "Save";
 $cmdBack = "Back";

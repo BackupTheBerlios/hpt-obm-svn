@@ -126,6 +126,10 @@ require($GO_THEME->theme_path."header.inc");
 	<td class="ModuleIcons">
 	<a class="small" href="addressbooks.php?return_to=<?php echo urlencode($link_back); ?>"><img src="<?php echo $GO_THEME->images['ab_addressbooks']; ?>" border="0" height="32" width="32" /><br /><?php echo $ab_addressbooks; ?></a></td>
 	</td>
+	<td class="ModuleIcons">
+	<a class="small" href="<?php echo $_SERVER['PHP_SELF']; ?>?post_action=categories&addressbook_id=<?php echo $addressbook_id; ?>"><img src="<?php echo $GO_THEME->images['add_category']; ?>" border="0" height="32" width="32" /><br /><?php echo $ab_new_category; ?></a></td>
+	</td>
+	
 	<?php
 	$tp_plugin = $GO_MODULES->get_plugin('templates');
 	if ($tp_plugin )
@@ -162,6 +166,13 @@ switch($post_action)
 
 	case 'browse':
 		require("contacts.inc");
+	break;
+	
+	case 'categories':
+		echo '<form name="projects_form" method="get" action="'.$_SERVER['PHP_SELF'].'">';
+		echo '<input type="hidden" name="task" />';
+		require("categories.php");
+		echo '</form>';
 	break;
 
 	case 'companies':

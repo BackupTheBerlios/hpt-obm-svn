@@ -169,6 +169,9 @@ if ($company_id > 0 && $company = $ab->get_company($company_id))
 			}
 		}
 	}
+//------------------------	
+	$tabtable->add_tab('categories', $ab_category);
+//----------------	
 	$tabtable->add_tab('contacts', $ab_employees);
 	$tabtable->add_tab('read_permissions', $strReadRights);
 	$tabtable->add_tab('write_permissions', $strWriteRights);
@@ -197,6 +200,7 @@ if (!$write_permission && !$read_permission)
 require($GO_THEME->theme_path."header.inc");
 
 $active_tab = isset($_REQUEST['active_tab']) ? $_REQUEST['active_tab'] : null;
+	
 if (isset($active_tab))
 {
 	$tabtable->set_active_tab($active_tab);
@@ -283,6 +287,10 @@ switch($active_tab_id)
 		{
 			$button = new button($cmdClose, "javascript:document.location='".$return_to."';");
 		}
+	break;
+	
+	case 'categories':
+		require('company_categories.php');
 	break;
 
 	case 'custom_fields':

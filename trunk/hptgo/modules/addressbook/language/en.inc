@@ -81,6 +81,17 @@ $contacts_colors['pink'] = 'Pink';
 $contacts_colors['orange'] = 'Orange';
 $contacts_colors['brown'] = 'Brown';
 
+//---------------- new TKD
+$ab_category_name = 'Category name';
+$ab_new_category = 'New category';
+$ab_category = 'Category';
+$ab_parent_category = 'Danh m?c thêm vào ch?a trong';
+$ab_TOP = '[CATEGORY GROUP]';
+
+$ab_ConfirmDeleteStatus = 'Do you want to delete \"%s\" category ?';
+$ab_ConfirmDeleteStatus2 = 'Do you want to delete \"%s\" category and its sub categories ?';
+//-----------------------------
+
 $ab_addressbooks = 'Addressbooks';
 $ab_owner = 'Owner';
 $ab_subscribed = 'Subscribed';

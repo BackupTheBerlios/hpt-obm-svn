@@ -657,3 +657,7 @@ a.small_underline, a.small_underline:visited, a.small_underline:active{
         font-weight: bold;
         color: blue;
 }
+
+.HiLi{
+	background-color: #ADC7B5;
+}

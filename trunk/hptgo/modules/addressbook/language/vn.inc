@@ -81,6 +81,17 @@ $contacts_colors['pink'] = 'Hồng';
 $contacts_colors['orange'] = 'Cam';
 $contacts_colors['brown'] = 'Nâu';
 
+//---------------- new TKD
+$ab_category_name = 'Tên danh mục';
+$ab_new_category = 'Thêm danh mục';
+$ab_category = 'Danh mục';
+$ab_parent_category = 'Danh mục thêm vào chứa trong';
+$ab_TOP = '[NHÓM DANH MỤC]';
+
+$ab_ConfirmDeleteStatus = 'Bạn có chắc chắn là muốn xoá danh mục \"%s\" ?';
+$ab_ConfirmDeleteStatus2 = 'Bạn có chắc chắn là muốn xoá danh mục \"%s\" và tất cả các danh mục con ?';
+//-----------------------------
+
 $ab_addressbooks = 'Sổ địa chỉ';
 $ab_owner = 'Người lập';
 $ab_subscribed = 'Chọn';
@@ -131,6 +142,7 @@ $ab_events = 'Sự kiện';
 
 $ab_new_contact = 'Thêm liên hệ';
 $ab_new_company = 'Thêm công ty';
+
 $ab_companies = 'Công ty';
 $ab_company_properties = 'Thông tin công ty';
 $ab_bank_no = 'Số tài khoản ngân hàng';

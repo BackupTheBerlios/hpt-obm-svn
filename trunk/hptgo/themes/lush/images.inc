@@ -44,6 +44,7 @@ $images['stop']			= 'stop.png';
 
 $images['accounts']		= 'buttons/accounts.png';
 $images['add_contact']		= 'buttons/add_contact.png';
+$images['add_category']		= 'buttons/add_category.gif';
 $images['addressbook_small']	= 'buttons/addressbook.png';
 $images['addressbook_big']	= 'buttons/addressbook_big.png';
 $images['contacts']		= 'buttons/addressbook_big.png';

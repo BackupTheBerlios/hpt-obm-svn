@@ -5,6 +5,9 @@ require($GO_LANGUAGE->get_fallback_base_language_file('common'));
 $charset = 'utf-8';
 //main language menu file register login and other non logged in pages
 //common
+
+$cmdCapnhat = "Cập nhật";
+
 $cmdLogin = "Đăng nhập";
 $cmdSave = "Lưu";
 $cmdBack = "Trở lại";
@@ -28,7 +31,9 @@ $strThis = 'this';
 $strItems = 'mục';
 $strDescription = 'Mô tả';
 
-$strName = "Tên";
+$strName = "Tên giao dịch";
+$strEnglishName = "Tên Tiếng Anh";
+$strNickName = "Tên viết tắt";
 $strUser = "Người dùng";
 $strUsername = "Tài khoản";
 $strPassword = "Mật khẩu";
