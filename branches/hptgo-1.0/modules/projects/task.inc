@@ -119,7 +119,8 @@ else {
       $current_space = '<img src="'.$GO_THEME->images['task_space'].'" width="'.$cspace.'" height="7">';
     }
     elseif ($t->approved) {
-      $d = (round((strtotime($t->approved_date) - $pstart_date) / $day_sec) - $real_start_date);
+      $d = $t->approved_date == '' ? 0 :
+           (round((strtotime($t->approved_date) - $pstart_date) / $day_sec) - $real_start_date);
       $adate = strftime("%d/%m", $pstart_date + ($real_start_date + $d) * $day_sec);
       $cwidth = $d * $day_space;
       if (!$cwidth) $cwidth = 2;
@@ -201,27 +202,37 @@ else {
 echo '</td></tr></table>';
 
 function show_planned_eslapsed_times() {
-  global $tasks, $pstop_date, $pstart_date, $pm_delay, $pm_days, $pm_remain, $pm_predict_delay,
-  		 $pm_legend_planning, $pm_legend_ongoing, $pm_legend_done, $today, $max_task_id;
+  global $tasks, $pstop_date, $pstart_date,
+    $pm_delay, $pm_days, $pm_remain, $pm_advance, $pm_predict_delay,
+    $pm_legend_planning, $pm_legend_ongoing, $pm_legend_done, $today, $last_task_id;
 
   $tasks[1]->get_elapsed();
   $pm_legend_current = $pm_legend_ongoing;
-  if ($tasks[$max_task_id]->approved) {
-    $today = strtotime($tasks[$max_task_id]->approved_date);
+  $project_done = $tasks[$last_task_id]->approved;
+  if ($project_done) {
+    $today = strtotime($tasks[$last_task_id]->approved_date);
     $pm_legend_current = $pm_legend_done;
   }
   $plan_days = round(($pstop_date - $pstart_date) / (24 * 3600));
   $done_days = round(($today - $pstart_date) / (24 * 3600));
   if ($done_days > $plan_days)
     $delay_days = "$pm_delay: ".($done_days - $plan_days)." $pm_days";
-  else
-    $delay_days = "$pm_remain: ".($plan_days - $done_days)." $pm_days";
-
-  $real_stop_date = $tasks[$max_task_id]->find_stop_date();
-  if ($real_stop_date > $plan_days) {
-    $predict_delay_days .= ', &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.
-      "$pm_predict_delay: ".($real_stop_date - $plan_days)." $pm_days";
+  else {
+    $d = ($plan_days - $done_days);
+    if ($project_done && $d > 0)
+      $delay_days = "$pm_advance: ".$d." $pm_days";
+    else
+      $delay_days = "$pm_remain: ".$d." $pm_days";
   }
+
+  if (!$project_done) {
+    $real_stop_date = $tasks[$last_task_id]->find_stop_date();
+    if ($real_stop_date > $plan_days) {
+      $predict_delay_days .= ', &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.
+        "$pm_predict_delay: ".($real_stop_date - $plan_days)." $pm_days";
+    }
+  }
+
   echo '<tr><td colspan="8">'.
        "$pm_legend_planning: $plan_days $pm_days,".
        '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.
