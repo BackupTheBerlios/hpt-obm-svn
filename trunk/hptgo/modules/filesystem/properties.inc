@@ -15,7 +15,7 @@ $filename = basename($path);
 $extension = get_extension($filename);
 $type = $filetypes->get_type($extension);
 $location = dirname($path);
-$share = $fs->get_share($path);
+$share = $fs->find_share($path);
 //do not let user share it's home folder or modify the name!
 $write_perms = ($fs->has_write_permission($GO_SECURITY->user_id, $path) && !$fs->is_home_path($GO_SECURITY->user_id, $path));
 
