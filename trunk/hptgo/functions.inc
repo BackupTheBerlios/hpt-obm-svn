@@ -679,14 +679,19 @@ function show_profile_by_email($email, $linktext = '', $return_to='')
       $style = '';
     }
     $link = "<a ".$style." href=\"".$ab_module['url']."contact.php?contact_id=".$contact['id']."&return_to=".urlencode($return_to)."\" class=\"normal\" title=\"".$strShowProfile."\">";
-    $link .= $linktext."</a>\n";
+    $m = $contact['middle_name'];
+    $m = isset($m) ? ' '.$m.' ' : ' ';
+    $link .= $contact['last_name'].$m.$contact['first_name']."</a>\n";
   }else
   {
     $users_id = $GO_USERS->get_user_id_by_email($email);
     if ($users_id && $GO_SECURITY->user_is_visible($users_id))
     {
       $link = '<a href="'.$GO_CONFIG->control_url.'user.php?id='.$users_id.'&return_to='.urlencode($return_to).'" title="'.$strShowProfile.'">';
-      $link .= $linktext."</a>\n";
+      $u = $GO_USERS->get_user($users_id);
+      $m = $u['middle_name'];
+      $m = isset($m) ? ' '.$m.' ' : ' ';
+      $link .= $u['last_name'].$m.$u['first_name']."</a>\n";
     }elseif($has_contacts_module)
     {
       $name = split_name($linktext);
