@@ -238,7 +238,8 @@ class project_task extends db {
 
     $this->is_owner = $GO_SECURITY->user_id == $this->person_id;
     $this->is_manager = $GO_SECURITY->user_id == $responsible_user_id;
-    $this->is_monitor = in_array($GO_SECURITY->user_id, array_keys($monitors));
+
+	if (is_array($monitors)) $this->is_monitor = in_array($GO_SECURITY->user_id, array_keys($monitors));
     $this->is_passed = $this->status <= TASK_DONE;
 
     $this->doc_path = $GO_CONFIG->file_storage_path . 'projects/' .
