@@ -102,6 +102,7 @@ if ($task == 'import')
 				{
 					$record = fgetcsv($fp, 4096, ',', '"');
 
+					if (is_array($record))
 					foreach ($record as $i => $j) {
 					  $record[$i] = $vnconv->vnconv($record[$i]);
 					}
@@ -207,9 +208,9 @@ if ($task == 'import')
 								if ($acl_read > 0 && $acl_write > 0)
 								{
 									if ($ab->add_company($_POST['addressbook_id'],
-											$GO_SECURITY->user_id, $name, $address, $zip, 
+											$GO_SECURITY->user_id, $name, '','',$address, $zip, 
 											$city, $state, $country, $email, $phone, $fax, 
-											$homepage, $bank_no, $vat_no, $acl_read, $acl_write))
+											$homepage, $bank_no, $vat_no, $acl_read, $acl_write,0))
 									{
 										$GO_SECURITY->copy_acl($addressbook['acl_read'], $acl_read);
 										$GO_SECURITY->copy_acl($addressbook['acl_write'], $acl_write);
