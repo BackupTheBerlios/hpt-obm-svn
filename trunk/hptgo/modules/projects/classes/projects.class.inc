@@ -151,8 +151,14 @@ class projects extends db
 * @param	string	$start_date				Start date of project
 * @param	string	$end_date				End date of project
 * @param	string	$responsible_user_id	Project manager ID
-* @param	string	$probability		Project name
-* @return	int 	= 0 if fail
+* @param	string	$probability			Probability of project
+* @param	int		$fee_id					This ID is used to make a relateionship with pmfees
+* @param	int		$budget					Bugget for project
+* @param	int		$acl_read				Read permission
+* @param	int		$acl_write				Write permission
+* @param	int		$task_template_id		Task template ID
+* @param	int		$cat_id					Catalog ID
+* @return	mixed 	if success return project_id, else return false
 */
   function add_project($user_id, $name, $description, $contact_id, $comments,
       $start_date, $end_date, $status, $responsible_user_id,
@@ -177,12 +183,38 @@ class projects extends db
     return false;
   }
 
+/**
+* Update a project
+*
+* @param	int		$user_id				User ID, who creates this project
+* @param	string	$name					Project name
+* @param	string	$Description			Description
+* @param	int		$contact_id				Client ID
+* @param	string	$comments				Comments
+* @param	string	$start_date				Start date of project
+* @param	string	$end_date				End date of project
+* @param	string	$responsible_user_id	Project manager ID
+* @param	string	$probability			???
+* @param	int		$fee_id					This ID is used to make a relateionship with pmfees
+* @param	???		$budget					???
+* @param	int		$acl_read				Read permission
+* @param	int		$acl_write				Write permission
+* @param	int		$task_template_id		Task template ID
+* @param	int		$cat_id					Catalog ID
+* @return	int 	= 0 if fail
+*/
   function update_project($project_id, $name, $description, $contact_id, $comments, $start_date, $end_date, $responsible_user_id, $probability, $fee_id, $budget)
   {
     $sql = "UPDATE pmProjects SET name='$name', description='$description', comments='$comments', mtime='".get_gmt_time()."', contact_id='$contact_id', start_date='$start_date', end_date='$end_date', res_user_id='$responsible_user_id', probability='$probability', fee_id='$fee_id', budget='$budget' WHERE id='$project_id'";
     return $this->query($sql);
   }
 
+/**
+* Get a project record by Project ID
+*
+* @param	int		$user_id				User ID, who creates this project
+* @return	mixed 	if success return a record, else false
+*/
   function get_project($project_id)
   {
     $sql = "SELECT * FROM pmProjects WHERE id='$project_id'";
@@ -196,6 +228,12 @@ class projects extends db
     }
   }
 
+/**
+* Get a project record by project name
+*
+* @param	string	$name	Project name
+* @return	mixed 	if success return a record, else false
+*/
   function get_project_by_name($name)
   {
     $sql = "SELECT * FROM pmProjects WHERE name='$name'";
@@ -209,6 +247,12 @@ class projects extends db
     }
   }
 
+/**
+* Delete a project by project ID
+*
+* @param	string	$name	Project name
+* @return	bool 	if success return true, else false
+*/
   function delete_project($project_id)
   {
     $sql = "DELETE FROM pmHours WHERE project_id='$project_id'";
@@ -222,6 +266,13 @@ class projects extends db
     }
   }
 
+/**
+* Get projects (and sort records by any field)
+*
+* @param	string	$sort	Name of field is used to sort
+* @param	string	$direction	Sort direction
+* @return	int 	Number rows
+*/
   function get_projects($sort='name', $direction='ASC')
   {
     $sql = "SELECT * FROM pmProjects ORDER BY $sort $direction";
@@ -229,6 +280,19 @@ class projects extends db
     return $this->num_rows();
   }
 
+/**
+* Get projects of current user (and sort records by any field)
+*
+* @param	int		$user_id		User ID
+* @param	string	$sort			Name of field is used to sort
+* @param	string	$direction		Sort direction
+* @param	int		$start			Start record is got
+* @param	int		$offset			Number record is got
+* @param	int		$filter			Filter conditional
+* @param	int		$catalog		Catalog ID
+* @param	int		$contact_id		Contact ID (Client)
+* @return	int 	Number rows		
+*/
   function get_authorized_projects($user_id, $sort='name', $direction='ASC', $start=0, $offset=0, $filter='', $catalog, $contact_id=0)
   {
     if ($filter < STATUS_RUNNING)
@@ -278,6 +342,12 @@ class projects extends db
     }
   }
 
+/**
+* Get writable projects by user id
+*
+* @param	int		$user_id	User ID
+* @return	int		Number rows
+*/
   function get_writable_projects($user_id)
   {
     $sql = "SELECT DISTINCT pmProjects.* FROM pmProjects, acl, users_groups WHERE (".
@@ -288,18 +358,33 @@ class projects extends db
     return $this->num_rows();
   }
 
+/**
+* Get projects be created by users
+*
+* @param	int		$user_id	User ID
+* @return	int		Number rows
+*/
   function get_user_projects($user_id)
   {
     $this->query("SELECT * FROM pmProjects WHERE user_id='$user_id'");
     return $this->num_rows();
   }
 
+/**
+* Get projects by client
+*
+* @param	int		$contact_id		Client ID
+* @return	int		Number rows
+*/
   function get_client_projects($contact_id)
   {
     $this->query("SELECT * FROM pmProjects WHERE contact_id='$contact_id'");
     return $this->num_rows();
   }
 
+/**
+* ???
+*/
   function add_hours($project_id, $user_id, $start_time, $end_time, $break_time, $unit_value, $comments)
   {
     $id = $this->nextid("pmHours");
@@ -312,6 +397,9 @@ class projects extends db
     return false;
   }
 
+/**
+* ???
+*/
   function get_working_hours($working_hours_id)
   {
     $sql = "SELECT * FROM pmHours WHERE id='$working_hours_id'";
@@ -323,6 +411,9 @@ class projects extends db
     return false;
   }
 
+/**
+* ???
+*/
   function check_hours($user_id, $start_time, $end_time)
   {
     $sql = "SELECT * FROM pmHours WHERE user_id='$user_id' AND start_time <= '$start_time' AND end_time > '$start_time'";
@@ -341,6 +432,9 @@ class projects extends db
     return true;
   }
 
+/**
+* ???
+*/
   function get_hours($start_time=0, $end_time=0, $project_id=0, $user_id=0, $contact_id=0)
   {
     if ($start_time == 0 && $end_time == 0)
@@ -399,6 +493,9 @@ class projects extends db
     return $this->num_rows();
   }
 
+/**
+* ???
+*/
   function delete_hours($hours_id)
   {
     if ($hours_id > 0)
@@ -411,6 +508,9 @@ class projects extends db
     }
   }
 
+/**
+* ???
+*/
   function get_project_hours($project_id, $start_time=0, $end_time=0)
   {
     if ($start_time == 0 && $end_time == 0)
@@ -423,7 +523,10 @@ class projects extends db
     $this->query($sql);
     return $this->num_rows();
   }
-
+  
+/**
+* ???
+*/
   function get_user_hours($user_id, $start_time=0, $end_time=0)
   {
     if ($start_time == 0 && $end_time == 0)
@@ -437,6 +540,9 @@ class projects extends db
     return $this->num_rows();
   }
 
+/**
+* ???
+*/
   function get_fees()
   {
     $sql = "SELECT * FROM pmFees";
@@ -444,6 +550,9 @@ class projects extends db
     return $this->num_rows();
   }
 
+/**
+* ???
+*/
   function get_fee($fee_id)
   {
     $sql = "SELECT * FROM pmFees WHERE id='$fee_id'";
@@ -457,6 +566,14 @@ class projects extends db
     }
   }
 
+/**
+* Add a new fee
+*
+* @param	string	$name	Fee name
+* @param	int		$value	Value of fee
+* @param	int		$time	Time
+* @return	bool	If success = "true", if fail = "false"
+*/
   function add_fee($name, $value, $time)
   {
     $id = $this->nextid("pmFees");
@@ -468,18 +585,27 @@ class projects extends db
     return false;
   }
 
+/**
+* ???
+*/
   function delete_fee($fee_id)
   {
     $sql = "DELETE FROM pmFees WHERE id='$fee_id'";
     return $this->query($sql);
   }
 
+/**
+* ???
+*/
   function update_fee($fee_id, $name, $value, $time)
   {
     $sql = "UPDATE pmFees SET name='$name', value='$value', time='$time' WHERE id='$fee_id'";
     return $this->query($sql);
   }
 
+/**
+* ???
+*/
   function delete_user($user_id)
   {
     $projects = new projects();
