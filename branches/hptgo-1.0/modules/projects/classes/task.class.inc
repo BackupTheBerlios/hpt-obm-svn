@@ -253,8 +253,9 @@ class project_task extends db {
           $tn = $tasks[$p]->name;
         }
         $tips .= '<tr><td align="right">'.$to.'.</td><td>&nbsp;'.$tn.'</td></tr>';
-        if ($p == 0 || (!$this->is_manager && !$this->is_monitor &&
-                        $tasks[$p]->person_id != $GO_SECURITY->user_id))
+        if ($p == 0 || $this->project_status == STATUS_DROP ||
+            (!$this->is_manager && !$this->is_monitor &&
+              $tasks[$p]->person_id != $GO_SECURITY->user_id))
           $nolist[] = $to;
         else {
           $nolist[] = '<a href="'.$_SERVER['PHP_SELF'].
@@ -488,7 +489,8 @@ class project_task extends db {
     echo '</tr>';
     echo '<tr><td>&nbsp;</td></tr>';
     echo '<tr><td colspan="8" width="100%">'.
-         '<iframe src="folder.php?path='.$this->doc_path.'" width="100%" height="300">'.
+         '<iframe src="folder.php?path='.$this->doc_path.
+         '" width="100%" height="300" class="textbox">'.
          '</iframe></td></tr>';
   }
 
@@ -744,6 +746,32 @@ class project_task extends db {
     }
 
     return array($plan_stop_date, $real_stop_date);
+  }
+
+  function find_stop_date() {
+    global $tasks, $pstart_date;
+
+    if ($this->pids == '0')
+      return 0;
+
+    $real_stop_date = 0;
+    $pids = explode(',', $this->pids);
+
+    foreach ($pids as $pid) {
+      if (isset($tasks[$pid]->approved_date))
+        $rsd = (strtotime($tasks[$pid]->approved_date) - $pstart_date) / (24 * 3600);
+      elseif ($tasks[$pid]->status == TASK_ONGOING || $tasks[$pid]->status == TASK_DONE) {
+        $today = getdate();
+        $today = gmmktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']);
+        $rsd = round(($today - $pstart_date) / (24 * 3600));
+      }
+      else
+        $rsd = $tasks[$pid]->find_stop_date();
+      if ($rsd > $real_stop_date)
+        $real_stop_date = $rsd;
+    }
+
+    return $real_stop_date + $this->days;
   }
 
   function get_elapsed() {
