@@ -203,10 +203,10 @@ $cal_resend_invitation = 'Gửi lại lời mời';
 $cal_everybody_write = 'Mọi người có thể sửa';
 $cal_everybody_read = 'Chỉ mình tôi có thể sửa';
 
-$cal_view = 'Theo dõi';
-$cal_views = 'Theo dõi';
-$sc_view_exists = 'Đã có 1 bảng theo dõi cùng tên';
-$cal_new_view = 'Tạo bảng theo dõi mới';
+$cal_view = 'Nhóm lịch';
+$cal_views = 'Nhóm lịch';
+$sc_view_exists = 'Đã có 1 nhóm lịch cùng tên';
+$cal_new_view = 'Tạo nhóm lịch mới';
 $cal_event_calendars = 'Lịch';
 
 //2.06
