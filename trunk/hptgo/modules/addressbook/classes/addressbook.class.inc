@@ -11,32 +11,62 @@
 
  */
 
+/**
+ * Addressbook class.
+ */
 class addressbook extends db
 {
   var $selector_is_enabled = false;
 
+  /**
+   * Constructor.
+   */
   function addressbook()
   {
     $this->db();
   }
+
+  /**
+   * Save contact sort preferences of user $user_id.
+   *
+   * @return true/false.
+   */
   function set_contacts_sorting($user_id, $sort_field, $sort_order)
   {
     $sql = "UPDATE ab_settings SET sort_contacts_field='$sort_field' , ".
       "sort_contacts_order='$sort_order' WHERE user_id='$user_id'";
     return $this->query($sql);
   }
+
+  /**
+   * Save company sort preferences of user $user_id.
+   *
+   * @return true/false.
+   */
   function set_companies_sorting($user_id, $sort_field, $sort_order)
   {
     $sql = "UPDATE ab_settings SET sort_companies_field='$sort_field' , ".
       "sort_companies_order='$sort_order' WHERE user_id='$user_id'";
     return $this->query($sql);
   }
+
+  /**
+   * Save user sort preferences of user $user_id.
+   *
+   * @return true/false.
+   */
   function set_users_sorting($user_id, $sort_field, $sort_order)
   {
     $sql = "UPDATE ab_settings SET sort_users_field='$sort_field' , ".
       "sort_users_order='$sort_order' WHERE user_id='$user_id'";
     return $this->query($sql);
   }
+
+  /**
+   * Save user/contact/company search preferences of user $user_id.
+   *
+   * @return true/false.
+   */
   function set_search($user_id, $search_type, $search_contacts_field, 
       $search_companies_field, $search_users_field,$search_addressbook_id)
   {
@@ -49,6 +79,12 @@ class addressbook extends db
     return $this->query($sql);
   }
 
+  /**
+   * Get user/contact/company search/sort preferences of user $user_id.
+   * Add new one if there is no preferences for the user.
+   *
+   * @return the setting record.
+   */
   function get_settings($user_id)
   {
     $this->query("SELECT * FROM ab_settings WHERE user_id='$user_id'");
@@ -68,6 +104,12 @@ class addressbook extends db
     }		
   }
 
+  /**
+   * Return an URL (javascript url exactly) that calls open_addressbook()
+   * or die() if contact_selector is not enabled.
+   *
+   * @return the link string or die().
+   */
   function select_contacts($target_field, $handler_file, $multiselect='true',
       $require_email_address='true', $show_users='true',
       $show_contacts='true', $show_companies='true',
@@ -95,6 +137,13 @@ class addressbook extends db
     }
   }
 
+  /**
+   * Enable contact selector.
+   * This is a form that submits to classes/base/controls/select/select.php.
+   * open_addressbook() function is included beside the form.
+   *
+   * @return none
+   */
   function enable_contact_selector()
   {
     global $GO_CONFIG;
@@ -142,6 +191,12 @@ class addressbook extends db
     $this->selector_is_enabled = true;
   }
 
+  /**
+   * Get default addressbook of user $user_id.
+   * That is the addressbook in ab_subscribed table with standard field=1
+   *
+   * @return addressbook id or false.
+   */
   function get_default_addressbook($user_id)
   {
     $sql = "SELECT addressbook_id FROM ab_subscribed WHERE user_id='$user_id' AND standard='1'";
@@ -153,6 +208,11 @@ class addressbook extends db
     return false;
   }
 
+  /**
+   * Set default addressbook $addressbook_id for  user $user_id
+   *
+   * @return true if successful, false otherwise.
+   */
   function set_default_addressbook($user_id, $addressbook_id)
   {
     $sql = "UPDATE ab_subscribed SET standard='0' WHERE user_id='$user_id' AND standard='1'";
@@ -163,6 +223,11 @@ class addressbook extends db
     return false;
   }
 
+  /**
+   * Get all addressbooks, sorted by name.
+   *
+   * @return number of addressbooks.
+   */
   function get_addressbooks()
   {
     $sql = "SELECT * FROM ab_addressbooks ORDER BY name ASC";
@@ -170,6 +235,11 @@ class addressbook extends db
     return $this->num_rows();
   }
 
+  /**
+   * Get all addressbooks of user $user_id.
+   *
+   * @return number of addressbooks.
+   */
   function get_user_addressbooks($user_id)
   {
     $sql = "SELECT DISTINCT ab_addressbooks.* FROM ab_addressbooks, acl, users_groups WHERE (".
@@ -181,6 +251,12 @@ class addressbook extends db
   }
 
 
+  /**
+   * Add new addressbook named $name for user $user_id
+   * Addressbook id is from nextid "ab_addressbooks".
+   *
+   * @return the addressbook id or false.
+   */
   function add_addressbook($user_id, $name)
   {
     global $GO_SECURITY;
@@ -212,12 +288,20 @@ class addressbook extends db
     return false;
   }
 
+  /**
+   * Update name of addressbook $addressbook_id 
+   * return true if successful, false otherwise.
+   */
   function update_addressbook($addressbook_id, $name)
   {
     $sql = "UPDATE ab_addressbooks SET name='$name' WHERE id='$addressbook_id'";
     return $this->query($sql);
   }
 
+  /**
+   * Get addressbook by name $name.
+   * Return the record of the addressbook, false otherwise.
+   */
   function get_addressbook_by_name($name)
   {
     $sql = "SELECT * FROM ab_addressbooks WHERE name='$name'";
@@ -231,6 +315,9 @@ class addressbook extends db
     }
   }
 
+  /**
+   * Delete addressbook $addressbook_id
+   */
   function delete_addressbook($addressbook_id)
   {
     global $GO_SECURITY;
@@ -262,6 +349,10 @@ class addressbook extends db
     }
   }
 
+  /**
+   * Get addressbook $addressbook_id.
+   * Return the record of the addressbook, false otherwise.
+   */
   function get_addressbook($addressbook_id)
   {
     $sql = "SELECT * FROM ab_addressbooks WHERE id='$addressbook_id'";
@@ -273,6 +364,10 @@ class addressbook extends db
     return false;
   }
 
+  /**
+   * Get all subscribed addressbook of user $user_id.
+   * Return number of addressbooks.
+   */
   function get_subscribed_addressbooks($user_id)
   {
     $sql = "SELECT ab_addressbooks.* FROM ab_addressbooks LEFT JOIN ab_subscribed ON (ab_subscribed.addressbook_id=ab_addressbooks.id) WHERE ab_subscribed.user_id='$user_id' ORDER BY name ASC";
@@ -280,12 +375,20 @@ class addressbook extends db
     return $this->num_rows();
   }
 
+  /**
+   * Subscribe addressbook $addressbook_id to user $user_id.
+   * Return true if successful, false otherwise.
+   */
   function subscribe($user_id, $addressbook_id)
   {
     $sql = "INSERT INTO ab_subscribed (user_id, addressbook_id) VALUES ('$user_id', '$addressbook_id')";
     return $this->query($sql);
   }
 
+  /**
+   * Check if user $user_id has subscribed addressbook $addressbook_id.
+   * Return the addressbook record, false otherwise.
+   */
   function is_subscribed($user_id, $addressbook_id)
   {
     $sql = "SELECT addressbook_id FROM ab_subscribed WHERE user_id='$user_id' AND addressbook_id='$addressbook_id'";
@@ -293,18 +396,39 @@ class addressbook extends db
     return $this->next_record();
   }
 
+  /**
+   * Unsubscribe all addressbooks from user $user_id.
+   * Return true if successful, false otherwise.
+   */
   function unsubscribe_all($user_id)
   {
     $sql = "DELETE FROM ab_subscribed WHERE user_id='$user_id'";
     return $this->query($sql);
   }
 
+  /**
+   * Unsubscribe addressbook $addressbook_id from user $user_id.
+   * Return true if successful, false otherwise.
+   */
   function unsubscribe($user_id, $addressbook_id)
   {
     $sql = "DELETE FROM ab_subscribed WHERE user_id='$user_id' AND addressbook_id='$addressbook_id'";
     return $this->query($sql);
   }
 
+  /**
+   * Get contacts whose field $field match query string $query in addressbook $addressbook_id. 
+   * Only get $max_rows contacts starting from $first.
+   *
+   * @param
+   * $user_id whose addressbooks will be searched for.
+   * $query the pattern to be matched. '*' represents an abitrary string (will be replaced by % in the function).
+   * $field Default is 'last_name'
+   * $addressbook_id the addressbook to be searched for. Default is all subscribed addressbooks of user $user_id (zero value)
+   * $first .
+   * $max_rows the number of contacts. Default is all contacts (zero value).
+   * @return the number of all selected contacts (assuming $first=0 and $max_rows=0)
+   */
   function search_contacts($user_id, $query, $field='last_name', $addressbook_id=0,$first=0,$max_rows=0)
   {
     $query = str_replace('*', '%', $query);
@@ -338,11 +462,28 @@ class addressbook extends db
     return isset($count) ? $count : $this->num_rows();
   }
 
+  /**
+   * Unimplemented function. 
+   */
   function get_contacts_by_birth_day($interval_start, $interval_end)
   {
 	
   }
 
+  /**
+   * Get companies whose field $field match query string $query in addressbook $addressbook_id. 
+   * Only get $max_rows companies starting from $first.
+   *
+   * @param
+   * $user_id whose addressbooks will be searched for.
+   * $query the pattern to be matched. '*' represents an abitrary string (will be replaced by % in the function).
+   * $field Default is 'last_name'
+   * $addressbook_id the addressbook to be searched for. Default is all subscribed addressbooks of user $user_id (zero value)
+   * $category limit the search in this category or search in all categories (value -1, also the default value)
+   * $first .
+   * $max_rows the number of companies. Default is all companies (zero value).
+   * @return the number of all selected contacts (assuming $first=0 and $max_rows=0)
+   */
   function search_companies($user_id, $query, $field='name', $addressbook_id=0, $category=-1,$first=0,$max_rows=0)
   {
     $query = str_replace('*', '%', $query);
@@ -381,6 +522,15 @@ class addressbook extends db
     return isset($count) ? $count : $this->num_rows();
   }
 
+  /**
+   * Get all authorised contacts from addressbook $addressbook_id of user $user_id, sorted by $sort with order $direction.
+   *
+   * $addressbook_id addressbook id.
+   * $sort sort field.
+   * $direction sort direction (ASC or DESC).
+   * $user default is 0 (current user).
+   * @return the number of contacts.
+   */
   function get_contacts($addressbook_id, $sort = "name", $direction = "ASC", $user_id=0)
   {
     global $GO_SECURITY;
@@ -405,18 +555,38 @@ class addressbook extends db
     return $this->num_rows();
   }
 
+  /**
+   * Get all contacts of addressbook $addressbook_id, user $user_id.
+   *
+   * @return number of contacts.
+   */
   function get_user_contacts($user_id, $addressbook_id)
   {
     $this->query("SELECT * FROM ab_contacts WHERE addressbook_id='$addressbook_id' AND user_id='$user_id'");
     return $this->num_rows();
   }
 
+  /**
+   * Get all companies of addressbook $addressbook_id, user $user_id.
+   *
+   * @return number of companies.
+   */
   function get_user_companies($user_id, $addressbook_id)
   {
     $this->query("SELECT * FROM ab_companies WHERE addressbook_id='$addressbook_id' AND user_id='$user_id'");
     return $this->num_rows();
   }
 
+  /**
+   * Get a range of contacts associated with company $company_id, sorted by field $sort.
+   *
+   * $company_id the company id
+   * $sort sorted field.
+   * $direction sort direction.
+   * $start the first contact of the range.
+   * $offset number of contacts of the range.
+   * @return number of all contacts (independent with $start/$offset).
+   */
   function get_company_contacts($company_id, $sort="name", $direction="ASC", $start, $offset)
   {
     if($sort == 'name')
@@ -448,6 +618,13 @@ class addressbook extends db
     }
   }
 
+  /**
+   * Get all contact-related information from addressbook $addressbook_id of user $user_id.
+   * 
+   * @param $addressbook_id Addressbook id.
+   *        $user_id        User id. Default is the current user.
+   * @return number of contacts.
+   */
   function get_contacts_for_export($addressbook_id, $user_id=0)
   {
     global $GO_SECURITY;
@@ -471,6 +648,16 @@ class addressbook extends db
     return $this->num_rows();
   }
 
+  /**
+   * Get all authorised contacts of group $group_id, addressbook $addressbook_id, $user_id, sorted by $sort with direction $direction.
+   * 
+   * @param $addressbook_id
+   * @param $group_id
+   * @param $sort sort field (default is 'name', which consists of first name and last name)
+   * @param $direction default is ASC.
+   * @param $user_id Default is the current user.
+   * @return the number of contacts.
+   */
   function get_contacts_group($addressbook_id, $group_id, $sort = "name", $direction = "ASC", $user_id=0)
   {
     global $GO_SECURITY;
@@ -494,6 +681,11 @@ class addressbook extends db
     return $this->num_rows();
   }
 
+  /**
+   * Get all contacts that contact name is $name from $addressbook_id.
+   *
+   * @return the record or false. 
+   */
   function get_contact_by_name($addressbook_id, $name)
   {
     $sql = "SELECT * FROM ab_contacts WHERE addressbook_id='$addressbook_id' AND name='$name'";
@@ -505,6 +697,11 @@ class addressbook extends db
     return false;
   }
 
+  /**
+   * Get contact $contact_id that associated with a company.
+   * 
+   * @return the record contains both contact (overrided with some company information) or false.
+   */
   function get_contact($contact_id)
   {
     $this->query("SELECT ab_contacts.*, ab_companies.address AS work_address, ab_companies.zip AS work_zip, ".
@@ -522,6 +719,41 @@ class addressbook extends db
     return false;
   }
 
+  /**
+   * Add a new contact.
+   * Contact id is created from nextid "contacts"
+   * 
+   * @param $source_id if this contact is created from user ID then $source_id is ID
+   * @param $user_id
+   * @param $addressbook_id
+   * @param $first_name
+   * @param $middle_name
+   * @param $last_name
+   * @param $initials
+   * @param $title
+   * @param $sex
+   * @param $birthday
+   * @param $email
+   * @param $work_phone default is empty
+   * @param $home_phone default is empty
+   * @param $fax default is empty
+   * @param $cellular default is empty
+   * @param $country default is empty
+   * @param $state default is empty
+   * @param $city default is empty
+   * @param $zip default is empty
+   * @param $address default is empty
+   * @param $company_id Default is zero (no company)
+   * @param $work_fax default is empty
+   * @param $department default is empty
+   * @param $function default is empty
+   * @param $comment default is empty
+   * @param $group_id Default is zero (Group "other")
+   * @param $color default is empty
+   * @param $acl_read
+   * @param $acl_write
+   * @return the new contact id or false.
+   */
   function add_contact($source_id, $user_id, $addressbook_id, $first_name, $middle_name, $last_name, $initials, $title, $sex, $birthday, $email, $work_phone="", $home_phone="", $fax="", $cellular="", $country="", $state="", $city="", $zip="", $address="", $company_id=0, $work_fax = "", $department="", $function="", $comment="", $group_id=0, $color='', $acl_read, $acl_write)
   {
     $contact_id = $this->nextid("contacts");
@@ -545,6 +777,37 @@ class addressbook extends db
     }
   }
 
+  /**
+   * Update contact with id $id. 
+   *
+   * @param $id contact id
+   * @param $addressbook_id
+   * @param $first_name
+   * @param $middle_name
+   * @param $last_name
+   * @param $initials
+   * @param $title
+   * @param $sex
+   * @param $birthday
+   * @param $email
+   * @param $work_phone
+   * @param $home_phone
+   * @param $fax
+   * @param $cellular
+   * @param $country
+   * @param $state
+   * @param $city
+   * @param $zip
+   * @param $address
+   * @param $company_id
+   * @param $work_fax
+   * @param $department
+   * @param $function
+   * @param $comment default is empty
+   * @param $group_id default is zero (group "other")
+   * @param $color
+   * @return true/false.
+   */
   function update_contact($id, $addressbook_id, $first_name, $middle_name, $last_name, $initials, $title, $sex, $birthday, $email, $work_phone, $home_phone, $fax, $cellular, $country, $state, $city, $zip, $address, $company_id, $work_fax, $department, $function, $comment='', $group_id='0', $color)
   {
     $sql = "UPDATE ab_contacts SET ";
@@ -561,6 +824,11 @@ class addressbook extends db
     }
   }
 
+  /**
+   * Delete contact $contact_id.
+   * 
+   * Return true/false.
+   */
   function delete_contact($contact_id)
   {
 
@@ -573,6 +841,11 @@ class addressbook extends db
     }
   }
 
+  /**
+   * Check if contact $id is created from user $user_id.
+   * 
+   * @return the contact record or false.
+   */
   function user_is_contact($user_id, $id)
   {
     $sql = "SELECT ab_contacts.* FROM ab_contacts ".
@@ -591,6 +864,11 @@ class addressbook extends db
     }
   }
 
+  /**
+   * Check if user $user_id is in contacts of addressbook $addressbook_id.
+   * 
+   * @return true/false.
+   */
   function user_is_in_addressbook($user_id, $addressbook_id)
   {
     $sql = "SELECT id FROM ab_contacts WHERE source_id='$user_id' AND addressbook_id='$addressbook_id'";
@@ -598,6 +876,12 @@ class addressbook extends db
     return $this->next_record();
   }
 
+  /**
+   * Get contact id whose email is $email and the contact is belonged to an addressbook of user $user_id.
+   * 
+   * @return the contact id or false.
+   * @see get_contact_profile_by_email
+   */
   function get_contact_id_by_email($email, $user_id)
   {
     $sql = "SELECT ab_contacts.id FROM ab_contacts ".
@@ -613,6 +897,11 @@ class addressbook extends db
       return false;
   }
 
+  /**
+   * Get contact id whose email is $email and the contact is belonged to an addressbook of user $user_id.
+   * 
+   * @return the contact record or false.
+   */
   function get_contact_profile_by_email($email, $user_id)
   {
     $sql = "SELECT ab_contacts.* FROM ab_contacts LEFT JOIN ab_addressbooks ON".
@@ -626,6 +915,11 @@ class addressbook extends db
       return false;
   }
 
+  /**
+   * Get all contact groups of addressbook $addressbook_id.
+   *
+   * @return number of groups. 
+   */
   function get_groups($addressbook_id)
   {
     $sql= "SELECT * FROM ab_groups WHERE addressbook_id='$addressbook_id'";
@@ -633,6 +927,13 @@ class addressbook extends db
     return $this->num_rows();
   }
 
+  /**
+   * Add a new group with name $name to addressbook $addressbook_id.
+   * The name will be htmlentities(ed) inside the function.
+   * Group id is in nextid "ab_groups"
+   *
+   * @return the group id or false.
+   */
   function add_group($addressbook_id, $name)
   {
     $name = htmlentities($name);
@@ -649,6 +950,11 @@ class addressbook extends db
     }
   }
 
+  /**
+   * Delete group $group_id.
+   * 
+   * @return true/false.
+   */
   function delete_group($group_id)
   {
     $sql = "UPDATE ab_contacts SET group_id='0' WHERE group_id='$group_id'";
@@ -661,24 +967,44 @@ class addressbook extends db
     return false;
   }
 
+  /**
+   * Move contact $contact_id to group $group_id.
+   *
+   * @return true/false. 
+   */
   function move_contact_to_group($contact_id, $group_id)
   {
     $sql = "UPDATE ab_contacts SET group_id='$group_id' WHERE id='$contact_id'";
     $this->query($sql);
   }
 
+  /**
+   * Clear group $group_id (Move all contacts in group $group_id to group "other").
+   *
+   * @return true/false.
+   */
   function clear_group($group_id)
   {
     $sql = "UPDATE ab_contacts SET group_id='0' WHERE group_id='$group_id'";
     $this->query($sql);
   }
 
+  /**
+   * Rename group $group_id with new name $name.
+   * 
+   * @return true/false.
+   */
   function change_group_name($group_id, $name)
   {
     $sql = "UPDATE ab_groups SET name='$name' WHERE id='$group_id'";
     $this->query($sql);
   }
 
+  /**
+   * Get the record of group $group_id.
+   * 
+   * @return the group record or false.
+   */
   function get_group($group_id)
   {
     $sql= "SELECT * FROM ab_groups WHERE id='$group_id'";
@@ -690,6 +1016,11 @@ class addressbook extends db
     return false;
   }
 
+  /**
+   * Get group by name $name in addressbook $addressbook_id.
+   * 
+   * @return the group record or false.
+   */
   function get_group_by_name($addressbook_id, $name)
   {
     $sql= "SELECT * FROM ab_groups WHERE addressbook_id='$addressbook_id' AND name='$name'";
@@ -701,11 +1032,43 @@ class addressbook extends db
     return false;
   }
 
+  /**
+   * Add contact $contact_id to company $company_id.
+   *
+   * @return true/false.
+   */
   function add_contact_to_company($contact_id, $company_id)
   {
     return $this->query("UPDATE ab_contacts SET company_id='$company_id' WHERE id='$contact_id'");
   }
 
+  /**
+   * Add new company to addressbook $addressbook_id, user $user_id.
+   * Company id is from nextid "ab_companies".
+   * If $user_id is not the current user, $company_id will be added to ab_new_companies.
+   * 
+   * @param $addressbook_id
+   * @param $user_id
+   * @param $name
+   * @param $shortname
+   * @param $engname
+   * @param $relation_date
+   * @param $address
+   * @param $zip
+   * @param $city
+   * @param $state
+   * @param $country
+   * @param $email
+   * @param $phone
+   * @param $fax
+   * @param $homepage
+   * @param $bank_no,
+   * @param $vat_no
+   * @param $acl_read
+   * @param $acl_write
+   * @param $parent_id
+   * @return the new company id or false.
+   */
   function add_company($addressbook_id, $user_id, $name, $shortname, $engname, $relation_date,
   	$address, $zip, $city, $state, $country, $email, $phone, $fax, $homepage, $bank_no,
       $vat_no, $acl_read, $acl_write, $parent_id)
@@ -735,6 +1098,29 @@ class addressbook extends db
     return false;
   }
 
+  /**
+   * Update information of company $company_id.
+   * If $user_id is not the current user, $company_id will be added to ab_new_companies.
+   *
+   * @param $company_id
+   * @param $addressbook_id
+   * @param $name
+   * @param $shortname
+   * @param $engname
+   * @param $relation_date
+   * @param $address
+   * @param $zip,$city
+   * @param $state
+   * @param $country
+   * @param $email
+   * @param $phone
+   * @param $fax
+   * @param $homepage
+   * @param $bank_no
+   * @param $vat_no
+   * @param $parent_id
+   * @return true/false.
+   */
   function update_company($company_id, $addressbook_id, $name, $shortname, $engname, $relation_date, 
   	$address, $zip,$city, $state, $country, $email, $phone, $fax,
       $homepage, $bank_no, $vat_no,$parent_id)
@@ -761,6 +1147,11 @@ class addressbook extends db
 
   }
 
+  /**
+   * Get company record of the company named $name in addressbook $addressbook_id.
+   *
+   * @return the company record or false.
+   */
   function get_company_by_name($addressbook_id, $name)
   {
     $sql = "SELECT * FROM ab_companies WHERE addressbook_id='$addressbook_id' AND name='$name'";
@@ -772,6 +1163,11 @@ class addressbook extends db
     return false;
   }
 
+  /**
+   * Get company record of company $company_id.
+   * 
+   * @return the company record or false.
+   */
   function get_company($company_id)
   {
     $sql = "SELECT * FROM ab_companies WHERE id='$company_id'";
@@ -783,6 +1179,18 @@ class addressbook extends db
     return false;
   }
 
+  /**
+   * Get a range of companies.
+   * If $user_id is the addressbook owner, then ab_new_companies will be fetched too.
+   * 
+   * @param $addressbook_id the addressbook storing companies
+   * @param $sort sort field. default is 'name' (both last_name and first_name)
+   * @param $direction sort direction. default is 'ASC'
+   * @param $start the begin of the range.
+   * @param $offset the size of the range (default is zero, all companies)
+   * @param $user_id the user that gets these information (default is the current user)
+   * @return the number of all companies.
+   */
   function get_companies($addressbook_id, $sort='name', $direction='ASC', $start=0, $offset=0, $user_id=0)
   {
     global $GO_SECURITY;
@@ -849,6 +1257,13 @@ class addressbook extends db
     }
   }
 
+  /**
+   * Get companiy parents in addressbook_ $addressbook_id of user $user_id.
+   *
+   * @param $addressbook_id
+   * @param $user_id default is zero (the current user).
+   * @return the array of parent companies whose keys is ids, values is array of ('id', 'parent', 'name')
+   */
   function get_companies_parents($addressbook_id, $user_id=0)
   {
     global $GO_SECURITY;
@@ -869,6 +1284,13 @@ class addressbook extends db
     return $ret;
   }
 
+  /**
+   * Get all companies whose name match pattern '%$name%' in addressbook $addressbook_id.
+   *
+   * @param $name the company name.
+   * @param $addressbook_id addressbook_id.
+   * @return number of companies.
+   */
   function search_company($name, $addressbook_id)
   {
     $sql = "SELECT * FROM ab_companies WHERE addressbook_id='$addressbook_id' AND name LIKE '%$name%'";
@@ -876,6 +1298,13 @@ class addressbook extends db
     return $this->num_rows();
   }
 
+  /**
+   * Get the company whose name is $name in addressbook $addressbook_id.
+   *
+   * @param $name the company name.
+   * @param $addressbook_id addressbook_id.
+   * @return the company record or false.
+   */
   function get_company_id_by_name($name, $addressbook_id)
   {
     $sql = "SELECT id FROM ab_companies WHERE addressbook_id='$addressbook_id' AND name='$name'";
@@ -887,6 +1316,12 @@ class addressbook extends db
     return false;
   }
 
+  /**
+   * Delete company $company_id.
+   * 
+   * @param $company_id.
+   * @return true/false.
+   */
   function delete_company($company_id)
   {
     $sql = "DELETE FROM ab_companies WHERE id='$company_id'";
@@ -898,6 +1333,12 @@ class addressbook extends db
   }
 
 
+  /**
+   * Delete user's contacts and user's addressbooks.
+   * 
+   * @param $user_id.
+   * @return none
+   */
   function delete_user($user_id)
   {
     $sql = "UPDATE ab_contacts SET source_id='0' WHERE source_id='$user_id'";
@@ -913,6 +1354,13 @@ class addressbook extends db
     }
   }
 
+  /**
+   * Get the full company name including parent names.
+   * 
+   * @param $parents if not null, parent company info will be retrieved from $parents.
+   * @return the full name.
+   * @see get_companies_parents
+   */
   function company_name($parents = null)
   {
     if (is_array($parents)) {
@@ -949,6 +1397,12 @@ class addressbook extends db
     return $name;
   }
 
+  /**
+   * Get all parent companies' links of company $company_id.
+   * 
+   * @param $company_id
+   * @return the html string.
+   */
   function parent_companies_urls($company_id)
   {
     global $link_back;
@@ -968,6 +1422,18 @@ class addressbook extends db
     }
     return $name;
   }
+  /**
+   * Get companies by parent company.
+
+   * @param $addressbook_id
+   * @param $parent
+   * @param $sort
+   * @param $direction
+   * @param $start
+   * @param $offset
+   * @param $user_id
+   * @return number of all companies by parent company.
+   */
   function get_companies_by_parent($addressbook_id,$parent,$sort='name', $direction='ASC', $start=0, $offset=0,$user_id=0)
   {
     global $GO_SECURITY;
@@ -1009,6 +1475,13 @@ class addressbook extends db
     }
   }
 
+  /**
+   * Get count of companies whose parent is $parent.
+   * 
+   * @param $addressbook_id
+   * @param $parent
+   * @return the count.
+   */
   function get_count_by_parent($addressbook_id,$parent)
   {
     $sql = "SELECT DISTINCT COUNT(ab_companies.id) AS COUNT FROM ab_companies WHERE parent='$parent'";
