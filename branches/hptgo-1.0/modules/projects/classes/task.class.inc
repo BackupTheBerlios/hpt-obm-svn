@@ -296,7 +296,7 @@ class project_task extends db {
         echo '<td align="center"><a href="'.$url.'">'.
            '<img border="0" src="'.$GO_THEME->images['doc'].'"/></a></td>';
       else
-        echo '<td align="center\">'.
+        echo '<td align="center">'.
            '<img border="0" src="'.$GO_THEME->images['doc_disable'].'"/></td>';
     }
     else {
