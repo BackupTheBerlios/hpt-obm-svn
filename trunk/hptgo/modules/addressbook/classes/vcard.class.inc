@@ -182,7 +182,7 @@ class vcard extends addressbook {
                                         $acl_write = $GO_SECURITY->get_new_acl('company write');
 
                                         if ($acl_read > 0 && $acl_write > 0) {
-                                            if ($company_id = $this->add_company($addressbook_id, $user_id, $company['name'], $company['address'], $company['zip'], $company['city'], $company['state'], $company['country'], '', '', '', $company['homepage'], '', '', $acl_read, $acl_write)) {
+                                            if ($company_id = $this->add_company($addressbook_id, $user_id, $company['name'], '', '', '', $company['address'], $company['zip'], $company['city'], $company['state'], $company['country'], '', '', '', $company['homepage'], '', '', $acl_read, $acl_write, 0)) {
                                                 $GO_SECURITY->copy_acl($ab['acl_read'], $acl_read);
                                                 $GO_SECURITY->copy_acl($ab['acl_write'], $acl_write);
                                             } 

@@ -4,7 +4,7 @@
 	<table border="0" cellpadding="0" cellspacing="3">
 	<tr>
 		<td align="right" nowrap><?php echo $strParentCompany;?>:</td>
-		<td><?php echo $ab->parent_companies_urls($company_id); ?>&nbsp;</td>
+		<td><?php echo empty_to_stripe($ab->parent_companies_urls($company_id)); ?>&nbsp;</td>
 	</tr>
 
 	<tr>
@@ -132,6 +132,27 @@
 	</tr>
 	</table>
 	</td>
+	
+	<td width="10%"></td>
+	<td valign="top">
+		<table width="100%"  border="0" cellspacing="3" cellpadding="0">
+			<tr nowrap>
+				<td align="right" width="1%" nowrap><?php echo $strRelationDate; ?>&nbsp;:&nbsp;</td>
+				<td nowrap>&nbsp;
+<?php
+	$company['relation_date'] = db_date_to_date($company['relation_date']);
+		
+	if ($company['relation_date']=="00-00-0000")
+		$company['relation_date'] = "";
+			
+	echo empty_to_stripe($company['relation_date']);
+?>
+				</td>
+			</tr>
+			<?php account_manager($company['acl_write']);?>
+		</table>
+	</td>
+	
 </tr>
 <tr heigth="25">
 	<td colspan="2">

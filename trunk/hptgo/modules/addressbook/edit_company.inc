@@ -4,12 +4,6 @@
 	<td valign="top">
 	<table border="0" cellpadding="0" cellspacing="3">
 <?php //if ($company_id > 0) { /* When adding new company, addressbook is not specified yet, so disable this thing.*/?>
-	<tr>
-		<td align="right" nowrap>
-		<?php echo $strParentCompany; ?>:&nbsp;
-		</td>
-		<td><?php $parent_dropbox->print_dropbox('parent_id',$company['parent_id']);?></td>
-	</tr>
 		<?php //} ?>
 
 	<tr>
@@ -37,6 +31,12 @@
 		<td>
 		<input type="text" class="textbox"  name="engname" size="40" value="<?php echo htmlspecialchars($company['engname']); ?>" maxlength="50">
 		</td>
+	</tr>
+	<tr>
+		<td align="right" nowrap>
+		<?php echo $strParentCompany; ?>:&nbsp;
+		</td>
+		<td><?php $parent_dropbox->print_dropbox('parent_id',$company['parent_id']);?></td>
 	</tr>
 	<tr><td>&nbsp;</td></tr>
 	<tr>
@@ -145,6 +145,26 @@
 	echo '</td></tr>';
 	?>
 	</table>
+	</td>
+	<td width="10%"></td>
+	<td valign="top">
+		<table width="100%"  border="0" cellspacing="3" cellpadding="0">
+			<tr nowrap>
+				<td align="right" width="1%" nowrap><?php echo $strRelationDate; ?>&nbsp;:&nbsp;</td>
+				<td nowrap>&nbsp;
+<?php
+	if ( empty($task) && $company['relation_date'] ) 
+		$company['relation_date'] = db_date_to_date($company['relation_date']);
+		
+	if ($company['relation_date']==0)
+		$company['relation_date'] = "";
+			
+	$datepicker->print_date_picker('relation_date', $_SESSION['GO_SESSION']['date_format'], $company['relation_date']);
+?>
+				</td>
+			</tr>
+			<?php account_manager($company['acl_write']);?>
+		</table>
 	</td>
 </tr>
 <tr heigth="25">

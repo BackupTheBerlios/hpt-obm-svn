@@ -89,6 +89,8 @@ if (isset($_REQUEST['new_sort_direction']))
 	if (isset($first_writable_ab) && (!isset($subscribed_addressbook_id) || $subscribed_addressbook_id == 0))
 		$subscribed_addressbook_id = $first_writable_ab;
 
+	$datepicker = new date_picker();
+	$GO_HEADER['head'] = $datepicker->get_header();
 //save
 switch($task)
 {
@@ -96,6 +98,7 @@ switch($task)
 		$name = trim(smart_addslashes($_POST['name']));
 		$shortname = trim(smart_addslashes($_POST['shortname']));
 		$engname = trim(smart_addslashes($_POST['engname']));
+    	$relation_date = smart_addslashes($_POST["relation_date"]);
 		$address = smart_addslashes($_POST["address"]);
 		$zip = smart_addslashes($_POST["zip"]);
 		$city = smart_addslashes($_POST["city"]);
@@ -108,7 +111,8 @@ switch($task)
 		$bank_no = smart_addslashes($_POST["bank_no"]);
 		$vat_no = smart_addslashes($_POST["vat_no"]);
 		$parent_id = $_POST['parent_id'];
-
+		
+		$relation_date = date_to_db_date($_POST['relation_date']);
 		if ($name == '')
 		{
 			$feedback = "<p class=\"Error\">".$error_missing_field."</p>";
@@ -131,8 +135,8 @@ switch($task)
 				else
 				{
 					if ($ab->update_company($_POST['company_id'], $addressbook_id, $name, $shortname, $engname,
-									$address, $zip, $city, $state, $country, $email, $phone, $fax,
-									$homepage, $bank_no, $vat_no,$parent_id))
+									$relation_date, $address, $zip, $city, $state, $country, $email, $phone, $fax,
+									$homepage, $bank_no, $vat_no, $parent_id))
 					{
 						if ($_POST['close'] == 'true')
 						{
@@ -150,7 +154,7 @@ switch($task)
 				$acl_write = $GO_SECURITY->get_new_acl('company write');
 
 				if ($company_id = $ab->add_company($addressbook_id, 
-							$GO_SECURITY->user_id, $name, $shortname, $engname,
+							$GO_SECURITY->user_id, $name, $shortname, $engname, $relation_date,
 							$address, $zip, $city, $state, $country, $email,
 							$phone, $fax, $homepage, $bank_no, $vat_no,
 							$acl_read, $acl_write,$parent_id))
@@ -234,6 +238,7 @@ if ($company_id > 0 && $company = $ab->get_company($company_id))
 		$read_permission =
 			$GO_SECURITY->has_permission($GO_SECURITY->user_id, $company['acl_read']);
 	}
+
 }else
 {
 	$tabtable= new tabtable('company_table', $ab_new_company, '100%', '400',
@@ -274,6 +279,7 @@ if ($company_id == 0 || $task == 'save_company')
 	$company['name'] = isset($_REQUEST['name']) ? smartstrip($_REQUEST['name']) : '';
 	$company['shortname'] = isset($_REQUEST['shortname']) ? smartstrip($_REQUEST['shortname']) : '';
 	$company['engname'] = isset($_REQUEST['engname']) ? smartstrip($_REQUEST['engname']) : '';
+	$company['relation_date'] = isset($_REQUEST['relation_date']) ? smartstrip($_REQUEST['relation_date']) : '0';
 	$company['parent_id'] = isset($_REQUEST['parent_id']) ? smartstrip($_REQUEST['parent_id']) : '0';
 	$company['address'] = isset($_REQUEST['address']) ? smartstrip($_REQUEST['address']) : '';
 	$company['zip'] = isset($_REQUEST['zip']) ? smartstrip($_REQUEST['zip']) : '';
@@ -354,6 +360,8 @@ switch($active_tab_id)
 	break;
 
 	default:
+//		require('../../test.php');
+		require('../../lib/tkdlib.php');
 		if ($write_permission)
 		{
 			require('edit_company.inc');

@@ -208,7 +208,7 @@ if ($task == 'import')
 								if ($acl_read > 0 && $acl_write > 0)
 								{
 									if ($ab->add_company($_POST['addressbook_id'],
-											$GO_SECURITY->user_id, $name, '','',$address, $zip, 
+											$GO_SECURITY->user_id, $name, '','', '', $address, $zip, 
 											$city, $state, $country, $email, $phone, $fax, 
 											$homepage, $bank_no, $vat_no, $acl_read, $acl_write,0))
 									{

@@ -226,5 +226,7 @@ $strTreeView = "Xem dạng phân cấp";
 $strParentCompanyError = "Công ty cha không hợp lệ";
 $strShortCompanyName = "Tên viết tắt";
 $strEnglishCompanyName = "Tên tiếng Anh";
+$strRelationDate = "Ngày thiết lập quan hệ";
+$strAccountManager = "Nhân viên Phụ trách";
 $strNew = "Mới";
 ?>

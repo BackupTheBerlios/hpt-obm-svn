@@ -684,16 +684,17 @@ class addressbook extends db
     return $this->query("UPDATE ab_contacts SET company_id='$company_id' WHERE id='$contact_id'");
   }
 
-  function add_company($addressbook_id, $user_id, $name, $shortname, $engname, $address, $zip, $city, $state,
-      $country, $email, $phone, $fax, $homepage, $bank_no,
+  function add_company($addressbook_id, $user_id, $name, $shortname, $engname, $relation_date,
+  	$address, $zip, $city, $state, $country, $email, $phone, $fax, $homepage, $bank_no,
       $vat_no, $acl_read, $acl_write, $parent_id)
   {
     $company_id = $this->nextid("ab_companies");
     if ($company_id > 0)
     {
       $sql = "INSERT INTO ab_companies ".
-	"(id, user_id, addressbook_id, name, address, zip, city, state, country, email, phone, fax, homepage, bank_no, vat_no, acl_read, acl_write, parent, shortname, engname) VALUES ".
-	"('$company_id', '$user_id', '$addressbook_id', '$name', '$address', '$zip', '$city', '$state', '$country', '$email', '$phone', '$fax', '$homepage', '$bank_no', '$vat_no', '$acl_read', '$acl_write', '$parent_id', '$shortname', '$engname')";
+	"(id, user_id, addressbook_id, name, address, zip, city, state, country, email, phone, fax, homepage, bank_no, vat_no, acl_read, acl_write, parent, shortname, engname, relation_date) VALUES ".
+	"('$company_id', '$user_id', '$addressbook_id', '$name', '$address', '$zip', '$city', '$state', '$country', '$email', '$phone', '$fax', '$homepage', '$bank_no', '$vat_no', '$acl_read', '$acl_write', '$parent_id', ".
+	" '$shortname', '$engname', '$relation_date')";
       if ($this->query($sql))
       {
 	global $GO_SECURITY;
@@ -712,8 +713,8 @@ class addressbook extends db
     return false;
   }
 
-  function update_company($company_id, $addressbook_id, $name, $shortname, $engname, $address, $zip,
-      $city, $state, $country, $email, $phone, $fax,
+  function update_company($company_id, $addressbook_id, $name, $shortname, $engname, $relation_date, 
+  	$address, $zip,$city, $state, $country, $email, $phone, $fax,
       $homepage, $bank_no, $vat_no,$parent_id)
   {
     $sql = "UPDATE ab_companies SET ".
@@ -721,7 +722,7 @@ class addressbook extends db
       "address='$address', zip='$zip', city='$city', state='$state', ".
       "country='$country', email='$email', phone='$phone', fax='$fax', ".
       "homepage='$homepage', bank_no='$bank_no', vat_no='$vat_no', parent='$parent_id', ".
-      "shortname='$shortname', engname='$engname'  WHERE id='$company_id'";
+      "shortname='$shortname', engname='$engname', relation_date = '$relation_date' WHERE id='$company_id'";
 
     if ($this->query($sql))
     {

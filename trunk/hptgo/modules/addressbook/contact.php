@@ -78,7 +78,7 @@ switch($task)
 
 	if ($acl_read > 0 && $acl_write > 0 &&
 	    $company_id = $ab->add_company($addressbook_id, 
-	      $GO_SECURITY->user_id, $company_name, '','',
+	      $GO_SECURITY->user_id, $company_name, '','', '',
 	      '', '', '', '', '', '', '', '', '','', ''
 	      , $acl_read, $acl_write,0))
 	{

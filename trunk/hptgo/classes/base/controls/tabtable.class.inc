@@ -116,7 +116,18 @@ class tabtable
     echo '<table border="0" cellpadding="0" cellspacing="0" id="'.$this->css_table.'" width="'.$this->width.'">';
     if ($this->title != '')
     {
-      echo '<tr><th colspan="99">'.$this->title.'</th>'.($this->right_title != '' ? '<th nowrap>'.$this->right_title.'</th>' : '').'</tr>';
+      echo '<tr>'.
+				'<td colspan="100">'.
+					'<table width="100%" border="0" cellspacing="0" cellpadding="0">'.
+						'<tr>'.
+    						'<th width="99%" nowrap>'.$this->title.'</th>'.
+    						'<th width="1%" nowrap>'.$this->right_title.'&nbsp;</th>'.
+						'</tr>'.
+					'</table>'.
+				'</td>'.
+	  		'</tr>'.
+//	  <th colspan="99">'.$this->title.'</th>'.($this->right_title != '' ? '<th nowrap>'.$this->right_title.'</th>' : '').
+	  '</tr>';
     }
 
     $remaining_width= $this->width - ($tab_count * $this->tabwidth);

@@ -224,5 +224,7 @@ $strListView = "View as list";
 $strTreeView = "View as tree";
 $strShortCompanyName = "Short name";
 $strEnglishCompanyName = "English name";
+$strRelationDate = "Start relation date";
+$strAccountManager = "Account Manager(s)";
 $strNew = "New";
 ?>
