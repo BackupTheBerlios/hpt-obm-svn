@@ -12,6 +12,9 @@ option) any later version.
 
 /**
  * Used to maintain table filetypes (MIME types)
+ * @author	Merijn Schering <mschering@intermesh.nl>
+ * @version 1.0 Release date: 08 July 2003
+ * @package filetypes
  */
 class filetypes extends db
 {
@@ -23,7 +26,13 @@ class filetypes extends db
 	/**
 	 * Add a new type with extension $extension and optionally mime type $mime, friendly name $friendly, icon $icon
 	 * Missing information will be filled by default values
-	 * Return array ('extension','mime','friendly') (and 'image' (icon) if $return_image is true)
+	 *
+	 * @param	string	$extension	Extension of file
+	 * @param	string	$mime		Path of picture mimes for this file type
+	 * @param	string	$friendly	Friendly calling of this file type
+	 * @param	blob	$icon		Blob icon
+	 * @param	bool	$return_image	if = "true" return $type['image'] = $icon
+	 * @return	array	('extension','mime','friendly') (and 'image' (icon) if $return_image is true)
 	 */
 	function add_type($extension, $mime='', $friendly='', $icon='',$return_image=false)
 	{
@@ -68,9 +77,12 @@ class filetypes extends db
 	}
 
 	/**
-	 * return file info corresponding to extension $extension.
+	 * Return file info corresponding to extension $extension.
 	 * Information may be retrieved through db interface.
-	 * return true if successful, false otherwise.
+	 *
+	 * @param	string	$extension	Extension of file
+	 * @param	bool	$return_image	if = "true", return a icon of file type
+	 * @return	bool	"true" if successful, "false" otherwise.
 	 */
 	function get_type($extension, $return_image=false)
 	{
@@ -88,8 +100,11 @@ class filetypes extends db
 	}
 
 	/**
-	 * return $offset file types, starting from $first.
-	 * return total number of file types.
+	 * Return $offset file types, starting from $first.
+	 *
+	 * @param	int	$first	Record number is started to get
+	 * @param	int	$offset	Max number of file type is got
+	 * @return	int	total number of file types.
 	 */
 	function get_filetypes($first=0, $offset=0)
 	{
@@ -117,7 +132,11 @@ class filetypes extends db
 
 	/**
 	 * Change friendly name/icon of filetype $extension.
-	 * return true if successful, false otherwise.
+	 *
+	 * @param	string	$extension	Extension of file
+	 * @param	string	$friendly	Friendly calling of this file type
+	 * @param	blob	$icon		Blob icon
+	 * @return	bool	true if successful, false otherwise.
 	 */
 	function update_filetype($extension, $friendly, $icon='')
 	{
@@ -133,7 +152,9 @@ class filetypes extends db
 
 	/**
 	 * Delete filetype $extension.
-	 * return true if successful, false otherwise.
+	 *
+	 * @param	string	$extension	Extension of file
+	 * @return	bool	true if successful, false otherwise.
 	 */
 	function delete_type($extension)
 	{
@@ -143,7 +164,9 @@ class filetypes extends db
 
 	/**
 	 * Get filetype $extension from mimetype file $GO_CONFIG->mime_types_file.
-	 * return correspoding mime type, application/octet-stream if not found.
+	 *
+	 * @param	string	$extension	Extension of file
+	 * @return	string	correspoding mime type, application/octet-stream if not found.
 	 */
 	function get_mime_type($extension)
 	{
@@ -169,6 +192,9 @@ class filetypes extends db
 
 	/**
 	 * Get extension of filename $filename.
+	 *
+	 * @param	string	$filename	Filename
+	 * @return	string	Extension of file
 	 */
 	function get_extension($filename)
 	{
@@ -182,6 +208,9 @@ class filetypes extends db
 
 	/**
 	 * Get mime extension of mime type $mime.
+	 *
+	 * @param	string	$mime		Mimes of file type
+	 * @return	mixed	extension string
 	 */
 	function get_mime_extension($mime)
 	{
