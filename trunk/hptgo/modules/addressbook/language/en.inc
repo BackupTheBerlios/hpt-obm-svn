@@ -88,8 +88,8 @@ $ab_category = 'Category';
 $ab_parent_category = 'New item is in';
 $ab_TOP = '[CATEGORY GROUP]';
 
-$ab_ConfirmDeleteStatus = 'Do you want to delete \"%s\" category ?';
-$ab_ConfirmDeleteStatus2 = 'Do you want to delete \"%s\" category and its sub categories ?';
+$ab_ConfirmDeleteStatus = 'Do you want to delete "%s" category ?';
+$ab_ConfirmDeleteStatus2 = 'Do you want to delete "%s" category and its sub categories ?';
 //-----------------------------
 
 $ab_addressbooks = 'Addressbooks';

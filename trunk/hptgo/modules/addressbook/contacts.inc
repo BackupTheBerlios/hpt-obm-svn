@@ -210,7 +210,7 @@ if(isset($groups))
 	  $name = $ab->f('last_name').' '.$middle_name.$ab->f('first_name');
 
 	  echo "<tr id=\"".$ab->f("id")."\" class=\"".$class."\"><td></td>\n";
-	  echo "<td nowrap><input id=\"".$name."\" type=\"checkbox\" onclick=\"javacript:item_click(this)\" name=\"contact[]\" value=\"".$ab->f("id")."\" ".$checked." /></td><td nowrap><a".$style." class=\"normal\" href=\"contact.php?contact_id=".$ab->f("id")."&return_to=".rawurlencode($_SERVER['REQUEST_URI'])."\" title=\"".$strShowProfile."\">".htmlspecialchars(empty_to_stripe($name))."</a>&nbsp;</td>\n";
+	  echo "<td nowrap><input id=\"".div_confirm_id($name)."\" type=\"checkbox\" onclick=\"javacript:item_click(this)\" name=\"contact[]\" value=\"".$ab->f("id")."\" ".$checked." /></td><td nowrap><a".$style." class=\"normal\" href=\"contact.php?contact_id=".$ab->f("id")."&return_to=".rawurlencode($_SERVER['REQUEST_URI'])."\" title=\"".$strShowProfile."\">".htmlspecialchars(empty_to_stripe($name))."</a>&nbsp;</td>\n";
 
 if (count($order) == 0)
 {
@@ -275,7 +275,7 @@ if ($group_count > 0)
 	$name = $ab->f('last_name').' '.$middle_name.$ab->f('first_name');
 	echo "<tr id=\"".$ab->f("id")."\" class=\"".$class."\"><td></td>\n";
 
-	echo "<td nowrap><input id=\"".addslashes($name)."\" onclick=\"javacript:item_click(this)\" type=\"checkbox\" name=\"contact[]\" value=\"".$ab->f("id")."\" ".$checked." /></td>	<td nowrap><a".$style." class=\"normal\" href=\"contact.php?contact_id=".$ab->f("id")."&return_to=".rawurlencode($_SERVER['REQUEST_URI'])."\" title=\"".$strShowProfile."\">".htmlspecialchars(empty_to_stripe($name))."</a>&nbsp;</td>\n";
+	echo "<td nowrap><input id=\"".div_confirm_id($name)."\" onclick=\"javacript:item_click(this)\" type=\"checkbox\" name=\"contact[]\" value=\"".$ab->f("id")."\" ".$checked." /></td>	<td nowrap><a".$style." class=\"normal\" href=\"contact.php?contact_id=".$ab->f("id")."&return_to=".rawurlencode($_SERVER['REQUEST_URI'])."\" title=\"".$strShowProfile."\">".htmlspecialchars(empty_to_stripe($name))."</a>&nbsp;</td>\n";
 
 if (count($order) == 0)
 {
@@ -335,7 +335,7 @@ if (count($order) == 0)
       $name = $ab->f('last_name').' '.$middle_name.$ab->f('first_name');
 
       echo "<tr id=\"".$ab->f("id")."\" class=\"".$class."\"><td></td>\n".
-	"<td nowrap><input id=\"".addslashes($name)."\" ".
+	"<td nowrap><input id=\"".div_confirm_id($name)."\" ".
 	"onclick=\"javacript:item_click(this)\"  type=\"checkbox\"".
 	"name=\"contact[]\" value=\"".$ab->f("id")."\" ".$checked.
 	" /></td><td nowrap><a".$style." class=\"normal\" ".
@@ -458,7 +458,7 @@ function confirm_delete()
       break;
 
     case 1:
-      if (confirm("<?php echo $strDeletePrefix; ?> '"+name+"' <?php echo $strDeleteSuffix; ?>"))
+      if (confirm("<?php echo $strDeletePrefix; ?> '"+div_confirm_text(name)+"' <?php echo $strDeleteSuffix; ?>"))
       {
 	document.forms[0].task.value="delete";
 	document.forms[0].submit();

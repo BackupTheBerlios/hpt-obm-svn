@@ -1,12 +1,28 @@
-Thank you for installing Group-Office!
+,-[ Tiếng Việt - UTF8 ] ------------------------------------------------
+| Cảm ơn bạn đã cài đặt chương trình HPT-OBM
+|
+| Để cấu hình HPT-OBM, mở chương trình duyệt Web (Internet Explorer,
+| Netscape, Mozille...) và nhập vào địa chỉ (URL) mà bạn đã chọn khi cài
+| đặt chương trình và theo các hướng dẫn từng bước trong đó.
+| Để nâng cấp chọn install.php
+|
+| !!! XIN HÃY ĐỌC CÁC GHI CHÚ VỀ PHIÊN BẢN PHÁT HÀNH !!!
+|
+| Chúc các bạn may mắn!
+|
+| Nhóm phát triển HPT OBM
+`-----------------------------------------------------------------------
 
-To install Group-Office open a browser and go to the URL where you put the 
-Group-Office files and follow instructions. 
-For upgrading point it to install.php.
-
-!!! READ THE RELEASE NOTES !!!
-
-Good luck!
-
-Merijn Schering
-Intermesh
+,-[ English ] -------------------------------------------------------
+| Thank you for installing HPT-OBM!
+|
+| To install HPT-OBM open a browser and go to the URL where you put the
+| HPT-OBM files and follow instructions.
+| For upgrading point it to install.php.
+|
+| !!! READ THE RELEASE NOTES !!!
+|
+| Good luck!
+|
+| HPT OBM Development Team
+`-----------------------------------------------------------------------

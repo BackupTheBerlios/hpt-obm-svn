@@ -35,7 +35,7 @@ registration_question_text;
 
 $registration_text=<<<registration_text
 Fill out this form and click on 'Ok' to register. The fields marked with a * are required.<br />
-The information you provide is only for use at Group-Office so we will not provide them to third parties.
+The information you provide is only for use at HPT-OBM so we will not provide them to third parties.
 registration_text;
 
 $registartion_authcode_text = "Enter an authorisation code. The authorisationcode is a code that other users will need to add this user to thier contactlist and view your details.";
@@ -43,11 +43,11 @@ $registartion_confirm_authcode = "Confirm authorisation code";
 $registration_visibility = "Make this user visible to all users.";
 $registration_success = "<h1>Congratulations!</h1>You are successfully registered and a welcome message has been sent to:";
 $registration_failure = "An error occured while trying to register your information. Please try again.";
-$registration_mail_subject = "Welcome to HPT OPM Group-Office.";
+$registration_mail_subject = "Welcome to HPT OBM.";
 $registration_folder_error = "Failed creating the personal folder. Contact us to restore this!";
-$registration_title = "Register at Group-Office";
+$registration_title = "Register at HPT OBM";
 
-$registration_email = "Create an E-mail address for this user at Group-Office.";
+$registration_email = "Create an E-mail address for this user at HPT OBM.";
 $registration_samba = "File & Print server.";
 $registration_email_error = "An error occured while creating your e-mail account. Contact us for support.";
 $strPasswordConfirm = "Confirm password";
@@ -61,7 +61,7 @@ $ml_sent_items = "Sent items";
 $ml_spam = "Spam";
 $ac_samba_user = "User has acces to the file and print server.";
 $ml_email_only = "Only required when you don't create an E-mail address";
-$register_new_user = 'New Group-Office subscriber';
+$register_new_user = 'New HPT OBM subscriber';
 $register_thanks = '<h2>Thank you</h2>Your subscription will be processed as soon as possible. You will recieve further notice.';
 $register_accept = 'Add to users';
 $register_addressbook = 'Add to addressbook';
@@ -69,7 +69,7 @@ $register_title = 'Subscribe';
 $registration_mail_body=<<<registration_mail_body
 Dear %sex% %last_name%,
 
-You have been registered at Group-Office.
+You have been registered at HPT OBM.
 We hope you will enjoy our service.
 
 You can login with the following data:

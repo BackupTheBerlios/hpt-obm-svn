@@ -1,6 +1,16 @@
+2004/10/15 Version 1.00
+HPT Vietnam Corporation - Development Team very please to announce the first
+release of HPT OBM - Open Business Management (version 1.0), which is based on
+Group-Office 2.05 of Intermesh.  This release include new style of Project
+Management module using work-flow, project template, task allocation, gantt
+chart monitorring, document management and alot more of features. Additionally,
+OBM v1.0 also include alot of bug fixes, Vietnamese support, dictionary module,
+company relation display (tree view), Group/Common filesystem...
+
+
 2004/05/23 Version 2.05
 Major changes under the hood and a nice new summary module. It's been two months
-since last release but we give you a much more stable and powerfull Group-Office 
+since last release but we give you a much more stable and powerfull Group-Office
 in return. Upgrading is recommended for everybody.
 
 !!Important!! For upgrading you will have to delete your old Group-Office.php

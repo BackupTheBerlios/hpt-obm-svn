@@ -43,13 +43,13 @@ $ac_add_user = 'Yêu cầu xác thực';
 $ac_auth_error = 'Lỗi khi thực hiện xác thực. Xin thử lại.';
 $ac_auth_success = 'Người này đã có thể thấy được tài khoản của bạn và 1 thông báo đã được gửi đến người đó cho biết bạn đã chấp nhận yêu cầu.';
 $ac_auth_decline = 'Thông báo đã được gửi đến người này cho biết bạn từ chối yêu cầu.';
-$ac_auth_accept_mail_title = 'Group-Office yêu cầu xác thực được chấp thuận';
-$ac_auth_decline_mail_title = 'Group-Office yêu cầu xác thực bị từ chối';
+$ac_auth_accept_mail_title = 'HPT-OBM yêu cầu xác thực được chấp thuận';
+$ac_auth_decline_mail_title = 'HPT-OBM yêu cầu xác thực bị từ chối';
 
 $ac_auth_accept_mail_body = 'Tài khoản có thể xem được theo yêu cầu của bạn.';
 $ac_auth_decline_mail_body = 'has declined your request to make his account visible to you.';
 $ac_request_auth = 'requests your permission to make your account visible. Do you want to make your account visible to this user?';
-$ac_request_auth_mail_title ='Group-Office yêu cầu xác thực';
+$ac_request_auth_mail_title ='HPT-OBM yêu cầu xác thực';
 $ac_invalid_email = 'Địa chỉ e-mail mà bạn nhập chưa có trong hệ thống. Xin nhập lại.';
 $ac_request_mail_body_prefix = 'Thông báo đã được gửi đến ';
 $ac_request_mail_body_suffix = 'yêu cầu xin phép được xem thông tin tài khoản.';

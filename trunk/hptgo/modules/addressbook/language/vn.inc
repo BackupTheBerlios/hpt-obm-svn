@@ -88,8 +88,8 @@ $ab_category = 'Danh mục';
 $ab_parent_category = 'Danh mục thêm vào chứa trong';
 $ab_TOP = '[NHÓM DANH MỤC]';
 
-$ab_ConfirmDeleteStatus = 'Bạn có chắc chắn là muốn xoá danh mục \"%s\" ?';
-$ab_ConfirmDeleteStatus2 = 'Bạn có chắc chắn là muốn xoá danh mục \"%s\" và tất cả các danh mục con ?';
+$ab_ConfirmDeleteStatus = 'Bạn có chắc chắn là muốn xoá danh mục "%s" ?';
+$ab_ConfirmDeleteStatus2 = 'Bạn có chắc chắn là muốn xoá danh mục "%s" và tất cả các danh mục con ?';
 //-----------------------------
 
 $ab_addressbooks = 'Sổ địa chỉ';

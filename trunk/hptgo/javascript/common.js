@@ -17,14 +17,35 @@ function confirm_action(url, message)
 	}
 }
 
+function div_text_replace(string,text,by) {
+	// Replaces text with by in string
+	var strLength = string.length, txtLength = text.length;
+	if ((strLength == 0) || (txtLength == 0)) return string;
+
+	var i = string.indexOf(text);
+	if ((!i) && (text != string.substring(0,txtLength))) return string;
+	if (i == -1) return string;
+
+	var newstr = string.substring(0,i) + by;
+
+	if (i+txtLength < strLength)
+		newstr += div_text_replace(string.substring(i+txtLength,strLength),text,by);
+
+	return newstr;
+}
+
 function div_confirm_text(message_id)
 {
-	return document.getElementById('div_confirm_'+message_id).innerHTML
+	str = document.getElementById('div_confirm_'+message_id).innerHTML
+	str = div_text_replace(str,'&lt;','<')
+	str = div_text_replace(str,'&gt;','>')
+	str = div_text_replace(str,'&amp;','&')
+	return str;
 }
 
 function div_confirm(message_id)
 {
-	return confirm(document.getElementById('div_confirm_'+message_id).innerHTML)
+	return confirm(div_confirm_text(message_id))
 }
 
 function div_confirm_action(url, message_id)
