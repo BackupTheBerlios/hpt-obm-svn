@@ -30,4 +30,6 @@ $cmdUninstall = 'Gỡ bỏ';
 $strConfirmUninstallPrefix = 'Bạn có chắc là bạn muốn gỡ bỏ';
 $strConfirmUninstallSuffix = '?';
 
+$mod_available = 'Chứa năng hiện có';
+$mod_installed = 'Chức năng đã cài đặt';
 ?>

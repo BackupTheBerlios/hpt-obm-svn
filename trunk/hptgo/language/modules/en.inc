@@ -30,4 +30,6 @@ $cmdUninstall = 'Uninstall';
 $strConfirmUninstallPrefix = 'Are you sure you want to uninstall';
 $strConfirmUninstallSuffix = '?';
 
+$mod_available = 'Available modules';
+$mod_installed = 'Installed modules';
 ?>

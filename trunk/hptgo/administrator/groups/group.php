@@ -10,7 +10,7 @@
    option) any later version.
  */
 require("../../Group-Office.php");
-$GO_SECURITY->authenticate();
+$GO_SECURITY->authenticate(true);
 require($GO_LANGUAGE->get_base_language_file('groups'));
 
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
@@ -41,7 +41,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
       case 'delete_users':
 	for ($i=0;$i<count($group_users);$i++)
 	{
+		if($group_users[$i] != $GO_SECURITY->user_id && $group_users[$i] != 1)
+		{
 	  $GO_GROUPS->delete_user_from_group($group_users[$i],$_POST['group_id']);
+	  }
 	}
 	break;
 
@@ -74,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 		{
 		  if ($_POST['close'] == 'true')
 		  {
-		    header('Location: '.$GO_CONFIG->host.'configuration/groups/index.php');
+		    header('Location: '.$GO_CONFIG->host.'administrator/groups/index.php');
 		    exit();
 		  }
 		}
@@ -95,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 
 		if ($_POST['close'] == 'true')
 		{
-		  header('Location: '.$GO_CONFIG->host.'configuration/groups/index.php');
+		  header('Location: '.$GO_CONFIG->host.'administrator/groups/index.php');
 		  exit();
 		}
 	      }
@@ -158,7 +161,7 @@ if ($group_id == $GO_CONFIG->group_everyone)
 $page_title = $groups_title;
 require($GO_THEME->theme_path."header.inc");
 
-$tabtable = new tabtable('group_tab', $group_name, '600', '300');
+$tabtable = new tabtable('group_tab', $group_name, '100%', '400');
 ?>
 <form name="group" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <input type="hidden" name="group_id" value="<?php echo $group_id; ?>" />

@@ -1464,67 +1464,6 @@ function path_to_url($path)
 }*/
 
 
-/**
-* Finds a system program
-*
-* @param	string $program	The name of the program
-* @access public
-* @return string The full path to the program
-*/
-function find_program ($program) {
-  $path = array('/bin', '/sbin', '/usr/bin', '/usr/sbin', '/usr/local/bin', '/usr/local/sbin');
-  while ($this_path = current($path)) {
-    if (is_executable("$this_path/$program")) {
-      return "$this_path/$program";
-    }
-    next($path);
-  }
-  return;
-}
-
-
-// Execute a system program. return a trim()'d result.
-// does very crude pipe checking.  you need ' | ' for it to work
-// ie $program = execute_program('netstat', '-anp | grep LIST');
-// NOT $program = execute_program('netstat', '-anp|grep LIST');
-
-/**
-* Execute a system program.
-*
-* does very crude pipe checking.  you need ' | ' for it to work
-* ie $program = execute_program('netstat', '-anp | grep LIST');
-* NOT $program = execute_program('netstat', '-anp|grep LIST');
-*
-* @param	string $program	The name of the program
-* @access public
-* @return string trim()'d result
-*/
-function execute_program ($program, $args = '') {
-  $buffer = '';
-  $program = find_program($program);
-
-  if (!$program) { return; }
-
-  // see if we've gotten a |, if we have we need to do patch checking on the cmd
-  if ($args) {
-    $args_list = split(' ', $args);
-    for ($i = 0; $i < count($args_list); $i++) {
-      if ($args_list[$i] == '|') {
-	$cmd = $args_list[$i + 1];
-	$new_cmd = find_program($cmd);
-	$args = ereg_replace("\| $cmd", "| $new_cmd", $args);
-      }
-    }
-  }
-
-  // we've finally got a good cmd line.. execute it
-  if ($fp = popen("$program $args", 'r')) {
-    while (!feof($fp)) {
-      $buffer .= fgets($fp, 4096);
-    }
-    return trim($buffer);
-  }
-}
 
 function array_csort($marray, $column) {
   foreach ($marray as $row) {

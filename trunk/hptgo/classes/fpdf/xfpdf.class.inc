@@ -82,7 +82,7 @@ class XFPDF extends FPDF
 			  if(headers_sent())
 				$this->Error('Some data has already been output to browser, can\'t send PDF file');
 			  Header('Content-Length: '.strlen($this->buffer));
-			  Header('Content-disposition: inline; filename='.$name);
+			  Header('Content-disposition: inline; filename="'.$name.'"');
 			  //Workaround for the IE to open the pdf file without any errors
 			  //but the displaying of the pdf file still doesn't work (an issue from IE, buggy browser??)
 			  if ($browser['name'] == 'MSIE')
@@ -102,7 +102,7 @@ class XFPDF extends FPDF
 			if(headers_sent())
 				$this->Error('Some data has already been output to browser, can\'t send PDF file');
 			Header('Content-Length: '.strlen($this->buffer));
-			Header('Content-disposition: attachment; filename='.$name);
+			Header('Content-disposition: attachment; filename="'.$name.'"');
 			echo $this->buffer;
 			break;
 		case 'F':

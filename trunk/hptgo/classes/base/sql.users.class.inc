@@ -444,21 +444,52 @@ class GO_USERS extends base_users
 
 	  "WHERE id='$user_id'"))
     {
-      $_SESSION['GO_SESSION']['thousands_seperator'] = $thousands_seperator;
-      $_SESSION['GO_SESSION']['decimal_seperator'] = $decimal_seperator;
-      $_SESSION['GO_SESSION']['date_format']= $date_format;
-      $_SESSION['GO_SESSION']['time_format']= $time_format;
-      $_SESSION['GO_SESSION']['currency'] = $currency;
-      $_SESSION['GO_SESSION']['mail_client'] = $mail_client;
-      $_SESSION['GO_SESSION']['max_rows_list'] = $max_rows_list;
-      $_SESSION['GO_SESSION']['timezone'] = $timezone_offset;
-      $_SESSION['GO_SESSION']['DST'] = $DST;
-      $_SESSION['GO_SESSION']['start_module'] = $start_module;
-      $_SESSION['GO_SESSION']['theme'] = $theme;
-      $GO_LANGUAGE->set_language($language);
-      $_SESSION['GO_SESSION']['first_weekday'] = $first_weekday;
+      $GO_LANGUAGE->set_language($language);      
+      $this->update_session($user_id);
     }
   }
+
+  function set_notations($user_id, $date_format, $time_format, 
+      $thousands_seperator, $decimal_seperator, 
+      $currency,  $timezone_offset,$DST, $first_weekday)
+  {
+    global $GO_LANGUAGE; 
+
+    if($this->query("UPDATE users SET time_format='$time_format', ".
+	  "date_format='$date_format', ".
+	  "thousands_seperator='$thousands_seperator', ".
+	  "decimal_seperator='$decimal_seperator', ".
+	  "currency='$currency', ".
+	  "timezone='$timezone_offset', ".
+	  "DST='$DST', ".
+	  "first_weekday='$first_weekday', ".
+
+	  "WHERE id='$user_id'"))
+    {
+      $this->update_session($user_id);
+    }
+  }
+  
+  function set_look_and_feel($user_id,
+      $max_rows_list, 
+      $start_module, 
+      $language, 
+			$theme)
+  {
+    global $GO_LANGUAGE; 
+
+    if($this->query("UPDATE users SET max_rows_list='$max_rows_list', ".	  
+	  "start_module='$start_module', ".
+	  "theme='$theme', ".
+	  "language='$language' ".
+	  "WHERE id='$user_id'"))
+    {
+      $GO_LANGUAGE->set_language($language);      
+      $this->update_session($user_id);
+
+    }
+  }
+  
 
   function delete_user($user_id)
   {

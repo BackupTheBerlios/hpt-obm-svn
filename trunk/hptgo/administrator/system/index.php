@@ -11,33 +11,79 @@
  */
 
 require("../../Group-Office.php");
-require($GO_LANGUAGE->get_base_language_file('sysinfo'));
-require($GO_CONFIG->class_path."sysinfo.class.inc");
-require_once($GO_CONFIG->class_path."filesystem.class.inc");
-$fso = new filesystem();
-$sysinfo = new sysinfo();
 
-$return_to = $GO_CONFIG->host.'configuration/';
+if(file_exists('phpsysinfo-dev/includes/lang/'.$GO_LANGUAGE->language['language_file'].'.php'))
+{
+	require('phpsysinfo-dev/includes/lang/'.$GO_LANGUAGE->language['language_file'].'.php');
+}else
+{
+	require('phpsysinfo-dev/includes/lang/en.php');
+}
+
+require_once($GO_CONFIG->class_path."filesystem.class.inc");
+require_once($GO_CONFIG->class_path."xml.class.inc");
+$fso = new filesystem();
+
+$return_to = $GO_CONFIG->host.'administrator/';
 
 $GO_SECURITY->authenticate(true);
+
+
+// Figure out which OS where running on, and detect support
+if (file_exists('phpsysinfo-dev/includes/os/class.' . PHP_OS . '.inc.php')) {
+  require('phpsysinfo-dev/includes/os/class.' . PHP_OS . '.inc.php');
+  $sysinfo = new sysinfo;
+} else {
+  echo '<center><b>Error: ' . PHP_OS . ' is not currently supported</b></center>';
+  exit;
+}
+
+if (!empty($GO_CONFIG->sensor_program)) {
+  if (file_exists('phpsysinfo-dev/includes/mb/class.' . $GO_CONFIG->sensor_program. '.inc.php')) {
+    require('phpsysinfo-dev/includes/mb/class.' . $GO_CONFIG->sensor_program . '.inc.php');
+    $mbinfo = new mbinfo;
+  } else {
+    echo '<center><b>Error: ' . $GO_CONFIG->sensor_program . ' is not currently supported</b></center>';
+    exit;
+  }
+}
+
+
+require('phpsysinfo-dev/includes/common_functions.php'); // Set of common functions used through out the app
+require('phpsysinfo-dev/includes/xml/vitals.php');
+require('phpsysinfo-dev/includes/xml/network.php');
+require('phpsysinfo-dev/includes/xml/hardware.php');
+require('phpsysinfo-dev/includes/xml/memory.php');
+require('phpsysinfo-dev/includes/xml/filesystems.php');
+require('phpsysinfo-dev/includes/xml/mbinfo.php');
+
+$xml = "<?xml version=\"1.0\" encoding=\"iso-8859-1\"?>\n";
+$xml .= "<!DOCTYPE phpsysinfo SYSTEM \"phpsysinfo-dev/phpsysinfo.dtd\">\n\n";
+$xml .= created_by();
+$xml .= "<phpsysinfo>\n";
+$xml .= "  <Generation version=\"$VERSION\" timestamp=\"" . time() . "\"/>\n";
+$xml .= xml_vitals();
+$xml .= xml_network();
+$xml .= xml_hardware();
+$xml .= xml_memory();
+$xml .= xml_filesystems();
+if (!empty($GO_CONFIG->sensor_program)) {
+  $xml .= xml_mbtemp();
+  $xml .= xml_mbfans();
+  $xml .= xml_mbvoltage();
+} ;
+$xml .= "</phpsysinfo>";
+
+echo $xml;
+$phpsysinfo = text_to_xml ($xml);
+
+//var_dump($si_xml);
+//$phpsysinfo = $si_xml->get_child ("phpsysinfo");
+
 $page_title = $menu_sysinfo;
 require($GO_THEME->theme_path."header.inc");
 
 
-//average load
-$ar_buf = $sysinfo->loadavg();
-$load_avg = '';
-for ($i=0;$i<3;$i++) {
-  if ($ar_buf[$i] > 2) {
-    $load_avg .= ' ';
-  } else {
-    $load_avg .= $ar_buf[$i] . ' ';
-  }
-}
-$load_avg = trim($load_avg);
-
-//cpu information
-$sys = $sysinfo->cpu_info();
 
 ?>
 <table border="0" cellpadding="0" cellspacing="10">
@@ -48,23 +94,38 @@ $sys = $sysinfo->cpu_info();
 <td valign="top">
 <table border="0" cellpadding="1" cellspacing="1" width="100%">
 <tr>
-<td colspan="99" class="TableHead"><?php echo $si_system_summary; ?></td>
+<td colspan="99" class="TableHead"><?php echo $text['vitals']; ?></td>
 </tr>
 <tr>
+ <Vitals>
+    <Hostname>localhost.localdomain</Hostname>
+    <IPAddr>127.0.0.1</IPAddr>
+    <Kernel>2.6.8-1.521</Kernel>
+
+    <Distro>Fedora Core release 2 (Tettnang)</Distro>
+    <Distroicon>Fedora.gif</Distroicon>
+    <Uptime>4  7 </Uptime>
+    <Users>2</Users>
+    <LoadAvg>0.49 0.55 0.40</LoadAvg>
+  </Vitals>
+
+
 <td class="TableInside">
 <table border="0">
 <tr>
 <td><?php echo $si_hostname; ?>:</td>
-<td><?php echo $sysinfo->chostname(); ?></td>
+<td><?php echo $phpsysinfo->get_data('Vitals/Hostname'); ?></td>
 </tr>
 <tr>
 <td><?php echo $si_ip; ?>:</td>
-<td><?php echo $sysinfo->ip_addr(); ?></td>
+<td><?php echo $phpsysinfo->get_data('Vitals/IPAddr'); ?></td>
 </tr>
 <tr>
 <td><?php echo $si_kernel; ?>:</td>
-<td><?php echo $sysinfo->kernel(); ?></td>
+<td><<?php echo $phpsysinfo->get_data('Vitals/Kernel'); ?></td>
 </tr>
+<tr>
+	<td>
 <tr>
 <td><?php echo $si_web_server; ?>:</td>
 <td><?php echo $_SERVER['SERVER_SOFTWARE']; ?></td>

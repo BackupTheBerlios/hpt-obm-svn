@@ -245,7 +245,31 @@ $images['cal_add_todo'] = 'buttons/todo.gif';
 
 $images['sum_notes'] = 'buttons/sum_notes.png';
 $images['sum_calendar'] = 'buttons/sum_calendar.png';
-$images['unknown'] = 'buttons/unknown.png';
+$images['unknown'] = 'questionmark.png';
+
+$images['up_green'] = 'buttons/up_green.png';
+$images['down_blue'] = 'buttons/down_blue.png';
+$images['opt_close'] = 'buttons/opt_close.png';
+$images['opt_open'] = 'buttons/opt_open.png';
+
+$images['pr_new_project'] = 'buttons/projects_new.png';
+$images['pr_load'] = 'buttons/projects_load.png';
+$images['pr_fees'] = 'buttons/projects_fees.png';
+
+$images['mod_bookmarks'] = 'buttons/mod_bookmarks.png';
+$images['mod_summary'] = 'buttons/mod_summary.png';
+$images['mod_addressbook'] = 'buttons/mod_addressbook.png';
+$images['mod_calendar'] = 'buttons/mod_calendar.png';
+$images['mod_cms'] = 'buttons/mod_cms.png';
+$images['mod_email'] = 'buttons/mod_email.png';
+$images['mod_filesystem'] = 'buttons/mod_filesystem.png';
+$images['mod_notes'] = 'buttons/mod_notes.png';
+$images['mod_projects'] = 'buttons/mod_projects.png';
+$images['mod_search']		= 'buttons/mod_search.png';
+$images['mod_opentts']		= 'buttons/mod_helpdesk.png';
+$images['mod_chat']		= 'buttons/mod_chat.png';
+$images['mod_comics']           = 'buttons/mod_garfield.png';
+$images['mod_todos'] = 'buttons/mod_todos.png';
 
 $images['doc'] = 'doc.gif';
 $images['doc_red'] = 'doc_red.gif';

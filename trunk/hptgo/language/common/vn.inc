@@ -107,7 +107,7 @@ $menu_topics = "Các chủ đề";
 $menu_support = "Hỗ trợ";
 $menu_projects = "Các dự án";
 $menu_sysinfo = "Xem thông tin hệ thống";
-$menu_admin = 'Trình đơn quản trị viên';
+$menu_admin = 'Cấu hình hệ thống';
 $menu_modules = 'Thêm/bớt chức năng';
 $menu_manual = 'Sổ tay';
 

@@ -57,6 +57,11 @@ class GO_THEME
 	 * @var array
 	 */
 	var $sounds = array();
+	/**
+	 * theme filetypes
+	 * @var array
+	 */
+	var $filetypes = array();
 
 	function GO_THEME()
 	{
@@ -91,6 +96,11 @@ class GO_THEME
 		{
 			$this->images[$key] = $this->image_url.$value;
 		}
+		require($this->theme_path.'filetypes.inc');
+		foreach($filetypes as $key => $value)
+		{
+			$this->filetypes[$key] = $this->image_url.$value;
+		}
 		require($this->theme_path.'sounds.inc');
 		foreach($sounds as $key => $value)
 		{

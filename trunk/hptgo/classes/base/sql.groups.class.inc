@@ -286,6 +286,28 @@ class GO_GROUPS extends base_groups
   }
 
   /**
+	* Get's all groups. If a user ID is specified it returns only the groups
+	*	that user is a member of.
+	*
+	* @access public
+	* @return int	Number of groups
+	*/
+  function get_groups($user_id=0)
+  {
+  	$sql = "SELECT groups.*,users.username FROM groups, users ";
+					 
+		if($user_id > 0)
+		{
+			$sql .= "INNER JOIN users_groups ON groups.id=users_groups.group_id ".
+							"AND users_groups.user_id='$user_id' ";
+		}					
+
+	$sql .= "WHERE groups.user_id = users.id ORDER BY groups.id ASC";
+    $this->query($sql);
+	return $this->num_rows();
+  }
+  
+  /**
 	* Get's all groups.
 	*
 	* @access public

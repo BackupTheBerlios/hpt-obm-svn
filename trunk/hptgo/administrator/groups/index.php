@@ -10,13 +10,15 @@
    option) any later version.
  */
 require("../../Group-Office.php");
-$GO_SECURITY->authenticate();
+$GO_SECURITY->authenticate(true);
 require($GO_LANGUAGE->get_base_language_file('groups'));
 
+/*
 if (!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
 	header('Location: '.$GO_CONFIG->host.'error_docs/403.php');
 	exit();
 }
+*/
 
 //perform on delete request
 if (isset($_REQUEST['delete_group']))
@@ -34,10 +36,11 @@ if (isset($_REQUEST['delete_group']))
   }
 }
 
+$return_to = $GO_CONFIG->host.'administrator/';
 $page_title = $groups_title;
 require($GO_THEME->theme_path."header.inc");
 
-$tabtable = new tabtable('groups', $groups_title, '600', '300');
+$tabtable = new tabtable('groups', $groups_title, '100%', '400');
 
 $tabtable->print_head();
 echo '<table cellpadding="4" cellspacing="0" border="0">';
@@ -45,12 +48,14 @@ if (isset($feedback))
 {
   echo $feedback;
 }
-echo '<tr height="30"><td colspan="3"><a href="'.$GO_CONFIG->host.'configuration/groups/group.php" class="normal">'.$cmdAdd.'</a></td></tr>';
+echo '<tr height="30"><td colspan="3"><a href="group.php" class="normal">'.$cmdAdd.'</a></td></tr>';
 echo '<tr><td><h3>'.$strName.'</h3></td>';
 echo '<td><h3>'.$strOwner.'</h3></td><td>&nbsp;</td></tr>';
 
 //show the groups the user is in and owns.
-$GO_GROUPS->get_authorised_groups($GO_SECURITY->user_id);
+//NOTE: consider this code carefully
+//$GO_GROUPS->get_authorised_groups($GO_SECURITY->user_id);
+$GO_GROUPS->get_groups();
 while ($GO_GROUPS->next_record())
 {
   echo '<tr>';
@@ -63,7 +68,7 @@ while ($GO_GROUPS->next_record())
 }
 echo '</table>';
 echo '<br />';
-$button = new button($cmdClose, "javascript:document.location='".$GO_CONFIG->host."configuration/'");
+$button = new button($cmdClose, "javascript:document.location='".$return_to."'");
 $tabtable->print_foot();
 
 require($GO_THEME->theme_path."footer.inc");

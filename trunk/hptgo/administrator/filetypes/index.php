@@ -16,7 +16,7 @@ require($GO_LANGUAGE->get_base_language_file('filetypes'));
 require($GO_CONFIG->class_path."filetypes.class.inc");
 $filetypes = new filetypes;
 
-$return_to = $GO_CONFIG->host.'configuration/';
+$return_to = $GO_CONFIG->host.'administrator/';
 
 $page_title= $ft_title;
 require($GO_THEME->theme_path."header.inc");

@@ -15,7 +15,7 @@ require($GO_LANGUAGE->get_base_language_file('users'));
 
 $GO_SECURITY->authenticate(true);
 
-$return_to = $GO_CONFIG->host.'configuration/';
+$return_to = $GO_CONFIG->host.'administrator/';
 
 if (isset($_REQUEST['delete_user']))
 {

@@ -8,26 +8,26 @@ This program is free software; you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by the
 Free Software Foundation; either version 2 of the License, or (at your
 option) any later version.
+
+
+After calling this function you can set the following parameters:
+name: The name of the control to validate (required)
+input: The string to validate this is the name of the control with an $ sign(optional)
+expression: Regular expression matching (optional)
+min_length: Minimum length of the input (optional)
+max_length: Maximum lentgh of the input (optional)
+required: indicates if the input is required (optional)
+error_required: error string when input is not given but required bla bla bla (optional, will use default value)
+match1 and match2 can be set to give an error when they do not match such as with passwords.
+error_min_length: bla bla bla (optional, will use default value)
+error max_length: bla bla bla (optional, will use default value)
+error_expression: bla bla bla (optional, will use default value)
+error_match: bla bla bla (optional, will use default value)
+
+after setting these vars call function validate_input().
+The function will output errors to the page you are calling it from.
 */
 
-/**
- * After calling this function you can set the following parameters:
- * name: The name of the control to validate (required)
- * input: The string to validate this is the name of the control with an $ sign(optional)
- * expression: Regular expression matching (optional)
- * min_length: Minimum length of the input (optional)
- * max_length: Maximum lentgh of the input (optional)
- * required: indicates if the input is required (optional)
- * error_required: error string when input is not given but required bla bla bla (optional, will use default value)
- * match1 and match2 can be set to give an error when they do not match such as with passwords.
- * error_min_length: bla bla bla (optional, will use default value)
- * error max_length: bla bla bla (optional, will use default value)
- * error_expression: bla bla bla (optional, will use default value)
- * error_match: bla bla bla (optional, will use default value)
- * 
- * after setting these vars call function validate_input().
- * The function will output errors to the page you are calling it from.
- */
 class validate
 {
         var $validated;
