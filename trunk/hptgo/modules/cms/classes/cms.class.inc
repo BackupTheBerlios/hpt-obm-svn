@@ -15,11 +15,18 @@ define('MULTIPAGE_DISPLAY', 1);
 
 class cms extends db
 {
+	/**
+	* Constructor
+	*/
   function cms()
   {
     $this->db();
   }
-  
+
+	/**
+	* Get settings
+	* @param	int		$user_id
+	*/  
   function get_settings($user_id)
   {
     $this->query("SELECT * FROM cms_settings WHERE user_id='$user_id'");
@@ -35,6 +42,13 @@ class cms extends db
     }		
   }
 
+	/**
+	* Set sorting
+	* @param	int		$user_id
+	* @param	string	$sort_field
+	* @param	string	$sort_order
+	* @return	bool
+	*/
   function set_sorting($user_id, $sort_field, $sort_order)
   {
     $sql = "UPDATE cms_settings SET sort_field='$sort_field' , ".
@@ -42,6 +56,12 @@ class cms extends db
     return $this->query($sql);
   }
 
+	/**
+	* Resolve url
+	* @param	string	$path
+	* @param	int		$site_id
+	* @return	string
+	*/
   function resolve_url($path, $site_id)
   {
     $site = $this->get_site($site_id);
@@ -77,6 +97,11 @@ class cms extends db
 
   }
 
+	/**
+	* Move file
+	* @param	int		$file_id
+	* @param	int		$new_folder_id
+	*/
   function move_file($file_id, $new_folder_id)
   {
     //if the name exists add (1) behind it.
@@ -94,6 +119,12 @@ class cms extends db
     return false;
   }
 
+	/**
+	* Move folder
+	* @param	int		$folder_id
+	* @param	int		$new_parent_id
+	* @return	bool
+	*/
   function move_folder($folder_id, $new_parent_id)
   {
     if ($folder = $this->get_folder($folder_id))
@@ -177,9 +208,11 @@ class cms extends db
 		  return false;
 		  }
 
-		  /*
-		     Check if a folder is in the path of another folder.
-		     This is used to check if we can move a folder into another.
+		  /**
+		  *   Check if a folder is in the path of another folder.
+		  *   This is used to check if we can move a folder into another.
+		  * @param	int		$check_folder_id
+		  * @param	int		$target_folder_id
 		   */
 		  function is_in_path($check_folder_id, $target_folder_id)
 		  {
@@ -196,6 +229,12 @@ class cms extends db
 		    }
 		  }
 
+			/**
+			* Check if file exists
+			* @param	int		$folder_id
+			* @param	string	$filename
+			* @return	mixed	int if succes, false otherwise
+			*/
 		  function file_exists($folder_id, $filename)
 		  {
 		    $this->query("SELECT id FROM cms_files WHERE folder_id='$folder_id' AND name='$filename'");
@@ -206,7 +245,11 @@ class cms extends db
 		    return false;
 		  }
 
-		  //builds the full path to this directory with links
+		  /**
+		  * Builds the full path to this directory with links
+		  * @param	int		$folder_id
+		  * @return	string
+		  */
 		  function get_path($folder_id)
 		  {
 		    $path = '';
@@ -219,7 +262,20 @@ class cms extends db
 		    return $path;
 		  }
 
-		  //functions for personal sites
+		  /**
+		  * Add a new site infomation
+		  * Functions for personal sites
+		  * @param	int		$user_id
+		  * @param	string	$name
+		  * @param	string	$domain
+		  * @param	int		$acl_write
+		  * @param	int		$acl_read
+		  * @param	string	$description
+		  * @param	string	$keywords
+		  * @param	int		$template_id
+		  * @param	int		$display_type
+		  * @return	mixed	int if succes, false otherwise
+		  */
 		  function add_site($user_id, $name, $domain, $acl_read, $acl_write, $description, $keywords, $template_id, $display_type)
 		  {
 			$domain = $this->prepare_domain($domain);  
@@ -243,6 +299,11 @@ class cms extends db
 		    return false;
 		  }
 
+			/**
+			* Delete a site
+			* @param	int		$site_id
+			* @return	bool	
+			*/
 		  function delete_site($site_id)
 		  {
 		    if($site = $this->get_site($site_id))
@@ -261,17 +322,41 @@ class cms extends db
 		    return false;
 		  }
 
+			/**
+			* Update a site
+			* @param	int		$site_id
+			* @param	string	$name
+			* @param	string	$domain
+			* @param	string	$description
+			* @param	string	$keywords
+			* @param	int		$template_id
+			* @param	string	$display_type
+			* @param	int		$acl_read
+			* @return	bool
+			*/		
 		  function update_site($site_id, $name, $domain, $description, $keywords, $template_id, $display_type, $acl_read)
 		  {
 			$domain = $this->prepare_domain($domain);  
 		    return $this->query("UPDATE cms_sites SET name='$name', domain='$domain', description='$description', keywords='$keywords', template_id='$template_id', display_type='$display_type', acl_read='$acl_read' WHERE id='$site_id'");
 		  }
 
+			/**
+			* Set publishing
+			* @param	int		$site_id
+			* @param	???		$publish_style
+			* @param	???		$publish_path
+			* @return	bool
+			*/
 		  function set_publishing($site_id, $publish_style, $publish_path)
 		  {
 		    return $this->query("UPDATE cms_sites SET publish_style='$publish_style', publish_path='$publish_path' WHERE id='$site_id'");
 		  }
 
+			/**
+			* Get site by publish path
+			* @param	string	$path
+			* @return	mixed	array if success, false otherwise
+			*/
 		  function get_site_by_publish_path($path)
 		  {
 		    $this->query("SELECT * FROM cms_sites WHERE publish_path='$path'");
@@ -284,6 +369,11 @@ class cms extends db
 		    }
 		  }
 
+			/**
+			* Get a site by site ID
+			* @param	int		$site_id
+			* @return	mixed	array if success, false otherwise
+			*/
 		  function get_site($site_id)
 		  {
 		    $this->query("SELECT * FROM cms_sites WHERE id='$site_id'");
@@ -294,6 +384,11 @@ class cms extends db
 		    return false;
 		  }
 		
+			/**
+			* Prepare a domain
+			* @param	string	$domain
+			* @return	string
+			*/
 		  function prepare_domain($domain)
 		  {
 			$domain = preg_replace("/http(s?):\/\//i", '', $domain);
@@ -304,6 +399,11 @@ class cms extends db
 			return $domain;
 		  }
 
+			/**
+			* Get a site by domain
+			* @param	string	$domain
+			* @return	mixed	array if success, false otherwise
+			*/
 		  function get_site_by_domain($domain)
 		  {
 			$domain = $this->prepare_domain($domain);  
@@ -315,12 +415,21 @@ class cms extends db
 		    return false;
 		  }
 
+			/**
+			* Get sites
+			* @return	int		Number of site
+			*/
 		  function get_sites()
 		  {
 		    $this->query("SELECT * FROM cms_sites");
 		    return $this->num_rows();
 		  }
 
+			/**
+			* Get authorized sites
+			* @param	int		$user_id
+			* @return	int		Number of rows
+			*/
 		  function get_authorized_sites($user_id)
 		  {
 		    $sql = "SELECT DISTINCT cms_sites.* FROM cms_sites, acl, users_groups WHERE ".
@@ -331,31 +440,59 @@ class cms extends db
 		    return $this->num_rows();
 		  }
 
+			/**
+			* Get subscribed sites
+			* @param	int		$user_id
+			* @return	int		Number of rows
+			*/
 		  function get_subscribed_sites($user_id)
 		  {
 		    $this->query("SELECT cms_sites.* FROM cms_sites LEFT JOIN cms_subscribed ON (cms_subscribed.site_id=cms_sites.id) WHERE cms_subscribed.user_id='$user_id' ORDER BY cms_sites.domain ASC");
 		    return $this->num_rows();
 		  }
 
-
+			/**
+			* Subscribe site
+			* @param	int		$user_id
+			* @param	int		$site_id
+			* @return	bool
+			*/
 		  function subscribe_site($user_id, $site_id)
 		  {
 		    return $this->query("INSERT INTO cms_subscribed (user_id, site_id) VALUES ('$user_id', '$site_id')");
 		  }
 
+			/**
+			* Unsubscribe site
+			* @param	int		$user_id
+			* @param	int		$site_id
+			* @return	bool
+			*/
 		  function unsubscribe_site($user_id, $site_id)
 		  {
 		    return $this->query("DELETE FROM cms_subscribed WHERE user_id='$user_id' AND site_id='$site_id'");
 		  }
 
+			/**
+			* Check if a site is subscribed
+			* @param	int		$user_id
+			* @param	int		$site_id
+			* @return	bool	
+			*/
 		  function is_subscribed($user_id, $site_id)
 		  {
 		    $this->query("SELECT * FROM cms_subscribed WHERE user_id='$user_id' AND site_id='$site_id'");
 		    return $this->next_record();
 		  }
 
-
-		  //functions for files and folders of sites
+		// functions for files and folders of sites
+		  /**
+		  * Get files 
+		  * @param	int		$folder_id
+		  * @param	string	$sort
+		  * @param	string	$direction
+		  * @return	int		Number of files
+		  */ 
 		  function get_files($folder_id, $sort = "priority", $direction = "ASC")
 		  {
 		    $sql = "SELECT * FROM cms_files WHERE folder_id='$folder_id' ORDER BY $sort $direction";
@@ -363,6 +500,11 @@ class cms extends db
 		    return $this->num_rows();
 		  }
 
+			/**
+			* Get hot items (files)
+			* @param	int		$folder_id
+			* @return	int		Number of files
+			*/
 		  function get_hot_items($folder_id)
 		  {
 		  	$sql = "SELECT * FROM cms_files WHERE folder_id='$folder_id' AND hot_item='1' ORDER BY priority ASC";
@@ -370,18 +512,38 @@ class cms extends db
 		    return $this->num_rows();
 		  }
 
+			/**
+			* Get visible folders
+			* @param	int		$folder_id
+			* @return	int		Number of folders
+			*/
 		  function get_visible_folders($folder_id)
 		  {
 		    $this->query("SELECT * FROM cms_folders WHERE parent_id='$folder_id' AND disabled='0' ORDER BY priority ASC");
 		    return $this->num_rows();
 		  }
 
+			/**
+			* Get folders
+			* @param	int		$folder_id
+			* @param	string	$sort
+			* @param	string	$direction
+			* @return	int		Number of folders
+			*/
 		  function get_folders($folder_id, $sort = "priority", $direction = "ASC")
 		  {
 		    $this->query("SELECT * FROM cms_folders WHERE parent_id='$folder_id' ORDER BY '$sort' $direction");
 		    return $this->num_rows();
 		  }
 
+			/**
+			* Add a new folder
+			* @param	int		$parent_id
+			* @param	string	$name
+			* @param	int		$priority
+			* @param	bool	$disabled
+			* @return	mixed	folder ID (int) if success, false otherwise
+			*/
 		  function add_folder($parent_id, $name, $priority=0, $disabled=false)
 		  {
 			$disabled = $disabled ? '1' : '0';
@@ -397,6 +559,11 @@ class cms extends db
 		    return false;
 		  }
 
+			/**
+			* Get a folder by folder ID
+			* @param	int		$folder_id
+			* @return	mixed	array if success, false otherwise
+			*/
 		  function get_folder($folder_id)
 		  {
 		    $this->query("SELECT * FROM cms_folders WHERE id='$folder_id';");
@@ -408,6 +575,15 @@ class cms extends db
 
 		  }
 
+			/**
+			* Update a folder
+			* @param	int		$folder_id
+			* @param	string	$name
+			* @param	bool	$disabled
+			* @param	int		$priority
+			* @param	bool	$disable_multipage
+			* @return	bool
+			*/
 		  function update_folder($folder_id, $name, $disabled, $priority, $disable_multipage=false)
 		  {
 		  	$sql = "UPDATE cms_folders SET name='$name', mtime='".get_gmt_time().
@@ -416,6 +592,12 @@ class cms extends db
 		    return $this->query($sql);
 		  }
 
+			/**
+			* Check if folder exists
+			* @param	int		$parent_id
+			* @param	string	$name
+			* @return	mixed	ID (int) success, false otherwise
+			*/
 		  function folder_exists($parent_id, $name)
 		  {
 		    $this->query("SELECT id FROM cms_folders WHERE parent_id='$parent_id' AND name='$name'");
@@ -426,6 +608,11 @@ class cms extends db
 		    return false;
 		  }
 
+			/**
+			* Delete a folder
+			* @param	int		$folder_id
+			* @return	bool
+			*/
 		  function delete_folder($folder_id)
 		  {
 		    if ($folder_id > 0)
@@ -459,11 +646,21 @@ class cms extends db
 		    }
 		  }
 
+			/**
+			* Delete a file
+			* @param	int		$file_id
+			* @return	bool
+			*/
 		  function delete_file($file_id)
 		  {
 		    return $this->query("DELETE FROM cms_files WHERE id='$file_id'");
 		  }
 
+			/**
+			* Get a file by file ID
+			* @param	int		$file_id
+			* @return	mixed	array if success, false otherwise
+			*/
 		  function get_file($file_id)
 		  {
 		    $this->query("SELECT * FROM cms_files WHERE id='$file_id'");
@@ -474,6 +671,17 @@ class cms extends db
 		    return false;
 		  }
 
+			/**
+			* Add a new file
+			* @param	int		$folder_id
+			* @param	string	$name
+			* @param	string	$content
+			* @param	string	$title
+			* @param	string	$description
+			* @param	string	$keywords
+			* @param	int		$priority
+			* @return	mixed	File ID if success, false otherwise
+			*/
 		  function add_file($folder_id, $name, $content, $title='', $description='', $keywords='', $priority='0')
 		  {
 		    $file_id = $this->nextid('cms_files');
@@ -493,6 +701,18 @@ class cms extends db
 		    return false;
 		  }
 
+			/**
+			* Update a file
+			* @param	int		$file_id
+			* @param	string	$name
+			* @param	string	$content
+			* @param	string	$title
+			* @param	string	$description
+			* @param	string	$keywords
+			* @param	int		$priority
+			* @param	int		$hot_items
+			* @return	bool
+			*/
 		  function update_file($file_id, $name, $content, $title='', $description='', $keywords='', $priority='0', $hot_item='0')
 		  {
 		    $size = strlen($content);
@@ -508,7 +728,17 @@ class cms extends db
 		  }
 
 		  //template functions
-
+			/**
+			* Add a new template
+			* @param	int		$user_id
+			* @param	string	$name
+			* @param	string	$style
+			* @param	string	$additional_style
+			* @param	bool	$restrict_editor
+			* @param	int		$acl_read
+			* @param	int		$acl_write
+			* @return	mixed	Template ID (int) if success, false otherwise
+			*/
 		  function add_template($user_id, $name, $style, $additional_style, $restrict_editor, $acl_read, $acl_write)
 		  {
 		    //create the template
@@ -526,18 +756,36 @@ class cms extends db
 		    return false;
 		  }
 
+			/**
+			* Update a template
+			* @param	int		$template_id
+			* @param	string	$name
+			* @param	string	$style
+			* @param	string	$additional_style
+			* @param	bool	$restrict_editor
+			* @return	bool
+			*/
 		  function update_template($template_id, $name, $style, $additional_style, $restrict_editor)
 		  {
 		    $restrict_editor = ($restrict_editor == "true") ? '1' : '0';
 		    return $this->query("UPDATE cms_templates SET restrict_editor='$restrict_editor', name='$name', style='$style', additional_style='$additional_style' WHERE id='$template_id'");
 		  }
 
+			/**
+			* Get all templates
+			* @return	int		Number of rows
+			*/ 
 		  function get_templates()
 		  {
 		    $this->query("SELECT * FROM cms_templates");
 		    return $this->num_rows();
 		  }
 
+			/**
+			* Get authorized templates
+			* @param	int		$user_id
+			* @return	int		Number of authorized templates
+			*/
 		  function get_authorized_templates($user_id)
 		  {
 
@@ -549,6 +797,11 @@ class cms extends db
 		    return $this->num_rows();
 		  }
 
+			/**
+			* Get a template by template id
+			* @param	int		$template_id
+			* @return	mixed	array if success, false otherwise
+			*/
 		  function get_template($template_id)
 		  {
 		    $this->query("SELECT * FROM cms_templates WHERE id='$template_id'");
@@ -559,6 +812,12 @@ class cms extends db
 		    return false;
 		  }
 
+			/**
+			* Get template by name
+			* @param	int		$user_id
+			* @param	string	$name
+			* @return	mixed	array if success, false otherwise
+			*/
 		  function get_template_by_name($user_id, $name)
 		  {
 		    $this->query("SELECT * FROM cms_templates WHERE user_id='$user_id' AND name='$name'");
@@ -569,6 +828,11 @@ class cms extends db
 		    return false;
 		  }
 
+			/**
+			* Delete a template
+			* @param	int		$template_id
+			* @return	bool	
+			*/
 		  function delete_template($template_id)
 		  {
 		    if($this->query("DELETE FROM cms_template_items WHERE template_id='$template_id'"))
@@ -579,6 +843,12 @@ class cms extends db
 
 		  }
 
+			/**
+			* Add a new template item
+			* @param	int		$template_id
+			* @param	string	$name
+			* @param	string	$content
+			*/
 		  function add_template_item($template_id, $name, $content)
 		  {
 		    //create the template
