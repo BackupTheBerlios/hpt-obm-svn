@@ -206,4 +206,9 @@ $ab_import_vcf_file_ok = 'The uploaded file seems to be fine. Please click on \'
 $ab_import_failed = 'Import failed.';
 //modified string:
 $contacts_import_text = "Select a file containing data to be imported and click on 'Ok'";
+$strParentCompany = "Parent Company";
+$strNone = "None";
+$strParentCompanyError = "Parent company's invalid";
+$strListView = "Listview";
+$strTreeView = "Treeview";
 ?>

@@ -83,6 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 }
 
 $addressbook_id = isset($_REQUEST['addressbook_id']) ? $_REQUEST['addressbook_id'] : $ab->get_default_addressbook($GO_SECURITY->user_id);
+$is_treeview = isset($_REQUEST['treeview']) ? $_REQUEST['treeview'] : '0';
 
 if (!$addressbook_id)
 {
@@ -164,7 +165,10 @@ switch($post_action)
 	break;
 
 	case 'companies':
-		require('companies.inc');
+		if ($is_treeview)
+			require('treeview.inc');
+		else
+			require('companies.inc');
 	break;
 
 	default:

@@ -58,6 +58,7 @@ switch($task)
 		$homepage = smart_addslashes($_POST["homepage"]);
 		$bank_no = smart_addslashes($_POST["bank_no"]);
 		$vat_no = smart_addslashes($_POST["vat_no"]);
+		$parent_id = $_POST['parent_id'];
 
 		if ($name == '')
 		{
@@ -66,18 +67,33 @@ switch($task)
 		{
 			if ($_POST['company_id'] > 0)
 			{
-				if ($ab->update_company($_POST['company_id'], $addressbook_id, $name,
-								$address, $zip, $city, $state, $country, $email, $phone, $fax,
-								$homepage, $bank_no, $vat_no))
+				$seen = array();
+				$seen[$_POST['company_id']] = 1;
+				$parent = $parent_id;
+				while ($parent != 0 && !isset($seen[$parent]))
 				{
-					if ($_POST['close'] == 'true')
+					$seen[$parent] = 1;
+					$sql = "SELECT parent FROM ab_companies WHERE id='$parent'";
+					if ($ab->query($sql) && $ab->next_record())
+						$parent = $ab->f('parent');
+				}
+				if ($parent != 0)
+					$feedback = "<p class=\"Error\">".$strParentCompanyError."</p>";
+				else
+				{
+					if ($ab->update_company($_POST['company_id'], $addressbook_id, $name,
+									$address, $zip, $city, $state, $country, $email, $phone, $fax,
+									$homepage, $bank_no, $vat_no,$parent_id))
 					{
-						header('Location: '.$return_to);
-						exit();
+						if ($_POST['close'] == 'true')
+						{
+							header('Location: '.$return_to);
+							exit();
+						}
+					}else
+					{
+						$feedback = "<p class=\"Error\">".$strSaveError."</p>";
 					}
-				}else
-				{
-					$feedback = "<p class=\"Error\">".$strSaveError."</p>";
 				}
 			}else
 			{
@@ -88,7 +104,7 @@ switch($task)
 							$GO_SECURITY->user_id, $name,
 							$address, $zip, $city, $state, $country, $email,
 							$phone, $fax, $homepage, $bank_no, $vat_no,
-							$acl_read, $acl_write))
+							$acl_read, $acl_write,$parent_id))
 				{
 					if($addressbook = $ab->get_addressbook($addressbook_id))
 					{
@@ -135,6 +151,7 @@ if ($company_id > 0 && $company = $ab->get_company($company_id))
 	$tabtable= new tabtable('company_table', $company['name'], '100%', '400',
 						'120', '', true, 'left', 'top', 'company_form', 'vertical');
 
+	
 	$tabtable->add_tab('profile', $ab_company_properties);
 	
 	if ($custom_fields_plugin)
@@ -198,6 +215,7 @@ echo '<input type="hidden" name="company_id" value="'.$company_id.'" />';
 if ($company_id == 0 || $task == 'save_company')
 {
 	$company['name'] = isset($_REQUEST['name']) ? smartstrip($_REQUEST['name']) : '';
+	$company['parent_id'] = isset($_REQUEST['parent_id']) ? smartstrip($_REQUEST['parent_id']) : '0';
 	$company['address'] = isset($_REQUEST['address']) ? smartstrip($_REQUEST['address']) : '';
 	$company['zip'] = isset($_REQUEST['zip']) ? smartstrip($_REQUEST['zip']) : '';
 	$company['city'] = isset($_REQUEST['city']) ? smartstrip($_REQUEST['city']) : '';
@@ -209,7 +227,27 @@ if ($company_id == 0 || $task == 'save_company')
 	$company['homepage'] = isset($_REQUEST['homepage']) ? smartstrip($_REQUEST['homepage']) : 'http://';
 	$company['bank_no'] = isset($_REQUEST['bank_no']) ? smartstrip($_REQUEST['bank_no']) : '';
 	$company['vat_no'] = isset($_REQUEST['vat_no']) ? smartstrip($_REQUEST['vat_no']) : '';
+
 }
+
+	$addressbook_id = $company['addressbook_id'];
+	$cp = new addressbook();
+	$company['parent_id'] = 0;
+	if ($company_id)
+	{
+		$cp->get_company($company_id);
+		$company['parent_id'] = $cp->f('parent');
+	}
+	$count = $cp->get_companies($addressbook_id);
+	$company['parents'] = "<option value='0'>$strNone</option>";
+	if ($count)
+	while ($cp->next_record())
+	{
+		$id = $cp->f('id');
+		$name = $cp->f('name');
+		$company['parents'] .= "<option value='$id'".($id == $company['parent_id'] ? "selected" : "").">$name</option>";
+	}
+
 
 $tabtable->print_head();
 if ($tabtable->get_active_tab_id() > 0)

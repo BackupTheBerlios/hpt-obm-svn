@@ -3,6 +3,10 @@
 	<td valign="top">
 	<table border="0" cellpadding="0" cellspacing="3">
 	<tr>
+		<td align="right" nowrap><?php echo $strParentCompany;?>:</td>
+		<td><?php echo $ab->parent_companies_urls($company_id); ?>&nbsp;</td>
+	</tr>
+	<tr>
 		<td align="right" nowrap>
 		<?php echo $strName; ?>:&nbsp;
 		</td>

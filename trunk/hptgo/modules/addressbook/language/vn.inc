@@ -207,4 +207,7 @@ $ab_import_failed = 'Đưa vào thất bại.';
 $contacts_import_text = "Chọn hồ sơ để đưa vào rồi nhấn 'Ok'";
 
 $strTitle = 'Chức danh';
+$strParentCompany = 'Công ty cha';
+$strNone = "Không";
+$strParentCompanyError = "Công ty cha không hợp lệ";
 ?>

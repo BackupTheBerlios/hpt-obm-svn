@@ -705,13 +705,13 @@ class addressbook extends db
 
   function update_company($company_id, $addressbook_id, $name, $address, $zip,
       $city, $state, $country, $email, $phone, $fax,
-      $homepage, $bank_no, $vat_no)
+      $homepage, $bank_no, $vat_no,$parent_id)
   {
     $sql = "UPDATE ab_companies SET ".
       "addressbook_id='$addressbook_id', name='$name', ".
       "address='$address', zip='$zip', city='$city', state='$state', ".
       "country='$country', email='$email', phone='$phone', fax='$fax', ".
-      "homepage='$homepage', bank_no='$bank_no', vat_no='$vat_no' WHERE id='$company_id'";
+      "homepage='$homepage', bank_no='$bank_no', vat_no='$vat_no', parent='$parent_id' WHERE id='$company_id'";
 
     return $this->query($sql);
 
@@ -820,6 +820,52 @@ class addressbook extends db
     {
       $ab->delete_addressbook($this->f('id'));
     }
+  }
+
+  function company_name()
+  {
+    $seen = array();
+    $seen[$this->f('id')] = 1;
+    $parent = $this->f('parent');
+    $ab = new addressbook();
+    $name = $this->f('name');
+    while ($parent != 0 && !isset($seen[$parent]))
+    {
+     $seen[$parent] = 1;
+      $sql = "SELECT id,parent,name FROM ab_companies WHERE id='$parent'";
+      $ab->query($sql);
+      if ($ab->num_rows() && $ab->next_record())
+        $name = $ab->f('name').' - '.$name;
+      $parent = $ab->f('parent');
+    }
+    return $name;
+  }
+
+  function parent_companies_urls($company_id)
+  {
+    global $link_back;
+    $seen = array();
+    $seen[$this->f('id')] = 1;
+    $parent = $this->f('parent');
+    $ab = new addressbook();
+    $name = "";
+    while ($parent != 0 && !isset($seen[$parent]))
+    {
+     $seen[$parent] = 1;
+      $sql = "SELECT id,parent,name FROM ab_companies WHERE id='$parent'";
+      $ab->query($sql);
+      if ($ab->num_rows() && $ab->next_record())
+        $name = '<a class="normal" href="'.$GO_MODULES->url.'company.php?company_id='.$ab->f('id').'&return_to='.rawurlencode($link_back).'">'. $ab->f('name').'</a>&nbsp;'.$name;
+      $parent = $ab->f('parent');
+    }
+    return $name;
+  }
+
+  function get_companies_by_parent($addressbook_id,$parent,$sort='name', $direction='ASC')
+  {
+    $sql = "SELECT * FROM ab_companies WHERE parent='$parent' ORDER BY $sort $direction";
+    $this->query($sql);
+    return $this->num_rows();
   }
 }
 ?>

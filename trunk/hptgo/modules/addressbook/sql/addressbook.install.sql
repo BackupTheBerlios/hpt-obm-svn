@@ -52,6 +52,7 @@ CREATE TABLE `ab_companies` (
   `vat_no` varchar(30) NOT NULL default '',
   `acl_read` int(11) NOT NULL default '0',
   `acl_write` int(11) NOT NULL default '0',
+  `parent` int(11) NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `addressbook_id` (`addressbook_id`)
 ) TYPE=MyISAM;

@@ -3,6 +3,17 @@
 <tr>
 	<td valign="top">
 	<table border="0" cellpadding="0" cellspacing="3">
+<?php if ($company_id > 0) { ?>
+	<tr>
+		<td align="right" nowrap>
+		<?php echo $strParentCompany; ?>:&nbsp;
+		</td>
+		<td>
+		<select name="parent_id"><?php echo $company['parents'];?></select><!-- input type="text" class="textbox"  name="name" size="40" value="<?php echo htmlspecialchars($company['name']); ?>" maxlength="50" -->
+		</td>
+	</tr>
+<?php } ?>
+
 	<tr>
 		<td align="right" nowrap>
 		<?php echo $strName; ?>*:&nbsp;
