@@ -6,9 +6,9 @@
 	$sc_cart = 'Create a quotation';
 	$sc_order_list = 'Quotations';
 	
-	$sc_search_on = 'Tìm theo';
-	$sc_search_phrase = 'Chực cụm từ';
-	$sc_in = 'trong';
+	$sc_search_on = 'Search on';
+	$sc_search_phrase = 'Phrase';
+	$sc_in = 'in';
 	
 	$sc_category_name = 'Category name';
 	
@@ -48,6 +48,17 @@
 	$sc_fields['product_name'] = 'Name';
 	$sc_fields['description'] = 'Description';
 	$sc_fields['price'] = 'Price';
+
+	$sc_fields['order_number'] = 'Quotation number';
+	$sc_fields['sale_date'] = 'Effective';
+	$sc_fields['valid_date'] = 'Quotation valid until';
+	$sc_fields['company'] = 'To';
+	$sc_fields['attn'] = 'Attn.';
+	$sc_fields['cc'] = 'Cc';
+	$sc_fields['phone'] = 'Phone';
+	$sc_fields['fax'] = 'Fax';
+	$sc_fields['subject'] = 'Subject';
+	$sc_fields['seller'] = 'Saleman';
 
 	$sc_all = '[ALL]';
 	$sc_top = '[TOP]';

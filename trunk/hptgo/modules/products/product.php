@@ -202,6 +202,7 @@
 			if ($task == 'apply') unset($_POST);
 			require('templates/header.tmp.php');	
 //			require('templates/search.tmp.php');
+			
 			require('templates/list_product.tmp.php');
 	}
 	if ($_POST['close_win']=='true') goURL('index.php');

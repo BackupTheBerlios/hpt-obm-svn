@@ -24,6 +24,7 @@ require('../addressbook/classes/addressbook.class.inc');
 	$pro = new products();
 	
 	$task = $_REQUEST['task'];
+
 	switch ($task)
 	{
 		case 'clear':
@@ -140,9 +141,18 @@ require('../addressbook/classes/addressbook.class.inc');
 
 			require('templates/edit_update_order.tmp.php');			
 		break;
+		case 'search':
+			require('templates/order_search.tmp.php');
+
+			$pro->get_search_orders($_POST['search_fld'],$_POST['search_value']);
+			require('templates/list_order.tmp.php');
+		break;
 		case 'delete':
 			$pro->delete_order($_POST['id']);
 		default:
+
+			require('templates/order_search.tmp.php');
+			
 			$pro->get_orders(false,'',$_POST['sort_fld'],$_POST['direction']);
 			require('templates/list_order.tmp.php');
 	}

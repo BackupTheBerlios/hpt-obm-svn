@@ -120,7 +120,7 @@ if ($count > 0)
   while($notes->next_record())
   {
     $catagory_name = ($notes->f('catagory_name') == '') ? $no_none : htmlspecialchars($notes->f('catagory_name'));
-    echo '<tr><td><a class="normal" href="'.$notes_module_url.'note.php?note_id='.$notes->f('id').'&return_to='.rawurlencode($link_back).'">'.htmlspecialchars($notes->f('name')).'</a></td>';
+    echo '<tr><td><a class="normal" href="'.$notes_module_url.'note.php?note_id='.$notes->f('id').'&return_to='.rawurlencode($link_back).'">'.htmlspecialchars($notes->f('name')).' </a></td>';
     echo '<td>'.$catagory_name.'</td>';
     $due_date = $notes->f('due_date') > 0 ? date($_SESSION['GO_SESSION']['date_format'], $notes->f('due_date')) : '';
     echo '<td>'.$due_date.'</td>';

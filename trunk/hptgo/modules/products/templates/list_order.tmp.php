@@ -1,3 +1,4 @@
+<br>
 <?php 
 	$image_string = '<img src="'.$GO_THEME->images['arrow_down'].'" border="0">';
 	if ($_POST['direction'] == 'DESC')

@@ -1,5 +1,6 @@
 <?php
 require($GO_LANGUAGE->get_fallback_language_file('products'));
+
 	$sc_amount = 'Tổng giá trị';
 	$sc_add_category = 'Danh mục sản phẩm';
 	$sc_add_attach_category = 'Danh mục Linh kiện';
@@ -8,7 +9,7 @@ require($GO_LANGUAGE->get_fallback_language_file('products'));
 	$sc_order_list = 'Bảng giá';
 	
 	$sc_search_on = 'Tìm theo';
-	$sc_search_phrase = 'Chực cụm từ';
+	$sc_search_phrase = 'Chứa cụm từ';
 	$sc_in = 'trong';
 	
 	$sc_category_name = 'Tên danh mục';
@@ -49,6 +50,17 @@ require($GO_LANGUAGE->get_fallback_language_file('products'));
 	$sc_fields['product_name'] = 'Tên';
 	$sc_fields['description'] = 'Mô tả';
 	$sc_fields['price'] = 'Giá tiền';
+
+	$sc_fields['order_number'] = 'Số bảng báo giá';
+	$sc_fields['sale_date'] = 'Ngày bán';
+	$sc_fields['valid_date'] = 'Ngày hết hiệu lực';
+	$sc_fields['company'] = 'Công ty';
+	$sc_fields['attn'] = 'Người nhận';
+	$sc_fields['cc'] = 'Đồng gửi';
+	$sc_fields['phone'] = 'Điện thoại';
+	$sc_fields['fax'] = 'Fax';
+	$sc_fields['subject'] = 'Về việc';
+	$sc_fields['seller'] = 'Người bán';
 
 	$sc_all = '[TẤT CẢ]';
 	$sc_top = '[ĐỨNG ĐẦU]';

@@ -202,6 +202,14 @@
 			return $res;
 		}
 		
+		function get_order_fields_name()
+		{
+			$result = $this->metadata('sc_orders');
+			for ($i=0; $i < count($result); $i++)
+				$res[] = $result[$i]['name'];
+			return $res;
+		}
+		
 		function upload_img(&$img)
 		{
 			if ($img['size'] > 0)
@@ -475,6 +483,26 @@
 					FROM sc_orders o ";
 			if ($has_id) $sql.=" WHERE so.order_number ='".$id."'";
 			if (!empty($sort_fld)) $sql .= " ORDER BY $sort_fld $direction";
+			if (!$this->query($sql)) return false;
+			return true;
+		}
+		
+		function get_search_orders($search_fld, $search_value, $sort_fld = '', $direction = '')
+		{
+			switch ($search_fld)
+			{
+				case 'seller' : $search_fld = "concat(u.first_name,' ',u.middle_name,' ',u.last_name)"; break;
+				case 'valid_date' :
+				case 'sale_date' : $search_value = date_to_db_date($search_value);
+				default : $search_fld = "o.$search_fld";
+			}
+		
+			$sql = "SELECT o.*
+					FROM sc_orders o
+					INNER JOIN users u ON o.seller = u.id
+					WHERE $search_fld LIKE '%$search_value%'";
+			if (!empty($sort_fld)) $sql .= " ORDER BY $sort_fld $direction";
+
 			if (!$this->query($sql)) return false;
 			return true;
 		}
