@@ -54,11 +54,14 @@ class GO_USERS extends base_users
     if ($query == 'Đ%')
       $sql .= " OR $field LIKE 'đ%' ";
     $sql .= ") ORDER BY first_name ASC, last_name ASC";
-    if ($offset != 0)
+    if ($offset != 0) {
+      $this->query($sql);
+      $count = $this->num_rows();
       $sql .= " LIMIT $start, $offset";
+    }
 
     $this->query($sql);
-    return $this->num_rows();
+    return isset($count) ? $count : $this->num_rows();
   }
 
   function authorize($requesting_user_id, $authcode, $accepting_user_id)

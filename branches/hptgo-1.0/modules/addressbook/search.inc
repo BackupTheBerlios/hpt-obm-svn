@@ -5,7 +5,13 @@
    Free Software Foundation; either version 2 of the License, or (at your
    option) any later version.
  */
+//define the items to show
+
+$max_rows = isset($_REQUEST['max_rows']) ? $_REQUEST['max_rows'] : $_SESSION['GO_SESSION']['max_rows_list'];
+$first = isset($_REQUEST['first']) ? $_REQUEST['first'] : 0;
 ?>
+<input type="hidden" name="first" value="<?=$first?>" />
+<input type="hidden" name="max_rows" value="<?=$max_rows?>" />
 <input type="hidden" name="post_action" value="search" />
 <input type="hidden" name="task" />
 <input type="hidden" name="_delete" value="false" />
@@ -83,7 +89,7 @@
 	$dropbox->add_value('contacts', $contacts_contacts);
 	$dropbox->add_value('companies', $ab_companies);
 	$dropbox->add_value('users', $contacts_members);
-	$dropbox->print_dropbox('search_type', $ab_settings['search_type'], 'onchange="javascript:document.forms[0].submit()"');
+	$dropbox->print_dropbox('search_type', $ab_settings['search_type'], 'onchange="javascript:document.forms[0].first.value=0;document.forms[0].submit()"');
 	echo '</td>';
 	
 	if ($ab_settings['search_type'] != 'users' && $ab->get_subscribed_addressbooks($GO_SECURITY->user_id) > 1)
@@ -263,7 +269,7 @@ if ($task=='search' || $task == 'show_letter')
 		case 'contacts':
 			
 			
-			$ab->search_contacts($GO_SECURITY->user_id, $query, $search_field, $ab_settings['search_addressbook_id']);
+			$allcount = $ab->search_contacts($GO_SECURITY->user_id, $query, $search_field, $ab_settings['search_addressbook_id'],$first,$max_rows);
 
 			while ($ab->next_record())
 			{
@@ -292,7 +298,7 @@ if ($task=='search' || $task == 'show_letter')
 				}
 			}
 
-			$result_str =  ($count == 1) ? $count.' '.$contacts_result : $count.' '.$contacts_results;
+			$result_str =  ($allcount == 1) ? $allcount.' '.$contacts_result : $allcount.' '.$contacts_results;
 			echo '<br /><h2>'.$result_str.'</h2>';
 
 			if ($count > 0)
@@ -309,13 +315,83 @@ if ($task=='search' || $task == 'show_letter')
 				echo $results;
 
 				echo '</table>';
+	$links = '';
+	$max_links=10;
+	if ($max_rows != 0)
+	{
+		if ($allcount > $max_rows)
+		{
+			$links = '<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>';
+			$next_start = $first+$max_rows;
+			$previous_start = $first-$max_rows;
+			if ($first != 0)
+			{
+				$links .= '<a href="javascript:change_list(0, '.$max_rows.');">&lt;&lt;</a>&nbsp;';
+				$links .= '<a href="javascript:change_list('.$previous_start.', '.$max_rows.');">'.$cmdPrevious.'</a>&nbsp;';
+			}else
+			{
+				$links .= '<font color="#cccccc">&lt;&lt; '.$cmdPrevious.'</font>&nbsp;';
+			}
+
+			$start = ($first-(($max_links/2)*$max_rows));
+
+			$end = ($first+(($max_links/2)*$max_rows));
+
+			if ($start < 0)
+			{
+				$end = $end - $start;
+				$start=0;
+			}
+			if ($end > $allcount)
+			{
+				$end = $allcount;
+			}
+			if ($start > 0)
+			{
+				$links .= '...&nbsp;';
+			}
+
+			for ($i=$start;$i<$end;$i+=$max_rows)
+			{
+				$page = ($i/$max_rows)+1;
+				if ($i==$first)
+				{
+					$links .= '<b><i>'.$page.'</i></b>&nbsp;';
+				}else
+				{
+
+					$links .= '<a href="javascript:change_list('.$i.', '.$max_rows.');">'.$page.'</a>&nbsp;';
+				}
+			}
+
+			if ($end < $allcount)
+			{
+				$links .= '...&nbsp;';
+			}
+
+			$last_page = floor($allcount/$max_rows)*$max_rows;
+
+			if ($allcount > $next_start)
+			{
+				$links .= '<a href="javascript:change_list('.$next_start.', '.$max_rows.');">'.$cmdNext.'</a>&nbsp;';
+				$links .= '<a href="javascript:change_list('.$last_page.', '.$max_rows.');">&gt;&gt;</a>';
+			}else
+			{
+				$links .= '<font color="#cccccc">'.$cmdNext.' &gt;&gt;</font>';
+			}
+			$links .= '</td><td align="right"><a class="normal" href="javascript:change_list(0, 0);">'.$cmdShowAll.'</a></td></tr></table>';
+
+			echo '<tr height="20"><td colspan="99">'.$links.'</td></tr>';
+			echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
+		}
+	}
 			}
 		break;
 
 		case 'companies':
 
 			$parents = $ab->get_companies_parents($ab_settings['search_addressbook_id'],$GO_SECURITY->user_id);
-			$ab->search_companies($GO_SECURITY->user_id, $query, $search_field, $ab_settings['search_addressbook_id'], $ab_settings['search_category']);
+			$allcount = $ab->search_companies($GO_SECURITY->user_id, $query, $search_field, $ab_settings['search_addressbook_id'], $ab_settings['search_category'],$first,$max_rows);
 
 			while ($ab->next_record())
 			{
@@ -335,7 +411,7 @@ if ($task=='search' || $task == 'show_letter')
 				}
 			}
 
-			$result_str =  ($count == 1) ? $count.' '.$contacts_result : $count.' '.$contacts_results;
+			$result_str =  ($allcount == 1) ? $allcount.' '.$contacts_result : $allcount.' '.$contacts_results;
 			echo '<br /><h2>'.$result_str.'</h2>';
 
 			if ($count > 0)
@@ -353,11 +429,81 @@ if ($task=='search' || $task == 'show_letter')
 				echo $results;
 
 				echo '</table>';
+	$links = '';
+	$max_links=10;
+	if ($max_rows != 0)
+	{
+		if ($allcount > $max_rows)
+		{
+			$links = '<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>';
+			$next_start = $first+$max_rows;
+			$previous_start = $first-$max_rows;
+			if ($first != 0)
+			{
+				$links .= '<a href="javascript:change_list(0, '.$max_rows.');">&lt;&lt;</a>&nbsp;';
+				$links .= '<a href="javascript:change_list('.$previous_start.', '.$max_rows.');">'.$cmdPrevious.'</a>&nbsp;';
+			}else
+			{
+				$links .= '<font color="#cccccc">&lt;&lt; '.$cmdPrevious.'</font>&nbsp;';
+			}
+
+			$start = ($first-(($max_links/2)*$max_rows));
+
+			$end = ($first+(($max_links/2)*$max_rows));
+
+			if ($start < 0)
+			{
+				$end = $end - $start;
+				$start=0;
+			}
+			if ($end > $allcount)
+			{
+				$end = $allcount;
+			}
+			if ($start > 0)
+			{
+				$links .= '...&nbsp;';
+			}
+
+			for ($i=$start;$i<$end;$i+=$max_rows)
+			{
+				$page = ($i/$max_rows)+1;
+				if ($i==$first)
+				{
+					$links .= '<b><i>'.$page.'</i></b>&nbsp;';
+				}else
+				{
+
+					$links .= '<a href="javascript:change_list('.$i.', '.$max_rows.');">'.$page.'</a>&nbsp;';
+				}
+			}
+
+			if ($end < $allcount)
+			{
+				$links .= '...&nbsp;';
+			}
+
+			$last_page = floor($allcount/$max_rows)*$max_rows;
+
+			if ($allcount > $next_start)
+			{
+				$links .= '<a href="javascript:change_list('.$next_start.', '.$max_rows.');">'.$cmdNext.'</a>&nbsp;';
+				$links .= '<a href="javascript:change_list('.$last_page.', '.$max_rows.');">&gt;&gt;</a>';
+			}else
+			{
+				$links .= '<font color="#cccccc">'.$cmdNext.' &gt;&gt;</font>';
+			}
+			$links .= '</td><td align="right"><a class="normal" href="javascript:change_list(0, 0);">'.$cmdShowAll.'</a></td></tr></table>';
+
+			echo '<tr height="20"><td colspan="99">'.$links.'</td></tr>';
+			echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
+		}
+	}
 			}
 		break;
 
 		case 'users':
-			$GO_USERS->search($query, $search_field, $GO_SECURITY->user_id);
+			$allcount = $GO_USERS->search($query, $search_field, $GO_SECURITY->user_id,$first,$max_rows);
 
 			while ($GO_USERS->next_record())
 			{
@@ -374,7 +520,7 @@ if ($task=='search' || $task == 'show_letter')
 				}
 			}
 
-			$result_str =  ($count == 1) ? $count.' '.$contacts_result : $count.' '.$contacts_results;
+			$result_str =  ($allcount == 1) ? $allcount.' '.$contacts_result : $allcount.' '.$contacts_results;
 			echo '<br /><h2>'.$result_str.'</h2>';
 
 			if ($count > 0)
@@ -390,6 +536,76 @@ if ($task=='search' || $task == 'show_letter')
 				echo $results;
 
 				echo '</table>';
+	$links = '';
+	$max_links=10;
+	if ($max_rows != 0)
+	{
+		if ($allcount > $max_rows)
+		{
+			$links = '<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>';
+			$next_start = $first+$max_rows;
+			$previous_start = $first-$max_rows;
+			if ($first != 0)
+			{
+				$links .= '<a href="javascript:change_list(0, '.$max_rows.');">&lt;&lt;</a>&nbsp;';
+				$links .= '<a href="javascript:change_list('.$previous_start.', '.$max_rows.');">'.$cmdPrevious.'</a>&nbsp;';
+			}else
+			{
+				$links .= '<font color="#cccccc">&lt;&lt; '.$cmdPrevious.'</font>&nbsp;';
+			}
+
+			$start = ($first-(($max_links/2)*$max_rows));
+
+			$end = ($first+(($max_links/2)*$max_rows));
+
+			if ($start < 0)
+			{
+				$end = $end - $start;
+				$start=0;
+			}
+			if ($end > $allcount)
+			{
+				$end = $allcount;
+			}
+			if ($start > 0)
+			{
+				$links .= '...&nbsp;';
+			}
+
+			for ($i=$start;$i<$end;$i+=$max_rows)
+			{
+				$page = ($i/$max_rows)+1;
+				if ($i==$first)
+				{
+					$links .= '<b><i>'.$page.'</i></b>&nbsp;';
+				}else
+				{
+
+					$links .= '<a href="javascript:change_list('.$i.', '.$max_rows.');">'.$page.'</a>&nbsp;';
+				}
+			}
+
+			if ($end < $allcount)
+			{
+				$links .= '...&nbsp;';
+			}
+
+			$last_page = floor($allcount/$max_rows)*$max_rows;
+
+			if ($allcount > $next_start)
+			{
+				$links .= '<a href="javascript:change_list('.$next_start.', '.$max_rows.');">'.$cmdNext.'</a>&nbsp;';
+				$links .= '<a href="javascript:change_list('.$last_page.', '.$max_rows.');">&gt;&gt;</a>';
+			}else
+			{
+				$links .= '<font color="#cccccc">'.$cmdNext.' &gt;&gt;</font>';
+			}
+			$links .= '</td><td align="right"><a class="normal" href="javascript:change_list(0, 0);">'.$cmdShowAll.'</a></td></tr></table>';
+
+			echo '<tr height="20"><td colspan="99">'.$links.'</td></tr>';
+			echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
+		}
+	}
 			}
 
 		break;
@@ -424,6 +640,13 @@ if (window.Event) //if Navigator 4.X
 }
 document.onkeypress = processkeypress;
 
+
+function change_list(first, max_rows)
+{
+	document.forms[0].first.value=first;
+	document.forms[0].max_rows.value=max_rows;
+	_search();
+}
 
 function letter_click(letter)
 {
