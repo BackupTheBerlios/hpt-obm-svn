@@ -88,10 +88,10 @@ function save_config($config)
 function print_head()
 {
   header('Content-Type: text/html; charset='.$charset);
-  echo '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Cài đặt HPT Open Bussiness Management</title></head><body style="font-family: Arial,Helvetica">';
+  echo '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Cài đặt HPT Open Business Management</title></head><body style="font-family: Arial,Helvetica">';
   echo '<form method="post" action="install.php">';
   echo '<table align="center" style="background: #f1f1f1;border-width: 1px;border-color: black;border-style: solid;font-family: Arial,Helvetica; font-size: 12px; width: 500px;">';
-  echo '<tr><td align="center"><h2><img src="lib/hpt-obm.gif" border="0" /><br />Cài đặt HPT Open Bussiness Management</h2></td></tr>';
+  echo '<tr><td align="center"><h2><img src="lib/hpt-obm.gif" border="0" /><br />Cài đặt HPT Open Business Management</h2></td></tr>';
   echo '<tr><td><table style="border-width: 0px;padding: 20px;font-family: Arial,Helvetica; width: 500px;font-weight: normal; font-size: 12px;"><tr><td>';
 }
 
@@ -169,7 +169,7 @@ if (!$config_exists)
   }
   fclose($fp);
 
-  $config_data = str_replace('%title%', 'HPT Open Bussiness Management', $config_data);
+  $config_data = str_replace('%title%', 'HPT Open Business Management', $config_data);
   $config_data = str_replace('%slash%', '/', $config_data);
 
   $host= str_replace('//','/',substr(str_replace(str_replace('\\','/',$_SERVER['DOCUMENT_ROOT']),"",$root_path),0,-1));
