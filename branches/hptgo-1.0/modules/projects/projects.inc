@@ -107,7 +107,7 @@ $dropbox->add_value(STATUS_DROP - 2, $cmdShowAll);
 $dropbox->add_value(STATUS_RUNNING, $pm_status_running);
 $dropbox->add_value(STATUS_BEGIN, $pm_status_begin);
 if ($show_catalog) {
-  $db->query('SELECT * FROM pmStatus WHERE cat_id='.$_GET['show_catalog']);
+  $db->query('SELECT * FROM pmStatus WHERE cat_id='.$show_catalog);
   while ($db->next_record())
     $dropbox->add_value($db->f('value'), $db->f('name'));
 }
