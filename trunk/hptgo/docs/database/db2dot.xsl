@@ -2,12 +2,21 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"  xmlns:dotml="http://www.martin-loetzsch.de/DOTML">
 	<xsl:output method="xml" indent="yes" omit-xml-declaration="no" encoding="UTF-8"/>
 
-	<xsl:variable name="all">0</xsl:variable>
+	<xsl:param name="all" select="0"/>
+	<xsl:param name="main_table" select="z"/>
 	
 	<xsl:template match="/schema">
 		<dotml:graph rankdir="LR" file-name="test">
 			<xsl:apply-templates select="table" mode="node"/>
-			<xsl:apply-templates select="table" mode="edge"/>
+			<xsl:choose>
+				<xsl:when test="table[@name=$main_table]">
+					<xsl:apply-templates select="table[@name=$main_table]" mode="edge"/>
+					<xsl:apply-templates select="table[field/link/@table=$main_table]" mode="edge"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:apply-templates select="table" mode="edge"/>
+				</xsl:otherwise>
+			</xsl:choose>
 		</dotml:graph>
 	</xsl:template>
 

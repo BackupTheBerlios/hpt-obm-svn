@@ -21,7 +21,7 @@
 
 				<h1 id="index">Index</h1>
 					<xsl:for-each select="module">
-						<xsl:for-each select="document(@href)/schema/table">
+						<xsl:for-each select="schema/table">
 							<a href="#table_{@name}"><xsl:value-of select="@name"/></a><br/>
 						</xsl:for-each>
 					</xsl:for-each>
@@ -32,7 +32,7 @@
 	<xsl:template match="module">
 		<h2 id="{generate-id(.)}">Module <xsl:value-of select="@name"/></h2>
 		<center>
-			<xsl:for-each select="document(@href)/schema/table">
+			<xsl:for-each select="schema/table">
 				<xsl:sort select="@name" order="ascending"/>
 				<xsl:if test="position() != 1"> - </xsl:if>
 				<a href="#table_{@name}"><xsl:value-of select="@name"/></a>
@@ -43,7 +43,7 @@
 		<a href="graphviz.php?input={@href}">Diagram</a><br/>
 		<a href="graphviz.php?input={@href}&amp;all=1">Full diagram</a>
 
-		<xsl:apply-templates select="document(@href)/schema">
+		<xsl:apply-templates select="schema">
 			<xsl:with-param name="module_path" select="@href"/>
 		</xsl:apply-templates>
 	</xsl:template>

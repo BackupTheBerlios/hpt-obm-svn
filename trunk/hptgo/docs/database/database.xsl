@@ -5,16 +5,21 @@
 	xsltproc database.xsl data.xml
 -->
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" >
-	<xsl:output method="xml" indent="yes" omit-xml-declaration="no" encoding="UTF-8"/>
+	<xsl:output method="html" indent="yes" omit-xml-declaration="no" encoding="UTF-8"/>
 	<xsl:template match="schema">
-				<xsl:apply-templates select="table">
-					<xsl:sort select="@name" order="ascending"/>
-				</xsl:apply-templates>
+		<xsl:param name="module_path"/>
+		<xsl:apply-templates select="table">
+			<xsl:sort select="@name" order="ascending"/>
+			<xsl:with-param name="module_path" select="$module_path"/>
+		</xsl:apply-templates>
 	</xsl:template>
 
 	<xsl:template match="table">
+		<xsl:param name="module_path"/>
 		<h2 id="{concat('table_',@name)}">Table <xsl:value-of select="@name"/></h2>
-		<xsl:if test="DROP">DROM</xsl:if>
+		<a href="graphviz.php?input={$module_path}&amp;table={@name}">Diagram</a><br/>
+		<a href="graphviz.php?input={$module_path}&amp;table={@name}&amp;all=1">Full Diagram</a>
+		<xsl:if test="DROP">DROP</xsl:if>
 		<h3>Description</h3>
 		<xsl:copy-of select="descr"/> 
 		<xsl:apply-templates select="constraint"/>
@@ -98,5 +103,10 @@
 
 	<xsl:template match="link">
 		<a href="#table_{@table}"><xsl:value-of select="@table"/></a>.<a href="#field_{@table}_{@field}"><xsl:value-of select="@field"/></a>
+		<xsl:variable name="table" select="@table"/>
+		<xsl:variable name="field" select="@field"/>
+		<xsl:if test="not(/schema/table[@name=$table]/field[@name=$field]) and not(/modules/module/schema/table[@name=$table]/field[@name=$field])">
+			<b>Broken</b>
+		</xsl:if>
 	</xsl:template>
 </xsl:stylesheet>
