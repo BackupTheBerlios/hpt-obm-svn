@@ -63,11 +63,6 @@ if ($task == 'save')
 				{
 					$db = new db();
 					$db->query('INSERT INTO cal_view_subscriptions VALUES ("'.$GO_SECURITY->user_id.'","'.$view_id.'")');
-					if ($_POST['close'] == 'true')
-					{
-						header('Location: '.$return_to);
-						exit();
-					}
 				}
 			}
 		}

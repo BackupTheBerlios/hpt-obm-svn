@@ -6,6 +6,7 @@ $event_addable = true;
 if ($view_id > 0) {
   $calendars = $cal->get_view_calendars($view_id);
   $event_addable = false;
+  if (is_array($calendars))
   foreach ($calendars as $c) {
     if ($GO_SECURITY->has_permission($GO_SECURITY->user_id,$c['acl_write'])) {
       $event_addable = true;
