@@ -131,9 +131,9 @@ if (isset($_REQUEST['account_id']) && $_SERVER['REQUEST_METHOD'] != "POST")
   $pass = isset($_REQUEST['pass']) ? smartstrip($_REQUEST['pass']) : '';
   $signature = isset($_REQUEST['signature']) ? smartstrip($_REQUEST['signature']) : '';
   $mbroot = isset($_REQUEST['mbroot']) ? smartstrip($_REQUEST['mbroot']) : '';
-  $spam = $mbroot.$ml_spam;
-  $trash = $mbroot.$ml_trash;
-  $sent = $mbroot.$ml_sent_items;
+  $spam = $mbroot."Spam";
+  $trash = $mbroot."Trash";
+  $sent = $mbroot."Sent items";
   $auto_check = isset($_REQUEST['auto_check']) ? true : false;
 }
 
