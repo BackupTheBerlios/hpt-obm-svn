@@ -132,7 +132,7 @@ $languages['sl']['DST'] = 1;
 $languages['sl']['language_file'] = 'sl';
 $languages['sl']['description'] = 'Slovenski';
 
-$languages['vn']['currency'] = '�';
+$languages['vn']['currency'] = 'Đ';
 $languages['vn']['decimal_seperator'] = ',';
 $languages['vn']['thousands_seperator'] = '.';
 $languages['vn']['date_format'] = 'd-m-Y';
@@ -141,5 +141,6 @@ $languages['vn']['first_weekday'] = 1;
 $languages['vn']['timezone'] = 7;
 $languages['vn']['DST'] = 0;
 $languages['vn']['language_file'] = 'vn';
-$languages['vn']['description'] = 'Vietnamese';
+$languages['vn']['description'] = 'Tiếng Việt';
 ?>
+
