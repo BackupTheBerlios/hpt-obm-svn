@@ -130,6 +130,7 @@ CREATE TABLE `pm_settings` (
 # Table structure for table `pmCatalog`
 #
 
+DROP TABLE IF EXISTS `pmCatalog`;
 CREATE TABLE `pmCatalog` (
   `id` int(11) NOT NULL auto_increment,
   `name` char(100) NOT NULL default '',
@@ -142,6 +143,7 @@ CREATE TABLE `pmCatalog` (
 # Table structure for table `pmStatus`
 #
 
+DROP TABLE IF EXISTS `pmStatus`;
 CREATE TABLE `pmStatus` (
   `cat_id` int(11) NOT NULL default '0',
   `value` int(11) NOT NULL default '0',
@@ -154,7 +156,7 @@ CREATE TABLE `pmStatus` (
 #
 # Table structure for table `task_templates`
 #
-
+DROP TABLE IF EXISTS `task_templates`;
 CREATE TABLE `task_templates` (
   `id` int(11) NOT NULL auto_increment,
   `cat_id` int(11) NOT NULL default '0',
@@ -168,6 +170,7 @@ CREATE TABLE `task_templates` (
 # Table structure for table `task`
 #
 
+DROP TABLE IF EXISTS `task`;
 CREATE TABLE `task` (
   `task_project_id` int(8) NOT NULL default '0',
   `task_id` int(8) NOT NULL default '0',
