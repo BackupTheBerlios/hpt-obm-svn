@@ -323,6 +323,7 @@ class cms_site extends cms
       {
 	$file['title'] = strip_extension($file['name']);
       }
+      $file['title'] = $this->site['name'].' - '.$file['title'];
       $folder_id = $file['folder_id'];
 
       $this->get_attached_search_words($file_id);

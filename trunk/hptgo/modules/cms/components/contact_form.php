@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
   if ($name_from == '' || $email_from == '' || $subject == '' || $mail_body == '')
   {
     $feedback = '<p class="Error">'.$error_missing_field.'</p>';
-  }elseif(!eregi("^([a-z0-9]+)([._-]([a-z0-9]+))*[@]([a-z0-9]+)([._-]([a-z0-9]+))*[.]([a-z0-9]){2}([a-z0-9])?$", $email_from))
+  }elseif(!validate_email($email_from))
   {
     $feedback = '<p class="Error">'.$error_email.'</p>';
   }else

@@ -11,7 +11,7 @@ option) any later version.
 */
 
 echo '<input type="hidden" name="task" />';
-$search_word_id = isset($_REQUEST['search_word_id']) ? $_REQUEST['search_word_id'] : 0;
+
 echo '<input type="hidden" name="search_word_id" value="'.$search_word_id.'" />';
 
 if($task == 'add_search_word')
@@ -84,10 +84,16 @@ if($task == 'add_search_word')
 	<tr>
 		<td colspan="2">
 		<?php
-		$button = new button($cmdOk, "javascript:save_search_word()");
+		$button = new button($cmdOk, "javascript:save_search_word('true')");
 		echo '&nbsp;&nbsp;';
+		$button = new button($cmdApply, "javascript:save_search_word('false')");
+		echo '&nbsp;&nbsp;';
+
+		if($search_word_id > 0)
+		{
 		$button = new button($cms_search_files, "javascript:search_files()");
 		echo '&nbsp;&nbsp;';
+		}
 		$button = new button($cmdClose, "javascript:document.forms[0].submit()");
 		?>
 		</td>
@@ -95,8 +101,9 @@ if($task == 'add_search_word')
 	</table>
 	<script type="text/javascript">
 
-	function save_search_word()
+	function save_search_word(close)
 	{
+		document.forms[0].close.value=close;
 		document.forms[0].task.value='save_search_word';
 		document.forms[0].submit();
 	}

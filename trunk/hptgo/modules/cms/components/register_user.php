@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
   if ($first_name == '' || $last_name == '' || $email == '')
   {
     $feedback = '<p class="Error">'.$error_missing_field.'</p>';
-  }elseif(!eregi("^([a-z0-9]+)([._-]([a-z0-9]+))*[@]([a-z0-9]+)([._-]([a-z0-9]+))*[.]([a-z0-9]){2}([a-z0-9])?$", $email))
+  }elseif(!validate_email($email))
   {
     $feedback = '<p class="Error">'.$error_email.'</p>';
   }else
@@ -156,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
       '</td></tr></table></body></html>';
  
 	$middle_name = ($middle_name == '') ? '' : ' '.$middle_name;
-	$name = $_POST['last_name'].$middle_name.' '.$_POST['first_name'];
+	$name = $_POST['first_name'].$middle_name.' '.$_POST['last_name'];
 
 	if(!sendmail($GO_CONFIG->webmaster_email, $email, $name, $register_new_user, $mailbody, '3', 'text/HTML'))
 	{

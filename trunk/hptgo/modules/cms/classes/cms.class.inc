@@ -852,31 +852,33 @@ class cms extends db
 
 		  function search_files($folder_id, $search_word_id, $attach_results=true)
 		  {
-		    $cms = new cms();
 		    $search_word = $this->get_search_word($search_word_id);
-		    $search_word1 = addslashes($search_word['search_word']);
+		    $search_word = addslashes(strtoupper($search_word['search_word']));
+		    
+				$cms = new cms();
+		    
 		    $files = array();
-		    /*$sql = "SELECT id FROM cms_files WHERE extension='html' AND folder_id='$folder_id' AND (UPPER(content) REGEXP '[[:<:]]".$search_word1."[[:>:]]'";
+		   	$sql = "SELECT id FROM cms_files WHERE (extension='html' OR extension='htm') AND folder_id='$folder_id' AND (UPPER(content) REGEXP '[[:<:]]".$search_word."[[:>:]]'";
 			
-				$search_word2 = htmlspecialchars($search_word1);
-				if($search_word2 != $search_word1)
+				$search_word2 = htmlspecialchars($search_word);
+				if($search_word2 != $search_word)
 				{
 					$sql .= " OR UPPER(content) REGEXP '[[:<:]]".$search_word2."[[:>:]]')";
 				}else
 				{
 					$sql .= ")";
-				}*/
-				
-				$sql = "SELECT id FROM cms_files WHERE (extension='html' OR extension='htm') AND folder_id='$folder_id' AND (content LIKE '%".$search_word1."%'";
+				}
+				/*
+				$sql = "SELECT id FROM cms_files WHERE (extension='html' OR extension='htm') AND folder_id='$folder_id' AND (UPPER(content) LIKE '%".$search_word."%'";
 			
-				$search_word2 = htmlspecialchars($search_word1);
-				if($search_word2 != $search_word1)
+				$search_word2 = htmlspecialchars($search_word);
+				if($search_word2 != $search_word)
 				{
-					$sql .= " OR LIKE '%".$search_word2."%')";
+					$sql .= " OR (UPPER(content) LIKE '%".$search_word2."%')";
 				}else
 				{
 					$sql .= ")";
-				}
+				}*/
 		    $this->query($sql);
 		    
 		    while ($this->next_record())

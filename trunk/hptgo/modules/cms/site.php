@@ -31,6 +31,8 @@ require($GO_LANGUAGE->get_language_file('cms'));
 $site_id = isset($_REQUEST['site_id']) ? $_REQUEST['site_id'] : 0;
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 
+$search_word_id = isset($_REQUEST['search_word_id']) ? $_REQUEST['search_word_id'] : 0;
+
 $return_to = isset($_REQUEST['return_to']) ? $_REQUEST['return_to'] : 'index.php';
 
 $root_publish_path = $GO_CONFIG->get_setting('cms_publish_path');
@@ -282,6 +284,10 @@ if ($site_id > 0)
 switch($task)
 {
   case 'save_search_word':
+  	if($_POST['close'] == 'false')
+  	{
+  		$task = 'add_search_word';
+  	}
     $search_word_name = smart_addslashes(trim($_POST['search_word_name']));
     if ($search_word_name == '')
     {
