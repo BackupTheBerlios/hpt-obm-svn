@@ -336,7 +336,7 @@ if ($contact_id > 0)
   }
     
     echo '<td  class="ModuleIcons" nowrap>';
-      echo '<a href="'.$projects_module['url'].'project.php?contact_id='.$contact_id.'&return_to='.rawurlencode($link_back).'"><img src="'.$GO_THEME->images['pr_new_project'].'" border="0" height="32" width="32" /><br />'.$ab_new_project.'</td>';
+      echo '<a href="'.$projects_module['url'].'project.php?contact_id='.$contact_id.'&return_to='.rawurlencode($link_back).'"><img src="'.$GO_THEME->images['pr_new_project'].'" border="0" height="32" width="32" /><br />'.$ab_new_project.'</a></td>';
       
       
   $calendar_module = $GO_MODULES->get_module('calendar');
@@ -347,7 +347,7 @@ if ($contact_id > 0)
       echo '<td class="ModuleIcons" nowrap>';
       echo '<a href="'.$calendar_module['url'].'event.php?contact_id='.$contact_id.'&return_to='.
 	rawurlencode($link_back).'"><img src="'.$GO_THEME->images['cal_compose'].
-	'" border="0" height="32" width="32" /><br />'.$ab_new_event.'</td>';
+	'" border="0" height="32" width="32" /><br />'.$ab_new_event.'</a>';
       echo '</td>';
 
       $tabtable->add_tab('calendar', $ab_events);
@@ -366,7 +366,7 @@ if ($contact_id > 0)
       echo '<a target="_blank" href="'.$GO_MODULES->url.
 	'templates/download_oo_template.php?contact_id='.$contact_id.
 	'"><img src="'.$GO_THEME->images['new_letter'].
-	'" border="0" height="32" width="32" /><br />'.$ab_oo_doc.'</td>';
+	'" border="0" height="32" width="32" /><br />'.$ab_oo_doc.'</a>';
       echo '</td>';
     }
   }
