@@ -75,32 +75,16 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 
 //define the items to show
 
-$max_rows = isset($_REQUEST['max_rows']) ? $_REQUEST['max_rows'] : $_SESSION['GO_SESSION']['max_rows_list'];
-$first = isset($_REQUEST['first']) ? $_REQUEST['first'] : 0;
+$lv = new listview('members');
 
-if(isset($_REQUEST['new_sort_order']) && $_REQUEST['new_sort_order'] != $ab_settings['sort_users_order'])
+//if(isset($_REQUEST['new_sort_order']) && $_REQUEST['new_sort_order'] != $ab_settings['sort_users_order'])
 {
-  $ab->set_users_sorting($GO_SECURITY->user_id, 
-						  $_REQUEST['new_sort_field'], $_REQUEST['new_sort_order']);
-  $ab_settings['sort_users_order'] = $_REQUEST['new_sort_order'];
-  $ab_settings['sort_users_field'] = $_REQUEST['new_sort_field'];
-}
-
-if ($ab_settings['sort_users_order'] == "DESC")
-{
-	$image_string = '&nbsp;<img src="'.$GO_THEME->images['arrow_down'].'" border="0" />';
-	$new_sort_order = "ASC";
-}else
-{
-	$image_string = '&nbsp;<img src="'.$GO_THEME->images['arrow_up'].'" border="0" />';
-	$new_sort_order = "DESC";
+  $ab->set_users_sorting($GO_SECURITY->user_id, $lv->sort_column,$lv->sort_order);
+  $ab_settings['sort_users_order'] = $lv->sort_order;
+  $ab_settings['sort_users_field'] = $lv->sort_column;
 }
 
 echo '<input type="hidden" name="post_action" value="'.$post_action.'" />';
-echo '<input type="hidden" name="first" value="'.$first.'" />';
-echo '<input type="hidden" name="max_rows" value="'.$max_rows.'" />';
-echo '<input type="hidden" name="new_sort_field" value="'.$ab_settings['sort_users_field'].'" />';
-echo '<input type="hidden" name="new_sort_order" value="'.$ab_settings['sort_users_order'].'" />';
 echo '<table border="0" width="100%"><tr>';
 if ($ab->get_subscribed_addressbooks($GO_SECURITY->user_id) > 1)
 {
@@ -133,7 +117,50 @@ if ($ab->get_groups($addressbook_id) > 0)
 }
 echo '</td>';
 
-$count = $GO_USERS->get_authorized_users($GO_SECURITY->user_id, $ab_settings['sort_users_field'], $ab_settings['sort_users_order'],$first,$max_rows);
+$lv->columns[] = array(
+	'attributes' => array(
+		'width' => '16'),
+	'tag' => 'input',
+	'tag_attributes' => array(
+		'type' => 'checkbox',
+		'value' => 'dummy',
+		'name' => 'dummy',
+		'onclick' => 'javascript:invert_selection()')
+);
+
+$lv->columns[] = array(
+	'text' => $strName,
+	'sort' => 'name'
+);
+
+require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
+$order = print_config_title($constMembersPage);
+
+for ($i=0; $i<count($order); $i++)
+{
+	$lv->columns[] = array(
+		'text' => $strCom[$order[$i]],
+		'sort' => $order[$i]
+	);
+}
+
+if (count($order) == 0)
+{
+	$lv->columns[] = array(
+		'text' => $strEmail,
+		'sort' => 'email'
+	);
+	$lv->columns[] = array(
+		'text' => $strCompany,
+		'sort' => 'company'
+	);
+}
+
+
+if ($ab_settings['sort_users_field'] == '')
+	$ab_settings['sort_users_field'] = 'name';
+
+$lv->count = $count = $GO_USERS->get_authorized_users($GO_SECURITY->user_id, $ab_settings['sort_users_field'], $ab_settings['sort_users_order'],$lv->first,$lv->max_rows);
 if($count > 0)
 {
 	echo '<td align="right" nowrap>'.$count.' '.$contacts_members.'</td>';
@@ -142,142 +169,57 @@ if($count > 0)
 
 echo '</tr></table>';
 
-
-echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" width=\"100%\">\n";
-echo "<tr>";
-echo '<td class="TableHead2" width="16"><input type="checkbox" value="dummy" name="dummy" onclick="javascript:invert_selection()" /></td>';
-echo "<td class=\"TableHead2\"><a class=\"TableHead2\" href=\"javascript:_sort('name','".$new_sort_order."')\">".$strName;
-if ($ab_settings['sort_users_field'] == "name")
-        echo $image_string;
-echo "</a></td>\n";
-
-require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
-$order = print_config_title($constMembersPage);
-
-for ($i=0; $i<count($order); $i++)
-{
-	echo "<td class=\"TableHead2\" nowrap><a class=\"TableHead2\" href=\"javascript:_sort('".$order[$i]."','".$new_sort_order."')\">".$strCom[$order[$i]];
-	if ($ab_settings['sort_users_field'] == $order[$i])
-        echo $image_string;
-	echo "</a></td>\n";
-}
-
-if (count($order) == 0)
-{
-echo "<td class=\"TableHead2\"><a class=\"TableHead2\" href=\"javascript:_sort('email','".$new_sort_order."')\">".$strEmail;
-if ($ab_settings['sort_users_field'] == "email")
-        echo $image_string;
-echo "</a></td>\n";
-echo "<td class=\"TableHead2\"><a class=\"TableHead2\" href=\"javascript:_sort('company','".$new_sort_order."')\">".$strCompany;
-if ($ab_settings['sort_users_field'] == "company")
-        echo $image_string;
-echo "</a></td>\n";
-}
-
-
-echo "<td class=\"TableHead2\">&nbsp;</td>\n";
-echo "</tr>\n";
+$lv->print_head();
 
 if ($count > 0) {
 while ($GO_USERS->next_record())
 {
+	$row = array();
 	$middle_name = $GO_USERS->f('middle_name') == '' ? '' : $GO_USERS->f('middle_name').' ';
 	$name = $GO_USERS->f('last_name').' '.$middle_name.$GO_USERS->f('first_name');
+	$attrs = array(
+		'id' => $GO_USERS->f("id"),
+		'height' => '18'
+	);
+	$row[] = array(
+		'tag' => 'input',
+		'attributes' => array(
+			'width' => 16),
+		'tag_attributes' => array(
+			'type' => 'checkbox',
+			'name' => 'user[]',
+			'value' => $GO_USERS->f("id"),
+			'onclick' => 'item_click(this)')
+	);
+	$row[] = array(
+		'html' => show_profile($GO_USERS->f("id"), $name),
+		'attributes' => array(
+			'nowrap' => '1'),
+	);
 
-	echo "<tr id=\"".$GO_USERS->f("id")."\" height=\"18\" class=\"Table1\">\n";
-	echo "<td width=\"16\"><input type=\"checkbox\" name=\"user[]\" value=\"".$GO_USERS->f("id")."\" onclick=\"item_click(this)\" /></td>";
-	echo "<td nowrap> ".show_profile($GO_USERS->f("id"), $name)."</td>\n";
-
-if (count($order) == 0)
-{
-	echo "<td>".mail_to(empty_to_stripe($GO_USERS->f("email")))."&nbsp;</td>\n";
-	echo "<td>".htmlspecialchars(empty_to_stripe($GO_USERS->f("company")))."&nbsp;</td>\n";
-}
-
-	print_config_content($order,$GO_USERS,$constMembersPage);
-
-	echo "<td><a href=\"contact.php?user_id=".$GO_USERS->f("id")."&return_to=".urlencode($link_back)."\" title=\"".$contacts_add_member."\"><img src=\"".$GO_THEME->images['save']."\" border=\"0\" />";
-	echo "</tr>\n";
-	echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
-}
-echo "</table>";
-
-	$links = '';
-	$max_links=10;
-	if ($max_rows != 0)
+	if (count($order) == 0)
 	{
-		if ($count > $max_rows)
-		{
-			$links = '<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>';
-			$next_start = $first+$max_rows;
-			$previous_start = $first-$max_rows;
-			if ($first != 0)
-			{
-				$links .= '<a href="javascript:change_list(0, '.$max_rows.');">&lt;&lt;</a>&nbsp;';
-				$links .= '<a href="javascript:change_list('.$previous_start.', '.$max_rows.');">'.$cmdPrevious.'</a>&nbsp;';
-			}else
-			{
-				$links .= '<font color="#cccccc">&lt;&lt; '.$cmdPrevious.'</font>&nbsp;';
-			}
-
-			$start = ($first-(($max_links/2)*$max_rows));
-
-			$end = ($first+(($max_links/2)*$max_rows));
-
-			if ($start < 0)
-			{
-				$end = $end - $start;
-				$start=0;
-			}
-			if ($end > $count)
-			{
-				$end = $count;
-			}
-			if ($start > 0)
-			{
-				$links .= '...&nbsp;';
-			}
-
-			for ($i=$start;$i<$end;$i+=$max_rows)
-			{
-				$page = ($i/$max_rows)+1;
-				if ($i==$first)
-				{
-					$links .= '<b><i>'.$page.'</i></b>&nbsp;';
-				}else
-				{
-
-					$links .= '<a href="javascript:change_list('.$i.', '.$max_rows.');">'.$page.'</a>&nbsp;';
-				}
-			}
-
-			if ($end < $count)
-			{
-				$links .= '...&nbsp;';
-			}
-
-			$last_page = floor($count/$max_rows)*$max_rows;
-
-			if ($count > $next_start)
-			{
-				$links .= '<a href="javascript:change_list('.$next_start.', '.$max_rows.');">'.$cmdNext.'</a>&nbsp;';
-				$links .= '<a href="javascript:change_list('.$last_page.', '.$max_rows.');">&gt;&gt;</a>';
-			}else
-			{
-				$links .= '<font color="#cccccc">'.$cmdNext.' &gt;&gt;</font>';
-			}
-			$links .= '</td><td align="right"><a class="normal" href="javascript:change_list(0, 0);">'.$cmdShowAll.'</a></td></tr></table>';
-
-			echo '<tr height="20"><td colspan="99">'.$links.'</td></tr>';
-			echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
-		}
+		$row[] = array(
+			'html' => mail_to(empty_to_stripe($GO_USERS->f("email")))
+		);
+		$row[] = empty_to_stripe($GO_USERS->f("company"));
 	}
-}else
-{
-        echo '<tr><td colspan="99" height="18">'.$contacts_no_contacts.'</td></tr>';
-	echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
-	echo "</table>";
+
+	fill_config_content($order,$GO_USERS,$constMembersPage,$row);
+
+	$row[] = array(
+		'href' => "contact.php?user_id=".$GO_USERS->f("id")."&return_to=".urlencode($link_back),
+		'html' => "<img src=\"".$GO_THEME->images['save']."\" border=\"0\" />",
+		'tag_attributes' => array(
+			'title' => $contacts_add_member
+		),
+		'attributes' => array(
+			'nowrap' => '1'),
+	);
+	$lv->print_line($row,$attrs);
 }
+}
+$lv->print_foot();
 ?>
 <script language="javascript" type="text/javascript">
 function _sort(field, direction)
