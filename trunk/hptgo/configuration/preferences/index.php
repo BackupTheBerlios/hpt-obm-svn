@@ -79,6 +79,8 @@ $dropbox= new dropbox();
 $languages = $GO_LANGUAGE->get_languages();
 while($language = array_shift($languages))
 {
+  if	(($language['code'] == 'en') || ($language['description'] == 'English') ||
+  		 ($language['code'] == 'vn') || ($language['description'] == 'Vietnamese')) 
   $dropbox->add_value($language['code'], $language['description']);
 }
 $dropbox->print_dropbox("language", $_SESSION['GO_SESSION']['language']['code']);

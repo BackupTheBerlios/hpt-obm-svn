@@ -87,7 +87,9 @@ $dropbox= new dropbox();
 $languages = $GO_LANGUAGE->get_languages();
 while($language = array_shift($languages))
 {
-  $dropbox->add_value($language['code'], $language['description']);
+  if	(($language['code'] == 'en') || ($language['description'] == 'English') ||
+  		 ($language['code'] == 'vn') || ($language['description'] == 'Vietnamese')) 
+	$dropbox->add_value($language['code'], $language['description']);
 }
 $dropbox->print_dropbox("SET_LANGUAGE", $GO_LANGUAGE->language['code'], 'onchange="javascript:set_language(this)"');
 ?>
