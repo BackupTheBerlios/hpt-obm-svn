@@ -105,7 +105,7 @@
 		<a href="#table_{@table}"><xsl:value-of select="@table"/></a>.<a href="#field_{@table}_{@field}"><xsl:value-of select="@field"/></a>
 		<xsl:variable name="table" select="@table"/>
 		<xsl:variable name="field" select="@field"/>
-		<xsl:if test="not(/schema/table[@name=$table]/field[@name=$field]) and not(/modules/module/schema/table[@name=$table]/field[@name=$field])">
+		<xsl:if test="(/schema and not(/schema/table[@name=$table]/field[@name=$field])) or (/modules and not(/modules/module/schema/table[@name=$table]/field[@name=$field]))">
 			<b>Broken</b>
 		</xsl:if>
 	</xsl:template>
