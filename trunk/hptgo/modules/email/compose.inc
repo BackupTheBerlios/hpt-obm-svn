@@ -80,7 +80,10 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
     {
       case "reply":
 	$mail_to = $content["reply_to"];
-      $mail_subject = "Re: ".$subject;
+	if (!stristr($subject,"Re: "))
+	  $mail_subject = "Re: ".$subject;
+	else
+	  $mail_subject = $subject;
       break;
 
       case "reply_all":
