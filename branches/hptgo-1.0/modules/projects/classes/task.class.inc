@@ -397,22 +397,8 @@ class project_task extends db {
   }
 
   function print_formated_comments() {
-    global $GO_THEME;
-
-    $comments = $this->comments;
-    $data = strtok($comments, "\xFF");
-    while ($data) {
-      if ($data != '') {
-        list($time, $who, $text) = explode("|", $data);
-        echo "<tr class=\"ProjectComment2\"><td height=\"20\"><i>($time)</i>&nbsp;&nbsp;-&nbsp;&nbsp;".
-             "<b>$who</b></td></tr>";
-        $text = str_replace("\n", "<br>", $text);
-        echo '<tr><td height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
-        echo "<tr class=\"ProjectComment1\" height=\"20\"><td>$text</td></tr>";
-        echo '<tr><td height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
-      }
-      $data = strtok("\xFF");
-    }
+	$_SESSION['GO_SESSION']['task_comments'] = $this->comments;
+	echo '<tr><td width="100%"><iframe src="comments.php" width="100%" class="textbox"></iframe></td></tr>';
   }
 
   function show_doc_folder() {
