@@ -81,16 +81,19 @@ echo '<table border="0" cellpadding="2" cellspacing="0">';
 echo '<tr><td>&nbsp;</td></tr>';
 echo '<tr><td><input type="checkbox" name="show_text" value="1" '.($show_text == '1' ? 'checked' : '').'/>'.$pref_show_text.'</td></tr>';
 echo '<tr><td>&nbsp;</td></tr>';
+echo '</table>';
 
 $count = count($res);
 $trash = '<img src="'.$GO_THEME->images['delete'].'" border="0">';
 $move_task_up = '<img src="'.$GO_THEME->images['task_up'].'" border="0">';
 $move_task_dn = '<img src="'.$GO_THEME->images['task_dn'].'" border="0">';
 $move_space = '<img src="'.$GO_THEME->images['task_space'].'" border="0" width="16" height="12">';
-$spliter = '<tr><td colspan="100" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
+
+echo '<table border="0" cellpadding="2" cellspacing="0">';
+$spliter = '<tr><td colspan="3" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 
 echo '<tr class="TableHead2" height="20">';
-echo '<td width="340" colspan="99" nowrap>'.$pref_module_name.'</td></tr>';
+echo '<td width="340" nowrap>'.$pref_module_name.'</td><td><input type="checkbox" name="dummy" onclick="javascript:invert_selection()" /></td><td ></td></tr>';
 
 require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 $mi = new move_item();
@@ -153,5 +156,13 @@ function save_modules(close)
   document.forms[0].task.value='save';
   document.forms[0].close.value=close;
   document.forms[0].submit();
+}
+
+function invert_selection()
+{
+	for (var i=0;i<document.forms[0].check.length;i++)
+	{
+		document.forms[0].check[i].checked = !(document.forms[0].check[i].checked);
+	}
 }
 </script>
