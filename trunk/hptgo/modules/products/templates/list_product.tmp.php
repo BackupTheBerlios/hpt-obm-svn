@@ -1,16 +1,16 @@
 <?php 
 	$image_string = '<img src="'.$GO_THEME->images['arrow_down'].'" border="0">';
-	if ($_POST['direction'] == 'DESC')
+	if ($direction == 'DESC')
 		$image_string = '<img src="'.$GO_THEME->images['arrow_up'].'" border="0">';
 ?>
 <form name="frmProList" method="post" action="">
 <input type="hidden" name="task">
 <input type="hidden" name="id">
-<input type="hidden" name="list_id" value="<?php echo $_POST['list_id']?>">
+<input type="hidden" name="list_id" value="<?php echo $list_id?>">
 <input type="hidden" name="txt_name">
 <input type="hidden" name="close_win">
-<input type="hidden" name="sort_fld" value="<?php echo $_POST['sort_fld']?>">
-<input type="hidden" name="direction" value="<?php echo $_POST['direction']=='ASC'?'DESC':'ASC';?>">
+<input type="hidden" name="sort_fld" value="<?php echo $sort_fld?>">
+<input type="hidden" name="direction" value="<?php echo $direction?>">
 <table width="100%"  border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td valign="middle" width="1%">
@@ -54,7 +54,6 @@
 		$pro2 = new products();
 		$pro2->get_categories($id);
 		$num2 = $pro2->num_rows();
-
 		
 		if ($num2 > 0)
 		{
@@ -136,25 +135,25 @@
 	<td><a class="TableHead2" href="javascript:click_txt(document.frmProList,'sort',document.frmProList.sort_fld,'part_number','')">
 		<?php 	
 			echo $sc_part_number;
-			if ($_POST['sort_fld'] == 'part_number') echo ' '.$image_string;
+			if ($sort_fld == 'part_number') echo ' '.$image_string;
 		?>
 	</a></td>
 	<td><a class="TableHead2" href="javascript:click_txt(document.frmProList,'sort',document.frmProList.sort_fld,'product_name','')">
 		<?php 	
 			echo $sc_product_name;
-			if ($_POST['sort_fld'] == 'product_name') echo ' '.$image_string;
+			if ($sort_fld == 'product_name') echo ' '.$image_string;
 		?>
 	</a></td>
     <td><a class="TableHead2" href="javascript:click_txt(document.frmProList,'sort',document.frmProList.sort_fld,'category_name','')">
 		<?php 	
 			echo $sc_category;
-			if ($_POST['sort_fld'] == 'category_name') echo ' '.$image_string;
+			if ($sort_fld == 'category_name') echo ' '.$image_string;
 		?>
 	</a></td>
 	<td><a class="TableHead2" href="javascript:click_txt(document.frmProList,'sort',document.frmProList.sort_fld,'price','')">
 		<?php 	
 			echo $sc_price;
-			if ($_POST['sort_fld'] == 'price') echo ' '.$image_string;
+			if ($sort_fld == 'price') echo ' '.$image_string;
 		?>
 	</a></td>
 	<td>&nbsp;</td>
@@ -162,15 +161,44 @@
 <?php
 	if ($task == 'list_attach')
 	{
-		$pro->get_attachments($_POST['list_id']);
+		$pro->get_attachments($list_id);
+		$numrows = $pro->num_rows();
+		$pro->get_attachments($list_id, true, $first, $max_rows);
+		if ($pro->num_rows() == 0)
+		{
+			$curpage = 1;
+			$pro->get_attachments($list_id, true, $first, $max_rows);
+		}
+		$page = PageNumber($numrows,$max_rows,5, $curpage, "index.php?list_id=$list_id&sort_fld=$sort_fld&direction=$direction", $st,$cmdPrevious,$cmdNext);		
 		$task = 'edit_attach';
 	}
 	else
 	{
-		if (!empty($_POST['list_id']))
-			$pro->get_products($_POST['list_id'],true,false,$_POST['sort_fld'],$_POST['direction']);
+		if (!empty($list_id))
+		{
+			$pro->get_products($list_id,true,false,$sort_fld,$direction);
+			$numrows = $pro->num_rows();
+			$pro->get_products($list_id,true,false,$sort_fld,$direction,$first,$max_rows);
+			if ($pro->num_rows() == 0)
+			{
+				$curpage = 1;
+				$pro->get_products($list_id,true,false,$sort_fld,$direction,0,$max_rows);				
+			}
+			$page = PageNumber($numrows,$max_rows,5, $curpage, "index.php?list_id=$list_id&sort_fld=$sort_fld&direction=$direction", $st,$cmdPrevious,$cmdNext);		
+		}
 		else
-			$pro->get_products(-1,false,true,$_POST['sort_fld'],$_POST['direction']);
+		{
+			$pro->get_products(-1,false,true,$sort_fld,$direction);
+			$numrows = $pro->num_rows();
+
+			$pro->get_products(-1,false,true,$sort_fld,$direction,$first,$max_rows);
+			if ($pro->num_rows() == 0)
+			{
+				$curpage = 1;
+				$pro->get_products(-1,false,true,$sort_fld,$direction,0,$max_rows);
+			}
+			$page = PageNumber($numrows,$max_rows,5, $curpage, "index.php?list_id=$list_id&sort_fld=$sort_fld&direction=$direction", $st,$cmdPrevious,$cmdNext);					
+		}
 		$task = 'edit';
 	}
 	
@@ -202,6 +230,12 @@
 	<tr><td colspan="99">&nbsp;</td></tr>
 	<tr>
 	  <td colspan="99"><a href="javascript:click_txt(document.frmProList,'buy',document.frmProList.id,'<?php echo $id?>','')"><img src="<?php echo $GO_THEME->images['cart']?>" border="0"></a><a href="javascript:click_but(document.frmProList,'buy_all',false)"></a></td>
+	</tr>
+	<tr>
+	  <td colspan="99">&nbsp;</td>
+	</tr>
+	<tr>
+	  <td colspan="99"><?php echo $page;?></td>
 	</tr>
 </table>
 

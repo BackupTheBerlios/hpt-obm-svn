@@ -308,24 +308,17 @@
 			return true;
 		}
 	
-		function get_products($id = -1, $category_id = false, $with_attach=false, $sort_fld = '', $direction='ASC')
+		function get_products($id = -1, $category_id = false, $with_attach=false, $sort_fld = '', $direction='ASC', $first=-1, $max_rows=-1)
 		{
 			$sql = "SELECT p.* , p.product_id as id, c.category_id, c.category_name
 					FROM sc_products p
 					INNER JOIN sc_cate_products cp ON cp.product_id = p.product_id
 					INNER JOIN sc_categories c ON cp.category_id = c.category_id ";
-
-			if (!$category_id && $id>-1) $sql.= "WHERE p.product_id = '$id' ";
-			if ($category_id) $sql.= "WHERE cp.category_id = '$id' ";
-			
+			if (!$category_id && $id>-1) $sql.= " WHERE p.product_id = '$id' ";
+			if ($category_id) $sql.= " WHERE cp.category_id = '$id' ";
 			if (!empty($sort_fld)) $sql.=" ORDER BY $sort_fld $direction";
-/*			if ($with_attach) 
-				$sql .= "union
-						select p.*, p.product_id as id, ac.id, ac.name
-						from sc_products p
-						inner join sc_cate_products cp on p.product_id = cp.product_id
-						inner join sc_attach_categories ac on cp.category_id = ac.id ";
-*/
+			if ($first>-1) $sql .= " LIMIT $first, $max_rows ";
+
  			if ($this->query($sql)) return true;
 			return false;
 		}
@@ -339,7 +332,7 @@
 			return true; 
 		}
 		
-		function get_attachments($id=-1, $attach_cate_id = true)
+		function get_attachments($id=-1, $attach_cate_id = true, $first = -1, $max_rows = -1)
 		{
 			$sql = "SELECT * 
 					FROM sc_products p 
@@ -350,6 +343,7 @@
 			if (!$attach_cate_id)
 				$sql .= " WHERE p.product_id = '".$id."' 
 						AND cp.be_attachment = 1";
+			if ($first>-1) $sql .= " LIMIT $first, $max_rows ";						
 			if (!$this->query($sql)) return false;
 			return true;
 		}
@@ -418,7 +412,7 @@
 			if (!$this->query($sql) || $this->num_rows() > 1) return false;
 
 			$sql = "UPDATE sc_orders
-					SET seller='$seller', 
+					SET seller='$seller', 	
 						company='$company', 
 						attn='$attn', 
 						sale_date='$sale_date', 
@@ -533,6 +527,49 @@
 					FROM sc_order_detail od
 					INNER JOIN sc_products p ON od.product_id = p.product_id
 					WHERE od.order_number = '".$id."'";
+			if (!$this->query($sql)) return false;
+			
+			return true;
+		}
+
+//The methods for statistic
+		function get_in(&$in)
+		{
+			switch ($in)
+			{
+				case 'seller' : 
+					$in = 'seller_name';
+					$sql = "SELECT concat(u.last_name,' ',u.middle_name,' ',u.first_name) as $in, o.seller as s_id ";
+				break;
+				case 'product_name':
+					$sql = "SELECT $in, od.product_id as s_id ";
+				break;
+				default : $sql = "SELECT $in, $in as s_id";
+			}
+
+			$sql.=" FROM sc_orders o
+					LEFT JOIN sc_order_detail od ON o.order_number = od.order_number
+					LEFT JOIN users u ON o.seller = u.id
+					LEFT JOIN sc_products p ON od.product_id = p.product_id
+					GROUP BY $in";
+			if (!$this->query($sql)) return false;
+			
+			return true;
+		}		
+		
+		function get_result($fld, $value, $from, $to)
+		{
+			$from = date_to_db_date($from);
+			$to = date_to_db_date($to);
+			if ($fld == 'product_name') $fld = 'od.product_id';
+			else $fld = "o.$fld";
+			$sql = "SELECT sum(od.quantity * od.price) as rs
+					FROM sc_orders o
+					LEFT JOIN sc_order_detail od ON o.order_number = od.order_number
+					WHERE $fld = '$value'
+						AND sale_date >= '$from'
+						AND sale_date <= '$to'";
+
 			if (!$this->query($sql)) return false;
 			
 			return true;

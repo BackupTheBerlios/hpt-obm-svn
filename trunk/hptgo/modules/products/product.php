@@ -3,6 +3,17 @@
 	$upload_dir = 'upload';
 	$maxsize = 500000;
 
+	$list_id = $_REQUEST['list_id'];
+	$sort_fld = $_REQUEST['sort_fld'];
+	$direction = ($_REQUEST['direction']=='ASC'?'DESC':'ASC');
+	
+	$max_rows = isset($_REQUEST['max_rows']) ? $_REQUEST['max_rows'] : $_SESSION['GO_SESSION']['max_rows_list'];
+	$first = isset($_REQUEST['first']) ? $_REQUEST['first'] : 0;
+	$curpage = isset($_REQUEST['curpage']) ? $_REQUEST['curpage'] : 1;
+//	$max_rows = 1;
+	$first = $max_rows * ($curpage - 1);
+//	alert($_GET['curpage']);
+
 	if (!isset($_SESSION['cart']))$_SESSION['cart'] = new Cart('product_id','price','sc_products');
 	$trash = '<img src="'.$GO_THEME->images['delete'].'" border="0">';
 	$spliter = '<tr><td colspan="100" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
@@ -15,7 +26,7 @@
 	$image['pnode'] = '<img src="'.$GO_THEME->images['pnode'].'" border="0" height="22" width="16" align="absmiddle" />';
 	$image['vertline'] = '<img src="'.$GO_THEME->images['vertline'].'" border="0" height="22" width="16" align="absmiddle" />';
 	$image['blank'] = '<img src="'.$GO_THEME->images['blank'].'" border="0" height="22" width="16" align="absmiddle" />';
-
+	
 	$pro = new products();
 	$exp = $_SESSION['exp'];
 	$task = $_REQUEST['task'];
