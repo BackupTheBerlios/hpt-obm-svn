@@ -10,6 +10,7 @@
    option) any later version.
  */
 
+$link_back = (isset($_REQUEST['link_back']) && $_REQUEST['link_back'] != '') ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
 $pstate = $projects['status'];
 $project_acl_write = $project['acl_write'];
 $pstart_date = $project['start_date'];
@@ -61,7 +62,7 @@ if ($task != 'show_task_gantt') {
   echo     '<td class="TableHead2" width="50" align="center" nowrap>'.$pm_task_document.'</td></tr>';
 
   // Display Task List
-  if (!isset($task_status)) {
+  if (!isset($task_status) || isset($_REQUEST['task_status_close'])) {
     foreach ($tasks as $id => $t)
       $t->print_info($member_ids, $member_names, $member_list);
     $stask = $tasks[1];
@@ -72,11 +73,10 @@ if ($task != 'show_task_gantt') {
     $stask = $tasks[$task_id];
     if ($task_status == 'show_doc') {
       $stask->show_doc_folder();
-      if (isset($_SERVER['HTTP_REFERER'])) $return_to = $_SERVER['HTTP_REFERER'];
     }
     else {
+      echo '<input type="hidden" name="task_status_close" value="1"/>';
       $stask->print_status($member_list);
-      $return_to = $_SERVER['PHP_SELF'].'?project_tab='.TASK_LIST_TAB.'&project_id='.$project_id;
     }
   }
 }
@@ -179,10 +179,20 @@ $_SESSION['GO_FILESYSTEM_PATH'] = $GO_CONFIG->file_storage_path.'users/'.
                                   $_SESSION['GO_SESSION']['username'];
 if ($task != 'show_task_gantt')
 {
-  if (!$is_new_project)
-    $button = new button($cmdClose, "javascript:document.location='$return_to';");
+  if (!$is_new_project) {
+    if ($task == 'show_task_status' || $task == 'show_task_doc') {
+      if ($_GET['task_status'] == 'show_doc') {
+	$return_to2 = $_REQUEST['return_to2'];
+	$button = new button($cmdClose, "javascript:document.location='$return_to2';");
+      } else {
+        $button = new button($cmdClose, "javascript:change_tab(".TASK_LIST_TAB.");");
+      }
+    } else
+      $button = new button($cmdClose, "javascript:document.location='$return_to';");
+  }
 }
 else {
+//  $button = new button($cmdClose, "javascript:document.location='$return_to';");
   $button = new button($cmdClose, 'javascript:change_tab('.TASK_LIST_TAB.')');
   echo '</td><td align="right" width="100%">'.
        '<table border="0" cellpadding="1" cellspacing="0" bgcolor="black">'.

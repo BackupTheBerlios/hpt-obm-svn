@@ -1,6 +1,7 @@
 // I18N constants : Vietnamese
 // LANG: "en", ENCODING: UTF-8
 // Author: Nguyễn Đình Nam, <hncryptologist@yahoo.com>
+// Modifier: Đào Hải Lâm, <lamdh@hptvietnam.com.vn>
 
 HTMLArea.I18N = {
 
@@ -19,13 +20,17 @@ HTMLArea.I18N = {
 		justifycenter:  "Căn Giữa",
 		justifyright:   "Căn Phải",
 		justifyfull:    "Căn Đều",
+    lefttoright:    "Viết từ trái sang",
+    righttoleft:    "Viết từ phải sang",
 		orderedlist:    "Danh Sách Có Thứ Tự",
 		unorderedlist:  "Danh Sách Phi Thứ Tự",
 		outdent:        "Lùi Ra Ngoài",
 		indent:         "Thụt Vào Trong",
 		forecolor:      "Màu Chữ",
 		backcolor:      "Màu Nền",
+    hilitecolor:    "Màu Nền",
 		horizontalrule: "Dòng Kẻ Ngang",
+    inserthorizontalrule: "Dòng Kẻ Ngang",
 		createlink:     "Tạo Liên Kết",
 		insertimage:    "Chèn Ảnh",
 		inserttable:    "Chèn Bảng",
@@ -34,10 +39,10 @@ HTMLArea.I18N = {
 		about:          "Tự Giới Thiệu",
 		showhelp:       "Giúp Đỡ",
 		textindicator:  "Định Dạng Hiện Thời",
-		undo:           "Undo",
-		redo:           "Redo",
+		undo:           "Hoàn lại",
+		redo:           "Làm lại",
 		cut:            "Cắt",
-		copy:           "Copy",
+		copy:           "Sao chép",
 		paste:          "Dán"
 	},
 	buttons: {

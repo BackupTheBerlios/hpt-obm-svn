@@ -40,7 +40,7 @@ if (!$ab_module || !($GO_SECURITY->has_permission($GO_SECURITY->user_id,
   $ab = new addressbook();
 }
 
-$html_mail_head = '<html><head><meta http-equiv=Content-Type content="text/html; charset='.$charset.'"><meta content="Group-Office '.$GO_CONFIG->version.'" name="GENERATOR"></head><body>';
+$html_mail_head = '<html><head><meta http-equiv=Content-Type content="text/html; charset='.$charset.'"><meta content="HPT-OBM '.$GO_CONFIG->version.'" name="GENERATOR"></head><body>';
 $html_mail_foot = '</body></html>';
 
 $_SESSION['num_attach'] = isset($_SESSION['num_attach']) ? $_SESSION['num_attach'] : 0;
@@ -513,11 +513,12 @@ switch ($sendaction)
   case 'delete':
     // Rebuilding the attachments array with only the files the user wants to keep
     $tmp_array = array();
-    for ($i=$j=1;$i<=$_SESSION['num_attach'];$i++)
+    $df = $_REQUEST['delete_attached_file'];
+    for ($i = $j = 1; $i <= $_SESSION['num_attach']; $i++)
     {
-      $thefile = 'file'.$i;
-      if (empty($_POST[$thefile]))
-      {
+      if ($i == $df) {
+	@unlink($_SESSION['attach_array'][$i]->tmp_file);
+      } else {
 	$tmp_array[$j]->file_name = $_SESSION['attach_array'][$i]->file_name;
 	$tmp_array[$j]->tmp_file = $_SESSION['attach_array'][$i]->tmp_file;
 	$tmp_array[$j]->file_size = $_SESSION['attach_array'][$i]->file_size;
@@ -525,9 +526,6 @@ switch ($sendaction)
 	$tmp_array[$j]->content_id = $_SESSION['attach_array'][$i]->content_id;
 	$tmp_array[$j]->disposition = $_SESSION['attach_array'][$i]->disposition;
 	$j++;
-      }else
-      {
-	@unlink($_SESSION['attach_array'][$i]->tmp_file);
       }
     }
 
@@ -621,7 +619,7 @@ if ($_SERVER['REQUEST_METHOD'] != "POST" && $tp_plugin && $template_id == 0 && $
     {
       if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $fs_module['acl_read']) || $GO_SECURITY->has_permission($GO_SECURITY->user_id, $fs_module['acl_write']))
       {
-	$htmlarea->add_button('go_image', '', $GO_CONFIG->control_url.'/htmlarea/images/ed_image.gif', 'false', "function insertGOimage()
+	$htmlarea->add_button('go_image', 'OBM images', $GO_CONFIG->control_url.'/htmlarea/images/obm_images.gif', 'false', "function insertGOimage()
 	    {
 	    popup('select_image.php','600','400');
 	    }");

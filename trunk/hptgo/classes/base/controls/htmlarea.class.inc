@@ -20,6 +20,7 @@ class htmlarea
   var $rows;
   var $width;
   var $browser_is_supported = false;
+  var $button_controls = array();
 
   function get_styles($style)
   {
@@ -198,6 +199,7 @@ refresh: '.$refresh.'
     config.killWordOnPaste=true;
     ';
 
+    // TODO: htmlarea in $restrict_editor mode will not be affected by the hack in patch 372 (which is the following hack)
     if($restrict_editor)
     {
       $header .= 'config.toolbar = ['.
@@ -211,6 +213,32 @@ refresh: '.$refresh.'
 	'"inserthorizontalrule", "createlink", "insertimage", "inserttable", "htmlmode", "separator",'.
 	'"popupeditor", "separator", "showhelp", "about" ]'.
 	'];';
+    }
+    else
+    {
+      // This is a hacking way to solve the layout temporarilly
+      // Begin of hacking block
+      if (count($this->button_controls) > 0) {
+        $header .= 'config.toolbar = [
+    	[ "fontname", "space",
+    	  "fontsize", "space",
+    	  "formatblock", "space",
+    	  "bold", "italic", "underline", "strikethrough", "separator",
+    	  "subscript", "superscript", "separator",
+    	  "copy", "cut", "paste", "space", "undo", "redo" ],
+    	[ "justifyleft", "justifycenter", "justifyright", "justifyfull", "separator",
+    	  "lefttoright", "righttoleft", "separator",
+    	  "orderedlist", "unorderedlist", "outdent", "indent", "separator",
+    	  "forecolor", "hilitecolor", "separator",
+    	  "inserthorizontalrule", "createlink", "insertimage", "go_image",
+              "inserttable", "htmlmode", "separator",
+    	  "popupeditor", "separator", "showhelp", "about" ]
+    	];';
+      }
+      foreach ($this->button_controls as $b) {
+        $header .= $b['code'];
+      }
+  // End of hacking block
     }
     
     $header.='config.fontname = {'.

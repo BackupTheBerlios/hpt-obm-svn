@@ -843,6 +843,101 @@ class filesystem extends db
     return $folders;
   }
 
+  function get_visible_folders_array($user_id,$path,$sort_field)
+  {
+    global $GO_CONFIG;
+    $slash = stristr(PHP_OS, 'Windows') ? '\\' : '/';
+    if (substr($path, -1) != $slash) $path .= $slash;
+
+    $folders = array();
+    if($dir = opendir($path))
+    {
+      while($item=readdir($dir))
+      {
+	$folder_path = $path.$item;
+	if (is_dir($folder_path) && $item != "." && $item != ".." &&
+	  $item != $GO_CONFIG->name_of_sharedir && !(strpos($item,".") === 0) )
+	{
+	  if ($this->has_read_permission2($user_id,$folder_path))
+	  {
+	    $key_id = 0;
+	    $first_key = strtolower($sort_field($folder_path));
+	    $key = $first_key;
+	    while (array_key_exists($key, $folders))
+	    {
+	      $key = $first_key.'_'.$key_id;
+	      $key_id++;
+	    }
+	    $folders[$key] = $folder_path;
+	  }
+	  else
+	  {
+	    //echo "Dive into $folder_path<br/>\n";
+	    $subfolders = $this->get_visible_folders($user_id,$folder_path);
+	    if (is_array($subfolders))
+	      foreach ($subfolders as $folder_path) {
+	    	$key_id = 0;
+	    	$first_key = strtolower($sort_field($folder_path));
+	    	$key = $first_key;
+	    	while (array_key_exists($key, $folders))
+	    	{
+	      	  $key = $first_key.'_'.$key_id;
+	      	  $key_id++;
+	    	}
+	    	$folders[$key] = $folder_path;
+	      }
+	  }
+	}
+      }
+      closedir($dir);
+    }
+    return $folders;
+  }
+
+  /**
+   * Get common subfolders of folder $path, which is visible to user $user_id,
+   * sorted by $sort_field with $sort_direction
+   * Retrieved folders may be direct children of $path or not.
+   * Return an folder array.
+   * Each element is an array ('path','name','mtime','size','type')
+   * FIXME: more information about the array
+   */
+  function get_visible_folders_sorted($user_id,$path,$sort_field='basename',$sort_direction='ASC')
+  {
+    global $GO_CONFIG;
+    $slash = stristr(PHP_OS, 'Windows') ? '\\' : '/';
+    if (substr($path, -1) != $slash) $path .= $slash;
+    if(strstr($_SERVER['HTTP_HOST'], $path))
+    {
+      $url = str_replace($_SERVER['DOCUMENT_ROOT'], 'http://'.$_SERVER['HTTP_HOST'], $path);
+      if ($slash == '\\')
+      {
+	$url = str_replace('\\','/',$url);
+      }
+    }
+    $sort_field = function_exists($sort_field) ? $sort_field : 'basename';
+    $sorted_list = $this->get_visible_folders_array($user_id,$path,$sort_field);
+
+    if ($sort_direction == 'ASC')
+      ksort($sorted_list);
+    else
+      krsort($sorted_list);
+    $folders = array();
+    while ($item=array_shift($sorted_list))
+    {
+      $folder = array();
+      $folder['path'] = $item;
+      $folder['name'] = basename($item);
+      $folder['mtime'] = filemtime($item);
+      $folder['size'] = filesize($item);
+      $folder['type'] = filetype($item);
+      if(isset($url))
+	$folder['url'] = $url.$folder['name'];
+      $folders[] = $folder;
+    }
+    return $folders;
+  }
+  
   /**
    * Get subfolders of folder $path sorted by $sort_field with $sort_direction
    * returns all subfolders of a folder sorted based on the result of a function

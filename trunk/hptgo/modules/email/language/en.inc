@@ -9,6 +9,7 @@ $ml_savedraft = "Save as draft";
 $ml_attach = "Attach";
 $ml_attachments = "Attachments";
 $ml_attachment = "Attachment";
+$ml_attachment_empty = "&lt; Empty &gt;";
 $ml_high = "High";
 $ml_normal = "Normal";
 $ml_low = "Low";
@@ -39,7 +40,7 @@ $ml_reply_all = "Reply all";
 $ml_delete_message = "Are you sure you want to delete this message permanently?";
 $ml_no_subject = "No subject";
 $ml_no_reciepent = "Undisclosed reciepent";
-$ml_online_files = "Online files";
+$ml_online_files = "Files in OBM";
 $ml_send_error = "Failed sending the mail.";
 $ml_attach_forget = "You have selected a file but you didn't attach it.";
 $ml_messages = "message(s)";
@@ -147,6 +148,6 @@ $ml_mails_were_sent = 'mail messages sent';
 $ml_novalidate_cert = 'Don\'t validate certificate';
 $ml_appointment_vcf = 'This message contains a contact address. Do you want to view this address in the addressbook?';
 
-$ml_cmd_show = 'Show';
-$ml_cmd_hide = 'Hide';
+$ml_cmd_show = 'Add';
+$ml_cmd_hide = 'Remove';
 ?>
