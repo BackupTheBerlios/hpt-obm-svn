@@ -12,7 +12,7 @@
 
 require_once($GO_MODULES->class_path.'task.class.inc');
 
-if (!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
+if (!$GO_MODULES->write_permissions) {
 	header('Location: '.$GO_CONFIG->host.'error_docs/403.php');
 	exit();
 }
