@@ -26,7 +26,8 @@ if ($cal_settings['show_days'] > 29)
 {
   $day = 1;
 }
-if ($cal_settings['show_days'] > 4)
+//else if ($cal_settings['show_days'] > 4)
+else if ($cal_settings['show_days'] >= 7)
 {
   //calculate the first day to display in the week view.
   $weekday = date("w", mktime(0,0,0,$month, $day, $year));
@@ -41,8 +42,24 @@ if ($cal_settings['show_days'] > 4)
   $year = date('Y', $new_time);
 }
 
-$interval_start_time = mktime(0,0,0,$month, $day-1, $year);
-$interval_end_time = mktime(0,0,0,$month, $day+$cal_settings['show_days']+1, $year);
+// 	Quoc sua cach tinh NgayBatDau va NgayKetThuc
+//$interval_start_time = mktime(0,0,0,$month, $day-1, $year);
+$interval_start_time = mktime(0,0,0,$month, $day, $year);
+
+//$interval_end_time = mktime(0,0,0,$month, $day+$cal_settings['show_days']+1, $year);
+if ($cal_settings['show_days'] > 29){ // Hien thi mot thang
+	// Ngay cuoi thang = ngay dau thang sau - 1
+	if ($month == 12)
+		$interval_end_time = mktime(0,0,0,12, 31, $year);
+	else{
+		$interval_end_time = mktime(0,0,0,$month+1, 0, $year);
+	}	
+}else if ($cal_settings['show_days'] >= 2){ // hien thi theo nhieu ngay
+	$interval_end_time = mktime(0,0,0,$month, $day+$cal_settings['show_days']-1, $year);
+}
+else{ // hien thi mot ngay
+	$interval_end_time = $interval_start_time;
+}
 
 if($_SESSION['GO_SESSION']['DST'] > 0 && date('I') > 0)
 {
@@ -76,11 +93,11 @@ if(!$print)
     $interval = $cal_settings['show_days'];
   }
 
-  echo '</td><td><h3><a href="javascript:goto_date('.($day-$interval).', '.$month.', '.$year.');">&lt;&lt;</a>&nbsp;';
+  echo '</td><td><h3><a href="javascript:goto_date('.($day-$interval).', '.$month.', '.$year.');">&lt;&lt; </a>&nbsp;';
   echo date($_SESSION['GO_SESSION']['date_format'], $interval_start_time+
       ($timezone_offset*3600)).' - '.
-    date($_SESSION['GO_SESSION']['date_format'], $interval_end_time+
-	($timezone_offset*3600));
+      date($_SESSION['GO_SESSION']['date_format'], $interval_end_time+
+      ($timezone_offset*3600));
   echo '&nbsp;<a href="javascript:goto_date('.($day+$interval).', '.$month.', '.$year.');">&gt;&gt;</a>';
   echo '</h3></td></tr></table>';
 }
