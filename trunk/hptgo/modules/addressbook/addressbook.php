@@ -117,7 +117,7 @@ switch($task)
 			ini_set('include_path',ini_get('include_path').':'.$GO_CONFIG->class_path.'pear/usr/lib/php');
 			require_once "Spreadsheet/Excel/Writer.php";
 			$xls =& new Spreadsheet_Excel_Writer();
-			$xls->setVersion(8); // Excel 97/2000
+			//$xls->setVersion(8); // Excel 97/2000 -- don't set this unless you want bugs
 			$vnconv->set_to("ascii");
 			$xls->send($vnconv->vnconv($addressbook['name']).".xls");
 			$xls->_codepage         = 0x04EA; // CP1258
