@@ -218,13 +218,13 @@ switch ($task)
     $project = $projects->get_project($project_id);
     $responsible_user_id = $project['res_user_id'];
     $user = $GO_USERS->get_user($responsible_user_id);
-    $project_folder = $GO_CONFIG->file_storage_path . $user['username'] . '/.projects';
+    $project_folder = $GO_CONFIG->file_storage_path . 'projects/';
     if (!file_exists($project_folder) && !mkdir($project_folder)) {
       error_log("GO: Create $project_folder error");
       unset($project_folder);
     }
     else {
-      $project_folder = $project_folder . "/$project_id";
+      $project_folder = $project_folder . "$project_id";
       if (!file_exists($project_folder)) {
         if (!mkdir($project_folder)) {
           error_log("GO: Create $project_folder error");

@@ -208,7 +208,7 @@ class project_task extends db {
     $this->is_passed = $this->status <= TASK_DONE;
 
     $user = $GO_USERS->get_user($responsible_user_id);
-    $this->doc_path = $GO_CONFIG->file_storage_path . $user['username'] . '/.projects/' .
+    $this->doc_path = $GO_CONFIG->file_storage_path . 'projects/' .
       $this->project_id . '/' . $this->id;
   }
 
@@ -391,9 +391,8 @@ class project_task extends db {
   }
 
   function show_doc_folder() {
-    global $GO_SECURITY, $GO_THEME, $pm_task_status_values,$GO_MODULES;
+    global $GO_SECURITY, $GO_THEME, $pm_task_status_values;
 
-    $fs_module = $GO_MODULES->get_module('filesystem');
     echo "<tr>";
     echo "<td align=\"center\">".$this->id."</td>";
     echo "<td>".$this->name."</td>";
@@ -406,7 +405,7 @@ class project_task extends db {
     echo "<td align=\"center\">".($this->approved ? "<img border=\"0\" src=\"".$GO_THEME->images['checked']."\"/>" : "&nbsp;")."</td>";
     echo "</tr>";
     echo "<tr><td>&nbsp;</td></tr>";
-    echo "<tr><td colspan=\"8\"><iframe src=\"".$fs_module['url']."index.php?path=".$this->doc_path."\" width=720 height=300>".
+    echo "<tr><td colspan=\"8\"><iframe src=\""."folder.php?path=".$this->doc_path."\" width=720 height=300>".
          "</iframe></td></tr>";
   }
 

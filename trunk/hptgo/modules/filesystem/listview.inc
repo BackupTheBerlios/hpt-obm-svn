@@ -10,7 +10,7 @@
    option) any later version.
  */
 
-$is_project_folder = !strstr($path, '/.projects/') ? false : true;
+$is_project_folder = $GO_CONFIG->window_mode == 'projects';
 
 if(isset($_REQUEST['new_sort_order']) && $_REQUEST['new_sort_order'] != $fs_settings['sort_order'])
 {
@@ -59,7 +59,7 @@ if (!$is_project_folder) {
 
 if ($write_permission)
 {
-  if (!$is_project_folder) {
+  if ($GO_CONFIG->window_mode != 'projects') {
     echo '<td class="ModuleIcons">';
     echo '<a class="small" href="'.$_SERVER['PHP_SELF'].'?task=new_folder&path='.$urlencoded_path.'"><img src="'.$GO_THEME->images['new_folder'].'" border="0" height="32" width="32" /><br />'.$fbNewFolder.'</a></td>';
   }

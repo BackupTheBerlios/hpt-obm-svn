@@ -56,7 +56,7 @@ $GO_MULTI_SELECT = isset($GO_MULTI_SELECT) ? $GO_MULTI_SELECT : true;
 $target_frame = isset($target_frame) ? $target_frame : '_self';
 
 //set path to browse
-$home_path = $GO_CONFIG->file_storage_path.$_SESSION['GO_SESSION']['username'];
+$home_path = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'];
 if (!isset($_SESSION['GO_FILESYSTEM_PATH']))
 {
   if (file_exists($home_path) || mkdir($home_path))

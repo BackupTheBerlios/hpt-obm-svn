@@ -63,7 +63,7 @@ class filesystem extends db
 
     if ($user = $GO_USERS->get_user($user_id))
     {
-      $home_path = $GO_CONFIG->file_storage_path.$user['username'];
+      $home_path = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
 
       if (dirname($path).basename($path) == dirname($home_path).basename($home_path))
       {
@@ -79,12 +79,31 @@ class filesystem extends db
 
     if ($user = $GO_USERS->get_user($user_id))
     {
-      $home_path = $GO_CONFIG->file_storage_path.$user['username'];
-
+      $home_path = $GO_CONFIG->file_storage_path.'users/'.$user['username'];
       if (strpos($path, $home_path) === 0)
       {
 	return true;
       }
+    }
+
+
+    $home_path = $GO_CONFIG->file_storage_path.'projects/';
+    global $GO_MODULES,$GO_SECURITY;
+    $project = $GO_MODULES->get_module('projects');
+    if ($project && 
+	ereg('^'.$home_path.'/*([0-9]*)/([0-9]*)/*',$path,$matches) &&
+	($GO_SECURITY->has_permission($GO_SECURITY->user_id, $project['acl_read']) ||
+	 $GO_SECURITY->has_permission($GO_SECURITY->user_id, $project['acl_write'])))
+    {
+      require_once($project['class_path'].'projects.class.inc');
+      require_once($project['class_path'].'task.class.inc');
+      $prjs = new projects();
+      $prj = $prjs->get_project($matches[1]);
+      $db = new db();
+      $db->query("SELECT task_person_id FROM task WHERE task_project_id=".(int)$matches[1]." AND task_id=".(int)$matches[2]);
+      if ($GO_SECURITY->user_id == $prj['user_id'] ||
+      	($db->num_rows() && $db->next_record() && $db->f('task_person_id') == $GO_SECURITY->user_id))
+	return true;
     }
     return false;
   }

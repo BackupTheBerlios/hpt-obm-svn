@@ -34,7 +34,7 @@ function get_group_folders($uid, $level)
 					else
 						$staff_middle_name = ' ';
 					$staffs[] = $GO_GROUPS->f('id');
-					$folder['path'] = $GO_CONFIG->file_storage_path.$GO_GROUPS->f('username');
+					$folder['path'] = $GO_CONFIG->file_storage_path.'users/'.$GO_GROUPS->f('username');
 					$folder['name'] = $GO_GROUPS->f('last_name').$staff_middle_name.$GO_GROUPS->f('first_name');
 					$group_folders[] = $folder;
 				}

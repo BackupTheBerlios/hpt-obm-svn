@@ -431,7 +431,7 @@ switch($active_tab_id)
     if (!isset($active_tab))
     {
       $link_back .= '&active_tab='.$tabtable->active_tab;
-    }  
+    }
     require($notes_module['path'].'notes.inc');
     echo '<br />';
     $button = new button($cmdClose, "javascript:document.location='".$return_to."'");
