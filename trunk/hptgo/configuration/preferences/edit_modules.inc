@@ -62,7 +62,7 @@ echo '<input type="hidden" name="max_rows" value="'.$_REQUEST['max_rows'].'" />'
 echo '<tr><td>';
 echo '<table border="0" cellpadding="2" cellspacing="0">';
 echo '<tr><td>&nbsp;</td></tr>';
-echo '<tr><td><input type="checkbox" name="show_text" value="1" '.($show_text == '1' ? 'checked' : '').'/>Show text</td></tr>';
+echo '<tr><td><input type="checkbox" name="show_text" value="1" '.($show_text == '1' ? 'checked' : '').'/>'.$pref_show_text.'</td></tr>';
 echo '<tr><td>&nbsp;</td></tr>';
 
 $count = count($res);

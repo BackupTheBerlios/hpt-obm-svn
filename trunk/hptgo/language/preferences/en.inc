@@ -23,4 +23,7 @@ $pref_first_weekday = 'First weekday';
 
 //2.05
 $adjust_to_dst = 'Automatically adjust time to Daylight Savings Time';
+$pref_show_text = 'Show text under icons';
+$menu_preferences_tab = "General";
+$menu_modules_tab = "Modules";
 ?>
