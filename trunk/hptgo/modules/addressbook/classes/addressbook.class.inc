@@ -847,6 +847,7 @@ class addressbook extends db
     $sql = "DELETE FROM ab_companies WHERE id='$company_id'";
     if ($this->query($sql))
     {
+	  return $this->query("DELETE FROM ab_cate_companies WHERE company_id='$company_id'");
       return $this->query("DELETE FROM ab_custom_company_fields WHERE id='$company_id'");
     }
   }
