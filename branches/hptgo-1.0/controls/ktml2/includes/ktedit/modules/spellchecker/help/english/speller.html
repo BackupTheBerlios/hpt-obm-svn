@@ -1,0 +1,80 @@
+<html>
+<head>
+<title>The Spellcheck</title>
+<link rel="stylesheet" type="text/css" href="../../../../styles/help.css"/>
+</head>
+<body>
+
+<div class="main">
+	<div class="title">The Spellchecker</div>
+	<div class="content"><img src="../img/speller.gif" width="344" height="259" border="1"> <br>
+	  The KTML3 Spellchecker user interface will allow you to
+	  quickly identify misspelled words, to choose one of the suggested corrections
+	  or replace them
+	  with new expressions, and to add words to the dictionary. You can also
+	  ignore one or all the instances of a word and to change one or all the instances,
+	  at once.<br>
+	  <p><strong>Not in Dictionary</strong><br>
+	    This text field will display the current unknown word found by the spell
+	      checker. The field is disabled, and its content cannot be modified
+      by users.</p>
+	  <p><strong>Replace With</strong><br>
+	    This text field will display the selected suggestion work. The default
+	    value is the first dictionary word that is considered a close match by
+	    the spell checker. To change this value, users should navigate through
+	      the word
+    list displayed by the                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        &quot;Suggestions&quot; field and click on a word.</p>
+	  <p><strong>Suggestions</strong><br>
+	    This list field will display all words considered a close match by the
+	    spell checker (either aspell or pspell). Users can navigate through the
+	    list by using the up and down arrows displayed on the list right border.
+	    To make a selection users should click on a word. If users double click
+	    on a selected word, the checker will automatically replace the unknown
+	    word display in the &quot;Not in Dictionary&quot; field with the selection
+    (it actions like the                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        &quot;Change&quot; command).</p>
+	  <p><strong>Language</strong><br>
+	    Users can specifies the language to use by the spell checker.
+	        The default language is the KTML3 default language, which was set
+	    when the KTML3
+	        field was inserted on the page. Users can change the language by
+	    making a selection
+      in the dropdown menu.</p>
+	  <p>When a new language is selected, KTML3 will reload
+	      the current page into the spell checker. This operation could take
+	    some time depending on the
+	      connection speed as the checker has to reload the page content from
+	    the server and save it into a temporary array.</p>
+	  <p>Once a selection is made, the &quot;Suggestions&quot; field
+	    is automatically updated with using a dictionary corresponding to the selected
+	    language.
+	    Each time the language is changed, the checker will verify all the page.
+	    This behavior will not allow users to use a certain language on certain
+	    page zone and other language for another page zone.</p>
+	  <p><strong>Ignore</strong><br>
+	    The &quot;Ignore Once&quot; command will ignore the current unknown word,
+	    and continue spell check. If another occurrence of this word will be
+    later found in the page, the spell checker will underline it and offer suggestions.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       </p>
+	  <p><strong>Ignore
+	      All</strong><br>
+        This command will ignore all occurrences of the current unknown word
+      in the entire document, and continues with the spell check.</p>
+	  <p><strong>Add to Dictionary</strong><br>
+        This command will allow users to add into dictionary unknown words
+	        that are considered correct by users. This situation is often met in
+	        case
+	      of names (products, companies, software applications, etc). After the
+      word is added, the spell checker will pass to the next unknown word.</p>
+	  <p><strong>Change</strong><br>
+	    Will replace the unknown word with the suggestion displayed in the &quot;Replace
+    With                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       &quot; window, and continue spell check.</p>
+	  <p><strong>Change All</strong><br>
+        This command will change all occurrences of the current unknown word
+      in the entire document, and continues with the spell check.</p>
+  </div>
+</div>
+<div class="footer">
+	<input type="button" class="ktml_button" value="Close" onclick="window.close()"/>
+</div>
+
+</body>
+</html>

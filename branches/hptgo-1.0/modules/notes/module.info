@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<module name="notes">
+	<description>
+		The notes module is integrated in all other modules. You can easily stick
+		notes to files, projects or contacts.
+	</description>
+	<version>
+		1.0
+	</version>
+	<releaseDate>
+	2004-04-05
+	</releaseDate>
+	<status>
+		Stable
+	</status>
+	<authors>
+		<author name="Merijn Schering" email="mschering@intermesh.nl" />
+	</authors>
+</module>
+	

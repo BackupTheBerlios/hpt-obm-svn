@@ -1,0 +1,27 @@
+body {
+	font: normal 14px "Microsoft Sans Serif",Tahoma,Arial,Verdana,sans-serif;
+	background-color: buttonface;
+	margin: 0px;
+}
+.ktml_button {
+	font: normal 11px "Microsoft Sans Serif",Tahoma,Arial,Verdana,sans-serif;
+	width: 80px;
+}
+.main {
+	height: 250px;
+	background-color: #ffffff;
+	padding: 10px 10px;
+	overflow: auto;
+	text-align: justify;
+}
+.footer {
+	width: 100%;
+	text-align: center;
+	margin: 10px auto;
+}
+.title {
+	font-weight: bold;
+}
+.content {
+	padding: 0px 20px;
+}

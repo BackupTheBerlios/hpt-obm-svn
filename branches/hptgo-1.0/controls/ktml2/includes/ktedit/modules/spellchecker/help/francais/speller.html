@@ -1,0 +1,57 @@
+<html>
+<head>
+<title>Vérification Orthographique</title>
+<link rel="stylesheet" type="text/css" href="../../../../styles/help.css"/>
+</head>
+<body>
+
+<div class="main">
+	<div class="title">
+	  <p>Vérification Orthographique</p>
+    </div>
+	<div class="content"><img src="../img/speller.gif" width="344" height="259" border="1"> <br>
+	  L'interface du Vérificateur Orthographique KTML3 permettra l'identification rapide des mots mal-orthographiés, la sélection d'une des suggestions de correction ou leur remplacement avec des expressions nouvelles, et l'ajout des mots dans le dictionnaire. On peut également ignorer une ou toutes les occurrences d'un mot ou de les changer à une ou à toutes d'un coup.<br>
+	  <p><strong>N'est pas dans le dictionnaire</strong><br>
+	    Ce champ de texte affichera le mot courant inconnu trouvé par le vérificateur orthographique. Le contenu de ce champ ne peut pas être modifié par les utilisateurs.</p>
+	  <p><strong>Remplacer Avec</strong><br>
+	    Ce champ de texte affichera les suggestions pour le mot courant. La valeur par défaut est le premier mot du dictionnaire qui est considéré le plus approprié par le vérificateur orthographique. Pour changer cette valeur, on doit naviguer parmi la liste de mots affichée par le champ                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       &quot;Suggestions&quot; et ensuite chiquer sur un mot.</p>
+	  <p><strong>Suggestions</strong><br>
+	    Cette liste affichera tous les mots considérés appropriés par le vérificateur
+	    orthographique (aspell ou pspell). On peut naviguer à travers la liste en
+	    utilisant la barre de défilement. Pour faire une sélection, on doit cliquer
+	    sur un mot. Si on double-clique sur un mot sélectionné, le vérificateur
+	    remplacera automatiquement le mot mal-orthographié du champ &quot;N'est
+	    pas dans le dictionnaire&quot; avec la sélection (c'est-à-dire il actionne
+	    comme la commande                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        &quot;Changer&quot;).</p>
+	  <p><strong>Langue</strong><br>
+	    On peut indiquer la langue qui sera utilisée par le vérificateur. La langue par défaut est la langue qui a été définie lorsqu'on a inséré l'élément KTML3 dans la page. On peut changer la langue dans laquelle on fait la vérification orthographique en la sélectionnant à partir du menu déroulant.</p>
+	  <p>Lorsqu'on a sélectionné une nouvelle langue, KTML3 va recharger la page
+	    courante dans le vérificateur orthographique. Cette opération pourrait durer
+	    en fonction de la vitesse de connexion puisque le vérificateur doit recharger
+	    le contenu de la page &agrave; partir du serveur et le sauvegarder dans un tableau
+	    temporaire.</p>
+	  <p>Une fois la sélection faite, le champ &quot;Suggestions&quot; est automatiquement mis à jour à l'aide d'un dictionnaire correspondant à la langue sélectionnée. Chaque fois que la langue est changée, le vérificateur vérifiera toute la page. Il ne sera pas possible d'utiliser une certaine langue pour une certaine section de la page, et une autre langue pour une autre section.</p>
+	  <p><strong>Ignorer</strong><br>
+	   La commande &quot;Ignorer&quot; ignorera le mot courant inconnu et continuera
+	   la vérification orthographique. Si une autre occurrence de ce mot sera trouvé plus
+   tard dans la page, le vérificateur
+   la soulignera et affichera des suggestions.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       </p>
+	  <p><strong>Ignorer
+	      Tout</strong><br>
+        Cette commande ignora toutes les occurrences du mot courant inconnu dans le document entier et continuera avec la vérification orthographique.</p>
+	  <p><strong>Ajouter au Dico</strong><br>
+        Cette commande permettra l'ajout dans le dictionnaire des mots inconnus qui sont considérés corrects par l'utilisateur. Cette situation est souvent rencontrée dans le cas des noms (produits, compagnies, logiciels, etc.). Après l'ajout du mot, le vérificateur passera au mot inconnu suivant.</p>
+	  <p><strong>Changer</strong><br>
+    Cette commande remplacera le mot inconnu avec la suggestion affichée dans
+    le champ  &quot;Remplacer Avec                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      &quot; et
+    continuera avec la vérification orthographique.</p>
+	  <p><strong>Changer Tout</strong><br>
+         Cette commande changera toutes les occurrences du mot courant inconnu dans le document entier et continuera avec la vérification orthographique.</p>
+  </div>
+</div>
+<div class="footer">
+	<input type="button" class="ktml_button" value="Fermer" onclick="window.close()"/>
+</div>
+
+</body>
+</html>
