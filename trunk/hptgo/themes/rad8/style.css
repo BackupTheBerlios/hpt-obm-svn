@@ -279,6 +279,13 @@ a.Tab:hover {
 	background-color: #aaa;
         border-bottom: 0px solid #aaa;
 }
+.TabSpan {	
+	background-color: #bbb;
+	border-right: 2px solid #ddd;
+	border-left: 0px solid #bbb;
+	border-bottom:2px solid #ddd;
+	text-align: center;
+}
 
 .ActiveTabVert{
 	background-color: #f7f7f7;
@@ -313,6 +320,13 @@ a.TabVert:link, a.TabVert:visited, a.TabVert:active {
 .TabBackgroundVert {
 	background-color: #fff;
 	border-bottom: 0px solid #fff;
+}
+.TabVertSpan {	
+	background-color: #bbb;
+	border-right: 2px solid #ddd;
+	border-left: 0px solid #ddd;
+	border-bottom:2px solid #ddd;
+	padding: 2px;
 }
 
 

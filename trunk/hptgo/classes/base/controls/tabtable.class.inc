@@ -235,10 +235,10 @@ class tabtable
       }
 	if ($this->tab_direction == 'vertical')
 	{
-	  echo '<tr height="100%"><td class="TabVert" width="100%" nowrap>&nbsp;</td></tr>';
+	  echo '<tr height="100%"><td class="TabVertSpan" width="100%" nowrap>&nbsp;</td></tr>';
 	}else
 	{
-	  echo '<td class="Tab" width="100%" nowrap>&nbsp;</td>';
+	  echo '<td class="TabSpan" width="100%" nowrap>&nbsp;</td>';
 	}
       if ($this->tab_direction == 'horizontal')
       {
