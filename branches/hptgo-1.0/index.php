@@ -87,7 +87,7 @@ if ( $_SERVER['REQUEST_METHOD'] == "POST" || (isset($_COOKIE['GO_UN'])
   //check if both fields were filled
   if (!$username || !$password)
   {
-    $feedback = "<p class=\"Error\">".$login_missing_field."</p>";
+    $feedback .= "<p class=\"Error\">".$login_missing_field."</p>";
   } else {
     SetCookie("GO_AUTH_SOURCE_KEY",
 	$auth_source_key, time()+3600*24*30,"/",'',0);
@@ -138,11 +138,11 @@ if ( $_SERVER['REQUEST_METHOD'] == "POST" || (isset($_COOKIE['GO_UN'])
 	}
       }else
       {
-	$feedback = "<p class=\"Error\">".$login_registration_fail."</p>";
+	$feedback .= "<p class=\"Error\">".$login_registration_fail."</p>";
       }
     }else
     {
-      $feedback = "<p class=\"Error\">".$login_bad_login."</p>";
+      $feedback .= "<p class=\"Error\">".$login_bad_login."</p>";
     }
   }
 }

@@ -5,6 +5,12 @@
    Free Software Foundation; either version 2 of the License, or (at your
    option) any later version.
  */
+$browser = detect_browser();
+if ($browser['name'] == 'MSIE' &&
+    ($browser['version'][0] < 5 ||
+     ($browser['version'][0] == 5 &&
+      $browser['version'][2] < 5)))
+  $feedback .= '<p class="Error">'.$login_old_version.'</p>';
 ?>
 <html>
 <head>

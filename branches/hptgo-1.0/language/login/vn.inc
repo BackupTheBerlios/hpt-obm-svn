@@ -12,4 +12,5 @@ $login_missing_field = "Bạn chưa điền tài khoản hoặc mật khẩu.";
 $login_bad_login = "Nhầm tài khoản hoặc mật khẩu";
 $login_remind = "Giữ trạng thái đăng nhập cho đến khi nhấn vào thoát.";
 $login_language = 'Ngôn ngữ';
+$login_old_version = 'Bạn đang sử dụng một trình duyệt cũ.<br/>Vài tính năng của OBM có thể sẽ không hoạt động với trình duyệt này.<br/>Bạn nên dùng trình duyệt mới hơn.';
 ?>
