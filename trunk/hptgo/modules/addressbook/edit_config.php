@@ -40,7 +40,7 @@ switch ($task) {
 				goURL("index.php?post_action=browse&addressbook_id=".$_REQUEST['addressbook_id']);
 			break;
 			case $constCompaniesPage:
-				goURL("index.php?post_action=companies&addressbook_id=".$_REQUEST['addressbook_id']);
+				goURL("index.php?post_action=companies&addressbook_id=".$_REQUEST['addressbook_id']."&first=".$_REQUEST['first']."&max_rows=".$_REQUEST['max_rows']."&treeview=".$_REQUEST['treeview']);
 			break;
 			case $constMembersPage:
 				goURL("index.php?post_action=members&addressbook_id=".$_REQUEST['addressbook_id']);
@@ -84,6 +84,9 @@ if ($db->num_rows() == 0)
 echo '<table border="0" cellspacing="0" cellpadding="1" width="100%">';
 echo '<input type="hidden" name="id" value="0" />';
 echo '<input type="hidden" name="addressbook_id" value="'.$_REQUEST['addressbook_id'].'" />';
+echo '<input type="hidden" name="treeview" value="'.$_REQUEST['treeview'].'" />';
+echo '<input type="hidden" name="first" value="'.$_REQUEST['first'].'" />';
+echo '<input type="hidden" name="max_rows" value="'.$_REQUEST['max_rows'].'" />';
 echo '<tr><td>';
 echo '<table border="0" cellpadding="2" cellspacing="0">';
 echo '<tr><td>&nbsp;</td></tr>';

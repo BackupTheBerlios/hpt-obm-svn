@@ -167,7 +167,7 @@ switch($post_action)
 		}else{
 			echo '"small" ';
 		} ?> 
-		href="<?php echo $_SERVER['PHP_SELF']; ?>?post_action=categories&addressbook_id=<?php echo $addressbook_id.(isset($active_tab)?"&active_tab=".$active_tab:""); ?>&return_to=<?php echo $return_to ?>"><img src="<?php echo $GO_THEME->images['add_category']; ?>" border="0" height="32" width="32" /><br /><?php echo $strConfig; ?></a>
+		href="<?php echo $_SERVER['PHP_SELF']; ?>?post_action=categories&addressbook_id=<?php echo $addressbook_id.(isset($active_tab)?"&active_tab=".$active_tab:""); ?>&first=<?php echo $_REQUEST['first'] ?>&max_rows=<?php echo $_REQUEST['max_rows']?>&treeview=<?php echo isset($_REQUEST['treeview'])?$_REQUEST['treeview']:0 ?>"><img src="<?php echo $GO_THEME->images['add_category']; ?>" border="0" height="32" width="32" /><br /><?php echo $strConfig; ?></a>
 	</td>
 	
 	<?php
@@ -220,11 +220,8 @@ switch($post_action)
 	break;
 	
 	case 'categories':
-//		echo '<form name="projects_form" method="get" action="'.$_SERVER['PHP_SELF'].'">';
 		echo '<input type="hidden" name="task" />';
-//		require("categories.php");
 		require("config.php");
-//		echo '</form>';
 	break;
 
 	case 'companies':
