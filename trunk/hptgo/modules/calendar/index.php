@@ -18,7 +18,6 @@ require($GO_LANGUAGE->get_language_file('calendar'));
 $max_columns = 7;
 $link_back = isset($_REQUEST['link_back']) ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
 $merged_view = isset($_REQUEST['merged_view']) ? $_REQUEST['merged_view'] : true;
-
 //are we in print view?
 $print = isset($_REQUEST['print']) ? true : false;	
 
@@ -54,6 +53,7 @@ $current_date = date(DB_DATE_FORMAT, $local_time);
 
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 $return_to = isset($_POST['return_to']) ? $_POST['return_to'] : '';
+$show_days = isset($_REQUEST['show_days']) ? $_REQUEST['show_days'] : '';
 
 if(isset($_REQUEST['calendar_view_id']))
 {
@@ -201,14 +201,58 @@ if (!$print) {
     document.forms[0].submit();
   }
   </script>
-
+  	
     <table border="0" cellpadding="0" cellspacing="0">
     <tr>
     <td class="ModuleIcons"><a href="event.php" class="small"><img src="<?php echo $GO_THEME->images['cal_compose']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_new_app; ?></a></td>
-    <td class="ModuleIcons"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show_days=1&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>" class="small"><img src="<?php echo $GO_THEME->images['cal_day']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_day_view; ?></a></td>
-    <td class="ModuleIcons"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show_days=7&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>" class="small"><img src="<?php echo $GO_THEME->images['cal_week']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_week_view; ?></a></td>
-    <td class="ModuleIcons"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?show_days=35&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>" class="small"><img src="<?php echo $GO_THEME->images['cal_month']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_month_view; ?></a></td>
-    <td class="ModuleIcons"><a href="<?php echo $_SERVER['PHP_SELF']; ?>?calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>&task=list_view" class="small"><img src="<?php echo $GO_THEME->images['cal_list']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_list_view; ?></a></td>
+    <td class="ModuleIcons">
+		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?show_days=1&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>" 
+		class=
+			<?php if ((!isset($found) && ($show_days == 1)) ||
+					  (($cal_settings['show_days'] == 1) && (strpos($link_back, "?") === false))){
+				echo '"bold_small" ';
+				$found=true;
+			}else{
+				echo '"small" ';
+			} ?>
+		>
+		<img src="<?php echo $GO_THEME->images['cal_day']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_day_view; ?></a></td>
+		
+    <td class="ModuleIcons">
+		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?show_days=7&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>" 
+		class=
+			<?php if ((!isset($found) && ($show_days == 7))||
+					  (($cal_settings['show_days'] == 7) && (strpos($link_back, "?") === false))){
+				echo '"bold_small" ';
+				$found=true;
+			}else{
+				echo '"small" ';
+			} ?>
+		>
+		<img src="<?php echo $GO_THEME->images['cal_week']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_week_view; ?></a></td>
+    <td class="ModuleIcons">
+		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?show_days=35&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>" 
+		class=
+			<?php if ((!isset($found) && ($show_days == 35))||
+					  (($cal_settings['show_days'] == 35) && (strpos($link_back, "?") === false))){
+				echo '"bold_small" ';
+				$found=true;
+			}else{
+				echo '"small" ';
+			} ?>			
+		>
+		<img src="<?php echo $GO_THEME->images['cal_month']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_month_view; ?></a></td>
+    <td class="ModuleIcons">
+		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>&task=list_view" 
+		class=
+			<?php if (!isset($found) && ($task == 'list_view') && ($show_days == '')){
+				echo '"bold_small" ';
+				$found=true;
+			}else{
+				echo '"small" ';
+			} ?>
+		>
+		<img src="<?php echo $GO_THEME->images['cal_list']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_list_view; ?></a></td>
     <td class="ModuleIcons"><a href="views.php?return_to=<?php echo $_SERVER['REQUEST_URI']; ?>" class="small"><img src="<?php echo $GO_THEME->images['cal_view']; ?>" border="0" width="32" height="32" /><br /><?php echo $cal_views; ?></a></td>
     <td class="ModuleIcons"><a href="calendars.php?return_to=<?php echo $_SERVER['REQUEST_URI']; ?>" class="small"><img src="<?php echo $GO_THEME->images['cal_calendar']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_calendars; ?></a></td>
     <td class="ModuleIcons"><a href="<?php echo $_SERVER['REQUEST_URI']; ?>" class="small"><img src="<?php echo $GO_THEME->images['cal_refresh']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_refresh; ?></a></td>
@@ -224,7 +268,6 @@ if (!$print) {
     <input type="hidden" name="link_back" value="<?php echo $link_back; ?>" />
     <input type="hidden" name="calendar_id" value="<?php echo $calendar_id; ?>" />
     <input type="hidden" name="view_id" value="<?php echo $view_id; ?>" />
-
     <table width="1" border="0" cellpadding="0" cellspacing="0" >
       <tr>
         <td>
