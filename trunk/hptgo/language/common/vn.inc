@@ -108,7 +108,7 @@ $menu_support = "Hỗ trợ";
 $menu_projects = "Các dự án";
 $menu_sysinfo = "Xem thông tin hệ thống";
 $menu_admin = 'Cấu hình hệ thống';
-$menu_modules = 'Thêm/bớt chức năng';
+$menu_modules = 'Quản lý chức năng';
 $menu_manual = 'Sổ tay';
 
 //class validate
