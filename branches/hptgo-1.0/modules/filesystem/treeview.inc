@@ -270,10 +270,14 @@ $is_expanded = in_array('//workspace',$_SESSION['expanded']);
 $has_children = false;
 $from_root =  ($fs->has_read_permission2($GO_SECURITY->user_id,$folder['path']));
 $my_folders = $fs->get_visible_folders($GO_SECURITY->user_id,$folder['path']);
-if (count($my_folders) > 0)
+if (count($my_folders) > 0) {
   $has_children = true;
-echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//workspace'.$arguments.'">'.($has_children ? ($is_expanded ? $image['mnode'] : $image['pnode']) : $image['emptynode']).'</a>';
-echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.($from_root ? $GO_CONFIG->file_storage_path.'common' : urlencode($path)).$arguments.'">'.$image['group'].$fbWorkspace.'</a><br />';
+  echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//workspace'.$arguments.'">'.($has_children ? ($is_expanded ? $image['mnode'] : $image['pnode']) : $image['emptynode']).'</a>';
+  echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.($from_root ? $GO_CONFIG->file_storage_path.'common' : urlencode($path)).$arguments.'">'.$image['group'].$fbWorkspace.'</a><br />';
+} else {
+  echo ($has_children ? ($is_expanded ? $image['mnode'] : $image['pnode']) : $image['emptynode']);
+  echo $image['group'].$fbWorkspace.'<br />';
+}
 
 if ($is_expanded && $has_children) {
   /*
@@ -369,8 +373,14 @@ foreach ( $fs->get_my_shares() as $sharer )
 $counter = $count = count($users_array);
 
 $is_expanded = in_array('//sharefolder',$_SESSION['expanded']);
-echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//sharefolder'.$arguments.'">'.($count > 0 ? ($is_expanded ? $image['mnode'] : $image['pnode']) : $image['emptynode']).'</a>';
-echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//sharefolder'.$arguments.'">'.$image['group'].$fbShares.'</a><br />';
+if ($count > 0)
+{
+  echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//sharefolder'.$arguments.'">'.($count > 0 ? ($is_expanded ? $image['mnode'] : $image['pnode']) : $image['emptynode']).'</a>';
+  echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//sharefolder'.$arguments.'">'.$image['group'].$fbShares.'</a><br />';
+} else {
+  echo ($count > 0 ? ($is_expanded ? $image['mnode'] : $image['pnode']) : $image['emptynode']);
+  echo $image['group'].$fbShares.'<br />';
+}
 if ($count > 0)
 {
 	//echo '<table border="0" cellpadding="0" cellspacing="0">';
@@ -407,12 +417,14 @@ if ($count > 0)
 }
 
 $is_expanded = in_array('//groupfolder',$_SESSION['expanded']);
-echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//groupfolder'.$arguments.'">'.(count($group_folders) > 0 ? ($is_expanded ? $image['mlastnode'] : $image['plastnode']) : $image['emptylastnode']).'</a>';
-echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//groupfolder'.$arguments.'">'.$image['group'].$fbGroupFolders.'</a><br />';
-
 if (count($group_folders) > 0) {
+  echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//groupfolder'.$arguments.'">'.(count($group_folders) > 0 ? ($is_expanded ? $image['mlastnode'] : $image['plastnode']) : $image['emptylastnode']).'</a>';
+  echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//groupfolder'.$arguments.'">'.$image['group'].$fbGroupFolders.'</a><br />';
+
   if ($is_expanded)
     print_filesystem($group_folders, $image['blank'], '');
+} else {
+  echo (count($group_folders) > 0 ? ($is_expanded ? $image['mlastnode'] : $image['plastnode']) : $image['emptylastnode']);
+  echo $image['group'].$fbGroupFolders.'<br />';
 }
-
 ?>
