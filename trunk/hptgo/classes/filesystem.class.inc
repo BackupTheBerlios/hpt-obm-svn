@@ -1336,9 +1336,9 @@ class filesystem extends db
     return is_dir($this->root.$dir);
   }
 
-  function chroot_mkdir($dir,$mode)
+  function chroot_mkdir($dir,$mode = -1)
   {
-    return mkdir($this->root.$dir,$mode);
+    return $mode != -1 ? mkdir($this->root.$dir,$mode) : mkdir($this->root.$dir);
   }
 
   function chroot_rmdir($dir)
