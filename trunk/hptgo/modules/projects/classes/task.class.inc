@@ -238,7 +238,7 @@ class project_task extends db {
 
     $this->is_owner = $GO_SECURITY->user_id == $this->person_id;
     $this->is_manager = $GO_SECURITY->user_id == $responsible_user_id;
-    $this->is_monitor = in_array($GO_SECURITY->user_id, array_keys($monitors));
+    $this->is_monitor = isset($monitors) && is_array($monitors) ? in_array($GO_SECURITY->user_id, array_keys($monitors)) : false;
     $this->is_passed = $this->status <= TASK_DONE;
 
     $this->doc_path = $GO_CONFIG->file_storage_path . 'projects/' .
@@ -249,7 +249,7 @@ class project_task extends db {
   }
 
   function get_pid_tips() {
-    global $pm_status_begin, $tasks, $link_back, $return_to;
+    global $pm_status_begin, $tasks, $link_back, $return_to,$GO_SECURITY;
 
     if ($this->pids == '0') {
       $pids = '&nbsp;';
