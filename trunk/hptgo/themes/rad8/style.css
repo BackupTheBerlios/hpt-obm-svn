@@ -294,7 +294,8 @@ a.TabVert:link, a.TabVert:visited, a.TabVert:active {
 #cal td {
 	vertical-align: top;
 	border-collapse: collapse;
-	border: 2px groove #666;
+	border-left: 2px groove #eee;
+	border-right: 2px groove #eee;
 	margin: 0px;
 	padding: 0px;
 	vertical-align: top;
@@ -326,8 +327,22 @@ a.TabVert:link, a.TabVert:visited, a.TabVert:active {
 	font-family: tahoma, arial, helvetica, sans-serif;
 	font-size: 10px;
 }
+
+td.cal_event3{
+	border: 0px;
+	padding: 2px;
+	margin: 0px;
+	vertical-align: top;
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 10px;
+}
+
 #cal_all_day_events{
 	background-color: #FFFFCC;
+}
+
+td.CalEvent{
+	border: 10px solid;
 }
 
 .cal_title{
@@ -355,6 +370,7 @@ body {
 	font-family: tahoma, arial, helvetica, sans-serif;
 	font-size: 12px;
 	color: #000000;
+	cursor:url("images/mouse.ani");
 }
 
 table {
