@@ -54,7 +54,7 @@ require($GO_MODULES->path.'classes/calendar.class.inc');
 $cal = new calendar();
 
 $task = isset($_POST['task']) ? $_POST['task'] : '';
-$return_to = isset($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
+$return_to = isset($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $GO_MODULES->root_path;
 $link_back = isset($_REQUEST['link_back']) ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
 
 $settings = $cal->get_settings($GO_SECURITY->user_id);
