@@ -150,8 +150,12 @@ switch($task)
 //check permissions
 if ($company_id > 0 && $company = $ab->get_company($company_id))
 {
+	$myab = new addressbook();
+	$myab->query("SELECT * FROM ab_addressbooks WHERE id='".$ab->f('addressbook_id')."'");
+	$myab->next_record();
+
 	$tabtable= new tabtable('company_table', $company['name'], '100%', '400',
-						'120', '', true, 'left', 'top', 'company_form', 'vertical');
+						'120', '', true, 'left', 'top', 'company_form', 'vertical',$myab->f('name'));
 
 	
 	$tabtable->add_tab('profile', $ab_company_properties);

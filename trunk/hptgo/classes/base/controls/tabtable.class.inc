@@ -35,10 +35,11 @@ class tabtable
   var $css_tab_background_vert = 'TabBackgroundVert';
 
   //constructor sets basic propertiesz
-  function tabtable($id, $title='', $width='', $height='', $tabwidth='120', $arguments='', $submit_form=false, $align='left', $valign='top', $form_name='forms[0]', $tab_direction='horizontal')
+  function tabtable($id, $title='', $width='', $height='', $tabwidth='120', $arguments='', $submit_form=false, $align='left', $valign='top', $form_name='forms[0]', $tab_direction='horizontal', $right_title = '')
   {
     $this->id = $id;
     $this->title = $title;
+    $this->right_title = $right_title;
     $this->width = $width;
     $this->height = $height;
     $this->tabwidth = $tabwidth;
@@ -115,7 +116,7 @@ class tabtable
     echo '<table border="0" cellpadding="0" cellspacing="0" id="'.$this->css_table.'" width="'.$this->width.'">';
     if ($this->title != '')
     {
-      echo '<tr><th colspan="99">'.$this->title.'</th></tr>';
+      echo '<tr><th colspan="99">'.$this->title.'</th>'.($this->right_title != '' ? '<th nowrap>'.$this->right_title.'</th>' : '').'</tr>';
     }
 
     $remaining_width= $this->width - ($tab_count * $this->tabwidth);
