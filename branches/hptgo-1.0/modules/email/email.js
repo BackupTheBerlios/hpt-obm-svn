@@ -37,27 +37,35 @@ function confirm_empty_mailbox(message_id)
 	}
 }
 
+item_click_data = {};
 function item_click(check_box)
 {
 	var item = get_object(check_box.value);
+	//var id = item.toString();
+	var id = item.id;
+	//alert(id);
+
 	if (check_box.checked)
 	{
-		if (item.className == 'Table1' || item.className == 'Table5')
+		item_click_data["Unchecked."+id] = item.className;
+		if (item_click_data["Checked."+id] != undefined)
 		{
+			item.className = item_click_data["Checked."+id];
+			delete item_click_data["Checked"+id];
+		}
+		else
 			item.className = 'Table2';
-		}else
-		{
-			item.className = 'Table3';
-		}
-	}else
+	}
+	else
 	{
-		if (item.className == 'Table2')
+		item_click_data["Checked."+id] = item.className;
+		if (item_click_data["Unchecked."+id] != undefined)
 		{
-			item.className = 'Table1';
-		}else
-		{
-			item.className = 'Table4';
+			item.className = item_click_data["Unchecked."+id];
+			delete item_click_data["Unchecked"+id];
 		}
+		else
+			item.className = 'Table1';
 	}
 }
 
