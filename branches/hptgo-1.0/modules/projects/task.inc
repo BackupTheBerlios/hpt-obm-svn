@@ -144,12 +144,6 @@ else {
   echo "<td class=\"GanttDate\" nowrap>$space<b>^<br>$space$pm_end_date ($date)</b></td></tr>";
 }
 
-if (!isset($task) || $task == '' || $task == 'show_task_list')
-  $return_to = '/modules/projects/';
-else
-if ($task != 'show_task_doc')
-  $return_to = $_SERVER['PHP_SELF'] . "?project_id=$project_id&task=show_task_list";
-
 echo "</table><table border=\"0\" cellspacing=\"0\" cellpadding=\"4\">";
 echo "<tr><td colspan=\"2\">&nbsp;</td></tr><tr><td>";
 
@@ -179,8 +173,12 @@ if ($task != 'show_task_gantt') {
 $_SESSION['GO_FILESYSTEM_PATH'] = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['username'];
 if ($task != 'show_task_gantt')
 {
-  if (!$is_new_project)
-    $button = new button($cmdClose, "javascript:document.location='".$return_to."';");
+  if (!$is_new_project) {
+    if ($task !=  'show_doc_folder')
+      $button = new button($cmdClose, "javascript:document.location='".$return_to."';");
+    else
+      $button = new button($cmdClose, "javascript:change_tab(".TASK_LIST_TAB.");");
+  }
 }
 else {
   $button = new button($cmdClose, "javascript:change_tab(".TASK_LIST_TAB.")");
