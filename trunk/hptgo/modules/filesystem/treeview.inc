@@ -271,7 +271,7 @@ $is_expanded = in_array('//workspace',$_SESSION['expanded']);
 $has_children = false;
 $from_root =  ($fs->has_read_permission2($GO_SECURITY->user_id,$folder['path']));
 $my_folders = $fs->get_visible_folders($GO_SECURITY->user_id,$folder['path']);
-if (count($my_folders) > 0) {
+if (count($my_folders) > 0 || $GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
   $has_children = true;
   echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//workspace'.$arguments.'">'.($has_children ? ($is_expanded ? $image['mnode'] : $image['pnode']) : $image['emptynode']).'</a>';
   echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.($from_root ? $GO_CONFIG->file_storage_path.'common' : urlencode($path)).$arguments.'">'.$image['group'].$fbWorkspace.'</a><br />';

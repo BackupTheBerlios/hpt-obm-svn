@@ -43,7 +43,7 @@ $com_string = $user_modules_properties[0];
 $show_text = isset($user_modules_properties[1]) ? $user_modules_properties[1] == '1' : true;
 
 if ($com_string == '') {
-	$res = array_keys($module_map);
+	$res = isset($module_map) && is_array($module_map) ? array_keys($module_map) : array();
 	$com = $res;
 } else {
 	$com = explode(' ',$com_string);
@@ -75,7 +75,7 @@ $spliter = '<tr><td colspan="100" height="1"><img src="'.$GO_THEME->images['cccc
 echo '<tr class="TableHead2" height="20">';
 echo '<td width="340" colspan="99" nowrap>'.$ab_category_name.'</td></tr>';
 
-require "../../lib/tkdlib.php";
+require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 $mi = new move_item();
 
 $value = 1;

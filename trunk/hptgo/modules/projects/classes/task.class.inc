@@ -6,6 +6,7 @@ define(TASK_BYPASS,  0);
 
 $today = 0;
 $max_task_id = 0;
+$last_task_id = 0;
 $is_new_project = true;
 
 function update_all_tasks($projects, $project_id) {
@@ -142,18 +143,23 @@ function load_project_task($projects, $project_id) {
   if (!$projects->next_record() && $template_id > 0) {
     $projects->query("INSERT INTO task SELECT $project_id, task_template_$template_id.* ".
                      "FROM task_template_$template_id");
-    $projects->query("SELECT * FROM task WHERE task_project_id=$project_id  ORDER BY task_id");
+    $projects->query("SELECT * FROM task WHERE task_project_id=$project_id  ORDER BY task_order");
     $projects->next_record();
   }
 
   // Load all tasks
+  $last_task = 0;
   while ($template_id >= 0) {
-    global $max_task_id, $is_new_project;
+    global $max_task_id, $is_new_project, $last_task_id;
 
     $t = new project_task($projects, $pstate);
     $tasks[$t->id] = $t;
     $project_task_list[$t->id] = &$tasks[$t->id];
     if ($t->id > $max_task_id) $max_task_id = $t->id;
+    if ($t->order > $last_task) {
+      $last_task = $t->order;
+      $last_task_id = $t->id;
+    }
     if ($t->days != 0) $is_new_project = false;
     if (!$projects->next_record()) break;
   }
@@ -221,33 +227,23 @@ class project_task extends db {
 
     $this->is_owner = $GO_SECURITY->user_id == $this->person_id;
     $this->is_manager = $GO_SECURITY->user_id == $responsible_user_id;
-	$this->is_monitor = in_array($GO_SECURITY->user_id, array_keys($monitors));
+    $this->is_monitor = in_array($GO_SECURITY->user_id, array_keys($monitors));
     $this->is_passed = $this->status <= TASK_DONE;
 
     $this->doc_path = $GO_CONFIG->file_storage_path . 'projects/' .
       $this->project_id . '/' . $this->id;
-    $this->doc_url = $_SERVER['PHP_SELF'] . "?task=show_task_doc".
-             "&project_id=".$this->project_id.
-             "&task_id=".$this->id."&task_status=show_doc";
+    $this->doc_url = $_SERVER['PHP_SELF'].'?task=show_task_doc'.
+             '&project_id='.$this->project_id.
+             '&task_id='.$this->id.'&task_status=show_doc';
   }
 
-  function print_info($member_ids, $member_names, $member_list) {
-    global $GO_THEME, $pm_task_status_values, $pm_status_begin,
-           $responsible_user_id, $is_new_project, $tasks;
+  function get_pid_tips() {
+    global $pm_status_begin, $tasks;
 
-    if ($this->level == -1)
-      echo '<tr>';
-    else
-      echo '<tr class="ProjectTask0">';
-
-    echo '<td align="center">'.$this->order.'</td>';
-    $this->print_name();
-    $this->print_members($member_ids, $member_names, $member_list);
     if ($this->pids == '0') {
       $pids = '&nbsp;';
       $tips = '';
-    }
-    else {
+    } else {
       $nolist = array();
       $tips = '<span id="task_tips_'.$this->order.'" '.
                 'style="position: absolute; visibility:hidden; display: none;">'.
@@ -263,7 +259,18 @@ class project_task extends db {
           $tn = $tasks[$p]->name;
         }
         $tips .= '<tr><td align="right">'.$to.'.</td><td>&nbsp;'.$tn.'</td></tr>';
-        $nolist[] = $to;
+        if ($p == 0 || $this->project_status == STATUS_DROP ||
+            (!$this->is_manager && !$this->is_monitor &&
+              $tasks[$p]->person_id != $GO_SECURITY->user_id))
+          $nolist[] = $to;
+        else {
+          $nolist[] = '<a href="'.$_SERVER['PHP_SELF'].
+                        '?task=show_task_status'.
+                        '&project_id='.$this->project_id.
+                        '&task_id='.$tasks[$p]->id.
+                        '&task_status="'.$tasks[$p]->status.
+                        ' class="normal">'.$to.'</a>';
+        }
       }
       $tips .= '</table></td></tr></table></span>';
       $pids = '<span id="task_pre_'.$this->order.'" style="cursor: default;"'.
@@ -272,6 +279,22 @@ class project_task extends db {
               implode(",", $nolist).
               '</span>';
     }
+    return array($pids, $tips);
+  }
+
+  function print_info($member_ids, $member_names, $member_list) {
+    global $GO_THEME, $pm_task_status_values, $pm_status_begin,
+           $responsible_user_id, $is_new_project, $tasks;
+
+    if ($this->level == -1)
+      echo '<tr>';
+    else
+      echo '<tr class="ProjectTask0">';
+
+    echo '<td align="center">'.$this->order.'</td>';
+    $this->print_name();
+    $this->print_members($member_ids, $member_names, $member_list);
+    list($pids, $tips) = $this->get_pid_tips();
     echo '<td>'.$tips.$pids.'</td>';
     if ($this->is_manager && $is_new_project && ($this->status > TASK_DONE))
     {
@@ -313,47 +336,48 @@ class project_task extends db {
   function print_name() {
     if (($this->is_manager || $this->is_monitor || $this->is_owner) &&
         $this->project_status != STATUS_DROP) {
-      $url = $_SERVER['PHP_SELF'] . "?task=show_task_status".
-             "&project_id=".$this->project_id.
-             "&task_id=".$this->id.
-             "&task_status=".$this->status;
-      echo "<td><b><a href=\"$url\" class=\"normal\">".$this->name."</a></b></td>";
+      $url = $_SERVER['PHP_SELF'] . '?task=show_task_status'.
+             '&project_id='.$this->project_id.
+             '&task_id='.$this->id.
+             '&task_status='.$this->status;
+      echo '<td><b><a href="'.$url.'" class="normal">'.$this->name.'</a></b></td>';
     }
-    else echo "<td>".$this->name."</td>";
+    else echo '<td>'.$this->name.'</td>';
   }
 
   function print_members($member_ids, $member_names, $member_list) {
-    echo "<td>";
+    echo '<td>';
     if (!$this->is_manager || $this->is_passed || $this->project_status == STATUS_DROP)
       echo $member_list[$this->person_id];
     else {
       $dropbox = new dropbox();
       $dropbox->add_arrays($member_ids, $member_names);
-      $dropbox->print_dropbox("task_".$this->id, $this->person_id);
+      $dropbox->print_dropbox('task_'.$this->id, $this->person_id);
     }
-    echo "</td>";
+    echo '</td>';
   }
 
   function print_status($member_list) {
     global $GO_SECURITY, $GO_THEME, $monitors,
            $pm_task_status_values, $pm_task_comments, $pm_task_new_comments;
 
-    echo "<tr>";
-    echo "<td align=\"center\">".$this->id."</td>";
-    echo "<td>".$this->name."</td>";
-    echo "<td>".$member_list[$this->person_id]."</td>";
-    echo "<td>".$this->pids."</td>";
+    echo '<tr>';
+    echo '<td align="center">'.$this->id.'</td>';
+    echo '<td>'.$this->name.'</td>';
+    echo '<td>'.$member_list[$this->person_id].'</td>';
+    list($pids, $tips) = $this->get_pid_tips();
+    echo '<td>'.$tips.$pids.'</td>';
 
     if ($this->is_manager && $this->status != TASK_BYPASS && !$this->approved)
-      echo "<td><input class=\"textbox\" style=\"width: 30px;\" type=\"text\" name=\"task_time\" value=\"".$this->days."\" align=\"right\"></td>";
+      echo '<td><input class="textbox" style="width: 30px;" type="text" name="task_time" value="'.$this->days.'" align="right"></td>';
     else {
       $this->get_elapsed();
       $progress = $this->elapsed."/".$this->days;
       if ($this->elapsed > $this->days)
-        $progress = "<font color=\"red\"><b>".$progress."</b></font>";
-      echo "<td>".$progress."</td>";
+        $progress = '<font color="red"><b>'.$progress.'</b></font>';
+      echo '<td>'.$progress.'</td>';
     }
-    echo "<td>";
+    echo '<td>';
 
     if (($this->is_manager && ($this->status == TASK_BYPASS || !$this->approved)) ||
          $this->status == TASK_ONGOING || ($this->status == TASK_DONE && !$this->approved)) {
@@ -397,34 +421,34 @@ class project_task extends db {
         $dropbox->add_value(TASK_ONGOING, $pm_task_status_values[TASK_ONGOING]);
         $dropbox->add_value(TASK_DONE, $pm_task_status_values[TASK_DONE]);
       }
-      $dropbox->print_dropbox("task_status", $this->status);
+      $dropbox->print_dropbox('task_status', $this->status);
       echo '<input type="hidden" name="saved_task_status" value="'.$this->status.'"/>';
     }
     else {
       echo $pm_task_status_values[$this->status];
-      echo "<input type=\"hidden\" name=\"task_status\" value=\"".$this->status."\">";
+      echo '<input type="hidden" name="task_status" value="'.$this->status.'">';
     }
-    echo "</td>";
+    echo '</td>';
 
     if ($this->is_manager && ($this->status == TASK_DONE || ($this->status == TASK_BYPASS && $this->pids == 0))) {
-      $chk = $this->approved ? "checked" : "";
-      echo "<td align=\"center\"><input type=\"checkbox\" name=\"task_approved\" ".
-           "$chk onclick='javascript:_set_approve()'></td>";
+      $chk = $this->approved ? 'checked' : '';
+      echo '<td align="center"><input type="checkbox" name="task_approved" '.$chk.
+           ' onclick="javascript:_set_approve()"></td>';
     }
     else
-      echo "<td align=\"center\">".($this->approved ? "<img border=\"0\" src=\"".$GO_THEME->images['checked']."\"/>" : "&nbsp;")."</td>";
+      echo '<td align="center">'.($this->approved ? '<img border="0" src="'.$GO_THEME->images['checked'].'"/>' : '&nbsp;').'</td>';
     if ($this->level >= 0)
       echo '<td align="center"><a href="'.$this->doc_url.'">'.
            '<img border="0" src="'.$GO_THEME->images['doc_red'].'"/></a></td>';
     else
       echo '<td align="center"><a href="'.$this->doc_url.'">'.
            '<img border="0" src="'.$GO_THEME->images['doc'].'"/></a></td>';
-    echo "</tr>";
+    echo '</tr>';
     $this->show_datetimes();
-    echo "<tr><td>&nbsp;</td></tr>";
-    echo "</table>";
-    echo "<table border=\"0\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\">";
-    echo "<tr><td class=\"TableHead2\" nowrap>$pm_task_comments</td></tr>";
+    echo '<tr><td>&nbsp;</td></tr>';
+    echo '</table>';
+    echo '<table border="0" width="100%" cellpadding="0" cellspacing="0">';
+    echo '<tr><td class="TableHead2" nowrap>'.$pm_task_comments.'</td></tr>';
 
     $this->print_formated_comments();
 
@@ -432,40 +456,48 @@ class project_task extends db {
       $user = $monitors[$GO_SECURITY->user_id];
     else
       $user = $member_list[$GO_SECURITY->user_id];
-    echo "<tr><td><input type=\"hidden\" name=\"task_id\" value=\"".$this->id."\">".
-         "<input type=\"hidden\" name=\"project_id\" value=\"".$this->project_id."\">".
-         "<input type=\"hidden\" name=\"task_cuser\" value=\"$user\"></td></tr>";
+    echo '<tr><td><input type="hidden" name="task_id" value="'.$this->id.'">'.
+         '<input type="hidden" name="project_id" value="'.$this->project_id.'">'.
+         '<input type="hidden" name="task_cuser" value="'.$user.'"></td></tr>';
 
     if ($this->status >= TASK_ONGOING) {
-      echo "<tr><td>&nbsp;</td></tr>";
+      echo '<tr><td>&nbsp;</td></tr>';
       echo "<tr><td>$pm_task_new_comments:</td></tr>";
-      echo "<tr><td><textarea class=\"textbox\" name=\"task_comments\"".
-         " rows=\"4\" cols=\"60\" wrap=\"soft\"></textarea></td></tr>";
+      echo '<tr><td><textarea class="textbox" name="task_comments"'.
+         ' rows="4" cols="60" wrap="soft"></textarea></td></tr>';
     }
-    echo "</tr>";
+    echo '</tr>';
   }
 
   function print_formated_comments() {
-    $_SESSION['GO_SESSION']['task_comments'] = $this->comments;
-    echo '<tr><td width="100%"><iframe src="comments.php" width="100%" class="textbox"></iframe></td></tr>';
+    $comments = trim($this->comments);
+    if ($comments == '') $height = 'height="60"';
+    $_SESSION['GO_SESSION']['task_comments'] = $comments;
+    echo '<tr><td width="100%">'.
+             '<iframe src="comments.php" width="100%" class="textbox" '.$height.'>'.
+             '</iframe></td></tr>';
   }
 
   function show_doc_folder() {
     global $GO_SECURITY, $GO_THEME, $pm_task_status_values;
 
-    echo "<tr>";
-    echo "<td align=\"center\">".$this->id."</td>";
-    echo "<td>".$this->name."</td>";
-    echo "<td>".$member_list[$this->person_id]."</td>";
-    echo "<td>".$this->pids."</td>";
-    echo "<td>".$this->days."</td>";
-    echo "<td>";
+    echo '<tr>';
+    echo '<td align="center">'.$this->id.'</td>';
+    echo '<td>'.$this->name.'</td>';
+    echo '<td>'.$member_list[$this->person_id].'</td>';
+    list($pids, $tips) = $this->get_pid_tips();
+    echo '<td>'.$tips.$pids.'</td>';
+    echo '<td>'.$this->days.'</td>';
+    echo '<td>';
     echo $pm_task_status_values[$this->status];
-    echo "</td>";
-    echo "<td align=\"center\">".($this->approved ? "<img border=\"0\" src=\"".$GO_THEME->images['checked']."\"/>" : "&nbsp;")."</td>";
-    echo "</tr>";
-    echo "<tr><td colspan=\"8\" width=\"100%\"><iframe src=\"folder.php?path=".$this->doc_path."\" width=\"100%\" height=\"300\">".
-         "</iframe></td></tr>";
+    echo '</td>';
+    echo '<td align="center">'.($this->approved ? '<img border="0" src="'.$GO_THEME->images['checked'].'"/>' : '&nbsp;').'</td>';
+    echo '</tr>';
+    echo '<tr><td>&nbsp;</td></tr>';
+    echo '<tr><td colspan="8" width="100%">'.
+         '<iframe src="folder.php?path='.$this->doc_path.
+         '" width="100%" height="300" class="textbox">'.
+         '</iframe></td></tr>';
   }
 
   function show_datetimes() {
@@ -559,8 +591,17 @@ class project_task extends db {
 
     $old_status = $this->status;
     $this->status = $status;
+
+    if ($status != TASK_BYPASS)
+      $changed_date = '';
+    else {
+      $today = getdate();
+      $today = "'" . $today['year'] . '-' . $today['mon'] . '-' . $today['mday'] . "'";
+      $changed_date = ", task_approved_date=$today";
+    }
+
     // Update db here
-    $this->query("UPDATE task SET task_status=" . $this->status .
+    $this->query("UPDATE task SET task_status=" . $this->status . $changed_date .
                  " WHERE task_id=".$this->id." AND task_project_id=".$this->project_id);
 
 
@@ -722,10 +763,40 @@ class project_task extends db {
     return array($plan_stop_date, $real_stop_date);
   }
 
+  function find_stop_date() {
+    global $tasks, $pstart_date;
+
+    if ($this->pids == '0')
+      return 0;
+
+    $real_stop_date = 0;
+    $pids = explode(',', $this->pids);
+
+    foreach ($pids as $pid) {
+      if (isset($tasks[$pid]->approved_date))
+        $rsd = (strtotime($tasks[$pid]->approved_date) - $pstart_date) / (24 * 3600);
+      elseif ($tasks[$pid]->status == TASK_ONGOING || $tasks[$pid]->status == TASK_DONE) {
+        $today = getdate();
+        $today = gmmktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']);
+        $rsd = round(($today - $pstart_date) / (24 * 3600));
+      }
+      else
+        $rsd = $tasks[$pid]->find_stop_date();
+      if ($rsd > $real_stop_date)
+        $real_stop_date = $rsd;
+    }
+
+    return $real_stop_date + $this->days;
+  }
+
   function get_elapsed() {
     global $today, $pstart_date;
 
     if ($this->elapsed >= 0) return;
+    if ($this->status == TASK_BYPASS) {
+      $this->elapsed = 0;
+      return;
+    }
 
     if ($today == 0) {
       $today = getdate();

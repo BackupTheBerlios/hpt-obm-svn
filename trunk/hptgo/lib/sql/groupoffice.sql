@@ -171,7 +171,7 @@ CREATE TABLE `users` (
   `time_format` varchar(10) NOT NULL default '',
   `thousands_seperator` char(1) NOT NULL default '.',
   `decimal_seperator` char(1) NOT NULL default ',',
-  `currency` char(3) NOT NULL default '€',
+  `currency` char(3) NOT NULL default '$',
   `mail_client` tinyint(4) NOT NULL default '1',
   `logins` int(11) NOT NULL default '0',
   `lastlogin` int(11) NOT NULL default '0',
@@ -183,6 +183,7 @@ CREATE TABLE `users` (
   `language` varchar(20) NOT NULL default '',
   `theme` varchar(20) NOT NULL default '',
   `first_weekday` tinyint(4) NOT NULL default '0',
+  `modules` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `id` (`id`)
 ) TYPE=MyISAM;

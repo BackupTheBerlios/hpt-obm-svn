@@ -364,7 +364,7 @@ switch($active_tab_id)
 	break;
 
 	default:
-		require('../../lib/tkdlib.php');
+		require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 		if ($write_permission)
 		{
 			require('edit_company.inc');

@@ -90,7 +90,7 @@ echo '<td colspan="100%">';
 
 echo '<table border="0" cellspacing="0" cellpadding="0" width="100%">';
 echo '<tr>';
-require('../../lib/tkdlib.php');
+require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 $order = print_config_title($constCompaniesPage);
 
 echo '<td class="TableHead2" width="16"><input type="checkbox" name="dummy" value="dummy" onclick="javascript:invert_selection()" /></td>';

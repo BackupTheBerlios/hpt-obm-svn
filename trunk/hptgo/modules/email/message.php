@@ -419,7 +419,7 @@ for ($i=0;$i<count($parts);$i++)
 
     }else
     {
-    $target = '_self';
+    $target = '_blank';
     $link = "attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&uid=".$uid."&part=".$parts[$i]["number"]."&transfer=".$parts[$i]["transfer"]."&mime=".$parts[$i]["mime"]."&filename=".urlencode($parts[$i]["name"]);
 	  }
 

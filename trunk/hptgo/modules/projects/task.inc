@@ -70,10 +70,14 @@ if ($task != 'show_task_gantt') {
   else {
     $task_id = isset($_GET['task_id']) ? $_GET['task_id'] : '0';
     $stask = $tasks[$task_id];
-    if ($task_status == 'show_doc')
+    if ($task_status == 'show_doc') {
       $stask->show_doc_folder();
-    else
+      if (isset($_SERVER['HTTP_REFERER'])) $return_to = $_SERVER['HTTP_REFERER'];
+    }
+    else {
       $stask->print_status($member_list);
+      $return_to = $_SERVER['PHP_SELF'].'?project_tab='.TASK_LIST_TAB.'&project_id='.$project_id;
+    }
   }
 }
 else {
@@ -113,7 +117,8 @@ else {
       $current_space = '<img src="'.$GO_THEME->images['task_space'].'" width="'.$cspace.'" height="7">';
     }
     elseif ($t->approved) {
-      $d = (round((strtotime($t->approved_date) - $pstart_date) / $day_sec) - $real_start_date);
+      $d = $t->approved_date == '' ? 0 :
+           (round((strtotime($t->approved_date) - $pstart_date) / $day_sec) - $real_start_date);
       $adate = strftime("%d/%m", $pstart_date + ($real_start_date + $d) * $day_sec);
       $cwidth = $d * $day_space;
       if (!$cwidth) $cwidth = 2;
@@ -174,12 +179,8 @@ $_SESSION['GO_FILESYSTEM_PATH'] = $GO_CONFIG->file_storage_path.'users/'.
                                   $_SESSION['GO_SESSION']['username'];
 if ($task != 'show_task_gantt')
 {
-  if (!$is_new_project) {
-    if ($task !=  'show_doc_folder')
-      $button = new button($cmdClose, "javascript:document.location='$return_to';");
-    else
-      $button = new button($cmdClose, "javascript:change_tab(".TASK_LIST_TAB.");");
-  }
+  if (!$is_new_project)
+    $button = new button($cmdClose, "javascript:document.location='$return_to';");
 }
 else {
   $button = new button($cmdClose, 'javascript:change_tab('.TASK_LIST_TAB.')');
@@ -199,24 +200,43 @@ else {
 echo '</td></tr></table>';
 
 function show_planned_eslapsed_times() {
-  global $tasks, $pstop_date, $pstart_date, $pm_delay, $pm_days, $pm_remain,
-  		 $pm_legend_planning, $pm_legend_ongoing, $pm_legend_done, $today, $max_task_id;
+  global $tasks, $pstop_date, $pstart_date,
+    $pm_delay, $pm_days, $pm_remain, $pm_advance, $pm_predict_delay,
+    $pm_legend_planning, $pm_legend_ongoing, $pm_legend_done, $today, $last_task_id;
 
   $tasks[1]->get_elapsed();
   $pm_legend_current = $pm_legend_ongoing;
-  if ($tasks[$max_task_id]->approved) {
-    $today = strtotime($tasks[$max_task_id]->approved_date);
+  $project_done = $tasks[$last_task_id]->approved;
+  if ($project_done) {
+    $today = strtotime($tasks[$last_task_id]->approved_date);
     $pm_legend_current = $pm_legend_done;
   }
   $plan_days = round(($pstop_date - $pstart_date) / (24 * 3600));
   $done_days = round(($today - $pstart_date) / (24 * 3600));
   if ($done_days > $plan_days)
-    $delay_days = ",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$pm_delay: ".($done_days - $plan_days)." $pm_days";
-  else
-    $delay_days = ",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$pm_remain: ".($plan_days - $done_days)." $pm_days";
+    $delay_days = "$pm_delay: ".($done_days - $plan_days)." $pm_days";
+  else {
+    $d = ($plan_days - $done_days);
+    if ($project_done && $d > 0)
+      $delay_days = "$pm_advance: ".$d." $pm_days";
+    else
+      $delay_days = "$pm_remain: ".$d." $pm_days";
+  }
 
-  echo '<tr><td colspan="8">'."$pm_legend_planning: $plan_days $pm_days,".
-       "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$pm_legend_current: $done_days $pm_days$delay_days</td></tr>";
+  if (!$project_done) {
+    $real_stop_date = $tasks[$last_task_id]->find_stop_date();
+    if ($real_stop_date > $plan_days) {
+      $predict_delay_days .= ', &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.
+        "$pm_predict_delay: ".($real_stop_date - $plan_days)." $pm_days";
+    }
+  }
+
+  echo '<tr><td colspan="8">'.
+       "$pm_legend_planning: $plan_days $pm_days,".
+       '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.
+       "$pm_legend_current: $done_days $pm_days,".
+       '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.
+       "$delay_days$predict_delay_days</td></tr>";
   echo '<tr><td colspan="8">&nbsp;</td></tr>';
 }
 

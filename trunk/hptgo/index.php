@@ -21,6 +21,7 @@ if(!file_exists("Group-Office.php"))
     webserver user.</b></font>';
   exit();
 }
+if (!isset($charset)) $charset = 'utf-8';
 header('Content-Type: text/html; charset='.$charset);
 
 $_COOKIE['GO_AUTH_SOURCE_KEY'] = isset($_COOKIE['GO_AUTH_SOURCE_KEY']) ? $_COOKIE['GO_AUTH_SOURCE_KEY'] : '0';

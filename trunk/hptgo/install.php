@@ -104,12 +104,12 @@ ini_set('session.cookie_lifetime','0');
 
 
 //get the path of this script
-if ($_SERVER['SCRIPT_FILENAME'] != '')
+if (isset($_SERVER['SCRIPT_FILENAME']) && $_SERVER['SCRIPT_FILENAME'] != '')
 {
   $script_path = stripslashes($_SERVER['SCRIPT_FILENAME']);
 }else
 {
-  $script_path = stripslashes($_SERVER['PATH_TRANSLATED']);
+  $script_path = stripslashes(str_replace('\\','/',$_SERVER['PATH_TRANSLATED']));
 }
 if ($script_path == '')
 {
@@ -171,15 +171,15 @@ if (!$config_exists)
   $config_data = str_replace('%title%', 'Group-Office', $config_data);
   $config_data = str_replace('%slash%', '/', $config_data);
 
-  $host= substr(str_replace($_SERVER['DOCUMENT_ROOT'],"",$root_path),0,-1);
+  $host= str_replace('//','/',substr(str_replace(str_replace('\\','/',$_SERVER['DOCUMENT_ROOT']),"",$root_path),0,-1));
   $full_url = 'http://'.$_SERVER['HTTP_HOST'].$host;
 
   $config_data = str_replace('%host%', $host, $config_data);
   $config_data = str_replace('%full_url%', $full_url, $config_data);
   $config_data = str_replace('%root_path%', addslashes($root_path), $config_data);
-  $config_data = str_replace('%language%', 'nl', $config_data);
+  $config_data = str_replace('%language%', 'vn', $config_data);
   $config_data = str_replace('%first_weekday%', '1', $config_data);
-  $config_data = str_replace('%tmpdir%', '/tmp/', $config_data);
+  $config_data = str_replace('%tmpdir%', (getenv('TEMP') ? getenv('TEMP') : '/tmp/'), $config_data);
   $config_data = str_replace('%theme%', 'crystal', $config_data);
   $config_data = str_replace('%allow_themes%', 'true', $config_data);
   $config_data = str_replace('%allow_password_change%', 'true', $config_data);
@@ -290,7 +290,9 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 	    $new_user_id
 	      );
 	    $old_umask = umask(000);
-	    mkdir($GO_CONFIG->file_storage_path.smartstrip($username), $GO_CONFIG->create_mode);
+	    mkdir($GO_CONFIG->file_storage_path.'users', $GO_CONFIG->create_mode);
+	    mkdir($GO_CONFIG->file_storage_path.'common', $GO_CONFIG->create_mode);
+	    mkdir($GO_CONFIG->file_storage_path.'users/'.smartstrip($username), $GO_CONFIG->create_mode);
 	    umask($old_umask);
 
 	    //grant administrator privileges

@@ -28,7 +28,7 @@ color: #000000;
 }
 
 .calendar .nav {
-  background: #778 url(menuarrow.gif) no-repeat 100% 100%;
+  background: #778 url(images/menuarrow.gif) no-repeat 100% 100%;
 }
 
 .calendar thead .title { /* This holds the current "month, year" */

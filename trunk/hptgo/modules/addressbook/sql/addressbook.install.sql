@@ -55,6 +55,7 @@ CREATE TABLE `ab_companies` (
   `parent` int(11) NOT NULL default '0',
   `shortname` varchar(50) NOT NULL default '',
   `engname` varchar(100) NOT NULL default '',
+  `relation_date` date default NULL,
   PRIMARY KEY  (`id`),
   KEY `addressbook_id` (`addressbook_id`)
 ) TYPE=MyISAM;

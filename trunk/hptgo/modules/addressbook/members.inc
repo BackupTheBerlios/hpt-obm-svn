@@ -151,7 +151,7 @@ if ($ab_settings['sort_users_field'] == "name")
         echo $image_string;
 echo "</a></td>\n";
 
-require('../../lib/tkdlib.php');
+require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
 $order = print_config_title($constMembersPage);
 
 for ($i=0; $i<count($order); $i++)

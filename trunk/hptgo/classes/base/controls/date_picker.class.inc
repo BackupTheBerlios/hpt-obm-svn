@@ -72,8 +72,22 @@ class date_picker
 
     if ($flat_div_id == '')
     {
+      $h = $m = '';
+      $browser = detect_browser();
+      if ($browser['name'] == 'MSIE' || $browser['name'] == 'OPERA') {
+        $h = '19px';
+        $m = '0px';
+      }
+      elseif ($browser['name'] == 'NETSCAPE' || $browser['subversion'] <= '20030624') {
+        $h = '18px';
+        $m = '1px';
+      }
+      else {
+        $h = '18px';
+        $m = '-1px';
+      }
       $str_return.='<input class="textbox" type="text" id="'.$name.'_input" name="'.$name.'" value="'.$set_date.'" '.$arguments.' />'.
-	'<input type="button" name="'.$name.'_button" id="'.$name.'_button" value="..."';
+	'<input type="button" name="'.$name.'_button" id="'.$name.'_button" value="..." class="button" style="width: 18px; height: '.$h.'; margin-bottom: '.$m.';"';
       if ($disabled)
       {
 	$str_return.=' disabled';
