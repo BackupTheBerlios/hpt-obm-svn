@@ -57,7 +57,9 @@ function Bold_Text(id)
 				$module_map[$module['id']] = $id;
 			}
 
-			$module_list = $user['modules'];
+			$a = explode(':',$user['modules']);
+			$show_text = isset($a[1]) ? $a[1] == '1' : true;
+			$module_list = $a[0];
 			if ($module_list == '')
 				$module_list = implode(' ',array_keys($module_map));
 
@@ -69,9 +71,11 @@ function Bold_Text(id)
 				if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read']))
 				{
 					$GO_THEME->images[$module['id']] = isset($GO_THEME->images[$module['id']]) ? $GO_THEME->images[$module['id']] : $GO_THEME->images['unknown'];
+					if ($show_text)
 					$lang_var = isset($lang_modules[$module['id']]) ? $lang_modules[$module['id']] : $module['id'];
 					//echo '<td class="ModuleIcons" align="center" valign="top" nowrap><a class="FooterBar" target="main" id="'.$module['id'].'" href="'.$module['url'].'"><img src="'.$GO_THEME->images[$module['id']].'" border="0" width="32" height="32" /><br />'.$lang_var.'</a></td>';
 					echo '<td class="ModuleIcons" align="center" valign="top" nowrap><a id="'.$module['id'].'" class="FooterBar" onClick="javascript:Bold_Text(\''.$module['id'].'\')" href="'.$module['url'].'" target="main"><img src="'.$GO_THEME->images[$module['id']].'" border="0" width="32" height="32" /><br />'.$lang_var.'</a></td>';	
+					if ($show_text)
 					if (strcasecmp($lang_modules[$_SESSION['GO_SESSION']['start_module']], $lang_var)==0) // set bold text for default screen
 						echo "<script language='javascript'>Bold_Text('".$module['id']."');</script>";
 				}

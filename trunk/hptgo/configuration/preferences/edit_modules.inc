@@ -9,11 +9,12 @@ $db = new db();
 switch ($task) {
 	case 'save':
 		$com = $_REQUEST['com'];
+		$show_text = $_REQUEST['show_text'] == '1' ? '1' : '0';
 
 		if ($_REQUEST['com'] > 0) {
 			$com = $_REQUEST['com'];
 			$com_string = implode(" ", $com);
-			$db->query("UPDATE users SET modules='$com_string' WHERE id='{$GO_SECURITY->user_id}'");
+			$db->query("UPDATE users SET modules='$com_string:$show_text' WHERE id='{$GO_SECURITY->user_id}'");
 		}
     echo '<script type="text/javascript">';
 
@@ -37,7 +38,10 @@ foreach ($modules as $id => $module) {
 		$module_map[$module['id']] = $id;
 }
 
-$com_string = $user['modules'];
+$user_modules_properties = explode(':',$user['modules']);
+$com_string = $user_modules_properties[0];
+$show_text = isset($user_modules_properties[1]) ? $user_modules_properties[1] == '1' : true;
+
 if ($com_string == '') {
 	$res = array_keys($module_map);
 	$com = $res = implode(' ',$res);
@@ -57,6 +61,8 @@ echo '<input type="hidden" name="first" value="'.$_REQUEST['first'].'" />';
 echo '<input type="hidden" name="max_rows" value="'.$_REQUEST['max_rows'].'" />';
 echo '<tr><td>';
 echo '<table border="0" cellpadding="2" cellspacing="0">';
+echo '<tr><td>&nbsp;</td></tr>';
+echo '<tr><td><input type="checkbox" name="show_text" value="1" '.($show_text == '1' ? 'checked' : '').'/>Show text</td></tr>';
 echo '<tr><td>&nbsp;</td></tr>';
 
 $count = count($res);
@@ -124,8 +130,6 @@ if ($_SESSION['GO_SESSION']['start_module'] != '')
   echo '&nbsp;&nbsp;';
   $button = new button($cmdClose, "javascript:document.location='".$return_to ."'");
 }
-echo '&nbsp;&nbsp;';
-$button = new button($cmdDefault, 'javascript:default_status()');
 ?>
 
 <script type="text/javascript">
