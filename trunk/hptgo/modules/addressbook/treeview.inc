@@ -242,6 +242,12 @@ $count = $ab->get_companies_by_parent($addressbook_id,0, $ab_settings['sort_comp
 $str_count = $count == 1 ? $ab_companies_count_single : $ab_companies_count;
 echo '</td><td class="small" align="right">'.$count.' '.$str_count.'</td></tr>';
 //echo '</td><td colspan="99" class="small" align="right"></td></tr>';
+
+echo '<tr height="20" width="100%">';
+echo '<td colspan="100%">';
+
+echo '<table border="0" cellspacing="0" cellpadding="0" width="100%">';
+//echo '<tr>';
 echo '<tr height="20">';
 echo '<td class="TableHead2" width="16"><input type="checkbox" name="dummy" value="dummy" onclick="javascript:invert_selection()" /></td>';
 echo '<td class="TableHead2" nowrap><a class="TableHead2" href="javascript:_sort(\'name\',\''.$new_sort_order.'\');">'.$strName.'</a>';
@@ -376,6 +382,7 @@ else
 	echo '<tr><td colspan="99">'.$ab_no_companies.'</td></tr>';
 	echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 }
+echo '</table>';
 echo '</table>';
 ?>
 
