@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<module name="addressbook">
+	<description>
+		A very fast and feature rich addressbook for Group-Office. 
+		It is integrated in other modules as well
+	</description>
+	<version>
+		1.0
+	</version>
+	<releaseDate>
+	2004-04-05
+	</releaseDate>
+	<status>
+		Stable
+	</status>
+	<authors>
+		<author name="Merijn Schering" email="mschering@intermesh.nl" />
+	</authors>
+</module>
+	

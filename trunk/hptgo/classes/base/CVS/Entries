@@ -1,0 +1,18 @@
+/base.groups.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/base.security.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/base.users.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/controls.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/crypto.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/email.auth.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/language.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/ldap.auth.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/ldap.groups.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/ldap.security.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/ldap.users.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/modules.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/sql.auth.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/sql.security.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/sql.users.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+/theme.class.inc/1.1.1.1/Tue Aug  3 11:50:16 2004//
+D/controls////
+/sql.groups.class.inc/1.2/Fri Aug  6 10:52:46 2004//

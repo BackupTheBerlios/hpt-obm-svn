@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<module name="comics">
+	<description>
+		Displays a daily comic of Garfield
+	</description>
+	<version>
+		1.0
+	</version>
+	<releaseDate>
+	2004-04-05
+	</releaseDate>
+	<status>
+		Alpha
+	</status>
+	<authors>
+		<author name="Markus Schabel" email="markus.schabel@tgm.ac.at" />
+	</authors>
+</module>
+	

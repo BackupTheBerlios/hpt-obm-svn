@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<module name="filesystem">
+	<description>
+		The filesystem module is used to store your personal files online and share
+		 them if you want with other users.	You can easily cut, paste and copy 
+		 files to different directories that you can access by a tree view.
+		 Sharing files online with your relations was never easier.
+	</description>
+	<version>
+		1.0
+	</version>
+	<releaseDate>
+	2004-04-05
+	</releaseDate>
+	<status>
+		Stable
+	</status>
+	<authors>
+		<author name="Merijn Schering" email="mschering@intermesh.nl" />
+	</authors>
+</module>
+	

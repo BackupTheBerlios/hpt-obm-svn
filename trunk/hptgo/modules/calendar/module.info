@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<module name="calendar">
+	<description>
+		In a corporate environment a shared calendar can't be missed. 
+		This calendar allows you to plan all sorts of recurring events and set 
+		reminders for them.	The easy to use interface will never let you miss an
+		 event.
+	</description>
+	<version>
+		1.0
+	</version>
+	<releaseDate>
+	2004-04-05
+	</releaseDate>
+	<status>
+		Stable
+	</status>
+	<authors>
+		<author name="Merijn Schering" email="mschering@intermesh.nl" />
+		<author name="Georg Lorenz" email="georg@lonux.de" />
+	</authors>
+</module>
+	
