@@ -23,7 +23,7 @@ $radio_list->add_option('companies', $ab_companies);
 <?php
 require_once($GO_CONFIG->class_path."/phpvnconv/LIST.inc");
 $droplist = new dropbox('encoding');
-$droplist->add_value('None','none');
+$droplist->add_value('none','None');
 foreach ($vnconv_charset_list as $cs => $text) {
   $droplist->add_value($cs,$text);
 }
