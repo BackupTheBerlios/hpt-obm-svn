@@ -55,10 +55,10 @@ while($module = array_shift($modules))
 		{
 				$tooltip = '<table border="0">'.
 					'<tr><td valign="top">'.$strDescription.':</td><td>'.text_to_html(trim(htmlspecialchars($module_info['description']))).'</td></tr>'.
-					'<tr><td>'.$strVersion.':</td><td>'.trim($module_info['version']).'</td></tr>'.
-					'<tr><td>'.$strStatus.':</td><td>'.trim($module_info['status']).'</td></tr>'.
-					'<tr><td>'.$strReleaseDate.':</td><td>'.db_date_to_date(trim($module_info['release_date'])).'</td></tr>'.
-					'<tr><td valign="top">'.$strAuthors.':</td><td>';
+					'<tr><td nowrap>'.$strVersion.':</td><td>'.trim($module_info['version']).'</td></tr>'.
+					'<tr><td nowrap>'.$strStatus.':</td><td>'.trim($module_info['status']).'</td></tr>'.
+					'<tr><td nowrap>'.$strReleaseDate.':</td><td>'.db_date_to_date(trim($module_info['release_date'])).'</td></tr>'.
+					'<tr><td nowrap valign="top">'.$strAuthors.':</td><td>';
 				while ($author = array_shift($module_info['authors']))
 				{
 					$tooltip .= trim(htmlspecialchars($author['name']).' &lt;'.mail_to($author['email']).'&gt;').'<br />';
@@ -96,10 +96,10 @@ while($module = array_shift($modules))
 	{
 			$tooltip = '<table border="0">'.
 				'<tr><td valign="top">'.$strDescription.':</td><td>'.text_to_html(trim(htmlspecialchars($module_info['description']))).'</td></tr>'.
-				'<tr><td>'.$strVersion.':</td><td>'.trim($module_info['version']).'</td></tr>'.
-				'<tr><td>'.$strStatus.':</td><td>'.trim($module_info['status']).'</td></tr>'.
-				'<tr><td>'.$strReleaseDate.':</td><td>'.db_date_to_date(trim($module_info['release_date'])).'</td></tr>'.
-				'<tr><td valign="top">'.$strAuthors.':</td><td>';
+				'<tr><td nowrap>'.$strVersion.':</td><td>'.trim($module_info['version']).'</td></tr>'.
+				'<tr><td nowrap>'.$strStatus.':</td><td>'.trim($module_info['status']).'</td></tr>'.
+				'<tr><td nowrap>'.$strReleaseDate.':</td><td>'.db_date_to_date(trim($module_info['release_date'])).'</td></tr>'.
+				'<tr><td nowrap valign="top">'.$strAuthors.':</td><td>';
 			while ($author = array_shift($module_info['authors']))
 			{
 				$tooltip .= trim(htmlspecialchars($author['name']).' &lt;'.mail_to($author['email']).'&gt;').'<br />';
