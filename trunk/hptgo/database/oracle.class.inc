@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Oracle accessor based on Session Management for PHP3
  *
  * Copyright (c) 1998-2000 Luis Francisco Gonzalez Hernandez
@@ -8,36 +8,145 @@
  */
 
 class db {
+  /** 
+  * Configuration parameter 
+  *
+  * Set to 1 for debugging messages
+  * 
+  * @access public
+  *
+  */
   var $Debug    =  false;
+  
+  
   var $Home     = "/u01/app/oracle/product/8.0.4";
   var $Remote   =  1;
-  /* Due to a strange error with Oracle 8.0.5, Apache and PHP3.0.6
-     you don't need to set the ENV - on my system Apache
-     will change to a zombie, if I don't set this to FALSE!
-     If unsure try it out, if it works. */
+  
+  /**
+   * Due to a strange error with Oracle 8.0.5, Apache and PHP3.0.6
+   *
+   *  you don't need to set the ENV - on my system Apache
+   *  will change to a zombie, if I don't set this to FALSE!
+   *
+   *  If unsure try it out, if it works. 
+   */
   var $OraPutEnv   = true;
-
+  
+  /**
+  * Database name 
+  * 
+  * @access public
+  */
   var $Database = "";
+  
+  /**
+  * User name - used to connect database server 
+  *
+  * @access public
+  */
   var $User     = "";
+  
+  /**
+  * Password connecting
+  *
+  * @access public
+  */
   var $Password = "";
+  
+ /**
+  *	Host name or database server name 
+  *
+  * @access public
+  */
+  var $Host = "";
 
+  /**
+   * Link identifier 
+   *
+   * The positive number is returned by <i> mysql_pconnect() </i> or <i> mysql_connect() </i> functions
+   *
+   * @access private 
+   */ 
   var $Link_ID    = 0;
+  
+  /**
+   * Result identifier
+   *
+   * The positive number is returned by <i> mysql_query() </i> function
+   * @access private
+   */  
   var $Query_ID  = 0;
+  
+  /**
+   * Result array and current row number 
+   *
+   * @access public
+   */
   var $Record    = array();
+
+  /**
+   * Retain a record in a recordset
+   *
+   * @access public
+   */
   var $Row;
 
+  /** 
+   * Current error number
+   *
+   * @access public
+   */
   var $Errno     = 0;
+  
+  /**
+   * Current error text
+   * 
+   * @access public
+   */
   var $Error     = "";
+  
+  
   var $ora_no_next_fetch=false;
 
 
   /* copied from db_mysql for completeness */
   /* public: identification constant. never change this. */
-  var $type     = "oracle";
+  
+  /** 
+   * Database type 
+   *
+   * @access public
+   */
+  $type     = "oracle";
+  
+  /**
+   * Revision
+   *
+   * @access public
+   */
   var $revision = "1.2";
 
+  /** 
+   * Configuration parameter
+   * 
+   * <b>$Halt_On_Error</b> = 
+   *
+   * <pre>	= <i>"yes"</i>: 	(halt with message)</pre>
+   *
+   * <pre>	= <i>"no"</i>:		(ignore errors quietly)</pre>
+   *
+   * <pre>	= <i>"report"</i>:	(ignore errror, but spit a warning)</pre>
+   *
+   * @access public
+   */
   var $Halt_On_Error = "yes"; ## "yes" (halt with message), "no" (ignore errors quietly), "report" (ignore errror, but spit a warning)
 
+  /**
+   * The class constructor
+   *
+   * @access public
+   * @param string $query
+   */
   /* public: constructor */
   function db($query = "") {
 	  global $GO_CONFIG;
@@ -48,15 +157,34 @@ class db {
       $this->query($query);
   }
 
+    /**
+   * Return current Link_ID
+   *
+   * @access public
+   * @return int true on success, false on failure
+   */
   /* public: some trivial reporting */
   function link_id() {
     return $this->Link_ID;
   }
-
+  
+  /**
+   * Return current Query_ID
+   *
+   * @access public
+   * @return int positive on success, false on failure
+   */
   function query_id() {
     return $this->Query_ID;
   }
 
+  /**
+   * Connecting database
+   *
+   * If the web page is in debug mode, the web browser will display all statements executed 
+   * @access public
+   */
+  /* public: connection management */
   function connect() {
       ## see above why we do this
       if ($this->OraPutEnv) {
@@ -110,7 +238,14 @@ class db {
   ##
   ## You can also make extensive use of ->disconnect()!
   ## The unused QueryIDs will be recycled sometimes.
-
+  
+  /**
+   * Execute a query
+   *
+   * @access public
+   * @param string $Query_String 
+   * @return int positive value (statement identifier) on success, 0 on failure
+   */
   function query($Query_String) {
 
     /* No empty queries, please, since PHP4 chokes on them. */
@@ -151,6 +286,11 @@ class db {
       return $this->Query_ID;
   }
 
+  /**
+   * Fetch next record in the current recordset
+   * @access public
+   * @return int 1 on success, 0 on failure
+   */
   function next_record() {
       if (!$this->no_next_fetch &&
           0 == ora_fetch($this->Query_ID)) {
@@ -193,6 +333,12 @@ class db {
   ## seek() works only for $pos - 1 and $pos
   ## Perhaps I make a own implementation, but my
   ## opinion is, that this should be done by PHP3
+  /**
+   * Set the internal row pointer to $pos 
+   *
+   * @access public
+   * @param int $pos
+   */
   function seek($pos) {
       if       ($this->Row - 1 == $pos) {
         $this->no_next_fetch=true;
@@ -206,6 +352,14 @@ class db {
       $this->Row=$pos;
   }
 
+    /**
+   * Locking a table in the current database
+   *
+   * @access public
+   * @param string $table
+   * @param string $mode
+   * @return int 1 (true) on success, 0 (false) on failure
+   */
   function lock($table, $mode = "write") {
     if ($mode == "write") {
       $result = ora_do($this->Link_ID, "lock table $table in row exclusive mode");
@@ -215,10 +369,24 @@ class db {
     return $result;
   }
 
+ /**
+   * Unlock all tables in the current database
+   * @access public
+   * @return int true on success, false on failure
+   */
   function unlock() {
     return ora_do($this->Link_ID, "commit");
   }
 
+  /**
+   * Return metadata of a table (determined by $table parameter) or of a query result
+   *
+   * Depending on $full parameter, this function returns the short/full values:  
+   * @access public
+   * @param string $table
+   * @param int $full
+   * @return mixed array of metadata on success
+   */
   function metadata($table,$full=false) {
       $count = 0;
       $id    = 0;
@@ -299,6 +467,13 @@ class db {
   }
 
   ## THIS FUNCTION IS UNSTESTED!
+  /**
+   * Return number of rows affected during statement execution
+   *
+   * The function invoked <i> num_rows() </i> function
+   * @access public
+   * @return int
+   */
   function affected_rows() {
     if ($Debug) echo "<BR>Debug: affected_rows=". ora_numrows($this->Query_ID)."<BR>";
     return ora_numrows($this->Query_ID);
@@ -313,6 +488,13 @@ class db {
   ## selection, cause this will fail: "SELECT id, from FROM ...").
   ## "FROM" is - as far as I know a keyword in Oracle, so it can
   ## only be used in this way. But you have been warned.
+  /**
+   * Return number of rows affected during statement execution
+   *
+   * Note: This function does not return number of rows selected
+   * @access public
+   * @return int
+   */
   function num_rows() {
     $curs=ora_open($this->Link_ID);
 
@@ -331,27 +513,62 @@ class db {
     }
   }
 
+  /**
+   * Return the number of fields in a result set
+   * @access public
+   * @return int
+   */
   function num_fields() {
       if ($Debug) echo "<BR>Debug: num_fields=". ora_numcols($this->Query_ID) . "<BR>";
       return ora_numcols($this->Query_ID);
   }
 
+  /**
+   * Return the number of rows affected during statement execution
+   *
+   * Shorthand notation - invoke <i> num_rows() </i> function
+   * @access public
+   * @return int
+   */
   function nf() {
     return $this->num_rows();
   }
 
+  /**
+   * Print the number of rows
+   *
+   * Print the value returned by <i> num_rows() </i> function 
+   * @access public
+   */
   function np() {
     print $this->num_rows();
   }
 
+  /**
+   * Return the value of $Name field in the current record
+   * @access public
+   * @param string $Name
+   * @return mixed
+   */
   function f($Name) {
     return $this->Record[$Name];
   }
 
+  /**
+   * Print the value of $Name field in the current record
+   * @access public
+   * @param string $Name
+   */
   function p($Name) {
     print $this->Record[$Name];
   }
 
+  /**
+   * Return the next ID value of $seq_name table
+   * @access public
+   * @param string $seq_name
+   * @return int
+   */
   /* public: sequence number */
   function nextid($seq_name)
   {
@@ -389,6 +606,11 @@ class db {
       return $next_id;
   }
 
+  /**
+   * Free all associated data in memory
+   *
+   * @access public
+   */
   function disconnect() {
       if($this->Debug) {
           echo "Debug: Disconnecting $this->Query_ID...<br>\n";
@@ -401,6 +623,11 @@ class db {
       $this->Query_ID=0;
   }
 
+  /**
+   * Error handling
+   * @access private
+   * @param string $msg
+   */
   /* private: error handling */
   function halt($msg) {
     if ($this->Halt_On_Error == "no")
@@ -412,6 +639,11 @@ class db {
       die("Session halted.");
   }
 
+  /*
+   * Display the error information on the web page
+   * @access private
+   * @param string $msg 
+   */
   function haltmsg($msg) {
     printf("</td></tr></table><b>Database error:</b> %s<br>\n", $msg);
     printf("<b>Oracle Error</b>: %s (%s)<br>\n",
@@ -419,6 +651,11 @@ class db {
       $this->Error);
   }
 
+  /**
+   * Return an array listing names of the permanent table (Non-Temporary tables) in the current database
+   * @access private
+   * @return mixed 
+   */
   function table_names() {
    $this->connect();
    $this->query("
