@@ -139,4 +139,5 @@ $pm_AddTemplate = 'Add process template:';
 
 $strReadRights = 'Monitors';
 $strWriteRights = 'Members';
+$strStatusChangeConfirm = 'You have changed task status. Everytime task status is changed, the project manager will be notified by email. Are you sure you want to change the task status?';
 ?>

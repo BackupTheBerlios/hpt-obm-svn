@@ -341,6 +341,7 @@ class project_task extends db {
         $dropbox->add_value(TASK_DONE, $pm_task_status_values[TASK_DONE]);
       }
       $dropbox->print_dropbox("task_status", $this->status);
+      echo '<input type="hidden" name="saved_task_status" value="'.$this->status.'"/>';
     }
     else {
       echo $pm_task_status_values[$this->status];
@@ -413,10 +414,84 @@ class project_task extends db {
     if ($this->approved)
       $this->set_approve(false);
 
+    $old_status = $this->status;
     $this->status = $status;
     // Update db here
     $this->query("UPDATE task SET task_status=" . $this->status .
                  " WHERE task_id=".$this->id." AND task_project_id=".$this->project_id);
+
+    global $GO_CONFIG;
+    
+    $db = new db();
+    $sql = "SELECT users.* FROM".
+      " users LEFT JOIN users_groups ON (users.id = users_groups.user_id)".
+      " WHERE users_groups.group_id='".$GO_CONFIG->group_root."'";
+    if ($db->query($sql) && $db->num_rows() && $db->next_record()) {
+      require($GO_CONFIG->class_path."phpmailer/class.phpmailer.php");
+      require($GO_CONFIG->class_path."phpmailer/class.smtp.php");
+      $mail = new PHPMailer();
+      $mail->PluginDir = $GO_CONFIG->class_path.'phpmailer/';
+      $mail->SetLanguage($php_mailer_lang, $GO_CONFIG->class_path.'phpmailer/language/');
+
+      switch($GO_CONFIG->mailer) {
+        case 'smtp':
+          $mail->Host = $GO_CONFIG->smtp_server;
+          $mail->Port = $GO_CONFIG->smtp_port;
+          $mail->IsSMTP();			  
+          break;			
+        case 'qmail':
+          $mail->IsQmail();
+          break;			
+        case 'sendmail':
+          $mail->IsSendmail();
+          break;
+        case 'mail':
+          $mail->IsMail();
+          break;
+      }
+
+      $mail->Sender   = $db->f('email');
+      $mail->From     = $db->f('email');
+      $mail->FromName = $GO_CONFIG->title;
+      $mail->AddReplyTo($db->f('email'),$GO_CONFIG->title);
+      $mail->WordWrap = 50;
+      $mail->IsHTML(true);
+
+      $this->query("SELECT * FROM task WHERE task_id=".$this->id." AND task_project_id=".$this->project_id);
+      $this->next_record();
+      $task_name = $this->f('task_name');
+
+      $db->query('SELECT pmProjects.* '.
+        'FROM pmProjects '.
+	'WHERE pmProjects.id="'.$this->project_id.'" ');
+      $db->next_record();
+
+      $task_url = $GO_CONFIG->full_url.'modules/projects/project.php?task=show_task_status&project_id='.$this->project_id.'&task_id='.$this->id.'&task_status='.$status;
+      $project_url = $GO_CONFIG->full_url.'modules/projects/project.php?project_id='.$this->project_id;
+
+
+      global $pm_task_status_values;
+      $new_status = $pm_task_status_values[$status];
+      $project_name = $db->f('name');
+      $mail->Subject = "[Projects] Status of task '$task_name' (project '$project_name') has changed to $new_status";
+      $mail_body  = '<html><body>Task "<a href="'.$task_url.'">'.$task_name.'</a>" in project "<a href="'.$project_url.'">'.$project_name.'</a>" has changed status from '.$pm_task_status_values[$old_status].' to '.$pm_task_status_values[$this->status].'.</body></html>';
+
+      $mail->Body = $mail_body;
+      $mail->ClearAllRecipients();
+      $db->query('SELECT users.* '.
+        'FROM users,pmProjects '.
+	'WHERE users.id=pmProjects.user_id '.
+	'AND pmProjects.id="'.$this->project_id.'"');
+      $db->next_record();
+      $mail->AddAddress($db->f('email'));
+
+      // HACK: For some reasons, admin@hptvietnam.com.vn is not accepted by mail.hptvietnam.com.vn :(
+      $mail->From = $db->f('email');
+      $mail->Sender = $db->f('email');
+
+      //if (!$mail->Send()) echo "Failed: ".$mail->ErrorInfo;
+      $mail->Send();
+    }
   }
 
   function set_approve($approved) {

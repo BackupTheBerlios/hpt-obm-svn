@@ -190,10 +190,14 @@ function show_planned_eslapsed_times() {
 <script type="text/javascript" langauge="javascript">
 function _save_task(action_type)
 {
-  document.projects_form.task.value='save_task_'+action_type;
-  document.projects_form.target = '_self';
-  document.projects_form.action = '<?php echo $_SERVER['PHP_SELF']; ?>';
-  document.projects_form.submit();
+  if (document.projects_form.task_status.value == document.projects_form.saved_task_status.value ||
+    confirm("<?php echo smart_addslashes($strStatusChangeConfirm); ?>"))
+  {
+    document.projects_form.task.value='save_task_'+action_type;
+    document.projects_form.target = '_self';
+    document.projects_form.action = '<?php echo $_SERVER['PHP_SELF']; ?>';
+    document.projects_form.submit();
+  }
 }
 
 function _set_approve() {

@@ -142,4 +142,5 @@ $strWriteRights = 'Thành viên';
 $acl_control_auth_groups = 'Nhóm tham gia';
 $acl_control_auth_users = 'Người tham gia';
 
+$strStatusChangeConfirm = 'Bạn đã thay đổi trạng thái công việc. Trưởng dự án sẽ được thông báo bằng email mỗi khi trạng thái công việc được thay đổi. Bạn có chắc muốn thay đổi trạng thái công việc hay không?';
 ?>
