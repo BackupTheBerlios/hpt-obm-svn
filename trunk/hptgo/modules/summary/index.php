@@ -35,7 +35,7 @@ require($GO_THEME->theme_path."header.inc");
 
 echo 	'<form method="post" name="summary_form" action="'.$_SERVER['PHP_SELF'].'">'.
 '<table border="0" width="100%" cellspacing="0" cellpadding="10"><tr><td width="50%">'.
-'<h3>'.$sum_welcome_to.' '.$GO_CONFIG->title.'  -  '.$_SESSION['GO_SESSION']['name'].'</h3></td><td width="50%" align="right"><h3>';
+'<h3>'.$sum_welcome_to.' '.$GO_CONFIG->title.'</h3></td><td width="50%" align="right"><h3>';
 $date = date($_SESSION['GO_SESSION']['date_format']);
 if($_SESSION['GO_SESSION']['date_format'] == 'd-m-Y')
 {
