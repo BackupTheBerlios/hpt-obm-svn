@@ -39,9 +39,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
         break;
 
       case 'delete_users':
+        $group = $GO_GROUPS->get_group($_POST['group_id']);
 	for ($i=0;$i<count($group_users);$i++)
 	{
 	  $GO_GROUPS->delete_user_from_group($group_users[$i],$_POST['group_id']);
+	  if ($group_users[$i] == $group['leader_id'])
+	    $GO_GROUPS->set_group_leader($_POST['group_id'],0);
 	}
 	break;
 
