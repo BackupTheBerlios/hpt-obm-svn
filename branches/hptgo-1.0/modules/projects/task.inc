@@ -57,7 +57,7 @@ if ($task != 'show_task_gantt') {
   echo     "<td class=\"TableHead2\" width=\"200\" nowrap>$pm_task_name</td>";
   echo     "<td class=\"TableHead2\" width=\"190\" nowrap>$pm_task_person</td>";
   echo     "<td class=\"TableHead2\" width=\"100\" nowrap>$pm_task_predecessors</td>";
-  echo     "<td class=\"TableHead2\" width=\"45\" nowrap>$pm_task_days</td>";
+  echo     "<td class=\"TableHead2\" width=\"45\" nowrap>$pm_task_time</td>";
   echo     "<td class=\"TableHead2\" width=\"80\" nowrap>$pm_task_status</td>";
   echo     "<td class=\"TableHead2\" width=\"50\" align=\"center\" nowrap>$pm_task_approved</td>";
   echo     "<td class=\"TableHead2\" width=\"50\" align=\"center\" nowrap>$pm_task_document</td></tr>";
@@ -130,7 +130,7 @@ else {
     if ($ndays == 0) $ndays = 2;
     $space = "<img src=\"".$GO_THEME->images['task_space']."\" width=\"$display_date\" height=\"7\">";
     $image = "<img src=\"".$GO_THEME->images['task_wait']."\" width=\"$ndays\" height=\"7\">";
-    echo "<tr class=\"TableInside$n\"><td width=\"25\" align=\"center\" nowrap>".$t->id."</td>";
+    echo "<tr class=\"TableInside$n\"><td width=\"25\" align=\"center\" nowrap>".$t->order."</td>";
     echo "<td width=\"150\"><font size=\"0\">".$t->name."</font></td>";
     echo "<td width=\"565\" class=\"GanttDate\" nowrap>$space$image&nbsp;<font color=\"blue\"><i>$date<br>$current_space$current</i></font></td></tr>";
     $n = $n == 1 ? 2 : 1;
@@ -214,6 +214,54 @@ function show_planned_eslapsed_times() {
 ?>
 
 <script type="text/javascript" language="javascript">
+var task_tips = null;
+
+function get_position(element)
+{
+  var elem = element, tagname = "", x = 0, y = 0;
+
+  while ((typeof(elem) == "object") && (typeof(elem.tagName) != "undefined"))
+  {
+    y += elem.offsetTop;
+    x += elem.offsetLeft;
+    tagname = elem.tagName.toUpperCase();
+
+    if (tagname == "BODY") elem = 0;
+    if (typeof(elem) == "object")
+      if (typeof(elem.offsetParent) == "object")
+        elem=elem.offsetParent;
+  }
+
+  position = new Object();
+  position.x = x;
+  position.y = y;
+  return position;
+}
+
+function show_tips(id)
+{
+  if (task_tips) return false;
+
+  task_tips = document.getElementById("task_tips_"+id);
+  task_tips.style.display = '';
+  task_tips.style.visibility = 'visible';
+  p = get_position(document.getElementById("task_pre_"+id));
+  x = p.x, y = p.y - task_tips.offsetHeight;
+  task_tips.style.top = y + "px";
+  task_tips.style.left = x + "px";
+  return false;
+}
+
+function hide_tips()
+{
+  if (task_tips) {
+    task_tips.style.display = 'none';
+    task_tips.style.visibility = 'hidden';
+    task_tips = null;
+  }
+  return false;
+}
+
 function _save_task(action_type)
 {
   if (action_type != 'status' ||
