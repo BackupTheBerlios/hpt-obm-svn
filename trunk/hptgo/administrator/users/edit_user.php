@@ -165,6 +165,18 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     $work_fax = smart_addslashes($_POST["work_fax"]);
     $homepage = smart_addslashes($_POST["homepage"]);
 
+    $profile = $GO_USERS->get_user($_REQUEST['id']);
+    if (isset($_POST['visible']))
+    {
+      if (!$GO_SECURITY->group_in_acl($GO_CONFIG->group_everyone,$profile['acl_id']))
+        $GO_SECURITY->add_group_to_acl($GO_CONFIG->group_everyone,$profile['acl_id']);
+    }
+    else
+    {
+      if ($GO_SECURITY->group_in_acl($GO_CONFIG->group_everyone,$profile['acl_id']))
+        $GO_SECURITY->delete_group_from_acl($GO_CONFIG->group_everyone,$profile['acl_id']);
+    }
+
     if (!$GO_USERS->update_profile($_REQUEST['id'], $first_name,
 	  $middle_name, $last_name, $initials, $title, $_POST["sex"], $birthday,
 	  $email, $work_phone, $home_phone, $fax, $cellular, $country,
@@ -177,17 +189,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
     {
       header('Location: '.$return_to);
       exit();
-    }
-    $profile = $GO_USERS->get_user($_REQUEST['id']);
-    if (isset($_POST['visible']))
-    {
-      if (!$GO_SECURITY->group_in_acl($GO_CONFIG->group_everyone,$profile['acl_id']))
-        $GO_SECURITY->add_group_to_acl($GO_CONFIG->group_everyone,$profile['acl_id']);
-    }
-    else
-    {
-      if ($GO_SECURITY->group_in_acl($GO_CONFIG->group_everyone,$profile['acl_id']))
-        $GO_SECURITY->delete_group_from_acl($GO_CONFIG->group_everyone,$profile['acl_id']);
     }
   }else
   {
