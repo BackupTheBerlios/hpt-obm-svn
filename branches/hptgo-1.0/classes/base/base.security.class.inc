@@ -98,7 +98,7 @@ class base_security extends db
 	*/
   function authenticate($admin = false)
   {
-    global $GO_CONFIG, $GO_AUTH, $auth_sources;
+    global $GO_CONFIG, $GO_AUTH, $auth_sources, $link_back;
 
     $GO_AUTH_SOURCE_KEY = isset($_COOKIE['GO_AUTH_SOURCE_KEY']) ? $_COOKIE['GO_AUTH_SOURCE_KEY'] : 0;
 
@@ -110,7 +110,7 @@ class base_security extends db
 ?>
 <html><head></head><body>
 <script language="javascript">
-window.top.location="<?php echo $GO_CONFIG->host.'index.php?return_to='.rawurlencode($_SERVER['REQUEST_URI']);?>";
+window.top.location="<?php echo $GO_CONFIG->host.'index.php'.(isset($link_back) && $link_back == '' ? '' : '?return_to='.rawurlencode(isset($link_back) && $link_back != '' ? $link_back : $_SERVER['REQUEST_URI']));?>";
 </script>
 </body></html>
 <?php

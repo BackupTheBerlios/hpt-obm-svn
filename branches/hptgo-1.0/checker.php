@@ -11,6 +11,8 @@
  */
 
 require('Group-Office.php');
+// Set $link_back to empty so that start module will be used if auth failed
+$link_back = '';
 $GO_SECURITY->authenticate();
 ?>
 <html>
