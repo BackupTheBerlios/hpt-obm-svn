@@ -26,6 +26,7 @@ if (isset($_POST['task']) && $_POST['task'] == 'delete_companies')
 }
 
 //define the items to show
+
 $max_rows = isset($_REQUEST['max_rows']) ? $_REQUEST['max_rows'] : $_SESSION['GO_SESSION']['max_rows_list'];
 $first = isset($_REQUEST['first']) ? $_REQUEST['first'] : 0;
 

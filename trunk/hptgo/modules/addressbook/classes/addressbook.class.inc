@@ -862,11 +862,54 @@ class addressbook extends db
     return $name;
   }
 
-  function get_companies_by_parent($addressbook_id,$parent,$sort='name', $direction='ASC')
+  function get_companies_by_parent($addressbook_id,$parent,$sort='name', $direction='ASC', $start=0, $offset=0,$user_id=0)
   {
-    $sql = "SELECT * FROM ab_companies WHERE parent='$parent' ORDER BY $sort $direction";
-    $this->query($sql);
-    return $this->num_rows();
+    global $GO_SECURITY;
+    if ($user_id == 0)
+    {
+      $user_id = $GO_SECURITY->user_id;
+    }
+    $sql = "SELECT DISTINCT ab_companies.* FROM ab_companies ".
+      "INNER JOIN acl ON (ab_companies.acl_read = acl.acl_id OR ab_companies.acl_write = acl.acl_id) ".
+      "LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
+      "WHERE ((users_groups.user_id='$user_id' AND acl.user_id=0) OR (".
+      "acl.group_id=0 AND acl.user_id='$user_id')) ".
+      "AND addressbook_id='$addressbook_id' AND parent='$parent' ORDER BY $sort $direction";
+    if ($offset != 0)
+    {
+      // HACKING BY PCLOUDS
+      $sql .= $parent == 0 ?  " LIMIT $start, $offset" : " LIMIT $offset";
+
+      $sql2= "SELECT DISTINCT ab_companies.id FROM ab_companies ".
+	"INNER JOIN acl ON (ab_companies.acl_read = acl.acl_id OR ab_companies.acl_write = acl.acl_id) ".
+	"LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
+	"WHERE ((users_groups.user_id='$user_id' AND acl.user_id=0) OR (".
+	"acl.group_id=0 AND acl.user_id='$user_id')) ".
+	"AND addressbook_id='$addressbook_id' AND parent='$parent'";
+      $this->query($sql2);
+      $count = $this->num_rows();
+
+      if ($count > 0)
+      {
+	$this->query($sql);
+	return $count;
+      }
+      return 0;
+    }
+    else
+    {
+      $this->query($sql);
+      return $this->num_rows();
+    }
+  }
+
+  function get_count_by_parent($addressbook_id,$parent)
+  {
+    $sql = "SELECT DISTINCT COUNT(ab_companies.id) AS COUNT FROM ab_companies WHERE parent='$parent'";
+    if ($this->query($sql) && $this->num_rows()  && $this->next_record())
+      return $this->f('COUNT');
+    else
+      return 0;
   }
 }
 ?>

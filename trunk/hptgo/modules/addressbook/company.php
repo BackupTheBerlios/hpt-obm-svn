@@ -248,6 +248,8 @@ if ($company_id == 0 || $task == 'save_company')
 	while ($cp->next_record())
 	{
 		$id = $cp->f('id');
+		if ($id == $company_id)
+			continue;
 		$name = $cp->f('name');
 		$company['parents'] .= "<option value='$id'".($id == $company['parent_id'] ? "selected" : "").">$name</option>";
 	}

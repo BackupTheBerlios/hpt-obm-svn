@@ -63,8 +63,8 @@ $image['blank'] = '<img src="'.$GO_THEME->images['blank'].'" border="0" height="
 $image['group'] = '<img src="'.$GO_THEME->images['workgroup'].'" border="0" height="22" width="24" align="absmiddle" />';
 $image['user'] = '<img src="'.$GO_THEME->images['workstation'].'" border="0" height="22" width="20" align="absmiddle" />';
 
-$image['opened_folder'] = '<img src="'.$GO_THEME->images['companyopen'].'" border="0" height="22" width="24" align="absmiddle" />';
-$image['closed_folder'] = '<img src="'.$GO_THEME->images['companyclosed'].'" border="0" height="22" width="24" align="absmiddle" />';
+$image['opened_folder'] = '<img src="'.$GO_THEME->images['companyopen'].'" border="0" height="22" width="24" align="absmiddle" />&nbsp;';
+$image['closed_folder'] = '<img src="'.$GO_THEME->images['companyclosed'].'" border="0" height="22" width="24" align="absmiddle" />&nbsp;';
 $image['opened_folder_shared'] = '<img src="'.$GO_THEME->images['shared_folder_open'].'" border="0" height="22" width="24" align="absmiddle" />';
 $image['closed_folder_shared'] = '<img src="'.$GO_THEME->images['shared_folder_closed'].'" border="0" height="22" width="24" align="absmiddle" />';
 
@@ -90,6 +90,7 @@ if ($ab_settings['sort_companies_order'] == "DESC")
 	$new_sort_order = "DESC";
 }
 
+echo '<input type="hidden" name="expand_path" value="" />';
 echo '<input type="hidden" name="first" value="'.$first.'" />';
 echo '<input type="hidden" name="max_rows" value="'.$max_rows.'" />';
 echo '<input type="hidden" name="task" />';
@@ -127,19 +128,21 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 {
 	global $image, $path, $GO_SECURITY, $GO_THEME,$group_folders;
 	global $addressbook_id,$ab_settings;
-	global $rowcount,$link_back;
+	global $rowcount,$link_back,$first,$max_rows;
+
+	$total = 0;
 
 	$ab = new addressbook();
-	$count = $ab->get_companies_by_parent($addressbook_id,$parent,$ab_settings['sort_companies_field'], $ab_settings['sort_companies_order']);
+	$count = $ab->get_companies_by_parent($addressbook_id,$parent,$ab_settings['sort_companies_field'], $ab_settings['sort_companies_order'], $first, $max_rows);
+	$total += $count;
 	$path .= $path != '' ? ",$parent" : $parent;
-	for ($i=0;$i<$count;$i++)
+	$i = 0;
+	while ($ab->next_record() && ($max_rows == 0 ||  ($i < $max_rows)))
 	{
-		$ab->next_record();
-
-/*
+		/*
 		if ($ab->f('parent') ||
 		  $fs->has_read_permission($GO_SECURITY->user_id, $folders[$i]['path']))
-//		if ($fs->has_read_permission($GO_SECURITY->user_id, $folders[$i]['path']))
+		  //		if ($fs->has_read_permission($GO_SECURITY->user_id, $folders[$i]['path']))
 		{
 			$subfolders = $fs->get_folders($folders[$i]['path']);
 			$subfolders_count = count($subfolders);
@@ -151,8 +154,9 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 			$open = false;
 		}
 
+		$open = in_array($ab->f('id'), $_SESSION['expanded']);
 		$subab = new addressbook();
-		$subcount = $subab->get_companies_by_parent($addressbook_id,$ab->f('id'));
+		$subcount = $subab->get_count_by_parent($addressbook_id,$ab->f('id'));
 		//if ($subfolders_count > 0)
 		if ($subcount)
 		{
@@ -180,7 +184,6 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 		}
 		unset($subab);
 
-		$open = in_array($ab->f('id'), $_SESSION['expanded']);
 		if ($open)
 		{
 			$folder_image = $image['opened_folder'];
@@ -196,7 +199,7 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 		echo '<tr class = "'.($rowcount ++ % 2 == 0 ? "TableInside1" : "TableInside2").'"id="'.$ab->f("id").'">';
 		echo '<td width="16"><input id="'.addslashes($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
 		if ($subcount)
-			echo '<td><a href="'.$_SERVER['PHP_SELF'].'?post_action=companies&treeview=1&expand_path='.$path.','.$ab->f('id').'">'.$images.$node.'</a>';
+			echo '<td><a href="javascript:document.forms[0].expand_path.value=\''.$path.','.$ab->f('id').'\';document.forms[0].submit()">'.$images.$node.'</a>';
 		else
 			echo '<td>'.$images.$node;
 
@@ -209,15 +212,18 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 
 		if ($open)
 		{
-			print_companies($ab->f('id'), $path,$images.$new_image, $arguments);
+			$subcount = print_companies($ab->f('id'), $path,$images.$new_image, $arguments);
+			$total += $subcount;
+			//$i += $subcount;
 		}
+		$i ++;
 	}
 	unset($ab);
-	return $count;
+	return $total;
 }
 
-//$count = $ab->get_companies_by_parent($addressbook_id, $ab_settings['sort_companies_field'], $ab_settings['sort_companies_order'], $first, $max_rows);
-//$str_count = $count == 1 ? $ab_companies_count_single : $ab_companies_count;
+$count = $ab->get_companies_by_parent($addressbook_id,0, $ab_settings['sort_companies_field'], $ab_settings['sort_companies_order'], $first, $max_rows);
+$str_count = $count == 1 ? $ab_companies_count_single : $ab_companies_count;
 //echo '</td><td colspan="99" class="small" align="right">'.$count.' '.$str_count.'</td></tr>';
 echo '</td><td colspan="99" class="small" align="right"></td></tr>';
 echo '<tr height="20">';
@@ -255,7 +261,79 @@ echo '</td>';
 echo '</tr>';
 
 $count = print_companies(0);
-if ($count == 0)
+if ($count > 0)
+{
+	$links = '';
+	$max_links=10;
+	if ($max_rows != 0)
+	{
+		if ($count > $max_rows)
+		{
+			$links = '<table border="0" cellpadding="0" cellspacing="0" width="100%"><tr><td>';
+			$next_start = $first+$max_rows;
+			$previous_start = $first-$max_rows;
+			if ($first != 0)
+			{
+				$links .= '<a href="javascript:change_list(0, '.$max_rows.');">&lt&lt</a>&nbsp;';
+				$links .= '<a href="javascript:change_list('.$previous_start.', '.$max_rows.');">'.$cmdPrevious.'</a>&nbsp;';
+			}else
+			{
+				$links .= '<font color="#cccccc">&lt&lt '.$cmdPrevious.'</font>&nbsp;';
+			}
+
+			$start = ($first-(($max_links/2)*$max_rows));
+
+			$end = ($first+(($max_links/2)*$max_rows));
+
+			if ($start < 0)
+			{
+				$end = $end - $start;
+				$start=0;
+			}
+			if ($end > $count)
+			{
+				$end = $count;
+			}
+			if ($start > 0)
+			{
+				$links .= '...&nbsp;';
+			}
+
+			for ($i=$start;$i<$end;$i+=$max_rows)
+			{
+				$page = ($i/$max_rows)+1;
+				if ($i==$first)
+				{
+					$links .= '<b><i>'.$page.'</i></b>&nbsp;';
+				}else
+				{
+					$links .= '<a href="'.$_SERVER['PHP_SELF'].'?post_action=projects&first='.$i.'">'.$page.'</a>&nbsp;';
+				}
+			}
+
+			if ($end < $count)
+			{
+				$links .= '...&nbsp;';
+			}
+
+			$last_page = floor($count/$max_rows)*$max_rows;
+
+			if ($count > $next_start)
+			{
+				$links .= '<a href="javascript:change_list('.$next_start.', '.$max_rows.');">'.$cmdNext.'</a>&nbsp;';
+				$links .= '<a href="javascript:change_list('.$last_page.', '.$max_rows.');">&gt&gt</a>';
+			}else
+			{
+				$links .= '<font color="#cccccc">'.$cmdNext.' &gt&gt</font>';
+			}
+			$links .= '</td><td align="right"><a class="normal" href="javascript:change_list(0, 0);">'.$cmdShowAll.'</a></td></tr></table>';
+
+			echo '<tr height="20"><td colspan="99">'.$links.'</td></tr>';
+			echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
+		}
+	}
+}
+else
 {
 	echo '<tr><td colspan="99">'.$ab_no_companies.'</td></tr>';
 	echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
