@@ -407,11 +407,13 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
 	  {
 	    $db->query($query);
 	  }
+	  /*
 	  $queries = get_sql_queries("lib/sql/filetypes.sql");
 	  while ($query = array_shift($queries))
 	  {
 	    $db->query($query);
 	  }
+	  */
 	  //store the version number for future upgrades
 	  $GO_CONFIG->save_setting('version', $GO_CONFIG->version);
 	  $db_version = $GO_CONFIG->version;

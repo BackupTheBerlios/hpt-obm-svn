@@ -707,9 +707,9 @@ require($GO_CONFIG->class_path.'base/theme.class.inc');
 
 $GO_LANGUAGE = new GO_LANGUAGE();
 $GO_THEME = new GO_THEME();
+$GO_SECURITY = new GO_SECURITY();
 $GO_MODULES = new GO_MODULES();
 $GO_AUTH = new GO_AUTH();
-$GO_SECURITY = new GO_SECURITY();
 $GO_USERS = new GO_USERS();
 $GO_GROUPS = new GO_GROUPS();
 

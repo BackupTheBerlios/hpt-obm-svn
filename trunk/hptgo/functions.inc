@@ -10,6 +10,44 @@
 * option) any later version.
 */
 
+function get_email_from_string($email)
+{	
+	if(preg_match("/(\b)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,4})\b/i", $email, $matches))
+	{
+		return $matches[0];	
+	}else
+	{
+		return false;
+	}
+}
+
+function get_filetype_image($extension)
+{
+	global $GO_THEME;
+
+	if(isset($GO_THEME->filetypes[$extension]))
+	{
+		return $GO_THEME->filetypes[$extension];
+	}else
+	{
+		return $GO_THEME->filetypes['unknown'];
+	}
+}
+
+function get_filetype_description($extension)
+{
+	global $filetypes;
+	
+	if(isset($filetypes[$extension]))
+	{
+		return $filetypes[$extension];
+	}else
+	{
+		return $filetypes['unknown'];
+	}
+}
+	
+
 /**
 * This file holds global functions for use inside Group-Office
 *
@@ -69,7 +107,7 @@ function get_sql_queries($file)
     while (!feof ($handle))
     {
       $buffer = trim(fgets($handle, 4096));
-      if($buffer != '' && strpos($buffer, '#') === false)
+      if($buffer != '' && substr($buffer, 0, 1) != '#' && substr($buffer, 0, 1) != '-')
       {
 	$sql .= $buffer;
       }
@@ -132,7 +170,7 @@ function date_to_unixtime($date_string)
     $date_array = explode('-',$datetime_array[0]);
     $year = isset($date_array[2]) ? $date_array[2] : 0;
 
-    if ($_SESSION['GO_SESSION']['date_format'] == "m-d-Y")
+    if (isset($_SESSION['GO_SESSION']['date_format']) && $_SESSION['GO_SESSION']['date_format'] == "m-d-Y")
     {
       $month = isset($date_array[0]) ? $date_array[0] : 0;
       $day = isset($date_array[1]) ? $date_array[1] : 0;
@@ -487,6 +525,19 @@ function detect_browser()
 }
 
 /**
+* Get the regex used for validating an email address
+* Requires the Top Level Domain to be between 2 and 6 alphanumeric chars
+*
+* @param	none
+* @access	public
+* @return	string
+*/
+function get_email_validation_regex()
+{
+  return "^([a-z0-9]+)([._-]([a-z0-9]+))*[@]([a-z0-9]+)([._-]([a-z0-9]+))*[.]([a-z0-9]){2,6}$";
+}
+
+/**
 * Check if an email adress is in a valid format
 *
 * @param	string $email E-mail address
@@ -495,7 +546,7 @@ function detect_browser()
 */
 function validate_email($email)
 {
-  return eregi("^([a-z0-9]+)([._-]([a-z0-9]+))*[@]([a-z0-9]+)([._-]([a-z0-9]+))*[.]([a-z0-9]){2}([a-z0-9])?([a-z0-9])?$",$email);
+  return eregi( get_email_validation_regex(), $email );
 }
 
 /**
@@ -532,41 +583,78 @@ function empty_to_stripe($input)
 */
 function mail_to($email, $name="", $class="normal", $full_link=true, $contact_id=0, $company_id=0)
 {
-  if (validate_email($email))
+  global $GO_CONFIG, $GO_SECURITY, $GO_MODULES, $strEmailTo, $charset;
+
+  $module = isset($GO_MODULES->modules['email']) ? 
+			$GO_MODULES->modules['email'] : false;
+		
+	//NOTE: comment the below line because i'm not sure
+	// htmlentities() is fine for utf-8 (pclouds)
+	//$email = htmlentities($email, ENT_QUOTES, $charset);
+  if ($name == "")
+    $name = $email;
+
+  if ($_SESSION['GO_SESSION']['mail_client'] == 1 && $module['read_permission'])
   {
-    global $GO_CONFIG, $GO_SECURITY, $GO_MODULES, $strEmailTo;
+		if ($full_link == true)
+		{
+			return "<a class=\"".$class."\" title=\"".$strEmailTo.stripslashes($email).
+							"\" href='javascript:popup(\"".$module['url']."send.php?mail_to=".
+							$email."&contact_id=".$contact_id."&company_id=".$company_id.
+							"\",\"".$GO_CONFIG->composer_width."\",\"".
+							$GO_CONFIG->composer_height."\")'>".$name."</a>";
+		}else
+		{
+			return 'javascript:popup("'.$module['url'].'send.php?mail_to='.$email.
+							'&contact_id='.$contact_id.'&company_id='.$company_id.
+							'","'.$GO_CONFIG->composer_width.'","'.
+							$GO_CONFIG->composer_height.'")';
+		}
+    
+  }else
+  {
+	  if ($full_link == true)
+	  {
+	    return "<a class=\"".$class."\" href=\"mailto:".$email."\" title=\"".$strEmailTo.$email."\">".$name."</a>";
+	  }else
+	  {
+	    return 'mailto:'.$email;
+	  }
+	}  
+}
 
-    $module = $GO_MODULES->get_module('email');
-
-    if ($name == "")
-      $name = $email;
-
-    if ($_SESSION['GO_SESSION']['mail_client'] == 1 && $module = $GO_MODULES->get_module('email'))
-    {
-      if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read']) || $GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_write']))
-      {
-	if ($full_link == true)
-	{
-	  return "<a class=\"".$class."\" title=\"".$strEmailTo.$email."\" href='javascript:popup(\"".$module['url']."send.php?mail_to=".$email."&contact_id=".$contact_id."&company_id=".$company_id."\",\"".$GO_CONFIG->composer_width."\",\"".$GO_CONFIG->composer_height."\")'>".$name."</a>";
-	}else
-	{
-	  return 'javascript:popup("'.$module['url'].'send.php?mail_to='.$email.'&contact_id='.$contact_id.'&company_id='.$company_id.'","'.$GO_CONFIG->composer_width.'","'.$GO_CONFIG->composer_height.'")';
+/**
+* Return a formatted address string
+* 
+* @param	array $object User or contact
+* @access public
+* @return string Address formatted
+*/
+function address_format($object)
+{
+	$middle_name = $object['middle_name'] == '' ? '' : $object['middle_name'].' ';
+  $name = $object['first_name'].' '.$middle_name.$object['last_name'];
+  
+  $address = $name.'<br />';
+  
+  if($object['address'] != '')
+  {
+  	$address .= $object['address'].'<br />';
+  }
+  if($object['zip'] != '')
+  {
+  	$address .=	$object['zip'].' ';
 	}
-      }
-    }
-
-    if ($full_link == true)
-    {
-      return "<a class=\"".$class."\" href=\"mailto:".$email."\" title=\"".$strEmailTo.$email."\">".$name."</a>";
-    }else
-    {
-      return 'mailto:'.$email;
-    }
-  }
-  else
+	if($object['city'] != '')
   {
-    return '';
+  	$address .= $object['city'].'<br />';
   }
+  if($object['country'] != '')
+  {
+  	$address .= $object['country'].'<br />';
+  }
+  return $address;
+ 	
 }
 
 /**
@@ -597,14 +685,13 @@ function show_profile($user_id, $linktext='', $class='normal', $return_to='')
     $middle_name = $profile['middle_name'] == '' ? '' : $profile['middle_name'].' ';
     $linktext = $profile['last_name'].' '.$middle_name.$profile['first_name'];
   }
-  $ab_module = $GO_MODULES->get_module('addressbook');
-  if ($ab_module)
+  $ab_module = isset($GO_MODULES->modules['addressbook']) ? $GO_MODULES->modules['addressbook'] : false;
+  if ($ab_module && $ab_module['read_permission'])
   {
     require_once($ab_module['class_path'].'addressbook.class.inc');
     $ab = new addressbook();
   }
-  if ($ab_module && ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $ab_module['acl_read']) ||
-	$GO_SECURITY->has_permission($GO_SECURITY->user_id, $ab_module['acl_write'])) &&
+  if ($ab_module && $ab_module['read_permission'] &&
       $contact = $ab->user_is_contact($GO_SECURITY->user_id, $user_id))
   {
 
@@ -633,7 +720,7 @@ function show_profile($user_id, $linktext='', $class='normal', $return_to='')
 }
 
 /**
-* Return an URL to a user profile page
+* Return an URL to a contact profile page
 * 
 * @param	int $contact_id The contact_id
 * @param	string $linktext The text to display
@@ -650,38 +737,35 @@ function show_contact($contact_id, $linktext='', $return_to='')
     $return_to = $_SERVER['REQUEST_URI'];
   }
 
-  $ab_module = $GO_MODULES->get_module('addressbook');
-
-  if ($ab_module && ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $ab_module['acl_read']) ||
-	$GO_SECURITY->has_permission($GO_SECURITY->user_id, $ab_module['acl_write'])))
+	$link = '';
+	 
+  $ab_module = isset($GO_MODULES->modules['addressbook']) ? $GO_MODULES->modules['addressbook'] : false;
+  if ($ab_module && $ab_module['read_permission'])
   {
-    require_once($ab_module['class_path'].'addressbook.class.inc');
+    require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
     $ab = new addressbook();
 
-    $contact = $ab->get_contact($contact_id);
-
-    if($ab->f('color') != '')
+    if($contact = $ab->get_contact($contact_id))
     {
-      $style = ' style="color: #'.$ab->f('color').';"';
-    }else
-    {
-      $style = '';
-    }
-
-    if ($linktext == '')
-    {
-      $middle_name = $contact['middle_name'] == '' ? '' : $contact['middle_name'].' ';
-      $linktext = $contact['last_name'].' '.$middle_name.$contact['first_name'];
-    }
-    $contact_id=$contact['id'];
-
-    $link = "<a ".$style." href=\"".$ab_module['url'].
-      "contact.php?contact_id=".$contact_id."&return_to=".
-      urlencode($return_to)."\" class=\"normal\" title=\"".$strShowProfile."\">";
-    $link .= htmlspecialchars($linktext)."</a>\n";
-  }else
-  {
-    $link = '';
+	    if($ab->f('color') != '')
+	    {
+	      $style = ' style="color: #'.$ab->f('color').';"';
+	    }else
+	    {
+	      $style = '';
+	    }
+	
+	    if ($linktext == '')
+	    {
+	      $middle_name = $contact['middle_name'] == '' ? '' : $contact['middle_name'].' ';
+	      $linktext = $contact['first_name'].' '.$middle_name.$contact['last_name'];
+	    }
+	
+	    $link = "<a ".$style." href=\"".$ab_module['url'].
+	      "contact.php?contact_id=".$contact_id."&return_to=".
+	      urlencode($return_to)."\" class=\"normal\" title=\"".$strShowProfile."\">";
+	    $link .= htmlspecialchars($linktext)."</a>\n";
+	  }
   }
   return $link;
 }
@@ -697,26 +781,22 @@ function show_contact($contact_id, $linktext='', $return_to='')
 */
 function show_profile_by_email($email, $linktext = '', $return_to='')
 {
-  global $GO_USERS;
+	global $GO_CONFIG, $GO_SECURITY, $strShowProfile, $strAddContact, $GO_MODULES, $GO_USERS;
+	  
   if ($return_to == '')
   {
     $return_to = $_SERVER['REQUEST_URI'];
   }
   if ($linktext == '') $linktext = $email;
-
-  global $GO_CONFIG, $GO_SECURITY, $strShowProfile, $strAddContact, $GO_MODULES, $GO_USERS;
-
-  $ab_module = $GO_MODULES->get_module('addressbook');
-
-  $has_contacts_module = ($ab_module && ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $ab_module['acl_read']) || $GO_SECURITY->has_permission($GO_SECURITY->user_id, $ab_module['acl_write'])));
-
-  if ($has_contacts_module)
+	
+	$ab_module = isset($GO_MODULES->modules['addressbook']) ? $GO_MODULES->modules['addressbook'] : false;
+  if ($ab_module && $ab_module['read_permission'])
   {
-    require_once($ab_module['class_path'].'addressbook.class.inc');
+    require_once($GO_MODULES->modules['addressbook']['class_path'].'addressbook.class.inc');
     $ab = new addressbook();
   }
 
-  if ($has_contacts_module && $contact = $ab->get_contact_profile_by_email($email, $GO_SECURITY->user_id))
+  if ($ab_module && $ab_module['read_permission'] && $contact = $ab->get_contact_profile_by_email($email, $GO_SECURITY->user_id))
   {
     if($contact['color'] != '')
     {
@@ -725,24 +805,19 @@ function show_profile_by_email($email, $linktext = '', $return_to='')
     {
       $style = '';
     }
-    $link = "<a ".$style." href=\"".$ab_module['url']."contact.php?contact_id=".$contact['id']."&return_to=".urlencode($return_to)."\" class=\"normal\" title=\"".$strShowProfile."\">";
-    $m = $contact['middle_name'];
-    $m = isset($m) ? ' '.$m.' ' : ' ';
-    $link .= $contact['last_name'].$m.$contact['first_name']."</a>\n";
+    $link = "<a ".$style." href=\"".$GO_MODULES->modules['addressbook']['url']."contact.php?contact_id=".$contact['id']."&return_to=".urlencode($return_to)."\" class=\"normal\" title=\"".$strShowProfile."\">";
+    $link .= $linktext."</a>\n";
   }else
   {
     $users_id = $GO_USERS->get_user_id_by_email($email);
     if ($users_id && $GO_SECURITY->user_is_visible($users_id))
     {
       $link = '<a href="'.$GO_CONFIG->control_url.'user.php?id='.$users_id.'&return_to='.urlencode($return_to).'" title="'.$strShowProfile.'">';
-      $u = $GO_USERS->get_user($users_id);
-      $m = $u['middle_name'];
-      $m = isset($m) ? ' '.$m.' ' : ' ';
-      $link .= $u['last_name'].$m.$u['first_name']."</a>\n";
-    }elseif($has_contacts_module)
+      $link .= $linktext."</a>\n";
+    }elseif($ab_module && $ab_module['read_permission'])
     {
       $name = split_name($linktext);
-      $link = "<a href=\"".$ab_module['url']."contact.php?email=".$email."&first_name=".urlencode($name['first'])."&middle_name=".urlencode($name['middle'])."&last_name=".urlencode($name['last'])."&return_to=".urlencode($return_to)."\" class=\"normal\" title=\"".$strShowProfile."\">";
+      $link = "<a href=\"".$ab_module['url']."contact.php?email=".$email."&first_name=".urlencode($name['first'])."&middle_name=".urlencode($name['middle'])."&last_name=".urlencode($name['last'])."&return_to=".urlencode($return_to)."\" class=\"normal\" title=\"".$strAddContact."\">";
       $link .= $linktext."</a>\n";
     }else
     {
@@ -753,6 +828,47 @@ function show_profile_by_email($email, $linktext = '', $return_to='')
   return $link;
 }
 
+/**
+* Return an URL to a company profile page
+* 
+* @param	int $company_id The company_id
+* @param	string $linktext The text to display
+* @param	string $return_to The URL to return to when Back is clicked
+* @access public
+* @return string URL to company profile page
+*/
+
+function show_company($company_id, $linktext='', $return_to='')
+{
+	global $strShowProfile, $GO_CONFIG, $GO_SECURITY, $GO_MODULES;
+
+  if ($return_to == '')
+  {
+    $return_to = $_SERVER['REQUEST_URI'];
+  }
+
+	$link = '';
+  $ab_module = isset($GO_MODULES->modules['addressbook']) ? $GO_MODULES->modules['addressbook'] : false;
+  if ($ab_module && $ab_module['read_permission'])
+  {
+    require_once($ab_module['class_path'].'addressbook.class.inc');
+    $ab = new addressbook();
+
+    if($company = $ab->get_company($company_id))
+    {
+	    if ($linktext == '')
+	    {
+	      $linktext = $company['name'];
+	    }
+	
+	    $link = "<a href=\"".$ab_module['url'].
+	      "company.php?company_id=".$company_id."&return_to=".
+	      urlencode($return_to)."\" class=\"normal\" title=\"".$strShowProfile."\">";
+	    $link .= htmlspecialchars($linktext)."</a>\n";
+	  }
+  }
+  return $link;
+}
 /**
 * Check precence of invalid characters
 * 
@@ -962,7 +1078,7 @@ function enriched_to_html($enriched)
   $enriched = preg_replace("/(?:^|\b)(((http(s?):\/\/)|(www\.-))([\w\.-]+)([,:;%#&\/?=\w+\.\-@]+))(?:\b|$)/is", "<a href=\"http$4://$5$6$7\" target=\"_blank\" class=\"blue\">$1</a>", $enriched);
   if ($_SESSION['GO_SESSION']['mail_client'] == 1)
   {
-    $enriched = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,3})\b/i","\\1<a href=\"javascript:popup('".$module['url']."send.php?mail_to=\\2\\3\\4\\5','650','500')\" class=\"blue\">\\2\\3\\4\\5</a>",$enriched);
+    $enriched = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,3})\b/i","\\1<a href=\"javascript:top.main.popup('".$module['url']."send.php?mail_to=\\2\\3\\4\\5','".$GO_CONFIG->composer_width."','".$GO_CONFIG->composer_height."')\" class=\"blue\">\\2\\3\\4\\5</a>",$enriched);
   }else
   {
     $enriched = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,3})\b/i","\\1<a href=\"mailto:\\2\\3\\4\\5\" class=\"blue\">\\2\\3\\4\\5</a>",$enriched);
@@ -1003,13 +1119,13 @@ function text_to_html($text)
 {
   global $GO_CONFIG, $GO_MODULES;
 
-  $module = $GO_MODULES->get_module('email');
+  $module = isset($GO_MODULES->modules['email']) ? $GO_MODULES->modules['email'] : false;
 
   $text = htmlspecialchars($text);
   $text = preg_replace("/(?:^|\b)(((http(s?):\/\/)|(www\.-))([\w\.-]+)([,:;%#&\/?=\w+\.\-@]+))(?:\b|$)/is", "<a href=\"http$4://$5$6$7\" target=\"_blank\" class=\"blue\">$1</a>", $text);
   if ($_SESSION['GO_SESSION']['mail_client'] == 1)
   {
-    $text = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,3})\b/i","\\1<a href=\"javascript:popup('".$module['url']."send.php?mail_to=\\2\\3\\4\\5','650','500')\" class=\"blue\">\\2\\3\\4\\5</a>",$text);
+    $text = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,3})\b/i","\\1<a href=\"javascript:top.main.popup('".$module['url']."send.php?mail_to=\\2\\3\\4\\5','".$GO_CONFIG->composer_width."','".$GO_CONFIG->composer_height."')\" class=\"blue\">\\2\\3\\4\\5</a>",$text);
   }else
   {
     $text = preg_replace("/(\A|\s)([\w\.\-]+)(@)([\w\.-]+)([A-Za-z]{2,3})\b/i","\\1<a href=\"mailto:\\2\\3\\4\\5\" class=\"blue\">\\2\\3\\4\\5</a>",$text);
@@ -1039,7 +1155,7 @@ function convert_html($html, $remove = true)
   //$html = str_replace("\r", "", $html);
   //$html = str_replace("\n", "", $html);
 
-  $module = $GO_MODULES->get_module('email');
+  $module = $GO_MODULES->modules['email'];
 
   if ($remove)
   {
@@ -1060,7 +1176,7 @@ function convert_html($html, $remove = true)
 	"'<textarea[^>]*>.*?</textarea>'si",
 	"'</form>'si"
 	);
-    $html= preg_replace($to_removed_array, '', $html);
+    //$html= preg_replace($to_removed_array, '', $html);
     //$html = preg_replace("|href=\"(.*)script:|i", 'href="removed_script:', $html);
     //$html = preg_replace("|<([^>]*)java|i", '<removed_java_tag', $html);
     //$html = preg_replace("|<([^>]*)&{.*}([^>]*)>|i", "<&{;}\\3>", $html);
@@ -1069,7 +1185,7 @@ function convert_html($html, $remove = true)
 
   if ($_SESSION['GO_SESSION']['mail_client'] == 1)
   {
-    $html = preg_replace("/(href=\"mailto:)([\w\.\-]+)(@)([\w\.\-\"]+)\b/i","href=\"javascript:popup('".$module['url']."send.php?mail_to=$2$3$4','650','500')\" class=\"blue\"",$html);
+    $html = preg_replace("/(href=\"mailto:)([\w\.\-]+)(@)([\w\.\-\"]+)\b/i","href=\"javascript:top.main.popup('".$module['url']."send.php?mail_to=$2$3$4','".$GO_CONFIG->composer_width."','".$GO_CONFIG->composer_height."')\" class=\"blue\"",$html);
   }
 
   $html = preg_replace("/\b((href=\"http(s?):\/\/))([\w\.\?\=\&]+)([\/\w+\.\?\=\&\:\~]+)\b/i"," target=\"_blank\" class=\"blue\" href=\"http$3://$4$5$6", $html);
@@ -1280,7 +1396,7 @@ function sendmail($email_to, $email_from, $name_from, $subject, $body,
   $mail->From     = $email_from;
   $mail->FromName = $name_from;
   $mail->AddReplyTo($email_from, $name_from);
-  $mail->WordWrap = 50;
+  $mail->WordWrap = 76;
   $html_message = strtolower($body_ctype) == 'text/html' ? true : false;
   $mail->IsHTML($html_message);
   $mail->Subject = smartstrip(trim($subject));
@@ -1322,7 +1438,7 @@ function show_open($GO_HANDLER, $GO_FILTER, $link_text="", $class="normal", $ful
 {
   global $GO_CONFIG, $GO_MODULES;
 
-  $module = $GO_MODULES->get_module('filesystem');
+  $module = $GO_MODULES->modules['filesystem'];
 
   if ($fulllink)
   {
@@ -1351,7 +1467,7 @@ function show_save($tmpfile, $link_text="", $class="normal", $fulllink=true)
 {
   global $GO_CONFIG, $GO_MODULES;
 
-  $module = $GO_MODULES->get_module('files');
+  $module = $GO_MODULES->get_module['filesystem'];
 
   if ($fulllink)
   {
@@ -1395,7 +1511,7 @@ function get_extension($filename)
   {
     $extension= substr($filename,$pos+1,strlen($filename));
   }
-  return $extension;
+  return strtolower($extension);
 }
 
 /**
@@ -1405,6 +1521,7 @@ function get_extension($filename)
 * @access public
 * @return string  The mime type of the file
 */
+/* -- DEPRECATED
 function filemime($path)
 {
   global $GO_CONFIG;
@@ -1424,6 +1541,7 @@ function filemime($path)
     return false;
   }
 }
+*/
 
 /**
 * Returns the file type n a friendly way. eg. text/HTML will be HTML document
@@ -1432,6 +1550,7 @@ function filemime($path)
 * @access public
 * @return string  The file type of the file
 */
+/* -- DEPRECATED
 function filemimefriendly($path)
 {
   global $GO_CONFIG;
@@ -1451,6 +1570,7 @@ function filemimefriendly($path)
     return false;
   }
 }
+*/
 
 /**
 function path_to_url($path)
@@ -1465,6 +1585,7 @@ function path_to_url($path)
 
 
 
+/* -- DEPRECATED
 function array_csort($marray, $column) {
   foreach ($marray as $row) {
     $sortarr[] = $row[$column];
@@ -1472,6 +1593,7 @@ function array_csort($marray, $column) {
   array_multisort($sortarr, $marray);
   return $marray;
 }
+*/
 
 /**
 * Returns an array with RGB color (e.g. R128 G126 B124) from a hex html color code (e.g. #F7F7F7)
@@ -1490,6 +1612,65 @@ function hex2dec($html_color)
   $color['G']=$G;
   $color['B']=$B;
   return $color;
+}
+
+function get_mime_type($path)
+{
+	if(function_exists('mime_content_type'))
+	{
+		return mime_content_type($path);
+	}else
+	{
+		$extension = get_extension($path);
+		
+		global $GO_CONFIG;
+		$file = file($GO_CONFIG->mime_types_file);
+		foreach($file as $line)
+		{
+			rtrim($line);
+			if (preg_match('/^\#/', $line))
+				continue;
+			$elms = preg_split('/\s+/', $line);
+			$mime = array_shift($elms);
+			foreach ($elms as $elm)
+			{
+				if ($elm == $extension)
+				{
+					return $mime;
+				}
+		 	}
+		}
+		return 'application/OCTET-STREAM';
+	}
+}
+
+function enc_utf8($str)
+{
+	//some mail clients create encoded strings such: =?iso-8859-1?Q? "Andr=E9=20Mc=20Intyre" ?=
+	//containing space values inside, but they mustn't. The space values have to be removed before
+	//they are going to be converted to utf8.
+	if(preg_match("/=\?/", $str))
+	{
+		$str = str_replace(" ", "", $str);
+	}
+	return imap_utf8($str);
+}
+
+function format_name($last, $first="", $middle="")
+{
+	if($_SESSION['GO_SESSION']['sort_name'] == 'last_name')
+	{
+		$name = $last;
+		$name .= !empty($first) ? ", ".$first : "";
+		$name .= !empty($middle) ? " ".$middle : "";
+	}else
+	{
+		$name = !empty($first) ? $first." " : "";
+		$name .= !empty($middle) ? $middle." " : "";
+		$name .= $last;
+	}
+	
+	return $name;
 }
 
 function div_confirm_id($string)

@@ -186,8 +186,8 @@ if ($fs_settings['sort_field'] == 'basename')
 }
 echo '</td>';
 
-echo '<td class="TableHead2" nowrap><a class="TableHead2" href="'.$_SERVER['PHP_SELF'].'?path='.$urlencoded_path.'&new_sort_field=filemimefriendly&new_sort_order='.$new_sort_order.'">'.$strType.'</a>';
-if ($fs_settings['sort_field'] == 'filemimefriendly')
+echo '<td class="TableHead2" nowrap><a class="TableHead2" href="'.$_SERVER['PHP_SELF'].'?path='.$urlencoded_path.'&new_sort_field=get_mime_type&new_sort_order='.$new_sort_order.'">'.$strType.'</a>';
+if ($fs_settings['sort_field'] == 'get_mime_type')
 {
   echo $sort_arrow;
 }

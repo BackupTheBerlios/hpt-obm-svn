@@ -19,10 +19,31 @@ class GO_MODULES extends db
   var $url;
   var $full_url;
   var $class_path;
+  var $modules;
 
   function GO_MODULES()
   {
+  	global $GO_SECURITY;
+  	
     $this->db();
+  
+		if($GO_SECURITY->logged_in)
+		{
+			$modules = $this->get_modules_with_locations();
+			for($i=0;$i<count($modules);$i++)
+			{
+				$this->modules[$modules[$i]['id']] = $modules[$i];				
+				
+				$this->modules[$modules[$i]['id']]['write_permission'] = 
+					$GO_SECURITY->has_permission($_SESSION['GO_SESSION']['user_id'], 
+						$modules[$i]['acl_write']);
+						
+				$this->modules[$modules[$i]['id']]['read_permission'] = 
+					$this->modules[$modules[$i]['id']]['write_permission'] ? true : 
+						$GO_SECURITY->has_permission($_SESSION['GO_SESSION']['user_id'], 
+						$modules[$i]['acl_read']);
+			}
+		}
   }
   
   /**
@@ -55,13 +76,14 @@ class GO_MODULES extends db
   function authenticate($module_id, $admin=false)
   {
     global $GO_CONFIG, $GO_SECURITY;
-    if($module = $this->get_module($module_id))
+    if(isset($this->modules[$module_id]))
     {
+      $module = $this->modules[$module_id];
       $_SESSION['GO_SESSION']['active_module'] = $module_id;
       $this->path = $GO_CONFIG->root_path.'modules'.$GO_CONFIG->slash.$module_id.$GO_CONFIG->slash;
       $this->class_path = $this->path.'classes'.$GO_CONFIG->slash;
-      $this->read_permissions = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read']);
-      $this->write_permissions = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_write']);
+      $this->read_permissions = $module['read_permission'];
+      $this->write_permissions = $module['write_permission'];
       $this->id = $module_id;
       $this->full_url = $GO_CONFIG->full_url.'modules/'.$module_id.'/';
       $this->url = $GO_CONFIG->host.'modules/'.$module_id.'/';
@@ -70,7 +92,8 @@ class GO_MODULES extends db
       {
 	if ($admin)
 	{
-	  return $this->write_permissions;
+	  if ($this->write_permissions)
+	    return true;
 	}else
 	{
 	  return true;
@@ -221,8 +244,7 @@ class GO_MODULES extends db
     global $GO_CONFIG;
 
     $modules = array();
-    $sql = "SELECT * FROM modules ORDER BY id ASC";
-    $this->query($sql);
+    $this->get_modules();
     while($this->next_record())
     {
       $this->Record['full_url'] = $GO_CONFIG->full_url.'modules/'.$this->f('id').'/';

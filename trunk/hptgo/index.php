@@ -59,7 +59,7 @@ if ($GO_SECURITY->logged_in == true)
     $link = $start_module['url'];
   }else
   {
-    $link = $GO_CONFIG->host.'configuration/preferences/';
+    $link = $GO_CONFIG->host.'configuration/';
   }
   require($GO_THEME->theme_path."frames.inc");
   exit();
@@ -85,7 +85,7 @@ if ( $_SERVER['REQUEST_METHOD'] == "POST" || (isset($_COOKIE['GO_UN'])
       $_POST['auth_source_key'] : 0;
   }
   //check if both fields were filled
-  if (!$username || !$password)
+  if (!$username)// || !$password)
   {
     $feedback = "<p class=\"Error\">".$login_missing_field."</p>";
   } else {
@@ -110,7 +110,7 @@ if ( $_SERVER['REQUEST_METHOD'] == "POST" || (isset($_COOKIE['GO_UN'])
 	    $_SESSION['GO_SESSION']['email'] == '')
 	{
 	  header("Location: ".$GO_CONFIG->host.
-	      "configuration/account/index.php");
+	      "configuration/index.php");
 	  exit();
 	}else
 	{
@@ -129,7 +129,7 @@ if ( $_SERVER['REQUEST_METHOD'] == "POST" || (isset($_COOKIE['GO_UN'])
 	    $link = $start_module['url'];
 	  } else
 	  {
-	    $link = $GO_CONFIG->host.'configuration/preferences/';
+	    $link = $GO_CONFIG->host.'configuration/index.php?account=look.inc';
 	  }
 	  //redefine theme
 	  $GO_THEME = new GO_THEME();

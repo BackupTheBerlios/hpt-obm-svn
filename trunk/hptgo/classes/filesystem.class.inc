@@ -1036,7 +1036,7 @@ class filesystem extends db
 	  $file['name'] = basename($file_path);
 	  $file['size'] = filesize($file_path);
 	  $file['mtime'] = filemtime($file_path);
-	  $file['type'] = filemimefriendly($file_path);
+	  $file['type'] = get_mime_type($file_path);
 
 	  $files[] = $file;
 	}
@@ -1047,7 +1047,7 @@ class filesystem extends db
 	  $file['name'] = basename($file_path);
 	  $file['size'] = filesize($file_path);
 	  $file['mtime'] = filemtime($file_path);
-	  $file['type'] = filemimefriendly($file_path);
+	  $file['type'] = get_mime_type($file_path);
 
 	  $files[] = $file;
 	}
@@ -1122,7 +1122,7 @@ class filesystem extends db
 	  $file['name'] = basename($item);
 	  $file['mtime'] = filemtime($item);
 	  $file['size'] = filesize($item);
-	  $file['type'] = filemimefriendly($item);
+	  $file['type'] = get_mime_type($item);
 
 	  if(isset($url))
 	  {
