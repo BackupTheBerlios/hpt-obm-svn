@@ -36,7 +36,7 @@
 		<td align="right" nowrap>
 		<?php echo $strParentCompany; ?>:&nbsp;
 		</td>
-		<td><?php $parent_dropbox->print_dropbox('parent_id',$company['parent_id']);?></td>
+		<td><?php $parent_dropbox->print_dropbox('parent_id',$company['parent_id'],'',false,10,230);?></td>
 	</tr>
 	<tr><td>&nbsp;</td></tr>
 	<tr>

@@ -232,7 +232,7 @@ $strRelationDate = "Ngày thiết lập quan hệ";
 $strAccountManager = "Nhân viên Phụ trách";
 $strNew = "Mới";
 
-$strConfig = "Cấu hình";
+$strConfig = "Hiệu chỉnh hiển thị";
 $strModifyCategories = "Hiệu chỉnh Danh mục";
 
 $strCom['address'] = $strAddress;

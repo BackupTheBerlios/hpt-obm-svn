@@ -230,7 +230,7 @@ $strRelationDate = "Start relation date";
 $strAccountManager = "Account Manager(s)";
 $strNew = "New";
 
-$strConfig = "Config";
+$strConfig = "View Setting";
 $strModifyCategories = "Modify Categories";
 
 $strCom['address'] = $strAddress;
