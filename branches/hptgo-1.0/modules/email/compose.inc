@@ -94,7 +94,10 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
 
       case "reply_all":
 	$mail_to = $content["reply_to"];
-      $mail_subject = "Re: ".$subject;
+	if (!stristr($subject,"Re: "))
+	  $mail_subject = "Re: ".$subject;
+	else
+	  $mail_subject = $subject;
 
       //add all recievers from this email
       if (isset($content["to"]))
