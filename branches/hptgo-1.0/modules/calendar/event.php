@@ -20,7 +20,7 @@ if (!$ab_module ||
   $ab_module = false;
 }else
 {
-  require_once ($ab_module['path'].'classes/addressbook.class.inc');
+  require_once ($ab_module['class_path'].'addressbook.class.inc');
   $ab = new addressbook();	
 }
 

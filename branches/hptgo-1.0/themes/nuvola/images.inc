@@ -196,6 +196,7 @@ $images['system_folder_closed']	= 'treeview/system_folder_closed.png';
 $images['system_folder_open']	= 'treeview/system_folder_open.png';
 $images['vertline']		= 'treeview/vertline.gif';
 $images['workgroup']		= 'treeview/workgroup.png';
+$images['workgroup_disable']	= 'treeview/workgroup_disable.png';
 $images['workstation']		= 'treeview/workstation.png';
 
 $images['configuration'] = 'buttons/configure.png';

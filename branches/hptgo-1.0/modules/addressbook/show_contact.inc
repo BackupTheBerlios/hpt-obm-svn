@@ -128,7 +128,7 @@
 		<td colspan="2">
 		<br />
 		<?php
-		if ($write_perm)
+		if ($write_permission)
 		{
 			$button = new button($contacts_edit, "document.forms[0].task.value='edit';document.forms[0].submit();");
 			echo '&nbsp;&nbsp;';
