@@ -92,8 +92,12 @@ if ($count > 0)
 			$checked = '';
 			if (isset($arrCategory) && in_array("$id",$arrCategory))
 				$checked = 'checked';
-
-			echo "<td><input type='checkbox' name='category_id[]' value='$id' $checked ></td>";			
+			
+			$disabled = '';
+			if (!$write_permission)
+				$disabled = 'disabled=true';
+			
+			echo "<td><input type='checkbox' name='category_id[]' value='$id' $disabled $checked ></td>";			
     		if ($count == 1)
       			echo '<td width="36" align="center">&nbsp;</a></td>';
     		echo '</tr>';
@@ -113,8 +117,13 @@ echo '</table></td></tr></table>';
 echo '<br />';
 
 echo '<br><br>&nbsp;&nbsp;';
-$button = new button($cmdCapnhat, 'javascript:ok_status()');
-echo '&nbsp;&nbsp;';
+
+if ($write_permission)
+{
+	$button = new button($cmdCapnhat, 'javascript:ok_status()');
+	echo '&nbsp;&nbsp;';
+}	
+
 $button = new button($cmdClose, "javascript:document.location='".$return_to."'");
 ?>
 
