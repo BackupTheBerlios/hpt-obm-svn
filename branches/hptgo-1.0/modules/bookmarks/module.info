@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 <module name="bookmarks">
 	<description>
-		Your favourite bookmarks ordered by catagories can be shared and made
-		available anywhere.
+		Những địa chỉ internet ưa thích của bạn có thể được sắp xếp, phân loại và chia sẻ cho mọi người với chức năng này.
 	</description>
 	<version>
 		1.0
@@ -11,7 +10,7 @@
 	2004-04-05
 	</releaseDate>
 	<status>
-		Stable
+		Ổn định
 	</status>
 	<authors>
 		<author name="Merijn Schering" email="mschering@intermesh.nl" />

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <module name="dictionary">
 	<description>
-		English-Vietnamese Dictionary
+		Từ điển Anh-Việt
 	</description>
 	<version>
 		1.0
@@ -10,9 +10,9 @@
 	2004-09-05
 	</releaseDate>
 	<status>
-		Stable
+		Ổn định
 	</status>
 	<authors>
-		<author name="Dao Hai Lam" email="lamdh@hptvietnam.com.vn" />
+		<author name="Đào Hải Lâm" email="lamdh@hptvietnam.com.vn" />
 	</authors>
 </module>

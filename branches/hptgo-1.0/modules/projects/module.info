@@ -1,20 +1,22 @@
 <?xml version="1.0"?>
 <module name="projects">
 	<description>
-		With the projects module you can easily administrate your working hours.
-		 You can load the working hours back based on project, client or employee.
+		Chức năng quản lý dự án cho phép bạn tạo các kiểu dự án mẫu, thêm và phân chia công việc cho từng người.  Tất cả thành viên tham gia dự án có thể tương tác, chia sẻ thông tin về dự án với nhau.  Quản trị dự án có thể theo dõi tiến độ công việc, trao đổi với các thành viên trong dự án để đưa ra các quyết định nhằm đảm bảo thời gian.
 	</description>
 	<version>
 		1.0
 	</version>
 	<releaseDate>
-	2004-04-05
+	2004-10-10
 	</releaseDate>
 	<status>
-		Stable
+		Ổn định
 	</status>
 	<authors>
 		<author name="Merijn Schering" email="mschering@intermesh.nl" />
+		<author name="Đào Hải Lâm" email="lamdh@hptvietnam.com.vn" />
+		<author name="Nguyễn Hồng Lê" email="lenh@hptvietnam.com.vn" />
+		<author name="Nguyễn Thái Ngọc Duy" email="lenh@hptvietnam.com.vn" />
 	</authors>
 </module>
-	
+
