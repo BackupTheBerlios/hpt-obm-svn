@@ -362,7 +362,6 @@ switch($active_tab_id)
 	break;
 
 	default:
-//		require('../../test.php');
 		require('../../lib/tkdlib.php');
 		if ($write_permission)
 		{

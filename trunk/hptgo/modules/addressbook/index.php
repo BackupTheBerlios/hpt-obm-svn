@@ -84,10 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 }
 
 $addressbook_id = isset($_REQUEST['addressbook_id']) ? $_REQUEST['addressbook_id'] : $ab->get_default_addressbook($GO_SECURITY->user_id);
-
-//echo "aaa==".$_REQUEST['addressbook_id']."==".$addressbook_id;
-//exit();
-
+//echo "2==".$addressbook_id;
 $is_treeview = isset($_REQUEST['treeview']) ? $_REQUEST['treeview'] : '0';
 
 if (!$addressbook_id)
@@ -170,7 +167,7 @@ switch($post_action)
 		}else{
 			echo '"small" ';
 		} ?> 
-		href="<?php echo $_SERVER['PHP_SELF']; ?>?post_action=categories&addressbook_id=<?php echo $addressbook_id.(isset($active_tab)?"&active_tab=".$active_tab:""); ?><?php echo (isset($active_tab)?"&active_tab=".$active_tab:"")?>"><img src="<?php echo $GO_THEME->images['add_category']; ?>" border="0" height="32" width="32" /><br /><?php echo $strConfig; ?></a>
+		href="<?php echo $_SERVER['PHP_SELF']; ?>?post_action=categories&addressbook_id=<?php echo $addressbook_id.(isset($active_tab)?"&active_tab=".$active_tab:""); ?>&return_to=<?php echo $return_to ?>"><img src="<?php echo $GO_THEME->images['add_category']; ?>" border="0" height="32" width="32" /><br /><?php echo $strConfig; ?></a>
 	</td>
 	
 	<?php

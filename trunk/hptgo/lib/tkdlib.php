@@ -9,6 +9,27 @@
    Free Software Foundation; either version 2 of the License, or (at your
    option) any later version.
  */
+	function get_today()
+	{
+		$local_time = get_time();
+//		$year = isset($_REQUEST['year']) ? $_REQUEST['year'] : date("Y", $local_time);
+//		$month = isset($_REQUEST['month']) ? $_REQUEST['month'] : date("m", $local_time);
+//		$day = isset($_REQUEST['day']) ? $_REQUEST['day'] : date("j", $local_time);
+//		$hour = isset($_REQUEST['hour']) ? $_REQUEST['hour'] : date("H", $local_time);
+//		$min = isset($_REQUEST['min']) ? $_REQUEST['min'] : date("i", $local_time);
+
+		$year = date("Y", $local_time);
+		$month = date("m", $local_time);
+		$day = date("j", $local_time);
+		$hour = date("H", $local_time);
+		$min = date("i", $local_time);
+		
+		$requested_time=mktime($hour,0,0,$month, $day, $year);
+		$requested_date=date($_SESSION['GO_SESSION']['date_format'], $requested_time);
+		
+		return $requested_date;
+	}
+
 
 	function send_mail($mail_to, $mail_body, $mail_subject='No title',$mail_name='No name', $mail_from='',$mail_priority=3, $mail_wordwrap=50, $mail_altbody='')
 	{

@@ -153,13 +153,18 @@
 				<td align="right" width="1%" nowrap><?php echo $strRelationDate; ?>&nbsp;:&nbsp;</td>
 				<td nowrap>&nbsp;
 <?php
+
 	if ( empty($task) && $company['relation_date'] ) 
-		$company['relation_date'] = db_date_to_date($company['relation_date']);
-		
+		$today = db_date_to_date($company['relation_date']);
+
 	if ($company['relation_date']==0)
-		$company['relation_date'] = "";
-			
-	$datepicker->print_date_picker('relation_date', $_SESSION['GO_SESSION']['date_format'], $company['relation_date']);
+		$today = "";
+//		$company['relation_date'] = "";
+
+	if (!isset($_REQUEST['company_id']))
+		$today = get_today();
+
+	$datepicker->print_date_picker('relation_date', $_SESSION['GO_SESSION']['date_format'], $today);
 ?>
 				</td>
 			</tr>

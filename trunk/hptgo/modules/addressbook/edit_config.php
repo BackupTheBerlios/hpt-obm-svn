@@ -1,7 +1,7 @@
 <?php
 	$task = $_REQUEST['task'];
 	$page = $_REQUEST['active_tab'];
-	
+
 	$user = $GO_SECURITY->user_id;
 
 	$db = new db();
@@ -31,18 +31,19 @@ switch ($task) {
 		$db->query("DELETE FROM ab_config WHERE page = '$page' AND user_id = '$user'");
 		if (!empty($order_all))
 			$db->query("INSERT INTO ab_config VALUES('$page', '$user', '$com', '$order_all')");
+			
 	case 'return_to':		
 		require('../../lib/tkdlib.php');
 		switch ($page)
 		{
 			case $constContactsPage:
-				goURL("index.php?post_action=browse&addressbooks=".$user);
+				goURL("index.php?post_action=browse&addressbook_id=".$_REQUEST['addressbook_id']);
 			break;
 			case $constCompaniesPage:
-				goURL("index.php?post_action=companies&addressbooks=".$user);
+				goURL("index.php?post_action=companies&addressbook_id=".$_REQUEST['addressbook_id']);
 			break;
 			case $constMembersPage:
-				goURL("index.php?post_action=members&addressbooks=".$user);
+				goURL("index.php?post_action=members&addressbook_id=".$_REQUEST['addressbook_id']);
 			break;
 		}
 }
@@ -82,6 +83,7 @@ if ($db->num_rows() == 0)
 
 echo '<table border="0" cellspacing="0" cellpadding="1" width="100%">';
 echo '<input type="hidden" name="id" value="0" />';
+echo '<input type="hidden" name="addressbook_id" value="'.$_REQUEST['addressbook_id'].'" />';
 echo '<tr><td>';
 echo '<table border="0" cellpadding="2" cellspacing="0">';
 echo '<tr><td>&nbsp;</td></tr>';
@@ -181,7 +183,7 @@ echo '<br />';
 echo '<br><br>&nbsp;&nbsp;';
 $button = new button($cmdOk, 'javascript:ok_status()');
 echo '&nbsp;&nbsp;';
-//$button = new button($cmdClose, "javascript:document.location='".$return_to."'");
+//$button = new button($cmdClose, "javascript:document.location='".$return_to_parent."'");
 $button = new button($cmdClose, "javascript:return_to()");
 echo '&nbsp;&nbsp;';
 $button = new button($cmdDefault, 'javascript:default_status()');

@@ -232,13 +232,22 @@ if (!$print) {
 //Chinh dong LICH va XEM		
     if ($cal->get_authorised_calendars($GO_SECURITY->user_id))
     {
+	  $db = new db();
+	  $db->query('SELECT calendar_id FROM cal_config WHERE user_id="'.$GO_SECURITY->user_id.'"');		
+	  while ($db->next_record())
+	  	$subscribed[] = $db->f('calendar_id');
+		
       echo '<table border="0"><tr><td><h3>'.$sc_calendar.':</h3></td><td>';
       $dropbox = new dropbox();
       $dropbox->add_optgroup($sc_calendars);
       #$dropbox->add_sql_data("cal","id","name");
       while($cal->next_record())
       {
-      	$dropbox->add_value('calendar:'.$cal->f('id'), cut_string($cal->f('name'),20));
+      	if (!isset($subscribed))
+			$dropbox->add_value('calendar:'.$cal->f('id'), cut_string($cal->f('name'),20));
+		else
+			if (in_array($cal->f('id'),$subscribed))
+				$dropbox->add_value('calendar:'.$cal->f('id'), cut_string($cal->f('name'),20));
       }
       
       if($cal->get_views($GO_SECURITY->user_id))

@@ -216,4 +216,7 @@ $cal_view_emerged = 'emerged';
 
 $strNoPastEvent= 'You are not allowed to add an event in the past';
 $subjectEventInvitation = '[Calendar] You are invited to event %s';
+
+$sc_subscribed = 'Subscribed';
+$sc_choice_calendar_msg = 'You must choose at least 1 calendar !';
 ?>

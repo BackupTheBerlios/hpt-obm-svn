@@ -214,4 +214,7 @@ $cal_view_merged = 'kết hợp';
 $cal_view_emerged = 'tách riêng';
 $strNoPastEvent = 'Bạn không được thêm một sự kiện vào quá khứ';
 $subjectEventInvitation = '[Calendar] Bạn được mời tham dự sự kiện %s';
+
+$sc_subscribed = 'Chọn';
+$sc_choice_calendar_msg = 'Bạn phải chọn ít nhất 1 lịch công tác !';
 ?>

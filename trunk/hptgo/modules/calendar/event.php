@@ -837,7 +837,6 @@ if ($event_id > 0 && $task != 'save_event')
   $event['name'] = isset($_POST['name']) ? smartstrip($_POST['name']) : '';
   $event['to'] = isset($_POST['to']) ? smartstrip($_POST['to']) : '';
   $event['contact_id'] = isset($_REQUEST['contact_id']) ? $_REQUEST['contact_id'] : '';
-
   $event['start_date'] = isset($_POST['start_date']) ? smartstrip($_POST['start_date']) : $requested_date;
   $tmp = (strlen($hour) == 1) ? '0'.$hour : $hour;
 
