@@ -253,7 +253,17 @@ class project_task extends db {
           $tn = $tasks[$p]->name;
         }
         $tips .= '<tr><td align="right">'.$to.'.</td><td>&nbsp;'.$tn.'</td></tr>';
-        $nolist[] = $to;
+        if ($p == 0 || (!$this->is_manager && !$this->is_monitor &&
+                        $tasks[$p]->person_id != $GO_SECURITY->user_id))
+          $nolist[] = $to;
+        else {
+          $nolist[] = '<a href="'.$_SERVER['PHP_SELF'].
+                        '?task=show_task_status'.
+                        '&project_id='.$this->project_id.
+                        '&task_id='.$tasks[$p]->id.
+                        '&task_status="'.$tasks[$p]->status.
+                        ' class="normal">'.$to.'</a>';
+        }
       }
       $tips .= '</table></td></tr></table></span>';
       $pids = '<span id="task_pre_'.$this->order.'" style="cursor: default;"'.
@@ -468,7 +478,8 @@ class project_task extends db {
     echo '<td align="center">'.$this->id.'</td>';
     echo '<td>'.$this->name.'</td>';
     echo '<td>'.$member_list[$this->person_id].'</td>';
-    echo '<td>'.$this->pids.'</td>';
+    list($pids, $tips) = $this->get_pid_tips();
+    echo '<td>'.$tips.$pids.'</td>';
     echo '<td>'.$this->days.'</td>';
     echo '<td>';
     echo $pm_task_status_values[$this->status];
