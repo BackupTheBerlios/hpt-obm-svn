@@ -4611,9 +4611,10 @@ class XPath extends XPathEngine {
     $this->properties['modMatch'] = XPATH_QUERYHIT_ALL;
     if ($fileName) {
       if (!$this->importFromFile($fileName)) {
-        $this = FALSE;
+        return FALSE;
       }
     }
+    return TRUE;
   }
   
   /**
