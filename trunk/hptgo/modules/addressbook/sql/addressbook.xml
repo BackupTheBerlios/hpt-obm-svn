@@ -583,7 +583,7 @@
 		</field>
 		<field name="category_id" size="11" type="I">
 			<PRIMARY/>
-			<link table="ab_categories" field="id"/>
+			<link table="ab_categories" field="category_id"/>
 		</field>
 		<descr>Company categorization. What company is in what category</descr>
 	</table>
@@ -599,7 +599,7 @@
 		</field>
 		<field name="parent_id" size="11" type="I">
 			<descr>Category parent ID</descr>
-			<link table="ab_categories" field="id"/>
+			<link table="ab_categories" field="category_id"/>
 		</field>
 		<descr>Company category</descr>
 	</table>
