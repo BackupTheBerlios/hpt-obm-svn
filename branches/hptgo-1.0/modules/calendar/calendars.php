@@ -37,7 +37,7 @@ switch ($task)
   case 'delete_calendar':
     $calendar = $cal->get_calendar($_POST['delete_calendar_id']);
 
-    if($GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']))
+    if($GO_SECURITY->user_id ==  $calendar['user_id'])
     {
       if ($cal->delete_calendar($_POST['delete_calendar_id']))
       {
