@@ -78,7 +78,7 @@ a.ModuleIcons:hover {
 	color: #ffffff;
 	padding: 2px;
 	margin:0px; 
-	padding-right: 3px;
+	padding-right: 5px;
 	font-size: 10px;
 	text-align: right;
 }
@@ -92,7 +92,7 @@ a.ModuleIcons1:link, a.ModuleIcons1:visited, a.ModuleIcons1:active {
 	text-decoration: none;
 	border: 0;
 	padding: 2px;
-	padding-right: 3px;
+	padding-right: 5px;
 }
 
 a.ModuleIcons1:hover {
@@ -138,11 +138,12 @@ a.HeaderBar:hover {
 	font-size:	12px;
 	font-weight: normal;
 	background-color: #8b1b2b;
-	padding:	0;
+	padding: 0;
 	border-bottom: 0px solid #8b1b2b;
 	border-top: 2px solid #8b1b2b;
-	height: 24px;
-	text-align: right;
+	height: 26px;
+	/*padding-right: 5px;
+	padding-left: 5px; */
 }
 
 a.FooterBar:link, a.FooterBar:visited, a.FooterBar:active {
@@ -154,7 +155,8 @@ a.FooterBar:link, a.FooterBar:visited, a.FooterBar:active {
 	text-decoration: none;
 	border: 0;
 	padding: 2px;
-	padding-right: 10px;
+	padding-right: 5px;
+	padding-left: 5px;
 }
 
 a.FooterBar:hover {

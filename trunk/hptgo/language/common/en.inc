@@ -6,7 +6,7 @@ $charset = 'UTF-8';
 //main language menu file register login and other non logged in pages
 //common
 
-$title = "OPEN BUSINESS MANAGEMENT";
+$title = "HPT - Open Business Management<br>GROUP OFFICE";
 
 $cmdCapnhat = "Update";
 

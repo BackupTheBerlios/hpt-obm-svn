@@ -72,7 +72,7 @@ function Bold_Text(id)
 				if ($show_text)
 				$lang_var = isset($lang_modules[$module['id']]) ? $lang_modules[$module['id']] : $module['id'];
 //				echo '<td class="ModuleIcons" align="center" valign="top" nowrap><a  id="'.$module['id'].'" class="LeftBar" href="javascript:Bold_Text(\''.$module['id'].'\',\''.$module['url'].'\')"><img src="'.$GO_THEME->images[$module['id']].'" border="0" width="32" height="32" /><br />'.$lang_var.'</a></td>';	
-				echo '<tr><td class="ModuleIcons" align="center" valign="top" nowrap>&nbsp;<br><a id="'.$module['id'].'" class="LeftBar" onClick="javascript:Bold_Text(\''.$module['id'].'\')" href="'.$module['url'].'" target="main"><img src="'.$GO_THEME->images[$module['id']].'" border="0" width="32" height="32" /><br />'.$lang_var.'</a></td></tr>';	
+				echo '<tr><td class="ModuleIcons" align="center" valign="top" wrap>&nbsp;<br><a id="'.$module['id'].'" class="LeftBar" onClick="javascript:Bold_Text(\''.$module['id'].'\')" href="'.$module['url'].'" target="main"><img src="'.$GO_THEME->images[$module['id']].'" border="0" width="32" height="32" /><br />'.$lang_var.'</a></td></tr>';	
 				if ($show_text)
 				if (strcasecmp($lang_modules[$_SESSION['GO_SESSION']['start_module']], $lang_var)==0) // set bold text for default screen
 					echo "<script language='javascript'>Bold_Text('".$module['id']."');</script>";
