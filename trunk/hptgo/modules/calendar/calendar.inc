@@ -73,6 +73,8 @@ if($_SESSION['GO_SESSION']['DST'] > 0 && date('I') > 0)
 	  
 $timezone_offset = $_SESSION['GO_SESSION']['timezone']+$dst_offset;
 
+//Chinh dong LICH va XEM
+/*
 if(!$print)
 {
   echo '<table border="0" cellpadding="0" cellspacing="0"><tr height="28"><td><h3>';
@@ -103,6 +105,7 @@ if(!$print)
   echo '&nbsp;<a href="javascript:goto_date('.($day+$interval).', '.$month.', '.$year.');">&gt;&gt;</a>';
   echo '</h3></td></tr></table>';
 }
+*/
 
 $weeknumber = date("W", mktime(0,0,0,$month,$day,$year));
 echo '<table id="cal" width="100%" height="100%">';

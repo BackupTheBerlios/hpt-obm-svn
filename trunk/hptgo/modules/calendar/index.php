@@ -225,13 +225,11 @@ if (!$print) {
     <input type="hidden" name="calendar_id" value="<?php echo $calendar_id; ?>" />
     <input type="hidden" name="view_id" value="<?php echo $view_id; ?>" />
 
-    <table border="0" cellpadding="0" cellspacing="0" width="100%">
-    <tr>
-    <td valign="top">
-    <table border="0" cellpadding="0" cellspacing="0" style="margin-right: 10px;">
-    <tr height="28">
-    <td>
+    <table width="1" border="0" cellpadding="0" cellspacing="0" >
+      <tr>
+        <td>
     <?php
+//Chinh dong LICH va XEM		
     if ($cal->get_authorised_calendars($GO_SECURITY->user_id))
     {
       echo '<table border="0"><tr><td><h3>'.$sc_calendar.':</h3></td><td>';
@@ -272,15 +270,166 @@ if (!$print) {
     }
     echo '</table>';
     ?>    
-    </td>
-    </tr>
+		</td>
+        <td>&nbsp;</td>
+        <td>
+<?php		
+//Chinh dong LICH va XEM	
+
+//show_days is the number of days to show (defined in index.php)
+//max_columns (defined in index.php)
+if ($cal_settings['show_days'] == 0)
+{
+  $_REQUEST['show_days'] = 7;
+}
+if (isset($_REQUEST['show_days']) && ($_REQUEST['show_days'] != $cal_settings['show_days']))
+{
+  $cal->set_show_days($GO_SECURITY->user_id, $_REQUEST['show_days']);
+  $cal_settings['show_days'] = $_REQUEST['show_days'];  
+}
+if ($cal_settings['show_days'] > 29)
+{
+  $day = 1;
+}
+//else if ($cal_settings['show_days'] > 4)
+else if ($cal_settings['show_days'] >= 7)
+{
+  //calculate the first day to display in the week view.
+  $weekday = date("w", mktime(0,0,0,$month, $day, $year));
+  $tmpday = $day - $weekday + $_SESSION['GO_SESSION']['first_weekday'];
+  if ($tmpday > $day)
+  {
+    $tmpday = $tmpday -7;
+  }
+  $new_time = mktime(0,0,0,$month, $tmpday, $year);
+  $day = date("j", $new_time);
+  $month = date('m', $new_time);
+  $year = date('Y', $new_time);
+}
+
+// 	Quoc sua cach tinh NgayBatDau va NgayKetThuc
+$interval_start_time = mktime(0,0,0,$month, $day-1, $year); // old calculation
+$interval_end_time = mktime(0,0,0,$month, $day+$cal_settings['show_days']+1, $year);
+
+$interval_start_time2 = mktime(0,0,0,$month, $day, $year);
+
+//$interval_end_time = mktime(0,0,0,$month, $day+$cal_settings['show_days']+1, $year);
+if ($cal_settings['show_days'] > 29){ // Hien thi mot thang
+	// Ngay cuoi thang = ngay dau thang sau - 1
+	if ($month == 12)
+		$interval_end_time2 = mktime(0,0,0,12, 31, $year);
+	else{
+		$interval_end_time2 = mktime(0,0,0,$month+1, 0, $year);
+	}	
+}else if ($cal_settings['show_days'] >= 2){ // hien thi theo nhieu ngay
+	$interval_end_time2 = mktime(0,0,0,$month, $day+$cal_settings['show_days']-1, $year);
+}
+else{ // hien thi mot ngay
+	$interval_end_time2 = $interval_start_time2;
+}
+
+if($_SESSION['GO_SESSION']['DST'] > 0 && date('I') > 0)
+{
+	$dst_offset = $_SESSION['GO_SESSION']['DST'];
+}else
+{
+	$dst_offset = 0;
+}
+	  
+$timezone_offset = $_SESSION['GO_SESSION']['timezone']+$dst_offset;
+
+if(!$print)
+{
+  echo '<table border="0" cellpadding="0" cellspacing="0"><tr height="28"><td><h3>';
+  echo $sc_view.':&nbsp;</h3></td><td>';
+  $dropbox = new dropbox();
+  $dropbox->add_value('1', '1 '.$sc_day);
+  $dropbox->add_value('2', '2 '.$sc_days);
+  $dropbox->add_value('5', '5 '.$sc_days);
+  $dropbox->add_value('7', '1 '.$sc_week);
+  $dropbox->add_value('14', '2 '.$sc_weeks);
+  $dropbox->add_value('21', '3 '.$sc_weeks);
+  $dropbox->add_value('35', '1 '.$sc_month);
+  $dropbox->print_dropbox("show_days", $cal_settings['show_days'],
+      'onchange="javascript:document.forms[0].submit()"');
+  if ($cal_settings['show_days'] == 5)
+  {
+    $interval= 7;
+  }else
+  {
+    $interval = $cal_settings['show_days'];
+  }
+
+  echo '</td><td nowrap><h3><a href="javascript:goto_date('.($day-$interval).', '.$month.', '.$year.');">&lt;&lt; </a>&nbsp;';
+  echo date($_SESSION['GO_SESSION']['date_format'], $interval_start_time2+
+      ($timezone_offset*3600)).' - '.
+      date($_SESSION['GO_SESSION']['date_format'], $interval_end_time2+
+      ($timezone_offset*3600));
+  echo '&nbsp;<a href="javascript:goto_date('.($day+$interval).', '.$month.', '.$year.');">&gt;&gt;</a>';
+  echo '</h3></td></tr></table>';
+}
+?>		
+		</td>
+      </tr>
+    </table>
+
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
     <tr>
+    <td valign="top">
+    <table border="0" cellpadding="0" cellspacing="0" style="margin-right: 10px;">
+
+<!--    
+//Chinh dong LICH va XEM	
+
+<tr height="28">
     <td>
-    <div id="date_picker1_container"></div>
+    <?php
+/*    if ($cal->get_authorised_calendars($GO_SECURITY->user_id))
+    {
+      echo '<table border="0"><tr><td><h3>'.$sc_calendar.':</h3></td><td>';
+      $dropbox = new dropbox();
+      $dropbox->add_optgroup($sc_calendars);
+      #$dropbox->add_sql_data("cal","id","name");
+      while($cal->next_record())
+      {
+      	$dropbox->add_value('calendar:'.$cal->f('id'), cut_string($cal->f('name'),20));
+      }
+      
+      if($cal->get_views($GO_SECURITY->user_id))
+      {
+	      $dropbox->add_optgroup($cal_views);
+	      #$dropbox->add_value('','----- '.$cal_views.' -----');
+	      while($cal->next_record())
+	      {
+	      	$dropbox->add_value('view:'.$cal->f('id'), cut_string($cal->f('name'),20));
+	      }		    
+	    }
+      $dropbox->print_dropbox("calendar_view_id", $calendar_view_id, 'onchange="javascript:change_calendar()"');
+      echo '</td></tr>';
+			
+    }
+    
+    if(isset($view) && $view)
+    {
+      echo '<tr><td><h3>'.$title.'</h3></td><td>';
+	  $calendars = $cal->get_view_calendars($view_id);
+	  if(count($calendars) > 1)
+	  {
+        $dropbox = new dropbox();
+        $dropbox->add_value(true, $cal_view_merged);
+        $dropbox->add_value(false, $cal_view_emerged);
+        $dropbox->print_dropbox("merged_view", $merged_view, 'onchange="javascript:document.forms[0].submit()"');
+	  }
+      echo '</td></tr>';
+    }
+    echo '</table>';*/
+    ?>
     </td>
-    </tr>
+    </tr>-->
+
     <tr>
     <td class="cal_todos">
+	<div id="date_picker1_container"></div>
     <?php
 
     $_REQUEST['max_rows'] = isset($_REQUEST['max_rows']) ? $_REQUEST['max_rows'] : 5;

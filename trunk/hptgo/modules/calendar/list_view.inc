@@ -59,6 +59,8 @@ $events = $cal->get_events_in_array($calendar_id, $view_id, 0, $contact_id, $int
 $events = array_merge($events['all_day'], $events['timed']);
 krsort($events);
 
+//Chinh dong LICH va XEM
+/*
 echo '<table border="0"><tr><td><h3>';
 echo $sc_view.':&nbsp;</h3></td><td>';
 $dropbox = new dropbox();
@@ -75,7 +77,7 @@ echo '</td><td><h3><a href="javascript:goto_date('.($day-$cal_settings['show_day
 echo date($_SESSION['GO_SESSION']['date_format'], $interval_start_time+($_SESSION['GO_SESSION']['timezone']*3600)).' - '.date($_SESSION['GO_SESSION']['date_format'], $interval_end_time+($_SESSION['GO_SESSION']['timezone']*3600));
 echo '&nbsp;<a href="javascript:goto_date('.($day+$cal_settings['show_days']).', '.$month.', '.$year.');">&gt;&gt;</a>';
 echo '</h3></td></tr></table>';
-
+*/
 echo '<table cellspacing="0" cellpadding="0" width="100%">';
 echo '<tr height="20">';
 echo '<td class="TableHead2" width="100" nowrap>'.$sc_start_time.'</td>';
