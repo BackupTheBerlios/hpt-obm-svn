@@ -133,6 +133,9 @@ class filesystem extends db
 
   function is_system_folder($folder)
   {
+    global $GO_CONFIG;
+    if ($GO_CONFIG->file_storage_path.'common' == $folder)
+      return true;
     $db = new db();
     return $db->query("SELECT * FROM fsSystemFolders WHERE path='".$folder."'") && $db->num_rows();
   }
