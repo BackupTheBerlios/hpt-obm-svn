@@ -861,7 +861,6 @@ class addressbook extends db
     }
     return $name;
   }
-
   function get_companies_by_parent($addressbook_id,$parent,$sort='name', $direction='ASC', $start=0, $offset=0,$user_id=0)
   {
     global $GO_SECURITY;

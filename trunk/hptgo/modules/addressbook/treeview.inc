@@ -63,8 +63,8 @@ $image['blank'] = '<img src="'.$GO_THEME->images['blank'].'" border="0" height="
 $image['group'] = '<img src="'.$GO_THEME->images['workgroup'].'" border="0" height="22" width="24" align="absmiddle" />';
 $image['user'] = '<img src="'.$GO_THEME->images['workstation'].'" border="0" height="22" width="20" align="absmiddle" />';
 
-$image['opened_folder'] = '<img src="'.$GO_THEME->images['companyopen'].'" border="0" height="22" width="24" align="absmiddle" />&nbsp;';
-$image['closed_folder'] = '<img src="'.$GO_THEME->images['companyclosed'].'" border="0" height="22" width="24" align="absmiddle" />&nbsp;';
+$image['opened_folder'] = '<img src="'.$GO_THEME->images['companyopen'].'" border="0" height="16" width="16" align="absmiddle" />&nbsp;';
+$image['closed_folder'] = '<img src="'.$GO_THEME->images['companyclosed'].'" border="0" height="16" width="16" align="absmiddle" />&nbsp;';
 $image['opened_folder_shared'] = '<img src="'.$GO_THEME->images['shared_folder_open'].'" border="0" height="22" width="24" align="absmiddle" />';
 $image['closed_folder_shared'] = '<img src="'.$GO_THEME->images['shared_folder_closed'].'" border="0" height="22" width="24" align="absmiddle" />';
 
