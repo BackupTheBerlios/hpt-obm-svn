@@ -170,20 +170,23 @@ echo "</td></tr></table>";
 
 function show_planned_eslapsed_times() {
   global $tasks, $pstop_date, $pstart_date, $pm_delay, $pm_days, $pm_remain,
-  		 $pm_legend_planning, $pm_legend_ongoing, $today, $max_task_id;
+  		 $pm_legend_planning, $pm_legend_ongoing, $pm_legend_done, $today, $max_task_id;
 
   $tasks[1]->get_elapsed();
-  if ($tasks[$max_task_id]->approved)
-	  $today = strtotime($tasks[$max_task_id]->approved_date);
+  $pm_legend_current = $pm_legend_ongoing;
+  if ($tasks[$max_task_id]->approved) {
+    $today = strtotime($tasks[$max_task_id]->approved_date);
+    $pm_legend_current = $pm_legend_done;
+  }
   $plan_days = round(($pstop_date - $pstart_date) / (24 * 3600));
   $done_days = round(($today - $pstart_date) / (24 * 3600));
   if ($done_days > $plan_days)
-	$delay_days = ",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$pm_delay: ".($done_days - $plan_days)." $pm_days";
+    $delay_days = ",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$pm_delay: ".($done_days - $plan_days)." $pm_days";
   else
-	$delay_days = ",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$pm_remain: ".($plan_days - $done_days)." $pm_days";
+    $delay_days = ",&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$pm_remain: ".($plan_days - $done_days)." $pm_days";
 
   echo "<tr><td colspan=\"8\">$pm_legend_planning: $plan_days $pm_days,".
-       "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$pm_legend_ongoing: $done_days $pm_days$delay_days</td></tr>";
+       "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$pm_legend_current: $done_days $pm_days$delay_days</td></tr>";
   echo "<tr><td colspan=\"8\">&nbsp;</td></tr>";
 }
 
