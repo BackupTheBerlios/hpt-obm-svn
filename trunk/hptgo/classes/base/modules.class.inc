@@ -1,26 +1,53 @@
 <?php
-/*
-   Copyright Intermesh 2003
-   Author: Merijn Schering <mschering@intermesh.nl>
-   Version: 1.0 Release date: 08 July 2003
-
-   This program is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation; either version 2 of the License, or (at your
-   option) any later version.
- */
+/**
+*   Copyright Intermesh 2003
+*   @author		Merijn Schering <mschering@intermesh.nl>
+*   @version	1.0 Release date: 08 July 2003
+*
+*   This program is free software; you can redistribute it and/or modify it
+*   under the terms of the GNU General Public License as published by the
+*   Free Software Foundation; either version 2 of the License, or (at your
+*   option) any later version.
+*/
 
 class GO_MODULES extends db
 {
+	/**
+	* @var bool
+	*/
   var $read_permissions = false;
+	/**
+	* @var bool
+	*/
   var $write_permissions = false;
+	/**
+	* @var string
+	*/
   var $path;
+	/**
+	* @var int
+	*/
   var $id;
+	/**
+	* @var string
+	*/
   var $url;
+	/**
+	* @var string
+	*/
   var $full_url;
+	/**
+	* @var string
+	*/
   var $class_path;
+	/**
+	* @var string
+	*/
   var $modules;
 
+	/**
+	* Constructor
+	*/
   function GO_MODULES()
   {
   	global $GO_SECURITY;
@@ -49,8 +76,8 @@ class GO_MODULES extends db
   
   /**
    * Get information of module $module_id
-   * return an array of module info
-   * return false otherwise
+   * @param		int		$module_id
+   * @return	mixed	An array of module info, otherwise false 
    */
   function get_module_info($module_id)
   {
@@ -72,7 +99,9 @@ class GO_MODULES extends db
   /**
    * Check if the current user has permission to access (read/write) module $module_id
    * redirect to error_docs/403.php when failed
-   * return true if succesful.
+   * @param		int		$module_id
+   * @param		bool	$admin
+   * @return	bool	true if succesful.
    */
   function authenticate($module_id, $admin=false)
   {
@@ -113,7 +142,9 @@ class GO_MODULES extends db
 
   /**
    * Check if the current user has permission to read module $module_id
-   * return true if succesful, false otherwise.
+   * @param		int		$user_id
+   * @param		int		$module_id
+   * @return	bool	True if succesful, false otherwise.
    */
   function has_read_permission($user_id, $module_id)
   {
@@ -132,7 +163,9 @@ class GO_MODULES extends db
 
   /**
    * Check if the current user has permission to write module $module_id
-   * return true if succesful, false otherwise.
+   * @param		int		$user_id
+   * @param		int		$module_id
+   * @return	bool	True if succesful, false otherwise.
    */
   function has_write_permission($user_id, $module_id)
   {
@@ -143,7 +176,8 @@ class GO_MODULES extends db
 
   /**
    * Return the record of module $module_id from table modules
-   * return false otherwise.
+   * @param		int		$module_id
+   * @return	mixed	Record if exists, false otherwise.
    */
   function get_module($module_id)
   {
@@ -166,7 +200,11 @@ class GO_MODULES extends db
 
   /**
    * Add new module named $module_id with version $version and acl_{read,write} to system.
-   * return true if successful, false otherwise.
+   * @param		int		$module_id
+   * @param		string	$version
+   * @param		int		$acl_read
+   * @param		int		$acl_write
+   * @return	bool	True if successful, false otherwise.
    */
   function add_module($module_id, $version, $acl_read, $acl_write)
   {
@@ -196,7 +234,8 @@ class GO_MODULES extends db
 
   /**
    * Remove a module from named $module_id from system.
-   * return true if successful, false otherwise.
+   * @param		int		$module_id
+   * @return	bool	True if successful, false otherwise.
    */
   function delete_module($module_id)
   {
@@ -227,7 +266,7 @@ class GO_MODULES extends db
 
   /**
    * Get all modules (accessed through db interface).
-   * return the number of installed modules.
+   * @return	int		the number of installed modules.
    */
   function get_modules()
   {
@@ -239,7 +278,7 @@ class GO_MODULES extends db
   /**
    * Get all modules (accessed through db interface).
    * This function is similiar to get_modules() with additional field (full_url, url, path, class_path)
-   * return the array of modules.
+   * @return	array	The array of modules.
    */
   function get_modules_with_locations()
   {
@@ -261,7 +300,9 @@ class GO_MODULES extends db
   /**
    * Get plugin information.
    * Plugins reside in $GO_CONFIG->full_url/modules/module-name/plugin-name
-   * Return plugin (an array of ('id','path','class_path','full_url','url') if successful, false otherwise.
+   * @param		int		$plugin_id
+   * @param		string	$module_id
+   * @return	mixed	plugin (an array of ('id','path','class_path','full_url','url') if successful, false otherwise.
    */
   function get_plugin($plugin_id, $module_id='')
   {

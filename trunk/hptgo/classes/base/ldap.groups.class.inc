@@ -1,17 +1,17 @@
 <?php
-/*
-   Copyright Intermesh 2003
-   Author: Merijn Schering <mschering@intermesh.nl>
-   Author: Michael Borko <michael.borko@tgm.ac.at>
-   Author: Markus Schabel <markus.schabel@tgm.ac.at>
-   Version: 1.0 Release date: 08 July 2003
-   Version: 1.5 Release date: 27 February 2004
-
-   This program is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation; either version 2 of the License, or (at your
-   option) any later version.
- */
+/**
+*   Copyright Intermesh 2003
+*   @author		Merijn Schering <mschering@intermesh.nl>
+*   @author		Michael Borko <michael.borko@tgm.ac.at>
+*   @author		Markus Schabel <markus.schabel@tgm.ac.at>
+*   @version	1.0 Release date: 08 July 2003
+*   @version	1.5 Release date: 27 February 2004
+*
+*   This program is free software; you can redistribute it and/or modify it
+*   under the terms of the GNU General Public License as published by the
+*   Free Software Foundation; either version 2 of the License, or (at your
+*   option) any later version.
+*/
 
 require_once ($GO_CONFIG->class_path.'base/base.groups.class.inc');
 
@@ -22,6 +22,9 @@ class GO_GROUPS extends base_groups
   var $is_in_group;
   var $grouplist_index;
 
+	/**
+	* Constructor
+	*/
   function GO_GROUPS()
   {
     global $GO_CONFIG, $auth_sources;
@@ -53,6 +56,10 @@ class GO_GROUPS extends base_groups
       return false;
   }
 
+	/**
+	* Delete a user
+	* @param	int	$user_id
+	*/
   function delete_user($user_id)
   {
     $sql = "DELETE FROM users_groups WHERE user_id='$user_id'";
@@ -66,12 +73,23 @@ class GO_GROUPS extends base_groups
     }
   }
 
+	/**
+	* Delete user from group
+	* @param	int		$user_id
+	* @param	int		$group_id
+	* @return	int		Handle of mysql_query
+	*/
   function delete_user_from_group($user_id, $group_id)
   {
     return $this->query("DELETE FROM users_groups WHERE".
 	" user_id='$user_id' AND group_id='$group_id'");
   }
 
+	/**
+	* Get a group
+	* @param	int		$group_id
+	* @return	mixed	array if success, otherwise : FALSE
+	*/
   function get_group($group_id)
   {
     global $GO_LDAP;
@@ -84,11 +102,22 @@ class GO_GROUPS extends base_groups
     return false;
   }
 
+	/**
+	* Update a group
+	* @param	int		$group_id
+	* @param	string	$name
+	* @return	int		Handle of mysql_query	
+	*/
   function update_group($group_id, $name)
   {
     return $this->query("UPDATE groups SET name='$name' WHERE id='$group_id'");
   }
-
+  
+  /**
+  * Get a group by name
+  * @param	string	$name
+  * @return	mixed	array if success, otherwise : FALSE
+  */
   function get_group_by_name($name)
   {
     global $GO_LDAP;
@@ -102,6 +131,12 @@ class GO_GROUPS extends base_groups
     return false;
   }
 
+  /**
+  * Add a new group
+  * @param	int		$user_id
+  * @param	string	$name
+  * @return mixed	int (group ID) if success, otherwise : FALSE
+  */
   function add_group($user_id, $name)
   {
     $name = htmlentities($name);
@@ -115,6 +150,12 @@ class GO_GROUPS extends base_groups
     }
   }
 
+	/**
+	* Check a user in a group
+	* @param	int		$user_id
+	* @param	int		$group_id
+	* @return	bool
+	*/
   function user_owns_group($user_id, $group_id)
   {
     $this->query("SELECT user_id FROM groups WHERE user_id='$user_id' AND".
@@ -128,6 +169,12 @@ class GO_GROUPS extends base_groups
 
   // updated by CSV - 2004-03-31: removed old code, since we can say for sure
   // that there are only uid's that exist in LDAP.
+	/**
+	* Check a user in a group
+	* @param	int		$user_id
+	* @param	int		$group_id
+	* @return	bool
+	*/
   function is_in_group($user_id, $group_id)
   {
     global $GO_CONFIG, $GO_USERS, $GO_LDAP;
@@ -148,6 +195,13 @@ class GO_GROUPS extends base_groups
     return false;
   }
 
+	/**
+	* Get users in a group (LDAP)
+	* @param	int		$group_id
+	* @param	string	$sort
+	* @param	string	$direction
+	* @return	int		Number users in this group
+	*/
   function get_users_in_group($group_id, $sort="name", $direction="ASC")
   {
     global $GO_CONFIG, $GO_LDAP, $GO_USERS;
@@ -169,6 +223,12 @@ class GO_GROUPS extends base_groups
     return $this->is_in_group["count"];
   }
 
+	/**
+	* Check a user in a group (both My SQL and LDAP)
+	* @param	int		$user_id
+	* @param	int		$group_id
+	* @return	bool
+	*/
   function group_is_visible($user_id, $group_id)
   {
     if ($this->user_owns_group($user_id, $group_id)
@@ -178,17 +238,21 @@ class GO_GROUPS extends base_groups
       return false;
   }
 
-  // Gets all groups. Not for user display. Use get_authorised groups.
-  ////////////////////////////////////////////////////////////////////////
+  /**
+  * Gets all groups. Not for user display. Use get_authorised groups.
+  */
   function get_all_groups()
   {
     $this->query("SELECT groups.*,users.username FROM groups, users WHERE".
 	" groups.user_id = users.id ORDER BY groups.id ASC");
   }
 
-  //Users can only see groups when they own it or are in it. Therefore this
-  //complicated query.
-  //////////////////////////////////////////////////////////////////////
+  /**
+  * Users can only see groups when they own it or are in it. Therefore this
+  * complicated query.
+  * @param	int		$user_id
+  * @return	int		Number group where user be in
+  */
   function get_authorised_groups($user_id)
   {
     global $GO_USERS, $GO_LDAP;
@@ -210,6 +274,10 @@ class GO_GROUPS extends base_groups
     return count( $this->grouplist );
   }
 
+	/**
+	* Get next group
+	* @return	mixed	array if success, otherwise : FALSE
+	*/
   function next_record()
   {
     if ( count( $this->grouplist ) > $this->grouplist_index )
@@ -219,7 +287,15 @@ class GO_GROUPS extends base_groups
     } else
       return false;
   }
-
+	/**
+	* Search a groupd
+	* @param	string	$query
+	* @param	string 	$field
+	* @param	int		$user_id
+	* @param	int		$start
+	* @param	int		$offset
+	* @return	int		Number found group
+	*/
   function search($query, $field, $user_id, $start=0, $offset=0) {
 ##TODO: DONT SEARCH FOR GROUPS UNDER 1000 !!!
     $query = utf8_encode(substr( $query, 1, strlen( $query ) - 2 ));

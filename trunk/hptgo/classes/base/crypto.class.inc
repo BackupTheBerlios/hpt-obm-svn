@@ -25,12 +25,18 @@ class GO_CRYPTO
   //var $cryptokey;
   var $varcryptokey;
 
+	/**
+	* Constructor
+	*/
   function GO_CRYPTO(){
     $this->time="1073437878";
     //$this->cryptokey=isset($_SESSION['GO_SESSION']['password']) ? $_SESSION['GO_SESSION']['password'] : 'secret';
     $this->varcryptokey='secret';
   }
 
+	/**
+	*
+	*/
   function bytexor($a,$b)
   {
     $c="";

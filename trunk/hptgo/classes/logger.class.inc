@@ -14,12 +14,19 @@ class GO_LOG
 {
 	var $fp;
 	
+  /**
+  * Constructor
+  */
   function GO_LOG()
   {
   	global $GO_CONFIG;
 		$this->fp = fopen($GO_CONFIG->root_path.'groupoffice.log', 'a+');  	
   }
 
+  /**
+  * log
+  * @param	string	$text
+  */
   function log($text)
   {
 		global $GO_MODULES;
@@ -30,6 +37,9 @@ class GO_LOG
 		return fwrite($this->fp, $text);
   }
   
+  /**
+  * Close
+  */
   function close()
   {
   	return fclose($this->fp);

@@ -1,13 +1,13 @@
 <?php
-/*
-Copyright Intermesh 2003
-Author: Merijn Schering <mschering@intermesh.nl>
-Version: 1.0 Release date: 08 July 2003
-
-This program is free software; you can redistribute it and/or modify it
-under the terms of the GNU General Public License as published by the
-Free Software Foundation; either version 2 of the License, or (at your
-option) any later version.
+/**
+* Copyright Intermesh 2003
+* @author	Merijn Schering <mschering@intermesh.nl>
+* @version	1.0 Release date: 08 July 2003
+* 
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 2 of the License, or (at your
+* option) any later version.
 */
 
 class GO_THEME
@@ -61,8 +61,11 @@ class GO_THEME
 	 * theme filetypes
 	 * @var array
 	 */
-	var $filetypes = array();
+	var $filetypes = array();
 
+	/**
+	* Constructor
+	*/
 	function GO_THEME()
 	{
 		global $GO_CONFIG;
@@ -96,11 +99,14 @@ class GO_THEME
 		{
 			$this->images[$key] = $this->image_url.$value;
 		}
-		require($this->theme_path.'filetypes.inc');
-		foreach($filetypes as $key => $value)
+		require($this->theme_path.'filetypes.inc');
+
+		foreach($filetypes as $key => $value)
+
 		{
 			$this->filetypes[$key] = $this->image_url.$value;
-		}
+		}
+
 		require($this->theme_path.'sounds.inc');
 		foreach($sounds as $key => $value)
 		{
@@ -111,7 +117,7 @@ class GO_THEME
 	/**
 	 * gets the themes
 	 *
-	 * @return array all themes
+	 * @return	array	all themes
 	 */
 	function get_themes()
 	{

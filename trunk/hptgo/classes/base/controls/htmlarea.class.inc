@@ -12,16 +12,48 @@
 
 class htmlarea
 {
+	/**
+	* @var array
+	*/
   var $buttons = array();
+  	/**
+	* @var array
+	*/
   var $fonts = array();
+  	/**
+	* @var string
+	*/
   var $pagestyle = '';
+  	/**
+	* @var string
+	*/
   var $header = '';
+  	/**
+	* @var string
+	*/
   var $name;
+  	/**
+	* @var int
+	*/
   var $rows;
+  	/**
+	* @var int
+	*/
   var $width;
+  	/**
+	* @var bool
+	*/
   var $browser_is_supported = false;
+    /**
+	* @var array
+	*/
   var $button_controls = array();
 
+	/**
+	* Get style
+	* @param	string	$style
+	* @return	array
+	*/
   function get_styles($style)
   {
     $styles = array();
@@ -73,7 +105,15 @@ class htmlarea
     return $styles;
   }
 
-
+	/**
+	* Register dropdow
+	* @param	int		$id
+	* @param	string	$tooltip
+	* @param	string	$option
+	* @param	string	$context
+	* @param	string	$action
+	* @param	string	refresh
+	*/
   function register_dropdown($id, $tooltip, $options, $context, $action, $refresh)
   {
     $button['code'] = '
@@ -100,6 +140,14 @@ refresh: '.$refresh.'
     $this->buttons[] = $button;
   }
 
+	/**
+	* Add button
+	* @param	int		$id
+	* @param	string	$tooltip
+	* @param	string	$image
+	* @param	string	$textmode
+	* @param	string	$action
+	*/
   function add_button($id, $tooltip, $image, $textmode, $action)
   {
     $button['code'] =  '
@@ -109,6 +157,11 @@ refresh: '.$refresh.'
     $this->buttons[] = $button;
   }
 
+	/**
+	* Add font
+	* @param	string	$name
+	* @param	string	$family
+	*/
   function add_font($name, $family)
   {
     $font['name']  = $name;
@@ -116,6 +169,11 @@ refresh: '.$refresh.'
     $this->fonts[] = $font;
   }
 
+	/**
+	* Get textarea header
+	* @param	int		$width
+	* @param	int		$height
+	*/
   function get_textarea_header($width, $height)
   {
     $header = '
@@ -126,6 +184,10 @@ refresh: '.$refresh.'
       resize_editor();
     }
 
+	/**
+	* Resize editor
+	* @return	string
+	*/
   function resize_editor()
   {
     if(textarea_obj = get_object("'.$this->name.'"))
@@ -160,6 +222,17 @@ refresh: '.$refresh.'
     return $header;
   }
 
+	/**
+	* Get header
+	* @param	string	$name
+	* @param	string	$width
+	* @param	string	$height
+	* @param	string	$rows
+	* @param	string	$pagestyle
+	* @param	string	$config_options
+	* @param	bool	$table_operations
+	* @param	bool	$retrict_editor
+	*/
   function get_header($name, $width='600px', $height='400px', $rows='0', $pagestyle='', $config_options='', $table_operations=false, $restrict_editor=false)
   {
     global $GO_CONFIG, $htmlarea_language_name;
@@ -470,6 +543,10 @@ refresh: '.$refresh.'
     return $header;
   }
 
+	/**
+	* Create combos
+	* @return	mixed	HTML code if success, else false
+	*/
   function generate_combos()
   {
     $styles = $this->get_styles($this->pagestyle);
@@ -499,26 +576,44 @@ options: {"CSS":""';
     }
   }
 
+	/**
+	* Print HTML area control
+	* @param	string	$value
+	*/
   function print_htmlarea($value='')
   {
     echo $this->get_htmlarea($value);
   }
 
+	/**
+	* Get HTML code of HTML area control
+	* @param	string	$value
+	* @return	string
+	*/
   function get_htmlarea($value='')
   {
     return '<textarea id="'.$this->name.'" style="width: '.$this->width.'" name="'.$this->name.'" rows="'.$this->rows.'">'.$value.'</textarea>';
   }
 
+	/**
+	* Check if browser is supported
+	*/
   function browser_is_supported()
   {
     return $this->browser_is_supported;
   }
 
+	/**
+	* Force HTML area control have to be used 
+	*/
   function force_textmode()
   {
     $this->browser_is_supported = false;
   }
 
+	/**
+	* Constructor
+	*/
   function htmlarea()
   {
     $browser = detect_browser();

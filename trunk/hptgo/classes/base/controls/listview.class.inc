@@ -46,9 +46,21 @@ class listview
 	 * @var array
 	 */
 	var $columns = array();
+	/**
+	* @var int
+	*/
 	var $max_rows;
+	/**
+	* @var int
+	*/
 	var $first;
+	/**
+	* @var string
+	*/
 	var $sort_order;
+	/**
+	* @var $sort_column
+	*/
 	var $sort_column;
 	/**
 	 * Total number of rows. It's not the number of display rows
@@ -172,6 +184,11 @@ function <?=$this->id?>_change_list(first, max_rows)
 		echo '</tr>';
 	}
 
+	/**
+	* Print line
+	* @param	int		$values
+	* @param	string	$attr
+	*/	
 	function print_line($values,&$attr)
 	{
 		if (!isset($attr) || !is_array($attr))
@@ -205,6 +222,9 @@ function <?=$this->id?>_change_list(first, max_rows)
 		$this->lines ++;
 	}
 
+	/**
+	* Print foot
+	*/
 	function print_foot()
 	{
 		global $cmdNext,$cmdPrevious,$cmdShowAll;
@@ -284,6 +304,11 @@ function <?=$this->id?>_change_list(first, max_rows)
 	}
 }
 
+/**
+* Implode attributes
+* @param	array	$attrs
+* @return	string
+*/
 function attributes_implode(&$attrs)
 {
 	$tdattr = '';
@@ -295,6 +320,13 @@ function attributes_implode(&$attrs)
 	return $tdattr;
 }
 
+/**
+* Create a HTML tag
+* @param	string	$tag
+* @param	string	$values
+* @param	string	$attr_index
+* @return	string	HTML tag
+*/
 function htmltag($tag,&$values,$attr_index = 'attributes')
 {
 	if ($tag != '')

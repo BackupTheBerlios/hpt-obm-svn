@@ -15,19 +15,54 @@
  */
 class datagrid extends db
 {
+  /**
+  * @var string
+  */
   var $table_name = '';
+  /**
+  * @var array
+  */
   var $fields = array();
+  /**
+  * @var int
+  */
   var $id_field = 0;
+  /**
+  * @var string
+  */
   var $order_field = '';
+  /**
+  * @var string
+  */
   var $order_direction = '';
 	
+  /**
+  * @var int
+  */
   var $start_row = 0;
+  /**
+  * @var int
+  */
   var $max_rows = 0;
 	
+  /**
+  * @var int
+  */
   var $row_count = 0;
 
+  /**
+  * @var array
+  */
   var $delete_tables = array();
 	
+	/**
+	* Constructor
+	* @param	string	$table_name
+	* @param	string	$id_field_name
+	* @param	string	$order_field
+	* @param	string	$order_direction
+	* @param	string	$delete_tables
+	*/
   function datagrid($table_name, $id_field_name='', $order_field='', $order_direction='ASC', $delete_tables='')
   {
     if($delete_tables != '')
@@ -76,6 +111,10 @@ class datagrid extends db
     }
   }
 
+	/**
+	* Print datagrid
+	* @return	string
+	*/
   function print_datagrid()
   {
     return $this->header().$this->data().$this->footer();
@@ -83,6 +122,7 @@ class datagrid extends db
 
   /**
    * Print the header
+   * @return	string
    */
   function header()
   {
@@ -106,6 +146,7 @@ class datagrid extends db
 
   /**
    * Print the footer.
+   * @return string
    */
   function footer()
   {
@@ -148,7 +189,7 @@ class datagrid extends db
   /**
    * Return pagination content.
    *
-   * @return html code
+   * @return	string	html code
    */
   function pagination()
   {
@@ -227,7 +268,7 @@ class datagrid extends db
   /**
    * Return sql table.
    *
-   * @return html code.
+   * @return	string	html code.
    */
   function data()
   {
@@ -309,6 +350,7 @@ class datagrid extends db
 
   /**
    * Do sql command INSERT
+   * @return	int		query handle
    */
   function insert()
   {

@@ -13,6 +13,9 @@
 /**
  * Class filesystem is used by module filesystem and other modules to provide
  * a filesystem interface.
+ * @author Merijn Schering <mschering@intermesh.nl>
+ * @version 1.0 Release date: 08 July 2003
+ * @package	Filesystem
  */
 class filesystem extends db
 {

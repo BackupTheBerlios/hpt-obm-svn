@@ -23,7 +23,8 @@ class acl
   /**
    * Constructor.
    *
-   * @param int $acl_id
+   * @param	int		$acl_id
+   * @param	string	$acl_table
    */
   function acl($acl_id,$acl_table='acl')
   {

@@ -1,14 +1,14 @@
 <?php
-/*
-   DAV-Addings
-   Copyright .tgm 2003
-   Author: Michael Borko <michael.borko@tgm.ac.at>
-
-   This program is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation; either version 2 of the License, or (at your
-   option) any later version.
- */
+/**
+*   DAV-Addings
+*   Copyright .tgm 2003
+*   Author: Michael Borko <michael.borko@tgm.ac.at>
+*
+*   This program is free software; you can redistribute it and/or modify it
+*   under the terms of the GNU General Public License as published by the
+*   Free Software Foundation; either version 2 of the License, or (at your
+*   option) any later version.
+*/
 
 class dav extends db
 {

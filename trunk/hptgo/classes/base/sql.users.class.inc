@@ -1,24 +1,31 @@
 <?php
-/*
-   Copyright Intermesh 2003
-   Author: Merijn Schering <mschering@intermesh.nl>
-   Version: 1.0 Release date: 08 July 2003
-
-   This program is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation; either version 2 of the License, or (at your
-   option) any later version.
- */
+/**
+*   Copyright Intermesh 2003
+*   @author		Merijn Schering <mschering@intermesh.nl>
+*   @version	1.0 Release date: 08 July 2003
+*
+*   This program is free software; you can redistribute it and/or modify it
+*   under the terms of the GNU General Public License as published by the
+*   Free Software Foundation; either version 2 of the License, or (at your
+*   option) any later version.
+*/
 
 require_once($GO_CONFIG->class_path.'base/base.users.class.inc');
 
 class GO_USERS extends base_users
 {
+	/**
+	* Constructor
+	*/
   function GO_USERS()
   {
     $this->base_users();   
   }
 
+	/**
+	* Get search fields
+	* @return	array
+	*/
   function get_search_fields() {
     global $strFirstName, $strLastName, $strEmail,
     $strCompany, $strDepartment, $strFunction,
@@ -44,6 +51,14 @@ class GO_USERS extends base_users
     return $searchfields;
   }
 
+	/**
+	* Search
+	* @param	string	$query
+	* @param	string	$field
+	* @param	int		$user_id
+	* @param	int		$start
+	* @param	int		$offset
+	*/
   function search($query, $field, $user_id, $start=0, $offset=0)
   {    
     $sql = "SELECT DISTINCT users.* FROM users, users_groups INNER ".
@@ -64,6 +79,12 @@ class GO_USERS extends base_users
     return isset($count) ? $count : $this->num_rows();
   }
 
+	/**
+	* @param	int		$requesting_user_id
+	* @param	string	$authcode
+	* @param	int		$accepting_user_id
+	* @return	bool
+	*/
   function authorize($requesting_user_id, $authcode, $accepting_user_id)
   {
     global $GO_SECURITY;
@@ -99,6 +120,14 @@ class GO_USERS extends base_users
     }
   }
 
+	/**
+	* Get users
+	* @param	string	$sort
+	* @param	string	$direction
+	* @param	int		$start
+	* @param	int		$offset
+	* @return	int		Number users
+	*/
   function get_users($sort="name",$direction="ASC", $start=0, $offset=0)
   {
     if ($sort == 'name')
@@ -125,6 +154,15 @@ class GO_USERS extends base_users
     return $count;
   }
 
+	/**
+	* Get authorized users
+	* @param	int		$user_id
+	* @param	string	$sort
+	* @param	string	$direction
+	* @param	int		$first
+	* @param	int		$max_rows
+	* @return	int		Number users
+	*/
   function get_authorized_users($user_id, $sort="name",$direction="ASC",$first=0,$max_rows=0)
   {
     if ($sort == 'users.name' || $sort=='name')
@@ -159,6 +197,11 @@ class GO_USERS extends base_users
     }
   }
 
+	/**
+	* Get profile by email
+	* @param	string	$email
+	* @return	mixed	array if success, else false
+	*/
   function get_profile_by_email($email)
   {
     $sql = "SELECT * FROM users WHERE email='$email'";
@@ -170,6 +213,11 @@ class GO_USERS extends base_users
     return false;
   }
 
+	/**
+	* Get user ID by email
+	* @param	string	$email
+	* @return	mixed	User ID if success, else false
+	*/
   function get_user_id_by_email($email)
   {
     $sql = "SELECT id FROM users WHERE email='$email'";
@@ -181,6 +229,11 @@ class GO_USERS extends base_users
     return false;
   }
 
+	/**
+	* Check password
+	* @param	string	$password
+	* @return	bool	
+	*/
   function check_password($password)
   {
     $this->query("SELECT id FROM users WHERE password='".md5($password).
@@ -192,6 +245,11 @@ class GO_USERS extends base_users
     return false;
   }
 
+	/**
+	* Get user by user ID
+	* @param	int		$user_id
+	* @return	mixed	array if success, else false
+	*/
   function get_user($user_id)
   {
     $sql = "SELECT * FROM users WHERE id='$user_id'";
@@ -203,6 +261,11 @@ class GO_USERS extends base_users
     return false;
   }
 
+	/**
+	* Get profile
+	* @param	int		$user_id
+	* @return	mixed	array if success, else false	
+	*/
   function get_profile($user_id)
   {
     $sql = "SELECT * FROM users WHERE id='$user_id'";
@@ -214,6 +277,36 @@ class GO_USERS extends base_users
     return false;
   }
 
+	/**
+	* Update profile
+	* @param	int		$user_id
+	* @param	string	$first_name
+	* @param	string	$middle_name
+	* @param	string	$last_name
+	* @param	string	$initials
+	* @param	string	$title
+	* @param	string	$sex
+	* @param	string	$birthday
+	* @param	string	$email
+	* @param	string	$work_phone
+	* @param	string	$fax
+	* @param	string	$cellular
+	* @param	string	$country
+	* @param	string	$state
+	* @param	string	$city
+	* @param	string	$zip
+	* @param	string	$address
+	* @param	string	$company
+	* @param	string	$work_country
+	* @param	string	$work_state
+	* @param	string	$work_city
+	* @param	string	$work_zip
+	* @param	string	$work_address
+	* @param	string	$work_fax
+	* @param	string	$homepage
+	* @param	string	$department
+	* @param	string	$function
+	*/
   function update_profile($user_id, $first_name, $middle_name, $last_name,
       $initials, $title, $sex, $birthday, $email,
       $work_phone, $home_phone, $fax, $cellular,
@@ -253,6 +346,13 @@ class GO_USERS extends base_users
     return false;
   }
 
+	/**
+	* Update password
+	* @param	int		$user_id
+	* @param	string	$password
+	* @param	string	$old_password
+	* @return	bool	
+	*/
   function update_password($user_id, $password,$old_password=null)
   {
     global $GO_CONFIG;
@@ -270,6 +370,11 @@ class GO_USERS extends base_users
     return false;
   }
 
+	/**
+	* Update authcode
+	* @param	string	$authcode
+	* @return	bool	
+	*/
   function update_authcode($authcode)
   {
     $sql = "UPDATE users SET authcode='$authcode' WHERE id='".$_SESSION['GO_SESSION']['user_id']."'";
@@ -283,6 +388,11 @@ class GO_USERS extends base_users
   }
 
 
+	/**
+	* Get profile by username
+	* @param	string	$username
+	* @return	mixed	record if success, else false
+	*/
   function get_profile_by_username($username)
   {
     $sql = "SELECT * FROM users WHERE username='$username'";
@@ -294,6 +404,11 @@ class GO_USERS extends base_users
     return false;
   }
 
+	/**
+	* Check if an email exists
+	* @param	string	$email
+	* @return	bool
+	*/
   function email_exists($email)
   {
     $sql = "SELECT id FROM users WHERE email='$email'";
@@ -305,6 +420,36 @@ class GO_USERS extends base_users
     return false;
   }
 
+  /**
+  * Add a new user
+	* @param	int		$user_id
+	* @param	string	$first_name
+	* @param	string	$middle_name
+	* @param	string	$last_name
+	* @param	string	$initials
+	* @param	string	$title
+	* @param	string	$sex
+	* @param	string	$birthday
+	* @param	string	$email
+	* @param	string	$work_phone
+	* @param	string	$fax
+	* @param	string	$cellular
+	* @param	string	$country
+	* @param	string	$state
+	* @param	string	$city
+	* @param	string	$zip
+	* @param	string	$address
+	* @param	string	$company
+	* @param	string	$work_country
+	* @param	string	$work_state
+	* @param	string	$work_city
+	* @param	string	$work_zip
+	* @param	string	$work_address
+	* @param	string	$work_fax
+	* @param	string	$homepage
+	* @param	string	$department
+	* @param	string	$function
+  */ 
   // the following fields are removed now: acl_id, authcode
   function add_user($username, $password, $first_name, $middle_name,
       $last_name, $initials, $title, $sex, $birthday,
@@ -368,7 +513,7 @@ class GO_USERS extends base_users
     if ($user_id < 0) {
       $user_id = $this->nextid("users");
     }
-    $acl_id = $GO_SECURITY->get_new_acl( $email );
+    $acl_id = $GO_SECURITY->get_new_acl( $email ); 
     $authcode = $this->random_password();
 
     if ($user_id > 0)
@@ -408,6 +553,10 @@ class GO_USERS extends base_users
     return false;
   }
 
+	/**
+	* Check if number users reach
+	* @return	bool
+	*/
   function max_users_reached()
   {
     global $GO_CONFIG;
@@ -421,6 +570,26 @@ class GO_USERS extends base_users
     }
   }
 
+  /**
+   * This function set's the preferences of the user.
+   * 
+   * @param int $user_id
+   * @param string $date_format
+   * @param string $time_format
+   * @param char $thousands_seperator
+   * @param char $decimal_seperator
+   * @param char $currency
+   * @param bool $mail_client
+   * @param int $max_rows_list
+   * @param string $timezone_offset
+   * @param string $DST
+   * @param string $start_module
+   * @param string $language
+   * @param string $theme
+   * @param string $first_weekday
+   * 
+   * @return bool
+   */
   function set_preferences($user_id, $date_format, $time_format, 
       $thousands_seperator, $decimal_seperator, 
       $currency, $mail_client, $max_rows_list, 
@@ -473,6 +642,15 @@ class GO_USERS extends base_users
     }
   }
 
+	/**
+	* Set notation
+	* @param	int		$user_id
+	* @param	string	$date_format
+	* @param	string	$time_format
+	* @param	string	$thousands_seperator
+	* @param	string	$decimal_seperator
+	* @param	
+	*/
   function set_notations($user_id, $date_format, $time_format, 
       $thousands_seperator, $decimal_seperator, 
       $currency,  $timezone_offset,$DST, $first_weekday)
@@ -494,6 +672,14 @@ class GO_USERS extends base_users
     }
   }
   
+  	/**
+	* Set look and feel (themes, ...)
+	* @param	int		$user_id
+	* @param	int		$max_rows_list
+	* @param	string	$start_module
+	* @param	string	language
+	* @param	string	$theme
+	*/
   function set_look_and_feel($user_id,
       $max_rows_list, 
       $start_module, 
@@ -514,7 +700,11 @@ class GO_USERS extends base_users
     }
   }
   
-
+	/**
+	* Delete a user by user ID
+	* @param	int		$user_id
+	* @return	bool
+	*/
   function delete_user($user_id)
   {
     global $GO_CONFIG,$GO_SECURITY, $GO_MODULES, $GO_GROUPS;
@@ -607,6 +797,10 @@ class GO_USERS extends base_users
     return false;
   }
 
+	/**
+	* Increase login number when user logs in
+	* @param	$user_id
+	*/
   function increment_logins( $user_id ) {
     $sql =  "UPDATE users SET logins=logins+1, lastlogin='".get_gmt_time().
       "' WHERE id='$user_id'";

@@ -169,11 +169,20 @@
 class XPathBase {
   var $_lastError;
   
-  // As debugging of the xml parse is spread across several functions, we need to make this a member.
+  /**
+  * As debugging of the xml parse is spread across several functions, we need to make this a member.
+  * @var bool
+  */
   var $bDebugXmlParse = FALSE;
 
-  // Used to help navigate through the begin/end debug calls
+  /**
+  * Used to help navigate through the begin/end debug calls
+  * @var int
+  */
   var $iDebugNextLinkNumber = 1;
+  /**
+  * @var array
+  */
   var $aDebugOpenLinks = array();
 
   /**
@@ -228,8 +237,8 @@ class XPathBase {
   /**
    * This method checks the right amount and match of brackets
    *
-   * @param     $term (string) String in which is checked.
-   * @return          (bool)   TRUE: OK / FALSE: KO  
+   * @param     string	$term	String in which is checked.
+   * @return	bool	TRUE: OK / FALSE: KO  
    */
   function _bracketsCheck($term) {
     $leng = strlen($term);
@@ -283,10 +292,10 @@ class XPathBase {
    * only if the string the method is looking for is located outside of
    * brackets, the search will be successful.
    *
-   * @param     $term       (string) String in which the search shall take place.
-   * @param     $expression (string) String that should be searched.
-   * @return                (int)    This method returns -1 if no string was found, 
-   *                                 otherwise the offset at which the string was found.
+   * @param     string 	$term		String in which the search shall take place.
+   * @param     string	$expression	String that should be searched.
+   * @return	int					This method returns -1 if no string was found, 
+   *                           			otherwise the offset at which the string was found.
    */
   function _searchString($term, $expression) {
     $bracketCounter = 0; // Record where we are in the brackets. 
@@ -316,9 +325,9 @@ class XPathBase {
    * Returns an array of strings, each of which is a substring of string formed 
    * by splitting it on boundaries formed by the string separator. 
    *
-   * @param     $separator  (string) String that should be searched.
-   * @param     $term       (string) String in which the search shall take place.
-   * @return                (array)  see above
+   * @param     string	$separator	String that should be searched.
+   * @param     string	$term		String in which the search shall take place.
+   * @return	array		see above
    */
   function _bracketExplode($separator, $term) {
     // Note that it doesn't make sense for $separator to itself contain (,),[ or ],
@@ -393,10 +402,10 @@ class XPathBase {
    * string.  ie a(b)cde(f)(g) would map to:
    * array ('a', '(b)', cde', '(f)', '(g)')
    *
-   * @param     $string  (string) The string to process
-   * @param     $open    (string) The substring for the open of a group
-   * @param     $close   (string) The substring for the close of a group
-   * @return             (array)  The parsed string, see above
+   * @param     string	$string	The string to process
+   * @param     string	$open	The substring for the open of a group
+   * @param     string	$close	The substring for the close of a group
+   * @return	array			The parsed string, see above
    */
   function _getEndGroups($string, $open='[', $close=']') {
     // Note that it doesn't make sense for $separator to itself contain (,),[ or ],
@@ -479,9 +488,10 @@ class XPathBase {
    * This method retrieves everything from a string before a given delimiter,
    * not including the delimiter.
    *
-   * @param     $string     (string) String, from which the substring should be extracted.
-   * @param     $delimiter  (string) String containing the delimiter to use.
-   * @return                (string) Substring from the original string before the delimiter.
+   * @param     string	$string	String, from which the substring should be extracted.
+   * @param     string	$delimiter	String containing the delimiter to use.
+   * @param		int		$offset
+   * @return	string				Substring from the original string before the delimiter.
    * @see       _afterstr()
    */
   function _prestr(&$string, $delimiter, $offset=0) {
@@ -497,9 +507,10 @@ class XPathBase {
    * This method retrieves everything from a string after a given delimiter,
    * not including the delimiter.
    *
-   * @param     $string     (string) String, from which the substring should be extracted.
-   * @param     $delimiter  (string) String containing the delimiter to use.
-   * @return                (string) Substring from the original string after the delimiter.
+   * @param     string	$string		String, from which the substring should be extracted.
+   * @param     string	$delimiter	String containing the delimiter to use.
+   * @param		int		$offset
+   * @return	string				Substring from the original string after the delimiter.
    * @see       _prestr()
    */
   function _afterstr($string, $delimiter, $offset=0) {
@@ -519,7 +530,7 @@ class XPathBase {
    * higher the level of verbosity. By default, the class has a verbose level 
    * of 1.
    *
-   * @param $levelOfVerbosity (int) default is 1 = on
+   * @param int	$levelOfVerbosity	default is 1 = on
    */
   function setVerbose($levelOfVerbosity = 1) {
     $level = -1;
@@ -555,8 +566,9 @@ class XPathBase {
    * You should call _displayError() rather than _setLastError() if you would like the message,
    * dependant on their verbose settings, echoed to the screen.
    * 
-   * @param $message (string) a textual error message default is ''
-   * @param $line    (int)    the line number where the error occured, use __LINE__
+   * @param string	$message	a textual error message default is ''
+   * @param int		$line		the line number where the error occured, use __LINE__
+   * @param	string	$filename
    * @see getLastError()
    */
   function _setLastError($message='', $line='-', $file='-') {
@@ -572,9 +584,10 @@ class XPathBase {
    * If also possibly stops the execution of the script.
    * ### Terminate should not be allowed --fab.  Should it??  N.S.
    *
-   * @param $message    (string)  Error message to be displayed.
-   * @param $lineNumber (int)     line number given by __LINE__
-   * @param $terminate  (bool)    (default TURE) End the execution of this script.
+   * @param string	$message	Error message to be displayed.
+   * @param int		$lineNumber	line number given by __LINE__
+   * @param	string	$file	
+   * @param bool	$terminate	(default TURE) End the execution of this script.
    */
   function _displayError($message, $lineNumber='-', $file='-', $terminate=TRUE) {
     // Display the error message.
@@ -590,8 +603,9 @@ class XPathBase {
    *
    * This method displays an error messages
    *
-   * @param $message    (string)  Error message to be displayed.
-   * @param $lineNumber (int)     line number given by __LINE__
+   * @param string	$message	Error message to be displayed.
+   * @param int		$lineNumber	line number given by __LINE__
+   * @param	string	$file
    */
   function _displayMessage($message, $lineNumber='-', $file='-') {
     // Display the error message.
@@ -608,8 +622,8 @@ class XPathBase {
    *
    * @author    Nigel Swinson <nigelswinson@users.sourceforge.net>
    * @author    Sam   Blum    <bs_php@infeer.com>
-   * @param     $functionName (string) the name of the function we are beginning to debug
-   * @return                  (array)  the output from the microtime() function.
+   * @param     string	$functionName	the name of the function we are beginning to debug
+   * @return	array					the output from the microtime() function.
    * @see       _closeDebugFunction()
    */
   function _beginDebugFunction($functionName) {
@@ -634,9 +648,9 @@ class XPathBase {
    * is clear to the debugging user.
    *
    * @author    Nigel Swinson <nigelswinson@users.sourceforge.net>
-   * @param     $aStartTime   (array) the time that the function call was started.
-   * @param     $return_value (mixed) the return value from the function call that 
-   *                                  we are debugging
+   * @param     array	$aStartTime	the time that the function call was started.
+   * @param     mixed	$return_value	the return value from the function call that 
+   *                                  		we are debugging
    */
   function _closeDebugFunction($aStartTime, $returnValue = "") {
     echo "<hr>";
@@ -660,8 +674,8 @@ class XPathBase {
   /**
    * Call to return time since start of function for Profiling
    *
-   * @param     $aStartTime  (array)  the time that the function call was started.
-   * @param     $alertString (string) the string to describe what has just finished happening
+   * @param     array	$aStartTime		the time that the function call was started.
+   * @param     string	$alertString	the string to describe what has just finished happening
    */
   function _profileFunction($aStartTime, $alertString) {
     // Print the time it took to call this function.
@@ -674,7 +688,7 @@ class XPathBase {
   /**
    * Echo an XPath context for diagnostic purposes
    *
-   * @param $context   (array)   An XPath context
+   * @param array	$context	An XPath context
    */
   function _printContext($context) {
     echo "{$context['nodePath']}({$context['pos']}/{$context['size']})";
@@ -685,8 +699,8 @@ class XPathBase {
    *
    * *QUICK AND DIRTY*. Needs some polishing.
    *
-   * @param $node   (array)   A node 
-   * @param $indent (string) (optional, default=''). For internal recursive calls.
+   * @param array	$node	A node 
+   * @param string	$indent	optional, default=''). For internal recursive calls.
    */
   function _treeDump($node, $indent = '') {
     $out = '';
@@ -730,51 +744,72 @@ class XPathBase {
 
 class XPathEngine extends XPathBase {
   
-  // List of supported XPath axes.
-  // What a stupid idea from W3C to take axes name containing a '-' (dash)
-  // NOTE: We replace the '-' with '_' to avoid the conflict with the minus operator.
-  //       We will then do the same on the users Xpath querys
-  //   -sibling => _sibling
-  //   -or-     =>     _or_
-  //  
-  // This array contains a list of all valid axes that can be evaluated in an
-  // XPath query.
+  /**
+  * List of supported XPath axes.
+  * What a stupid idea from W3C to take axes name containing a '-' (dash)
+  * NOTE: We replace the '-' with '_' to avoid the conflict with the minus operator.
+  *       We will then do the same on the users Xpath querys
+  *   -sibling => _sibling
+  *   -or-     =>     _or_
+  *  
+  * This array contains a list of all valid axes that can be evaluated in an
+  * XPath query.
+  * @var array
+  */
   var $axes = array ( 'ancestor', 'ancestor_or_self', 'attribute', 'child', 'descendant', 
                         'descendant_or_self', 'following', 'following_sibling',  
                         'namespace', 'parent', 'preceding', 'preceding_sibling', 'self' 
      );
   
-  // List of supported XPath functions.
-  // What a stupid idea from W3C to take function name containing a '-' (dash)
-  // NOTE: We replace the '-' with '_' to avoid the conflict with the minus operator.
-  //       We will then do the same on the users Xpath querys 
-  //   starts-with      => starts_with
-  //   substring-before => substring_before
-  //   substring-after  => substring_after
-  //   string-length    => string_length
-  //
-  // This array contains a list of all valid functions that can be evaluated
-  // in an XPath query.
+  /**
+  * List of supported XPath functions.
+  * What a stupid idea from W3C to take function name containing a '-' (dash)
+  * NOTE: We replace the '-' with '_' to avoid the conflict with the minus operator.
+  *       We will then do the same on the users Xpath querys 
+  *   starts-with      => starts_with
+  *   substring-before => substring_before
+  *   substring-after  => substring_after
+  *   string-length    => string_length
+  *
+  * This array contains a list of all valid functions that can be evaluated
+  * in an XPath query.
+  * @var array
+  */
   var $functions = array ( 'last', 'position', 'count', 'id', 'name',
     'string', 'concat', 'starts_with', 'contains', 'substring_before',
     'substring_after', 'substring', 'string_length', 'normalize_space', 'translate',
     'boolean', 'not', 'true', 'false', 'lang', 'number', 'sum', 'floor',
     'ceiling', 'round', 'x_lower', 'x_upper', 'generate_id' );
     
-  // List of supported XPath operators.
-  //
-  // This array contains a list of all valid operators that can be evaluated
-  // in a predicate of an XPath query. The list is ordered by the
-  // precedence of the operators (lowest precedence first).
+  /**
+  * List of supported XPath operators.
+  *
+  * This array contains a list of all valid operators that can be evaluated
+  * in a predicate of an XPath query. The list is ordered by the
+  * precedence of the operators (lowest precedence first).
+  * @var array
+  */
   var $operators = array( ' or ', ' and ', '=', '!=', '<=', '<', '>=', '>',
     '+', '-', '*', ' div ', ' mod ', ' | ');
 
-  // List of literals from the xPath string.
+  /**
+  * List of literals from the xPath string.
+  * @var array
+  */
   var $axPathLiterals = array();
   
-  // The index and tree that is created during the analysis of an XML source.
+  /**
+  * The index and tree that is created during the analysis of an XML source.
+  * @var array
+  */
   var $nodeIndex = array();
+  /**
+  * @var array
+  */
   var $nodeRoot  = array();
+  /**
+  * @var array
+  */
   var $emptyNode = array(
                      'name'        => '',       // The tag name. E.g. In <FOO bar="aaa"/> it would be 'FOO'
                      'attributes'  => array(),  // The attributes of the tag E.g. In <FOO bar="aaa"/> it would be array('bar'=>'aaa')
@@ -787,20 +822,49 @@ class XPathEngine extends XPathBase {
                      'contextPos'  => 1,  // Is the one-based position this node has by counting the siblings tags (tags with same name)
                      'xpath'       => ''  // Is the abs. XPath to this node.
                    );
+  /**
+  * @var bool
+  */
   var $_indexIsDirty = FALSE;
 
   
-  // These variable used during the parse XML source
+  /**
+  * These variable used during the parse XML source
+  * @var array
+  */
   var $nodeStack       = array(); // The elements that we have still to close.
-  var $parseStackIndex = 0;       // The current element of the nodeStack[] that we are adding to while 
-                                  // parsing an XML source.  Corresponds to the depth of the xml node.
-                                  // in our input data.
-  var $parseOptions    = array(); // Used to set the PHP's XML parser options (see xml_parser_set_option)
-  var $parsedTextLocation   = ''; // A reference to where we have to put char data collected during XML parsing
-  var $parsInCData     = 0 ;      // Is >0 when we are inside a CDATA section.  
-  var $parseSkipWhiteCache = 0;   // A cache of the skip whitespace parse option to speed up the parse.
+  /**
+  * The current element of the nodeStack[] that we are adding to while 
+  * parsing an XML source.  Corresponds to the depth of the xml node.
+  * in our input data.  
+  * @var int
+  */
+  var $parseStackIndex = 0;
+  /**
+  * Used to set the PHP's XML parser options (see xml_parser_set_option)
+  * @var array
+  */
+  var $parseOptions    = array(); 
+  /**
+  * A reference to where we have to put char data collected during XML parsing
+  * @var  string
+  */
+  var $parsedTextLocation   = ''; 
+  /**
+  * Is >0 when we are inside a CDATA section.  
+  * @var int
+  */
+  var $parsInCData     = 0 ;      
+  /**
+  * A cache of the skip whitespace parse option to speed up the parse.
+  * @var int
+  */
+  var $parseSkipWhiteCache = 0;   
 
-  // This is the array of error strings, to keep consistency.
+  /**
+  * This is the array of error strings, to keep consistency.
+  * @var array
+  */
   var $errorStrings = array(
     'AbsoluteXPathRequired' => "The supplied xPath '%s' does not *uniquely* describe a node in the xml document.",
     'NoNodeMatch'           => "The supplied xPath-query '%s' does not match *any* node in the xml document.",
@@ -818,10 +882,10 @@ class XPathEngine extends XPathBase {
    *   $xmlOpt = array(XML_OPTION_CASE_FOLDING => FALSE, 
    *                   XML_OPTION_SKIP_WHITE => TRUE);
    *
-   * @param  $userXmlOptions (array) (optional) Vector of (<optionID>=><value>, 
-   *                                 <optionID>=><value>, ...).  See PHP's
-   *                                 xml_parser_set_option() docu for a list of possible
-   *                                 options.
+   * @param  $userXmlOptions	array	(optional) Vector of (<optionID>=><value>, 
+   *                                 	<optionID>=><value>, ...).  See PHP's
+   *                                 	xml_parser_set_option() docu for a list of possible
+   *                                 	options.
    * @see   importFromFile(), importFromString(), setXmlOptions()
    */
   function XPathEngine($userXmlOptions=array()) {
@@ -867,8 +931,8 @@ class XPathEngine extends XPathBase {
    * 
    * if $param is not given, all properties will be returned in a hash.
    *
-   * @param  $param (string) the property you want the value of, or NULL for all the properties
-   * @return        (mixed)  string OR hash of all params, or NULL on an unknown parameter.
+   * @param  	string	$param	the property you want the value of, or NULL for all the properties
+   * @return	mixed			string OR hash of all params, or NULL on an unknown parameter.
    */
   function getProperties($param=NULL) {
     $this->properties['hasContent']      = !empty($this->nodeRoot);
@@ -887,8 +951,8 @@ class XPathEngine extends XPathBase {
   /**
    * Set an xml_parser_set_option()
    *
-   * @param $optionID (int) The option ID (e.g. XML_OPTION_SKIP_WHITE)
-   * @param $value    (int) The option value.
+   * @param int	$optionID	The option ID (e.g. XML_OPTION_SKIP_WHITE)
+   * @param int	$value	The option value.
    * @see XML parser functions in PHP doc
    */
   function setXmlOption($optionID, $value) {
@@ -899,7 +963,7 @@ class XPathEngine extends XPathBase {
   /**
    * Sets a number of xml_parser_set_option()s
    *
-   * @param  $userXmlOptions (array) An array of parser options.
+   * @param  array	$userXmlOptions	An array of parser options.
    * @see setXmlOption
    */
   function setXmlOptions($userXmlOptions=array()) {
@@ -919,8 +983,8 @@ class XPathEngine extends XPathBase {
    * have this option set, then your XPath queries will also be case folded 
    * for you.
    *
-   * @param $onOff (bool) (default TRUE) 
-   * @see XML parser functions in PHP doc
+   * @param	bool	$onOff	(default TRUE) 
+   * @see 			XML parser functions in PHP doc
    */
   function setCaseFolding($onOff=TRUE) {
     $this->parseOptions[XML_OPTION_CASE_FOLDING] = $onOff;
@@ -940,7 +1004,7 @@ class XPathEngine extends XPathBase {
    * write out the new version of your XML without whitespace, then use the
    * new XML file with skip whitespaces turned off.
    *
-   * @param $onOff (bool) (default TRUE) 
+   * @param bool	$onOff	(default TRUE) 
    * @see XML parser functions in PHP doc
    */
   function setSkipWhiteSpaces($onOff=TRUE) {
@@ -1111,13 +1175,13 @@ class XPathEngine extends XPathBase {
    *
    * Per default includes a <?xml ...> tag at the start of the data too. 
    *
-   * @param     $fileName       (string) 
-   * @param     $absoluteXPath  (string) The path to the parent node you want(see text above)
-   * @param     $xmlHeader      (array)  The string that you would like to appear before
+   * @param     string	$fileName	
+   * @param     string	$absoluteXPath	The path to the parent node you want(see text above)
+   * @param     array	$xmlHeader	The string that you would like to appear before
    *                                     the XML content.  ie before the <root></root>.  If you
    *                                     do not specify this argument, the xmlHeader that was 
    *                                     found in the parsed xml file will be used instead.
-   * @return                    (string) The returned string contains well-formed XML data 
+   * @return	string	The returned string contains well-formed XML data 
    *                                     or FALSE on error.
    * @see       exportAsXml(), exportAsHtml()
    */
@@ -1185,11 +1249,11 @@ class XPathEngine extends XPathBase {
    *          'as is'. No formatting is done. The output should the same as the 
    *          the original parsed XML source. 
    *
-   * @param  $absoluteXPath (string) (optional, default is root) The node we choose as top-node
-   * @param  $xmlHeader     (string) (optional) content before <root/> (see text above)
-   * @param  $hilightXpath  (array)  (optional) a vector of xPaths to nodes we wat to 
+   * @param  	string	$absoluteXPath	(optional, default is root) The node we choose as top-node
+   * @param  	string	$xmlHeader	(optional) content before <root/> (see text above)
+   * @param  	array	$hilightXpath	(optional) a vector of xPaths to nodes we wat to 
    *                                 hi-light (see text above)
-   * @return                (mixed)  The xml string, or FALSE on error.
+   * @return	mixed	The xml string, or FALSE on error.
    */
   function _export($absoluteXPath='', $xmlHeader=NULL, $hilightXpathList='') {
     // Check whether a root node is given.
@@ -1262,8 +1326,8 @@ class XPathEngine extends XPathBase {
   /**
    * Export the xml document starting at the named node.
    *
-   * @param $node (node)   The node we have to start exporting from
-   * @return      (string) The string representation of the node.
+   * @param		node	$node	The node we have to start exporting from
+   * @return	string	The string representation of the node.
    */
   function _InternalExport($node) {
     $bDebugThisFunction = FALSE;
@@ -1512,8 +1576,8 @@ class XPathEngine extends XPathBase {
    *
    * Parse the XML source and (upon success) store the information into an internal structure.
    *
-   * @param     $fileName (string) Path and name (or URL) of the file to be read and parsed.
-   * @return              (bool)   TRUE on success, FALSE on failure (check getLastError())
+   * @param     string	$fileName	Path and name (or URL) of the file to be read and parsed.
+   * @return	bool				TRUE on success, FALSE on failure (check getLastError())
    * @see       importFromString(), getLastError(), 
    */
   function importFromFile($fileName) {
@@ -1576,9 +1640,9 @@ class XPathEngine extends XPathBase {
    *
    * ### If a function uses setLastError(), then say in the function header that getLastError() is useful.
    *
-   * @param  $xmlString           (string) Name of the string to be read and parsed.
-   * @param  $absoluteParentPath  (string) Node to append data too (see above)
-   * @return                      (bool)   TRUE on success, FALSE on failure 
+   * @param  	string	$xmlString			Name of the string to be read and parsed.
+   * @param  	string	$absoluteParentPath	Node to append data too (see above)
+   * @return	bool	TRUE on success, FALSE on failure 
    *                                       (check getLastError())
    */
   function importFromString($xmlString, $absoluteParentPath = '') {
@@ -1715,9 +1779,9 @@ class XPathEngine extends XPathBase {
    * While parsing a XML document for each opening tag this method is
    * called. It'll add the tag found to the tree of document nodes.
    *
-   * @param $parser     (int)    Handler for accessing the current XML parser.
-   * @param $name       (string) Name of the opening tag found in the document.
-   * @param $attributes (array)  Associative array containing a list of
+   * @param int		$parser		Handler for accessing the current XML parser.
+   * @param string	$name		Name of the opening tag found in the document.
+   * @param string	$attributes	xAssociative array containing a list of
    *                             all attributes of the tag found in the document.
    * @see _handleEndElement(), _handleCharacterData()
    */
@@ -1775,8 +1839,8 @@ class XPathEngine extends XPathBase {
    *
    * While parsing a XML document for each closing tag this method is called.
    *
-   * @param $parser (int)    Handler for accessing the current XML parser.
-   * @param $name   (string) Name of the closing tag found in the document.
+   * @param int		$parser	Handler for accessing the current XML parser.
+   * @param string	$name	Name of the closing tag found in the document.
    * @see       _handleStartElement(), _handleCharacterData()
    */
   function _handleEndElement($parser, $name) {
@@ -1825,8 +1889,8 @@ class XPathEngine extends XPathBase {
    * While parsing a XML document for each character data this method
    * is called. It'll add the character data to the document tree.
    *
-   * @param $parser (int)    Handler for accessing the current XML parser.
-   * @param $text   (string) Character data found in the document.
+   * @param int		$parser	Handler for accessing the current XML parser.
+   * @param string	$text	Character data found in the document.
    * @see       _handleStartElement(), _handleEndElement()
    */
   function _handleCharacterData($parser, $text) {
@@ -1858,8 +1922,8 @@ class XPathEngine extends XPathBase {
    * While parsing a XML document for string not caught by one of the other
    * handler functions, we end up here.
    *
-   * @param $parser (int)    Handler for accessing the current XML parser.
-   * @param $text   (string) Character data found in the document.
+   * @param int		$parser	Handler for accessing the current XML parser.
+   * @param string	$text	Character data found in the document.
    * @see       _handleStartElement(), _handleEndElement()
    */
   function _handleDefaultData($parser, $text) {
@@ -1885,9 +1949,9 @@ class XPathEngine extends XPathBase {
    * Currently I have no bether idea as to left it 'as is' and treat the PI data as normal 
    * text (and adding the surrounding PI-tags <? ? >). 
    *
-   * @param     $parser (int)    Handler for accessing the current XML parser.
-   * @param     $target (string) Name of the PI target. E.g. XML, PHP, DTD, ... 
-   * @param     $data   (string) Associative array containing a list of
+   * @param     int	$parser	Handler for accessing the current XML parser.
+   * @param     string	$target	Name of the PI target. E.g. XML, PHP, DTD, ... 
+   * @param     string	$data	Associative array containing a list of
    * @see       PHP's manual "xml_set_processing_instruction_handler"
    */
   function _handlePI($parser, $target, $data) {
@@ -1928,11 +1992,11 @@ class XPathEngine extends XPathBase {
    * The function is faciliated by a nodeStack, which is an array of nodes that
    * we have yet to close.
    *
-   * @param   $stackParentIndex (int)    The index into the nodeStack[] of the parent
+   * @param   	int		$stackParentIndex	The index into the nodeStack[] of the parent
    *                                     node to which the new node should be added as 
    *                                     a child. *READONLY*
-   * @param   $nodeName         (string) Name of the new node. *READONLY*
-   * @return                    (bool)   TRUE if we successfully added a new child to 
+   * @param   	string	$nodeName	Name of the new node. *READONLY*
+   * @return	bool	TRUE if we successfully added a new child to 
    *                                     the node stack at index $stackParentIndex + 1,
    *                                     FALSE on error.
    */
@@ -2023,7 +2087,7 @@ class XPathEngine extends XPathBase {
    *    // Finally do the reindex and the object is consistent again
    *    reindexNodeTree();
    *
-   * @return (bool) TRUE on success, FALSE otherwise.
+   * @return	bool	TRUE on success, FALSE otherwise.
    * @see _recursiveReindexNodeTree()
    */
   function reindexNodeTree() {
@@ -2063,8 +2127,8 @@ class XPathEngine extends XPathBase {
   /**
    * Here's where the work is done for reindexing (see reindexNodeTree)
    *
-   * @param  $absoluteParentPath (string) the xPath to the parent node
-   * @return                     (bool)   TRUE on success, FALSE otherwise.
+   * @param		string	$absoluteParentPath	the xPath to the parent node
+   * @return	bool	TRUE on success, FALSE otherwise.
    * @see reindexNodeTree()
    */
   function _recursiveReindexNodeTree($absoluteParentPath) {
@@ -2156,9 +2220,9 @@ class XPathEngine extends XPathBase {
    *       Otherwise the children will not point back to the parent, they will point 
    *       back to your temporary variable instead.
    *
-   * @param   $node (mixed)  Either a node (hash array) or an abs. Xpath to a node in 
+   * @param		mixed	$node	Either a node (hash array) or an abs. Xpath to a node in 
    *                         the current doc
-   * @return        (&array) A node and it's child nodes.
+   * @return	&array	A node and it's child nodes.
    */
   function &cloneNode($node, $recursive=FALSE) {
     if (is_string($node) AND isSet($this->nodeIndex[$node])) {
@@ -2226,10 +2290,10 @@ class XPathEngine extends XPathBase {
    * This method tries to evaluate an XPath query by parsing it. A XML source must 
    * have been imported before this method is able to work.
    *
-   * @param     $xPathQuery  (string) XPath query to be evaluated.
-   * @param     $baseXPath   (string) (default is super-root) XPath query to a single document node, 
+   * @param		string	$xPathQuery	XPath query to be evaluated.
+   * @param		string	$baseXPath	(default is super-root) XPath query to a single document node, 
    *                                  from which the XPath query should  start evaluating.
-   * @return                 (mixed)  The result of the XPath expression.  Either:
+   * @return	mixed	The result of the XPath expression.  Either:
    *                                    node-set (an ordered collection of absolute references to nodes without duplicates) 
    *                                    boolean (true or false) 
    *                                    number (a floating-point number) 
@@ -2320,8 +2384,8 @@ class XPathEngine extends XPathBase {
    * Note: This does not interfere with the VariableReference syntactical element, as these 
    * elements must not start with a number.
    *
-   * @param  $xPathQuery  (string) XPath expression to be processed
-   * @return              (string) The XPath expression without the literals.
+   * @param  	string	$xPathQuery	XPath expression to be processed
+   * @return	string	The XPath expression without the literals.
    *                              
    */
   function _removeLiterals($xPathQuery) {
@@ -2356,8 +2420,8 @@ class XPathEngine extends XPathBase {
   /**
    * Returns the given string as a literal reference.
    *
-   * @param $string (string) The string that we are processing
-   * @return        (mixed)  The literal string.  FALSE if the string isn't a literal reference.
+   * @param 	string	$string	The string that we are processing
+   * @return	mixed	The literal string.  FALSE if the string isn't a literal reference.
    */
   function _asLiteral($string) {
     if (empty($string)) return FALSE;
@@ -2385,8 +2449,8 @@ class XPathEngine extends XPathBase {
    * In order to make sure we don't interpret literal strings as XPath expressions, we have to
    * encode literal strings so that we know that they are not XPaths.
    *
-   * @param $string (string) The literal string that we need to store for future access
-   * @return        (mixed)  A reference string to this literal.
+   * @param		string	$string	The literal string that we need to store for future access
+   * @return	mixed	A reference string to this literal.
    */
   function _addLiteral($string) {
     // Store the literal
@@ -2402,13 +2466,13 @@ class XPathEngine extends XPathBase {
    * $this->evaluate() is the entry point and does some inits, while this 
    * function is called recursive internaly for every sub-xPath expresion we find.
    *
-   * @param  $xPathQuery  (string)   XPath query to be evaluated.
-   * @param  $context     (array)    An associative array the describes the context from which
+   * @param		string	$xPathQuery	XPath query to be evaluated.
+   * @param		array	$context	An associative array the describes the context from which
    *                                 to evaluate the XPath Expr.  Contains three members:
    *                                  'nodePath' => The absolute XPath expression to the context node
    *                                  'size' => The context size
    *                                  'pos' => The context position
-   * @return              (mixed)    The result of the XPath expression.  Either:
+   * @return	mixed	The result of the XPath expression.  Either:
    *                                 node-set (an ordered collection of nodes without duplicates) 
    *                                 boolean (true or false) 
    *                                 number (a floating-point number) 
@@ -2825,9 +2889,9 @@ class XPathEngine extends XPathBase {
   /**
    * Internal recursive evaluate an Path expression.
    *
-   * @param  $PathExpr   (string) PathExpr syntactical element
-   * @param  $context    (array)  The context from which to evaluate
-   * @return             (mixed)  The result of the XPath expression.  Either:
+   * @param		string	$PathExpr	PathExpr syntactical element
+   * @param		array	$context	The context from which to evaluate
+   * @return	mixed	The result of the XPath expression.  Either:
    *                               node-set (an ordered collection of nodes without duplicates) 
    *                               boolean (true or false) 
    *                               number (a floating-point number) 
@@ -2888,8 +2952,8 @@ class XPathEngine extends XPathBase {
   /**
    * Sort an xPathSet by doc order.
    *
-   * @param  $xPathSet (array) Array of full paths to nodes that need to be sorted
-   * @return           (array) Array containing the same contents as $xPathSet, but
+   * @param		array	$xPathSet	Array of full paths to nodes that need to be sorted
+   * @return	array	Array containing the same contents as $xPathSet, but
    *                           with the contents in doc order
    */
   function _sortByDocOrder($xPathSet) {
@@ -2983,10 +3047,10 @@ class XPathEngine extends XPathBase {
    * absolute XPath (or vector of XPaths) to a starting node(s) from which the step should 
    * be evaluated.
    *
-   * @param  $steps        (array) Vector containing the remaining steps of the current 
+   * @param		array	$steps	Vector containing the remaining steps of the current 
    *                               XPathQuery expression.
-   * @param  $context      (array) The context from which to evaluate
-   * @return               (array) Vector of absolute XPath's as a result of the step 
+   * @param		array	$context	The context from which to evaluate
+   * @return	array	Vector of absolute XPath's as a result of the step 
    *                               evaluation.  The results will not necessarily be in doc order
    * @see    evaluate()
    */
@@ -3082,9 +3146,9 @@ class XPathEngine extends XPathBase {
    * This method checks whether a list of nodes passed to this method match
    * a given list of predicates. 
    *
-   * @param  $xPathSet   (array)  Array of full paths of all nodes to be tested.
-   * @param  $predicates (array)  Array of predicates to use.
-   * @return             (array)  Vector of absolute XPath's that match the given predicates.
+   * @param		array	$xPathSet	Array of full paths of all nodes to be tested.
+   * @param		array	$predicates	Array of predicates to use.
+   * @return	array	Vector of absolute XPath's that match the given predicates.
    * @see    _evaluateStep()
    */
   function _checkPredicates($xPathSet, $predicates) {
@@ -3174,11 +3238,11 @@ class XPathEngine extends XPathBase {
    * This method evaluates a given XPath function with its arguments on a
    * specific node of the document.
    *
-   * @param  $function      (string) Name of the function to be evaluated.
-   * @param  $arguments     (string) String containing the arguments being
+   * @param		string	$function	Name of the function to be evaluated.
+   * @param		string	$arguments	String containing the arguments being
    *                                 passed to the function.
-   * @param  $context       (array)  The context from which to evaluate
-   * @return                (mixed)  This method returns the result of the evaluation of
+   * @param		array	$context	The context from which to evaluate
+   * @return	mixed	This method returns the result of the evaluation of
    *                                 the function. Depending on the function the type of the 
    *                                 return value can be different.
    * @see    evaluate()
@@ -3234,10 +3298,10 @@ class XPathEngine extends XPathBase {
    * This method checks whether a node in the document matches a given node-test.
    * A node test is something like text(), node(), or an element name.
    *
-   * @param  $contextPath (string)  Full xpath of the node, which should be tested for 
+   * @param		string	$contextPath	Full xpath of the node, which should be tested for 
    *                                matching the node-test.
-   * @param  $nodeTest    (string)  String containing the node-test for the node.
-   * @return              (boolean) This method returns TRUE if the node matches the 
+   * @param		string	$nodeTest	String containing the node-test for the node.
+   * @return	boolean	This method returns TRUE if the node matches the 
    *                                node-test, otherwise FALSE.
    * @see    evaluate()
    */
@@ -3310,9 +3374,9 @@ class XPathEngine extends XPathBase {
    * This method tries to extract the name of the axis and its node-test
    * from a given step of an XPath query at a given node.
    *
-   * @param  $step     (string) String containing a step of an XPath query.
-   * @param  $context  (array)  The context from which to evaluate
-   * @return           (array)  Contains information about the axis found in the step.
+   * @param		string	$step	String containing a step of an XPath query.
+   * @param		array	$context	The context from which to evaluate
+   * @return	array	Contains information about the axis found in the step.
    * @see    _evaluateStep()
    */
   function _getAxis($step, $context) {
@@ -3448,10 +3512,10 @@ class XPathEngine extends XPathBase {
    * This method handles the XPath child axis.  It essentially filters out the
    * children to match the name specified after the '/'.
    *
-   * @param  $axis        (array)  Array containing information about the axis.
-   * @param  $contextPath (string) xpath to starting node from which the axis should 
+   * @param		array	$axis	Array containing information about the axis.
+   * @param		string	$contextPath	xpath to starting node from which the axis should 
    *                               be processed.
-   * @return              (array)  A vector containing all nodes that were found, during 
+   * @return	array	A vector containing all nodes that were found, during 
    *                               the evaluation of the axis.
    * @see    evaluate()
    */
@@ -3496,9 +3560,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath parent axis.
    *
-   * @param  $axis        (array)  Array containing information about the axis.
-   * @param  $contextPath (string) xpath to starting node from which the axis should be processed.
-   * @return              (array)  A vector containing all nodes that were found, during the 
+   * @param		array	$axis	Array containing information about the axis.
+   * @param  	string	$contextPath	xpath to starting node from which the axis should be processed.
+   * @return	array	A vector containing all nodes that were found, during the 
    *                               evaluation of the axis.
    * @see    evaluate()
    */
@@ -3559,9 +3623,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath descendant axis.
    *
-   * @param  $axis        (array)  Array containing information about the axis.
-   * @param  $contextPath (string) xpath to starting node from which the axis should be processed.
-   * @return              (array)  A vector containing all nodes that were found, during the evaluation of the axis.
+   * @param		array	$axis	Array containing information about the axis.
+   * @param		string	$contextPath	xpath to starting node from which the axis should be processed.
+   * @return	array	A vector containing all nodes that were found, during the evaluation of the axis.
    * @see    evaluate()
    */
   function _handleAxis_descendant($axis, $contextPath) {
@@ -3587,9 +3651,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath ancestor axis.
    *
-   * @param  $axis        (array)  Array containing information about the axis.
-   * @param  $contextPath (string) xpath to starting node from which the axis should be processed.
-   * @return              (array)  A vector containing all nodes that were found, during the evaluation of the axis.
+   * @param		array	$axis	Array containing information about the axis.
+   * @param		string	$contextPath	xpath to starting node from which the axis should be processed.
+   * @return	array	A vector containing all nodes that were found, during the evaluation of the axis.
    * @see    evaluate()
    */
   function _handleAxis_ancestor($axis, $contextPath) {
@@ -3612,9 +3676,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath namespace axis.
    *
-   * @param  $axis        (array)  Array containing information about the axis.
-   * @param  $contextPath (string) xpath to starting node from which the axis should be processed.
-   * @return              (array)  A vector containing all nodes that were found, during the evaluation of the axis.
+   * @param		array	$axis	Array containing information about the axis.
+   * @param		string	$contextPath	xpath to starting node from which the axis should be processed.
+   * @return	array	A vector containing all nodes that were found, during the evaluation of the axis.
    * @see    evaluate()
    */
   function _handleAxis_namespace($axis, $contextPath) {
@@ -3624,9 +3688,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath following axis.
    *
-   * @param  $axis        (array)  Array containing information about the axis.
-   * @param  $contextPath (string) xpath to starting node from which the axis should be processed.
-   * @return              (array)  A vector containing all nodes that were found, during the evaluation of the axis.
+   * @param		array	$axis	Array containing information about the axis.
+   * @param  	string	$contextPath	xpath to starting node from which the axis should be processed.
+   * @return	array					A vector containing all nodes that were found, during the evaluation of the axis.
    * @see    evaluate()
    */
   function _handleAxis_following($axis, $contextPath) {
@@ -3659,9 +3723,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath preceding axis.
    *
-   * @param  $axis        (array)  Array containing information about the axis.
-   * @param  $contextPath (string) xpath to starting node from which the axis should be processed.
-   * @return              (array)  A vector containing all nodes that were found, during the evaluation of the axis.
+   * @param		array	$axis			Array containing information about the axis.
+   * @param		string	$contextPath	xpath to starting node from which the axis should be processed.
+   * @return	array					A vector containing all nodes that were found, during the evaluation of the axis.
    * @see    evaluate()
    */
   function _handleAxis_preceding($axis, $contextPath) {
@@ -3689,9 +3753,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath following-sibling axis.
    *
-   * @param  $axis        (array)  Array containing information about the axis.
-   * @param  $contextPath (string) xpath to starting node from which the axis should be processed.
-   * @return              (array)  A vector containing all nodes that were found, during the evaluation of the axis.
+   * @param		array	$axis			Array containing information about the axis.
+   * @param		string	$contextPath	xpath to starting node from which the axis should be processed.
+   * @return	array					A vector containing all nodes that were found, during the evaluation of the axis.
    * @see    evaluate()
    */
   function _handleAxis_following_sibling($axis, $contextPath) {
@@ -3725,9 +3789,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath preceding-sibling axis.
    *
-   * @param  $axis        (array)  Array containing information about the axis.
-   * @param  $contextPath (string) xpath to starting node from which the axis should be processed.
-   * @return              (array)  A vector containing all nodes that were found, during the evaluation of the axis.
+   * @param		array	$axis			Array containing information about the axis.
+   * @param		string	$contextPath	xpath to starting node from which the axis should be processed.
+   * @return	array					A vector containing all nodes that were found, during the evaluation of the axis.
    * @see    evaluate()
    */
   function _handleAxis_preceding_sibling($axis, $contextPath) {
@@ -3755,9 +3819,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath descendant-or-self axis.
    *
-   * @param  $axis        (array)  Array containing information about the axis.
-   * @param  $contextPath (string) xpath to starting node from which the axis should be processed.
-   * @return              (array)  A vector containing all nodes that were found, during the evaluation of the axis.
+   * @param		array	$axis			Array containing information about the axis.
+   * @param		string	$contextPath	xpath to starting node from which the axis should be processed.
+   * @return	array					A vector containing all nodes that were found, during the evaluation of the axis.
    * @see    evaluate()
    */
   function _handleAxis_descendant_or_self($axis, $contextPath) {
@@ -3776,9 +3840,9 @@ class XPathEngine extends XPathBase {
    *
    * This method handles the XPath ancestor-or-self axis.
    *
-   * @param  $axis        (array)  Array containing information about the axis.
-   * @param  $contextPath (string) xpath to starting node from which the axis should be processed.
-   * @return              (array)  A vector containing all nodes that were found, during the evaluation of the axis.
+   * @param		array	$axis			Array containing information about the axis.
+   * @param		string	$contextPath	xpath to starting node from which the axis should be processed.
+   * @return	array					A vector containing all nodes that were found, during the evaluation of the axis.
    * @see    evaluate()
    */
   function _handleAxis_ancestor_or_self ( $axis, $contextPath) {
@@ -3800,9 +3864,9 @@ class XPathEngine extends XPathBase {
    /**
     * Handles the XPath function last.
     *    
-    * @param  $arguments     (string) String containing the arguments that were passed to the function.
-    * @param  $context       (array)  The context from which to evaluate the function
-    * @return                (mixed)  Depending on the type of function being processed
+    * @param	string	$arguments	String containing the arguments that were passed to the function.
+    * @param	array	$context	The context from which to evaluate the function
+    * @return	mixed				Depending on the type of function being processed
     * @see    evaluate()
     */
   function _handleFunction_last($arguments, $context) {
@@ -3812,9 +3876,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function position.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_position($arguments, $context) {
@@ -3824,9 +3888,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function count.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_count($arguments, $context) {
@@ -3837,9 +3901,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function id.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_id($arguments, $context) {
@@ -3862,9 +3926,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function name.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_name($arguments, $context) {
@@ -3885,9 +3949,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function string.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_string($arguments, $context) {
@@ -3924,9 +3988,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function concat.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_concat($arguments, $context) {
@@ -3946,9 +4010,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function starts-with.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_starts_with($arguments, $context) {
@@ -3965,9 +4029,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function contains.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_contains($arguments, $context) {
@@ -3993,9 +4057,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function substring-before.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_substring_before($arguments, $context) {
@@ -4012,9 +4076,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function substring-after.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_substring_after($arguments, $context) {
@@ -4031,9 +4095,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function substring.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_substring($arguments, $context) {
@@ -4056,9 +4120,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function string-length.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_string_length($arguments, $context) {
@@ -4077,9 +4141,9 @@ class XPathEngine extends XPathBase {
    * If the argument is omitted, it defaults to the context node converted to a string,
    * in other words the string-value of the context node
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                 (stri)g trimed string
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	string				trimed string
    * @see    evaluate()
    */
   function _handleFunction_normalize_space($arguments, $context) {
@@ -4095,9 +4159,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function translate.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_translate($arguments, $context) {
@@ -4115,9 +4179,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function boolean.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_boolean($arguments, $context) {
@@ -4160,9 +4224,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function not.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed	Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_not($arguments, $context) {
@@ -4175,9 +4239,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function TRUE.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_true($arguments, $context) {
@@ -4187,9 +4251,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function FALSE.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_false($arguments, $context) {
@@ -4199,9 +4263,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function lang.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_lang($arguments, $context) {
@@ -4221,9 +4285,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function number.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_number($arguments, $context) {
@@ -4254,9 +4318,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function sum.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_sum($arguments, $context) {
@@ -4279,9 +4343,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function floor.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_floor($arguments, $context) {
@@ -4295,9 +4359,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function ceiling.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_ceiling($arguments, $context) {
@@ -4311,9 +4375,9 @@ class XPathEngine extends XPathBase {
   /**
    * Handles the XPath function round.
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_round($arguments, $context) {
@@ -4334,9 +4398,9 @@ class XPathEngine extends XPathBase {
    * lower case a string.
    *    string x-lower(string) 
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_x_lower($arguments, $context) {
@@ -4352,9 +4416,9 @@ class XPathEngine extends XPathBase {
    * upper case a string.
    *    string x-upper(string) 
    *   
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @see    evaluate()
    */
   function _handleFunction_x_upper($arguments, $context) {
@@ -4385,9 +4449,9 @@ class XPathEngine extends XPathBase {
    *       echo htmlspecialchars($xPath->exportAsXml($Function));
    *   }
    * 
-   * @param  $arguments     (string) String containing the arguments that were passed to the function.
-   * @param  $context       (array)  The context from which to evaluate the function
-   * @return                (mixed)  Depending on the type of function being processed
+   * @param		string	$arguments	String containing the arguments that were passed to the function.
+   * @param		array	$context	The context from which to evaluate the function
+   * @return	mixed				Depending on the type of function being processed
    * @author Ricardo Garcia
    * @see    evaluate()
    */
@@ -4428,10 +4492,10 @@ class XPathEngine extends XPathBase {
    *
    * ### Provide an option that will do this by default.
    *
-   * @param $encodedData (mixed) The string or array that has entities you would like to remove
-   * @param $reverse     (bool)  If TRUE entities will be encoded rather than decoded, ie
-   *                             < to &lt; rather than &lt; to <.
-   * @return             (mixed) The string or array returned with entities decoded.
+   * @param		mixed	$encodedData	The string or array that has entities you would like to remove
+   * @param		bool	$reverse		If TRUE entities will be encoded rather than decoded, ie
+   *                             			< to &lt; rather than &lt; to <.
+   * @return	mixed					The string or array returned with entities decoded.
    */
   function decodeEntities($encodedData, $reverse=FALSE) {
     static $aEncodeTbl;
@@ -4469,9 +4533,9 @@ class XPathEngine extends XPathBase {
    *
    * 2 nodes are considered equal if the absolute XPath is equal.
    * 
-   * @param  $node1 (mixed) Either an absolute XPath to an node OR a real tree-node (hash-array)
-   * @param  $node2 (mixed) Either an absolute XPath to an node OR a real tree-node (hash-array)
-   * @return        (bool)  TRUE if equal (see text above), FALSE if not (and on error).
+   * @param		mixed	$node1	Either an absolute XPath to an node OR a real tree-node (hash-array)
+   * @param		mixed	$node2	Either an absolute XPath to an node OR a real tree-node (hash-array)
+   * @return	bool			TRUE if equal (see text above), FALSE if not (and on error).
    */
   function equalNodes($node1, $node2) {
     $xPath_1 = is_string($node1) ? $node1 : $this->getNodePath($node1);
@@ -4482,8 +4546,8 @@ class XPathEngine extends XPathBase {
   /**
    * Get the absolute XPath of a node that is in a document tree.
    *
-   * @param $node (array)  A real tree-node (hash-array)   
-   * @return      (string) The string path to the node or FALSE on error.
+   * @param		array	$node	A real tree-node (hash-array)   
+   * @return	string			The string path to the node or FALSE on error.
    */
   function getNodePath($node) {
     if (!empty($node['xpath'])) return $node['xpath'];
@@ -4509,8 +4573,8 @@ class XPathEngine extends XPathBase {
    * information is stored in the XPath query itself...so instead we use a function
    * to extract the parent from the absolute Xpath query
    *
-   * @param  $childPath (string) String containing an absolute XPath query
-   * @return            (string) returns the absolute XPath of the parent
+   * @param		string	$childPath	String containing an absolute XPath query
+   * @return	string				returns the absolute XPath of the parent
    */
    function getParentXPath($absoluteXPath) {
      $lastSlashPos = strrpos($absoluteXPath, '/'); 
@@ -4524,8 +4588,8 @@ class XPathEngine extends XPathBase {
   /**
    * Returns TRUE if the given node has child nodes below it
    *
-   * @param  $absoluteXPath (string) full path of the potential parent node
-   * @return                (bool)   TRUE if this node exists and has a child, FALSE otherwise
+   * @param		string	$absoluteXPath	full path of the potential parent node
+   * @return	bool					TRUE if this node exists and has a child, FALSE otherwise
    */
   function hasChildNodes($absoluteXPath) {
     if ($this->_indexIsDirty) $this->reindexNodeTree();
@@ -4570,8 +4634,8 @@ class XPathEngine extends XPathBase {
    * a) Replacement of all '&' in the XML-source.
    * b) All data that is not char-data or in CDATA-block have to be reversed during the XML-parse phase.
    *
-   * @param  $xmlSource (string) The XML string
-   * @return            (string) The XML string with translated ampersands.
+   * @param		string	$xmlSource	The XML string
+   * @return	string				The XML string with translated ampersands.
    */
   function _translateAmpersand($xmlSource, $reverse=FALSE) {
     return ($reverse ? str_replace('&amp;', '&', $xmlSource) : str_replace('&', '&amp;', $xmlSource));
@@ -4599,11 +4663,11 @@ class XPath extends XPathEngine {
    * XML option vector. A option vector sample: 
    *   $xmlOpt = array(XML_OPTION_CASE_FOLDING => FALSE, XML_OPTION_SKIP_WHITE => TRUE);
    *
-   * @param  $userXmlOptions (array)  (optional) Vector of (<optionID>=><value>, <optionID>=><value>, ...)
-   * @param  $fileName       (string) (optional) Filename of XML file to load from.
-   *                                  It is recommended that you call importFromFile()
-   *                                  instead as you will get an error code.  If the
-   *                                  import fails, the object will be set to FALSE.
+   * @param		array	$userXmlOptions	(optional) Vector of (<optionID>=><value>, <optionID>=><value>, ...)
+   * @param		string	$fileName		(optional) Filename of XML file to load from.
+   *                                  	It is recommended that you call importFromFile()
+   *                                  	instead as you will get an error code.  If the
+   *                                  	import fails, the object will be set to FALSE.
    * @see    parent::XPathEngine()
    */
   function XPath($fileName='', $userXmlOptions=array()) {
@@ -4639,10 +4703,10 @@ class XPath extends XPathEngine {
    * node. The question is, if the none, the fist or all nodes are to be modified.
    * The behaver can be set with setModMatch()  
    *
-   * @param $modMatch (int) One of the following:
-   *                        - XPATH_QUERYHIT_ALL (default) 
-   *                        - XPATH_QUERYHIT_FIRST
-   *                        - XPATH_QUERYHIT_UNIQUE // If the query matches more then one node. 
+   * @param		int		$modMatch	One of the following:
+   *                        		- XPATH_QUERYHIT_ALL (default) 
+   *                        		- XPATH_QUERYHIT_FIRST
+   *                        		- XPATH_QUERYHIT_UNIQUE // If the query matches more then one node. 
    * @see  _resolveXPathQuery()
    */
   function setModMatch($modMatch = XPATH_QUERYHIT_ALL) {
@@ -4668,11 +4732,11 @@ class XPath extends XPathEngine {
    * specified in the argument.  So if the argument was '/A[1]/B[2]' then it
    * would return 'B' if the node did exist in the tree.
    *          
-   * @param  $xPathQuery (mixed) Array or single full document path(s) of the node(s), 
-   *                             from which the names should be retrieved.
-   * @return             (mixed) Array or single string of the names of the specified 
-   *                             nodes, or just the individual name.  If the node did 
-   *                             not exist, then returns FALSE.
+   * @param		mixed	$xPathQuery	Array or single full document path(s) of the node(s), 
+   *                             	from which the names should be retrieved.
+   * @return	mixed				Array or single string of the names of the specified 
+   *                             	nodes, or just the individual name.  If the node did 
+   *                             	not exist, then returns FALSE.
    */
   function nodeName($xPathQuery) {
     if (is_array($xPathQuery)) {
@@ -4709,10 +4773,10 @@ class XPath extends XPathEngine {
    * NOTE: When passing a xpath-query instead of an abs. Xpath.
    *       Depending on setModMatch() one, none or multiple nodes are affected.
    *
-   * @param  $xPathQuery  (string) xpath to the node (See note above).
-   * @param  $autoReindex (bool)   (optional, default=TRUE) Reindex the document to reflect 
-   *                               the changes.  A performance helper.  See reindexNodeTree()
-   * @return              (bool)   TRUE on success, FALSE on error;
+   * @param		string	$xPathQuery		xpath to the node (See note above).
+   * @param		bool	$autoReindex	(optional, default=TRUE) Reindex the document to reflect 
+   *                               		the changes.  A performance helper.  See reindexNodeTree()
+   * @return	bool					TRUE on success, FALSE on error;
    * @see    setModMatch(), reindexNodeTree()
    */
   function removeChild($xPathQuery, $autoReindex=TRUE) {
@@ -4773,11 +4837,11 @@ class XPath extends XPathEngine {
    * NOTE: When passing a xpath-query instead of an abs. Xpath.
    *       Depending on setModMatch() one, none or multiple nodes are affected.
    *
-   * @param  $xPathQuery  (string) xpath to the node (See note above).
-   * @param  $data        (string) String containing the content to be set. *READONLY*
-   * @param  $autoReindex (bool)   (optional, default=TRUE) Reindex the document to reflect 
-   *                               the changes.  A performance helper.  See reindexNodeTree()
-   * @return              (bool)   TRUE on success, FALSE on error;
+   * @param		string	$xPathQuery		xpath to the node (See note above).
+   * @param		string	$data			String containing the content to be set. *READONLY*
+   * @param		bool	$autoReindex	(optional, default=TRUE) Reindex the document to reflect 
+   *                               		the changes.  A performance helper.  See reindexNodeTree()
+   * @return	bool					TRUE on success, FALSE on error;
    * @see    setModMatch(), replaceChild(), reindexNodeTree()
    */
   function replaceChildByData($xPathQuery, $data, $autoReindex=TRUE) {
@@ -4826,13 +4890,13 @@ class XPath extends XPathEngine {
    * NOTE: When passing a xpath-query instead of an abs. Xpath.
    *       Depending on setModMatch() one, none or multiple nodes are affected.
    *
-   * @param  $xPathQuery  (string) Xpath to the node being replaced.
-   * @param  $node        (mixed)  String or Array (Usually a String)
-   *                               If string: Vaild XML. E.g. "<A/>" or "<A> foo <B/> bar <A/>"
-   *                               If array:  A Node (can be a whole sub-tree) (See comment in header)
-   * @param  $autoReindex (bool)   (optional, default=TRUE) Reindex the document to reflect 
-   *                               the changes.  A performance helper.  See reindexNodeTree()
-   * @return              (array)  The last replaced $node (can be a whole sub-tree)
+   * @param		string	$xPathQuery		Xpath to the node being replaced.
+   * @param		mixed	$node			String or Array (Usually a String)
+   *                               		If string: Vaild XML. E.g. "<A/>" or "<A> foo <B/> bar <A/>"
+   *                               		If array:  A Node (can be a whole sub-tree) (See comment in header)
+   * @param		bool	$autoReindex	(optional, default=TRUE) Reindex the document to reflect 
+   *                               		the changes.  A performance helper.  See reindexNodeTree()
+   * @return	array					The last replaced $node (can be a whole sub-tree)
    * @see    reindexNodeTree()
    */
   function &replaceChild($xPathQuery, $node, $autoReindex=TRUE) {
@@ -4904,20 +4968,20 @@ class XPath extends XPathEngine {
    *
    * #### Do a complete review of the "(optional)" tag after several arguments.
    *
-   * @param  $xPathQuery  (string) Xpath to the node to append.
-   * @param  $node        (mixed)  String or Array (Usually a String)
-   *                               If string: Vaild XML. E.g. "<A/>" or "<A> foo <B/> bar <A/>"
-   *                               If array:  A Node (can be a whole sub-tree) (See comment in header)
-   * @param  $shiftRight  (bool)   (optional, default=TRUE) Shift the target node to the right.
-   * @param  $afterText   (bool)   (optional, default=TRUE) Insert after the text.
-   * @param  $autoReindex (bool)   (optional, default=TRUE) Reindex the document to reflect 
-   *                                the changes.  A performance helper.  See reindexNodeTree()
-   * @return              (mixed)  FALSE on error (or no match). On success we return the path(s) to the newly
-   *                               appended nodes. That is: Array of paths if more then 1 node was added or
-   *                               a single path string if only one node was added.
-   *                               NOTE:  If autoReindex is FALSE, then we can't return the *complete* path
-   *                               as the exact doc-pos isn't available without reindexing. In that case we leave
-   *                               out the last [docpos] in the path(s). ie  we'd return /A[3]/B instead of /A[3]/B[2]
+   * @param		string	$xPathQuery		Xpath to the node to append.
+   * @param		mixed	$node			String or Array (Usually a String)
+   *                               		If string: Vaild XML. E.g. "<A/>" or "<A> foo <B/> bar <A/>"
+   *                               		If array:  A Node (can be a whole sub-tree) (See comment in header)
+   * @param		bool	$shiftRight		(optional, default=TRUE) Shift the target node to the right.
+   * @param		bool	$afterText		(optional, default=TRUE) Insert after the text.
+   * @param		bool	$autoReindex	(optional, default=TRUE) Reindex the document to reflect 
+   *                                	the changes.  A performance helper.  See reindexNodeTree()
+   * @return	mixed					FALSE on error (or no match). On success we return the path(s) to the newly
+   *                               		appended nodes. That is: Array of paths if more then 1 node was added or
+   *                               		a single path string if only one node was added.
+   *                               		NOTE:  If autoReindex is FALSE, then we can't return the *complete* path
+   *                               		as the exact doc-pos isn't available without reindexing. In that case we leave
+   *                               		out the last [docpos] in the path(s). ie  we'd return /A[3]/B instead of /A[3]/B[2]
    * @see    appendChildByXml(), reindexNodeTree()
    */
   function insertChild($xPathQuery, $node, $shiftRight=TRUE, $afterText=TRUE, $autoReindex=TRUE) {
@@ -5003,19 +5067,19 @@ class XPath extends XPathEngine {
    * If you intend to do a lot of appending, you should leave autoIndex as FALSE
    * and then call reindexNodeTree() when you are finished all the appending.
    *
-   * @param  $xPathQuery  (string) Xpath to the node to append to.
-   * @param  $node        (mixed)  String or Array (Usually a String)
-   *                               If string: Vaild XML. E.g. "<A/>" or "<A> foo <B/> bar <A/>"
-   *                               If array:  A Node (can be a whole sub-tree) (See comment in header)
-   * @param  $afterText   (bool)   (optional, default=FALSE) Insert after the text.
-   * @param  $autoReindex (bool)   (optional, default=TRUE) Reindex the document to reflect 
-   *                               the changes.  A performance helper.  See reindexNodeTree()
-   * @return              (mixed)  FALSE on error (or no match). On success we return the path(s) to the newly
-   *                               appended nodes. That is: Array of paths if more then 1 node was added or
-   *                               a single path string if only one node was added.
-   *                               NOTE:  If autoReindex is FALSE, then we can't return the *complete* path
-   *                               as the exact doc-pos isn't available without reindexing. In that case we leave
-   *                               out the last [docpos] in the path(s). ie  we'd return /A[3]/B instead of /A[3]/B[2]
+   * @param		string	$xPathQuery		Xpath to the node to append to.
+   * @param		mixed	$node			String or Array (Usually a String)
+   *                               		If string: Vaild XML. E.g. "<A/>" or "<A> foo <B/> bar <A/>"
+   *                               		If array:  A Node (can be a whole sub-tree) (See comment in header)
+   * @param		bool	$afterText		(optional, default=FALSE) Insert after the text.
+   * @param		bool	$autoReindex	(optional, default=TRUE) Reindex the document to reflect 
+   *                               		the changes.  A performance helper.  See reindexNodeTree()
+   * @return	mixed					FALSE on error (or no match). On success we return the path(s) to the newly
+   *                               		appended nodes. That is: Array of paths if more then 1 node was added or
+   *                               		a single path string if only one node was added.
+   *                               		NOTE:  If autoReindex is FALSE, then we can't return the *complete* path
+   *                               		as the exact doc-pos isn't available without reindexing. In that case we leave
+   *                               		out the last [docpos] in the path(s). ie  we'd return /A[3]/B instead of /A[3]/B[2]
    * @see    insertChild(), reindexNodeTree()
    */
   function appendChild($xPathQuery, $node, $afterText=FALSE, $autoReindex=TRUE) {
@@ -5083,19 +5147,19 @@ class XPath extends XPathEngine {
    * If you intend to do a lot of appending, you should leave autoIndex as FALSE
    * and then call reindexNodeTree() when you are finished all the appending.
    *
-   * @param  $xPathQuery  (string) Xpath to the node to insert new node before
-   * @param  $node        (mixed)  String or Array (Usually a String)
-   *                               If string: Vaild XML. E.g. "<A/>" or "<A> foo <B/> bar <A/>"
-   *                               If array:  A Node (can be a whole sub-tree) (See comment in header)
-   * @param  $afterText   (bool)   (optional, default=FLASE) Insert after the text.
-   * @param  $autoReindex (bool)   (optional, default=TRUE) Reindex the document to reflect 
-   *                               the changes.  A performance helper.  See reindexNodeTree()
-   * @return              (mixed)  FALSE on error (or no match). On success we return the path(s) to the newly
-   *                               appended nodes. That is: Array of paths if more then 1 node was added or
-   *                               a single path string if only one node was added.
-   *                               NOTE:  If autoReindex is FALSE, then we can't return the *complete* path
-   *                               as the exact doc-pos isn't available without reindexing. In that case we leave
-   *                               out the last [docpos] in the path(s). ie  we'd return /A[3]/B instead of /A[3]/B[2]
+   * @param		string	$xPathQuery		Xpath to the node to insert new node before
+   * @param		mixed	$node			String or Array (Usually a String)
+   *                               		If string: Vaild XML. E.g. "<A/>" or "<A> foo <B/> bar <A/>"
+   *                               		If array:  A Node (can be a whole sub-tree) (See comment in header)
+   * @param		bool	$afterText		(optional, default=FLASE) Insert after the text.
+   * @param		bool	$autoReindex	(optional, default=TRUE) Reindex the document to reflect 
+   *                               		the changes.  A performance helper.  See reindexNodeTree()
+   * @return	mixed					FALSE on error (or no match). On success we return the path(s) to the newly
+   *                               		appended nodes. That is: Array of paths if more then 1 node was added or
+   *                               		a single path string if only one node was added.
+   *                               		NOTE:  If autoReindex is FALSE, then we can't return the *complete* path
+   *                               		as the exact doc-pos isn't available without reindexing. In that case we leave
+   *                               		out the last [docpos] in the path(s). ie  we'd return /A[3]/B instead of /A[3]/B[2]
    * @see    reindexNodeTree()
    */
   function insertBefore($xPathQuery, $node, $afterText=TRUE, $autoReindex=TRUE) {
@@ -5117,11 +5181,11 @@ class XPath extends XPathEngine {
    * Optionally you may pass an attrubute name in $attrName and the function will return the 
    * string value of that attribute.
    *
-   * @param  $absoluteXPath (string) Full xpath OR a xpath-query that results to *one* xpath.
-   * @param  $attrName      (string) (Optional) The name of the attribute. See above.
-   * @return                (mixed)  hash-array or a string of attributes depending if the 
-   *                                 parameter $attrName was set (see above).  FALSE if the 
-   *                                 node or attribute couldn't be found.
+   * @param		string	$absoluteXPath	Full xpath OR a xpath-query that results to *one* xpath.
+   * @param		string	$attrName		(Optional) The name of the attribute. See above.
+   * @return	mixed					hash-array or a string of attributes depending if the 
+   *                                 	parameter $attrName was set (see above).  FALSE if the 
+   *                                 	node or attribute couldn't be found.
    * @see    setAttribute(), removeAttribute()
    */
   function getAttributes($absoluteXPath, $attrName=NULL) {
@@ -5150,11 +5214,11 @@ class XPath extends XPathEngine {
    * NOTE: When passing a xpath-query instead of an abs. Xpath.
    *       Depending on setModMatch() one, none or multiple nodes are affected.
    *
-   * @param  $xPathQuery (string) xpath to the node (See note above).
-   * @param  $name       (string) Attribute name.
-   * @param  $value      (string) Attribute value.   
-   * @param  $overwrite  (bool)   If the attribute is already set we overwrite it (see text above)
-   * @return             (bool)   TRUE on success, FALSE on failure.
+   * @param		string	$xPathQuery	xpath to the node (See note above).
+   * @param		string	$name		Attribute name.
+   * @param		string	$value		Attribute value.   
+   * @param		bool	$overwrite	If the attribute is already set we overwrite it (see text above)
+   * @return	bool				TRUE on success, FALSE on failure.
    * @see    getAttribute(), removeAttribute()
    */
   function setAttribute($xPathQuery, $name, $value, $overwrite=TRUE) {
@@ -5169,10 +5233,10 @@ class XPath extends XPathEngine {
    * NOTE: When passing a xpath-query instead of an abs. Xpath.
    *       Depending on setModMatch() one, none or multiple nodes are affected.
    *
-   * @param  $xPathQuery (string) xpath to the node (See note above).
-   * @param  $attributes (array)  associative array of attributes to set.
-   * @param  $overwrite  (bool)   If the attributes are already set we overwrite them (see text above)
-   * @return             (bool)   TRUE on success, FALSE otherwise
+   * @param		string	$xPathQuery	xpath to the node (See note above).
+   * @param		array	$attributes	associative array of attributes to set.
+   * @param		bool	$overwrite	If the attributes are already set we overwrite them (see text above)
+   * @return	bool				TRUE on success, FALSE otherwise
    * @see    setAttribute(), getAttribute(), removeAttribute()
    */
   function setAttributes($xPathQuery, $attributes, $overwrite=TRUE) {
@@ -5210,9 +5274,9 @@ class XPath extends XPathEngine {
    * NOTE: When passing a xpath-query instead of an abs. Xpath.
    *       Depending on setModMatch() one, none or multiple nodes are affected.
    *
-   * @param   $xPathQuery (string) xpath to the node (See note above).
-   * @param   $attrList   (mixed)  (optional) if not set will delete *all* (see text above)
-   * @return              (bool)   TRUE on success, FALSE if the node couldn't be found
+   * @param		string	$xPathQuery	xpath to the node (See note above).
+   * @param		mixed	$attrList	(optional) if not set will delete *all* (see text above)
+   * @return	bool				TRUE on success, FALSE if the node couldn't be found
    * @see     getAttribute(), setAttribute()
    */
   function removeAttribute($xPathQuery, $attrList=NULL) {
@@ -5249,9 +5313,9 @@ class XPath extends XPathEngine {
    * The first param $xPathQuery must be a valid xpath OR a xpath-query that 
    * results to *one* xpath. 
    *
-   * @param  $xPathQuery (string) xpath to the node - resolves to *one* xpath.
-   * @return             (mixed)  The returned string (see above), FALSE if the node 
-   *                              couldn't be found or is not unique.
+   * @param		string	$xPathQuery	xpath to the node - resolves to *one* xpath.
+   * @return	mixed				The returned string (see above), FALSE if the node 
+   *                              	couldn't be found or is not unique.
    * @see getDataParts()
    */
   function getData($xPathQuery) {
@@ -5271,9 +5335,9 @@ class XPath extends XPathEngine {
    * The first param $absoluteXPath must be a valid xpath OR a xpath-query that results 
    * to *one* xpath. 
    *
-   * @param  $xPathQuery (string) xpath to the node - resolves to *one* xpath.
-   * @return             (mixed)  The returned array (see above), or FALSE if node is not 
-   *                              found or is not unique.
+   * @param		string	$xPathQuery	xpath to the node - resolves to *one* xpath.
+   * @return	mixed				The returned array (see above), or FALSE if node is not 
+   *                              	found or is not unique.
    * @see getData()
    */
   function getDataParts($xPathQuery) {
@@ -5310,10 +5374,10 @@ class XPath extends XPathEngine {
    * If no 'direct referencing' is used (Xpath ends with text()[<part-number>]), then 
    * the first text-part of the node ist returned (if exsiting).
    *
-   * @param  $absoluteXPath (string) Xpath to the node (See note above).   
-   * @param  $offset        (int)    (optional, default is 0) Starting offset. (Just like PHP's substr())
-   * @param  $count         (number) (optional, default is ALL) Character count  (Just like PHP's substr())
-   * @return                (mixed)  The sub string, FALSE if not found or on error
+   * @param		string	$absoluteXPath	Xpath to the node (See note above).   
+   * @param		int		$offset			(optional, default is 0) Starting offset. (Just like PHP's substr())
+   * @param		number	$count			(optional, default is ALL) Character count  (Just like PHP's substr())
+   * @return	mixed					The sub string, FALSE if not found or on error
    * @see    XPathEngine::wholeText(), PHP's substr()
    */
   function substringData($absoluteXPath, $offset = 0, $count = NULL) {
@@ -5331,12 +5395,12 @@ class XPath extends XPathEngine {
    * NOTE: When passing a xpath-query instead of an abs. Xpath.
    *       Depending on setModMatch() one, none or multiple nodes are affected.
    *
-   * @param  $xPathQuery    (string) xpath to the node (See note above).
-   * @param  $replacement   (string) The string to replace with.
-   * @param  $offset        (int)    (optional, default is 0) Starting offset. (Just like PHP's substr_replace ())
-   * @param  $count         (number) (optional, default is 0=ALL) Character count  (Just like PHP's substr_replace())
-   * @param  $textPartNr    (int)    (optional) (see _getTextSet() )
-   * @return                (bool)   The new string value on success, FALSE if not found or on error
+   * @param		string	$xPathQuery		xpath to the node (See note above).
+   * @param		string	$replacement	The string to replace with.
+   * @param		int		$offset			(optional, default is 0) Starting offset. (Just like PHP's substr_replace ())
+   * @param		number	$count			(optional, default is 0=ALL) Character count  (Just like PHP's substr_replace())
+   * @param		int		$textPartNr		(optional) (see _getTextSet() )
+   * @return	bool					The new string value on success, FALSE if not found or on error
    * @see    substringData()
    */
   function replaceData($xPathQuery, $replacement, $offset = 0, $count = 0, $textPartNr=1) {
@@ -5358,10 +5422,10 @@ class XPath extends XPathEngine {
    * NOTE: When passing a xpath-query instead of an abs. Xpath.
    *       Depending on setModMatch() one, none or multiple nodes are affected.
    *
-   * @param  $xPathQuery (string) xpath to the node (See note above).
-   * @param  $data       (string) The string to replace with.
-   * @param  $offset     (int)    (optional, default is 0) Offset at which to insert the data.
-   * @return             (bool)   The new string on success, FALSE if not found or on error
+   * @param		string	$xPathQuery	xpath to the node (See note above).
+   * @param		string	$data	The string to replace with.
+   * @param  	$offset	(optional, default is 0) Offset at which to insert the data.
+   * @return	bool	The new string on success, FALSE if not found or on error
    * @see    replaceData()
    */
   function insertData($xPathQuery, $data, $offset=0) {
@@ -5378,10 +5442,10 @@ class XPath extends XPathEngine {
    * NOTE: When passing a xpath-query instead of an abs. Xpath.
    *       Depending on setModMatch() one, none or multiple nodes are affected.
    *
-   * @param   $xPathQuery (string) to the node(s) (See note above).
-   * @param   $data       (string) String containing the content to be added.
-   * @param   $textPartNr (int)    (optional, default is 1) (see _getTextSet())
-   * @return              (bool)   TRUE on success, otherwise FALSE
+   * @param		string	$xPathQuery	to the node(s) (See note above).
+   * @param		string	$data		String containing the content to be added.
+   * @param		int		$textPartNr	(optional, default is 1) (see _getTextSet())
+   * @return	bool				TRUE on success, otherwise FALSE
    * @see     _getTextSet()
    */
   function appendData($xPathQuery, $data, $textPartNr=1) {
@@ -5403,10 +5467,10 @@ class XPath extends XPathEngine {
    * NOTE: When passing a xpath-query instead of an abs. Xpath.
    *       Depending on setModMatch() one, none or multiple nodes are affected.
    *
-   * @param  $xPathQuery (string) to the node(s) (See note above).
-   * @param  $offset     (int)    (optional, default is 0) Starting offset. (Just like PHP's substr_replace())
-   * @param  $count      (number) (optional, default is 0=ALL) Character count.  (Just like PHP's substr_replace())
-   * @param  $textPartNr (int)    (optional, default is 0) the text part to delete (see _getTextSet())
+   * @param		string	$xPathQuery	to the node(s) (See note above).
+   * @param		int		$offset	(optional, default is 0) Starting offset. (Just like PHP's substr_replace())
+   * @param		number	$count	(optional, default is 0=ALL) Character count.  (Just like PHP's substr_replace())
+   * @param		int		$textPartNr	(optional, default is 0) the text part to delete (see _getTextSet())
    * @return             (bool)   TRUE on success, otherwise FALSE
    * @see     _getTextSet()
    */
@@ -5469,10 +5533,10 @@ class XPath extends XPathEngine {
    * NOTE III:Instead of an absolute xpath you may also pass a xpath-query.
    *          Depending on setModMatch() one, none or multiple nodes are affected.
    *
-   * @param   $xPathQuery (string) xpath to the node (See note above).
-   * @param   $textPartNr (int)    String containing the content to be set.
-   * @return              (mixed)  A vector of *references* to the text that match, or 
-   *                               FALSE on error
+   * @param		string	$xPathQuery	xpath to the node (See note above).
+   * @param		int		$textPartNr	String containing the content to be set.
+   * @return	mixed				A vector of *references* to the text that match, or 
+   *                               	FALSE on error
    * @see XPathEngine::wholeText()
    */
   function _getTextSet($xPathQuery, $textPartNr=1) {
@@ -5580,11 +5644,11 @@ class XPath extends XPathEngine {
    * Also it demands that there be at least one node returned, and displays a suitable
    * error message if the returned xPathSet does not contain any nodes.
    * 
-   * @param  $xPathQuery (string) An xpath query targeting a single node.  If empty() 
-   *                              returns the root node and auto creates the root node
-   *                              if it doesn't exist.
-   * @param  $function   (string) The function in which this check was called
-   * @return             (array)  Vector of $absoluteXPath's (May be empty)
+   * @param		string	$xPathQuery		An xpath query targeting a single node.  If empty() 
+   *                              		returns the root node and auto creates the root node
+   *                              		if it doesn't exist.
+   * @param		string	$function		The function in which this check was called
+   * @return	array					Vector of $absoluteXPath's (May be empty)
    * @see    _resolveXPathQuery()
    */
   function _resolveXPathQueryForNodeMod($xPathQuery, $functionName) {
@@ -5618,10 +5682,10 @@ class XPath extends XPathEngine {
    *   - none (If the query matches more then one node.)
    * see  setModMatch() for details
    * 
-   * @param  $xPathQuery (string) An xpath query targeting a single node.  If empty() 
-   *                              returns the root node (if it exists).
-   * @param  $function   (string) The function in which this check was called
-   * @return             (array)  Vector of $absoluteXPath's (May be empty)
+   * @param		string	$xPathQuery	An xpath query targeting a single node.  If empty() 
+   *                              	returns the root node (if it exists).
+   * @param		string	$function	The function in which this check was called
+   * @return	array				Vector of $absoluteXPath's (May be empty)
    * @see    setModMatch()
    */
   function _resolveXPathQuery($xPathQuery, $function) {

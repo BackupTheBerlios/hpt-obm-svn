@@ -13,7 +13,7 @@
 class date_picker
 {
   /**
-   * return date picker's header
+   * @return	string	date picker's header
    */
   function get_header()
   {

@@ -11,14 +11,21 @@
    Free Software Foundation; either version 2 of the License, or (at your
    option) any later version.
  */
-
+/**
+*   @author		Markus Schabel <markus.schabel@tgm.ac.at>
+*   @author		Michael Borko <michael.borko@tgm.ac.at>
+*   @version	1.0 Release date: 22 August 2003
+*   @version	1.5 Release date: 27 February 2004
+*/
 class profiles
 {
   var $db;
-
   var $mapping;
   var $group_mapping;
 
+	/**
+	* Constructor
+	*/
   function profiles()
   {
     global $GO_CONFIG, $auth_sources, $GO_LDAP;
@@ -90,6 +97,11 @@ class profiles
     }
   }
 
+	/**
+	* Get profile ldap
+	* @param	int	$userid
+	* @return	mixed	profile array if success, otherwise : false
+	*/
   function get_profile_ldap( $userid )
   {
     global $GO_SECURITY, $GO_CONFIG, $GO_GROUPS, $GO_LDAP;
@@ -102,6 +114,11 @@ class profiles
     return false;
   }
 
+	/**
+	* Convert profile ldap
+	* @param	array	$entry
+	* @return	array	
+	*/
   function convert_profile_ldap( $entry )
   {
     global $GO_SECURITY, $GO_CONFIG, $GO_LDAP, $GO_GROUPS;
@@ -175,6 +192,11 @@ class profiles
     return $row;
   }
 
+	/**
+	* Get profile in SQL database
+	* @param	int	$userid
+	* @return	mixed	array if success, otherwise : false
+	*/
   function get_profile_sql( $userid )
   {
     $sql = "SELECT * FROM users WHERE id='$userid'";
@@ -186,6 +208,11 @@ class profiles
     return false;
   }
 
+	/**
+	* Get profile
+	* @param	int	$userid
+	* @return	array	SQL record or LDAP record
+	*/
   function get_profile( $userid )
   {
     global $GO_LDAP;
@@ -208,6 +235,11 @@ class profiles
     return $sqlrecord;
   }
 
+	/**
+	* Get group profile in LDAP
+	* @param	int		$groupid
+	* @return	array	LDAP record if success, otherwise : false
+	*/
   function get_group_profile_ldap( $groupid )
   {
     global $GO_SECURITY, $GO_CONFIG, $GO_LDAP;
@@ -221,6 +253,11 @@ class profiles
     return false;
   }
 
+	/**
+	* Convert group profile in LDAP
+	* @param	array	$entry
+	* @return	array	LDAP record
+	*/
   function convert_group_profile_ldap( $entry )
   {
     global $GO_SECURITY, $GO_CONFIG;
@@ -247,6 +284,11 @@ class profiles
     return $row;
   }
 
+	/**
+	* Get group profile in SQL
+	* @param	int		$groupid
+	* @return	array	SQL record
+	*/
   function get_group_profile_sql( $groupid )
   {
     $sql = "SELECT * FROM groups WHERE id='$groupid'";
@@ -258,6 +300,11 @@ class profiles
     return false;
   }
 
+	/**
+	* Get group profile
+	* @param	int		$groupid
+	* @return	array	Record
+	*/
   function get_group_profile( $groupid )
   {
     global $GO_LDAP;

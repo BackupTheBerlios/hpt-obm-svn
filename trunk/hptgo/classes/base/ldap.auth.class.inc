@@ -1,24 +1,28 @@
 <?php
-/*
-   Copyright Intermesh 2003
-
-   Author: Markus Schabel <markus.schabel@tgm.ac.at>
-   Version: 1.0 Release date: 22 August 2003
-
-   Author: Merijn Schering <mschering@intermesh.nl>
-   Version: 1.1 Release date: 29 March 2004
-
-   This program is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation; either version 2 of the License, or (at your
-   option) any later version.
- */
+/**
+*   Copyright Intermesh 2003
+*
+*   @author		Markus Schabel <markus.schabel@tgm.ac.at>
+*   @version	1.0 Release date: 22 August 2003
+*
+*   @author		Merijn Schering <mschering@intermesh.nl>
+*   @version	1.1 Release date: 29 March 2004
+*
+*   This program is free software; you can redistribute it and/or modify it
+*   under the terms of the GNU General Public License as published by the
+*   Free Software Foundation; either version 2 of the License, or (at your
+*   option) any later version.
+*/
 
 class GO_AUTH
 {
-  //attempts to login a user and registers user_id in a session.
-  //returns true on success. Stores general preferences in sessions
-  //////////////////////////////////////////////////////////////
+  /**
+  * attempts to login a user and registers user_id in a session.
+  * returns true on success. Stores general preferences in sessions
+  * @param	string	$username
+  * @param	string	$password
+  * @param	string	$params
+  */
   function login($username, $password, $params) {
     global $GO_CONFIG, $GO_SECURITY, $GO_LANGUAGE, $GO_USERS, $GO_GROUPS,
            $GO_MODULES, $GO_LDAP;

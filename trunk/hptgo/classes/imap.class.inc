@@ -31,22 +31,80 @@ function quoted_to_ncr($matches)
 
 /**
  * Class for accessing IMAP mail folders.
+ *  @author	Merijn Schering <mschering@intermesh.nl>
+ *  @version	1.0 Release date: 08 July 2003
+ *  @version	1.1 Release date: 09 April 2004
+ *  @package	imap
  */
 class imap
 {
+  /**
+  * Imap stream
+  * @var resource 
+  */
   var $conn;
+  /**
+  * Count number mail
+  * @var int
+  */
   var $count;
+  /**
+  * ???
+  */
   var $unseen;
+  /**
+  * Messages
+  * @var array
+  */
   var $messages = array();
+  /**
+  * Next message id
+  * @var int
+  */
   var $next_message_id;
+  /**
+  * A message
+  * @var string
+  */
   var $message;
+  /**
+  * Server type
+  * @var string
+  */
   var $servertype;
+  /**
+  * Connect string
+  * @var string
+  */
   var $connectstring;
+  /**
+  * Mail boxes name array
+  * @var array
+  */
   var $mailboxes;
+  /**
+  * Current mail box name
+  * @var string
+  */
   var $mailbox;
+  /**
+  * User name
+  * @var string
+  */
   var $username;
+  /**
+  * Mail box Information
+  * @var string
+  */
   var $mailbox_info;
+  /**
+  * Sort type
+  * @var string
+  */
   var $sort;
+  /**
+  * ???
+  */
   var $next_sort_index;
 
   /**
@@ -108,8 +166,7 @@ class imap
 
   /**
    * count total and new messages on server
-   *
-   * @return array result of imap_status
+   * @return	array	result of imap_status
    */
   function count()
   {
@@ -127,7 +184,8 @@ class imap
   /**
    * Get the status of mailbox $mailbox (the result of imap_status())
    *
-   * @return array result of imap_status
+   * @param		string	$mailbox
+   * @return 	array 	result of imap_status
    */
   function status($mailbox)
   {
@@ -136,8 +194,7 @@ class imap
   }
 
   /**
-   * return true when server is an IMAP server.
-   * @return boolean
+   * @return	boolean	true when server is an IMAP server.
    */
   function is_imap()
   {
@@ -153,6 +210,16 @@ class imap
   /**
    * Return sorted messages into $this->sort
    * if $uid is true, FT_UID is passed to imap_sort()
+   * @param	const	$type	sort type
+   * 		SORTDATE - message Date 
+   *		SORTARRIVAL - arrival date 
+   *		SORTFROM - mailbox in first From address 
+   *		SORTSUBJECT - message subject 
+   *		SORTTO - mailbox in first To address 
+   *		SORTCC - mailbox in first cc address 
+   *		SORTSIZE - size of message in octets 
+   * @param	int		$reverse	is 1 for reverse-sorting. 
+   * @param	bool	$uid		UIDs instead of sequence numbers 
    */
   function sort($type = SORTDATE, $reverse = "1", $uid=false)
   {
@@ -170,6 +237,17 @@ class imap
    * This should be sort(), not search() :(
    * Call imap_sort() and store the result in $this->sort, then return count($this->sort).
    * If something goes wrong, make $this->sort[] empty and return zero.
+   * @param		const	$type	sort type
+   * 		SORTDATE - message Date 
+   *		SORTARRIVAL - arrival date 
+   *		SORTFROM - mailbox in first From address 
+   *		SORTSUBJECT - message subject 
+   *		SORTTO - mailbox in first To address 
+   *		SORTCC - mailbox in first cc address 
+   *		SORTSIZE - size of message in octets 
+   * @param		int		$reverse	is 1 for reverse-sorting. 
+   * @param		string	$query		Search criteria
+   * @return	int		Finded item number
    */
   function search($sort_type = SORTDATE, $reverse = "1", $query)
   {
@@ -188,6 +266,8 @@ class imap
    * get $offset messages starting from $first.
    * If $this->sort is true, then messages will be sorted.
    * The result is in $this->messages, $this->sort_index[], $this->sort_map[]
+   * @param	int	$first	Position to start to get
+   * @param	int	$offset	Number gotten mail
    */
   function get_messages($first, $offset)
   {
@@ -228,6 +308,8 @@ class imap
 
   /**
    * Loop through messages and return array with message info needed for inbox listing.
+   * @param		bool	$get_to_addresses
+   * @return	array	with message info needed for inbox listing.
    */
   function next_message($get_to_addresses=false)
   {
@@ -302,7 +384,9 @@ class imap
 
 /**
  * get part identified by $path from an array of parts $parts
- * return false if things go wrong.
+ * @param	array	$parts
+ * @param	array	$part
+ * @return	mixed	part indentified by $part, false if things go wrong.
  */
 function mail_fetchpart($parts, $part) {
  
@@ -321,8 +405,10 @@ function mail_fetchpart($parts, $part) {
 
 /**
  * splits a message given in the body if it is
- * a mulitpart mime message and returns the parts,
- * if no parts are found, returns false
+ * a mulitpart mime message. 
+ * @param	string	$header
+ * @param	array	$body
+ * @return	mixed	returns the parts, if no parts are found, returns false
  */
 function mail_mimesplit($header, $body) {
   $parts = array();
@@ -346,7 +432,8 @@ function mail_mimesplit($header, $body) {
 
 /**
  * Split $part into header and body
- * return an array ('header','body') of $part
+ * @param	string	$part
+ * @return	array	an array ('header','body') of $part
  */
 function mail_mimesubme($part) {
   $headDelimiter = "\r\n\r\n";
@@ -363,7 +450,7 @@ function mail_mimesubme($part) {
 }
 
 /**
- * returns an array with all parts that are
+ * @returns	array	an array with all parts that are
  * subparts of the given part
  * if no subparts are found, return the body of
  * the current part
@@ -401,6 +488,8 @@ function mail_mimesub($part) {
  * get an array with the bodies all parts of an email
  * the structure of the array corresponds to the
  * structure that is available with imap_fetchstructure
+ * @param	int		$msgNo
+ * @return	array	parts of mail
  */
 function mail_fetchparts($msgNo) {
   $parts = array();
@@ -420,7 +509,9 @@ function mail_fetchparts($msgNo) {
 }
 
   /**
-   * return an array with all message info.
+   * @param		int		$iud
+   * @param		string	$preferred_type
+   * @return	array	an array with all message info.
    */
   function get_message($uid, $preferred_type = "html", $part="")
   {
@@ -598,6 +689,12 @@ function mail_fetchparts($msgNo) {
 
   /**
    * private function to get all the parts from a message.
+   * @param		$mimeobj
+   * @param	string	$preferred_type
+   * @param	string	$section
+   * @param	string	$header
+   * @param	string	$body
+   * @param	bool	$skip
    */
   function get_parts($mimeobj,$preferred_type = "html", $section = '',$header,$body,$skip = false)
   {
@@ -794,6 +891,9 @@ function mail_fetchparts($msgNo) {
 
   /**
    * FIXME
+   * @param		???		$mimeobj
+   * @param		int		$depth
+   * @param		int		$section
    */
   function print_structure($mimeobj, $depth = 0, $section = 0)
   {
@@ -872,6 +972,7 @@ function mail_fetchparts($msgNo) {
 
 /**
  * private function to get mimetype in text
+ * @param	string	$encoding	Encoding
  */
 
 function get_encoding($encoding)
@@ -906,8 +1007,9 @@ function get_encoding($encoding)
 
 /**
  * private function to get encoding in text
+ * @param	string	$type	Mime type
+ * @return	string	Encoding in text
  */
-
 function get_mime_type($type)
 {
   switch ($type)
@@ -945,6 +1047,9 @@ function get_mime_type($type)
 
 /**
  * get a value of field $fieldname from header $header
+ * @param	string	$fieldname	Field name
+ * @param	string	$header		Header
+ * @param	string	value of field $fieldname
  */
 function get_header_value($fieldname, $header)
 {
@@ -970,6 +1075,7 @@ function get_header_value($fieldname, $header)
 
 /**
  * Delete $messages (imap_delete() and then imap_expunge())
+ * @param	array	a string array
  */
 function delete($messages)
 {
@@ -982,6 +1088,11 @@ function delete($messages)
 
 /**
  * Return a MIME part identified by $part_no in message $uid
+ * @param	int		$uid
+ * @param	int		$part_no
+ * @param	string	$transfer
+ * @param	string	$part_charset
+ * @return	string	Return a MIME part identified by $part_no in message $uid
  */
 function view_part($uid, $part_no, $transfer, $part_charset='')
 {
@@ -1005,6 +1116,8 @@ function view_part($uid, $part_no, $transfer, $part_charset='')
 
 /**
  * DB interface's method.
+ * @param	string	$name
+ * @return	mixed
  */
 function f($name)
 {
@@ -1014,6 +1127,7 @@ function f($name)
 
 /**
  * Get mailbox delimiter()
+ * @return	mixed	
  */
 function get_mailbox_delimiter()
 {
@@ -1031,6 +1145,8 @@ function get_mailbox_delimiter()
 
 /**
  * FIXME
+ * @param	string	$mbroot
+ * @return	mixed	if success return a string : $mbroot + $demiliter, otherwise false
  */
 function check_mbroot($mbroot)
 {
@@ -1062,6 +1178,9 @@ function check_mbroot($mbroot)
 
 /**
  * FIXME
+ * @param	string	$mailbox_root
+ * @param	bool	$name_only
+ * @return	array
  */
 function get_mailboxes($mailbox_root='', $name_only=false)
 {
@@ -1096,6 +1215,9 @@ function get_mailboxes($mailbox_root='', $name_only=false)
 
 /**
  * FIXME
+ * @param	string	$mailbox_root
+ * @param	bool	$name_only
+ * @return	array
  */
 function get_subscribed($mailbox_root='', $name_only=false)
 {
@@ -1132,6 +1254,9 @@ function get_subscribed($mailbox_root='', $name_only=false)
 
 /**
  * FIXME
+ * @param	string	$name	folder name
+ * @param	$mailbox_root
+ * @return	bool	TRUE if success, else FALSE
  */
 function is_subscribed($name, $mailbox_root)
 {
@@ -1148,6 +1273,8 @@ function is_subscribed($name, $mailbox_root)
 
 /**
  * Subcribe an imap folder named $name
+ * @param	string	$name	Folder name
+ * @return	bool	TRUE on success or FALSE on failure. 
  */
 function subscribe($name)
 {
@@ -1156,6 +1283,8 @@ function subscribe($name)
 
 /**
  * Unsubcribe an imap folder named $name
+ * @param	string	$name	Folder name
+ * @return	bool	TRUE on success or FALSE on failure. 
  */
 function unsubscribe($name)
 {
@@ -1164,6 +1293,9 @@ function unsubscribe($name)
 
 /**
  * Delete folder $name from mailbox $mailbox_root
+ * @param	string	$name	Folder name
+ * @param	string	$mailbox_root
+ * @returns	bool	TRUE on success or FALSE on failure
  */
 function delete_folder($name, $mailbox_root)
 {
@@ -1182,6 +1314,7 @@ function delete_folder($name, $mailbox_root)
 
 /**
  * Create new folder named $name
+ * @param	string	$name
  */
 function create_folder($name)
 {
@@ -1222,6 +1355,10 @@ function move($folder, $messages)
 
 /**
  * Get mail quota
+ * @returns	array	an array with integer values limit and usage for the given mailbox. 
+ * The value of limit represents the total amount of space allowed for this mailbox. 
+ * The usage value represents the mailboxes current level of capacity. 
+ * Will return FALSE in the case of failure
  */
 function get_quota()
 {
@@ -1230,6 +1367,10 @@ function get_quota()
 
 /**
  * FIXME
+ * @param	string	$mailbox
+ * @param	string	$body
+ * @param	string	$flag
+ * @return	bool	TRUE if success, else FALSE 
  */
 function append_message($mailbox, $body, $flags = "")
 {
@@ -1244,6 +1385,10 @@ function append_message($mailbox, $body, $flags = "")
 
 /**
  * FIXME
+ * @param	string	$mailbox
+ * @param	array	$uid_array
+ * @param			$flags
+ * @param	string	$action
  */
 function set_message_flag($mailbox = "INBOX", $uid_array, $flags, $action = "")
 {

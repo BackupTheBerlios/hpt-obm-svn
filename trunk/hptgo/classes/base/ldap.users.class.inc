@@ -1,30 +1,45 @@
 <?php
-/*
-   Copyright Intermesh 2003
-   Author: Merijn Schering <mschering@intermesh.nl>
-   Author: Markus Schabel <markus.schabel@tgm.ac.at>
-   Version: 1.0 Release date: 08 July 2003
-
-   This program is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation; either version 2 of the License, or (at your
-   option) any later version.
-
-   TODO when we fetch all users [get_users()], most times we only need
-        the following attributes: name and uid, and a bit more information
-	in the administration/users
- */
+/**
+*   Copyright Intermesh 2003
+*   @author		Merijn Schering <mschering@intermesh.nl>
+*   @author		Markus Schabel <markus.schabel@tgm.ac.at>
+*   @version	1.0 Release date: 08 July 2003
+*
+*   This program is free software; you can redistribute it and/or modify it
+*   under the terms of the GNU General Public License as published by the
+*   Free Software Foundation; either version 2 of the License, or (at your
+*   option) any later version.
+*
+*   TODO when we fetch all users [get_users()], most times we only need
+*        the following attributes: name and uid, and a bit more information
+*	in the administration/users
+*/
 
 require_once($GO_CONFIG->class_path.'profiles.class.inc');
 
 require_once($GO_CONFIG->class_path.'base/base.users.class.inc');
 
 class GO_USERS extends base_users {
+	/**
+	* @var int
+	*/
   var $user_id;
+  /**
+  * @var profiles
+  */
   var $profile;
+  /**
+  * @var array
+  */
   var $userlist;
+  /**
+  * @var int
+  */
   var $userlist_index;
   
+	/**
+	* Constructor
+	*/
   function GO_USERS() {
     global $GO_CONFIG;
     $this->db();
@@ -40,11 +55,24 @@ class GO_USERS extends base_users {
     //  $_SESSION['GO_SESSION']['password']);
   }
 
+	/**
+	* Get search fields
+	* @return array
+	*/
   function get_search_fields() {
     $searchfields[] = array( 'name', "Name" );
     return $searchfields;
   }
 
+	/**
+	* Search user
+	* @param	string	$query
+	* @param	string	$field
+	* @param	int		$user_id
+	* @param	int		$start
+	* @param	int		$offset
+	* @return	int		Number user
+	*/
   function search($query, $field, $user_id, $start=0, $offset=0) {
     global $GO_LDAP;
     $query = substr( $query, 1, strlen( $query ) - 2 );
@@ -69,6 +97,14 @@ class GO_USERS extends base_users {
     return count($this->userlist);
   }
 
+	/**
+	* Get users
+	* @param	string	$sort
+	* @param	string	$direction
+	* @param	int		$start
+	* @param	int		$offset
+	* @return	int		Number users
+	*/
   function get_users($sort="name",$direction="ASC", $start=0, $offset=0) {
     global $GO_LDAP;
     $GO_LDAP->search("(&(uid=*)(mail=*))", $GO_LDAP->PeopleDN ); //, array( "uidNumber", "uid", "cn"));
@@ -100,6 +136,10 @@ class GO_USERS extends base_users {
     return $this->num_rows();
   }
 
+	/**
+	* Get next record
+	* @return	mixed	array if succes, otherwise : FALSE
+	*/
   function next_record() {
     if ( count( $this->userlist ) > $this->userlist_index ) {
       $this->Record = $this->userlist[$this->userlist_index++];
@@ -109,6 +149,11 @@ class GO_USERS extends base_users {
     }
   }
 
+	/**
+	* Get profile by email
+	* @param	string	$email
+	* @return	mixed	array if succes, otherwise : FALSE
+	*/
   function get_profile_by_email($email) {
     if ( $uid = $this->get_user_id_by_email( $email ) ) {
       $profile = new profiles();
@@ -118,6 +163,11 @@ class GO_USERS extends base_users {
     return false;
   }
 
+	/**
+	* Get user if by email
+	* @param	string	$email
+	* @return	mixed	array if success, otherwise : FALSE
+	*/
   function get_user_id_by_email($email) {
     global $GO_LDAP;
     // I'm not sure if we really need this, because each LDAP user should be in
@@ -131,6 +181,11 @@ class GO_USERS extends base_users {
     return false;
   }
 
+	/**
+	* Check password
+	* @param	string	$password
+	* @return	bool
+	*/
   function check_password($password) {
     global $GO_LDAP;
     // rebinding is not an optimal solution. hints for doing better are welcome...
@@ -142,12 +197,47 @@ class GO_USERS extends base_users {
     return $ok;
   }
 
+	/**
+	* Get user by user ID
+	* @param	int		$user_id
+	* @return	array
+	*/
   function get_user($user_id) {
     $profile = new profiles();
     $this->Record = $profile->get_profile( $user_id );
     return $this->Record;
   }
 
+	/**
+	* Update profile
+	* @param	string	$user_id
+	* @param	string	$first_name
+	* @param	string	$middle_name
+	* @param	string	$last_name
+	* @param	string	$initials
+	* @param	string	$title
+	* @param	string	$sex
+	* @param	string	$birthday
+	* @param	string	$email
+	* @param	string	$work_phone
+	* @param	string	$fax
+	* @param	string	$cellular
+	* @param	string	$country
+	* @param	string	$state
+	* @param	string	$city
+	* @param	string	$zip
+	* @param	string	$address
+	* @param	string	$company
+	* @param	string	$work_country
+	* @param	string	$work_state
+	* @param	string	$work_city
+	* @param	string	$work_zip
+	* @param	string	$work_address
+	* @param	string	$work_fax
+	* @param	string	$homepage
+	* @param	string	$department
+	* @param	string	$function
+	*/
   function update_profile($user_id, $first_name, $middle_name, $last_name,
       $initials, $title, $sex, $birthday, $email,
       $work_phone, $home_phone, $fax, $cellular,
@@ -188,6 +278,11 @@ class GO_USERS extends base_users {
   }
 
   // TODO
+  /**
+  * Update authcode
+  * @param	string	$authcode
+  * @return	bool	true if success, otherwise : FALSE
+  */
   function update_authcode($authcode) {
     $sql = "UPDATE users SET authcode='$authcode' WHERE id='".$_SESSION['GO_SESSION']['user_id']."'";
     if ($this->query($sql)) {
@@ -197,7 +292,11 @@ class GO_USERS extends base_users {
     }
   }
 
-
+	/**
+	* Get profile by user name
+	* @param	string	$username
+	* @return	array	profile record 
+	*/
   function get_profile_by_username($username) {
     global $GO_LDAP;
     $GO_LDAP->search( "uid=$username", $GO_LDAP->PeopleDN );
@@ -211,6 +310,11 @@ class GO_USERS extends base_users {
     return $this->Record;
   }
 
+	/**
+	* Check email address
+	* @param	string	$email
+	* @return	bool
+	*/
   function email_exists($email) {
     global $GO_LDAP;
     $GO_LDAP->search("mail=$email", $GO_LDAP->PeopleDN);
@@ -221,13 +325,48 @@ class GO_USERS extends base_users {
   }
   
   
-  /*
-  MKS: Some behaviour has changed.
-  Regional settings like language, currency decimal sep etc.
-  are stored in language/locale.inc
-  They should be retrieved with the given locale_code.
-  See sql.users.class.inc for an example.
-  */
+    /**
+    * Add a new user
+	* @param	string	$username
+	* @param	string	$password
+	* @param	string	$first_name
+	* @param	string	$middle_name
+	* @param	string	$last_name
+	* @param	string	$initials
+	* @param	string	$title
+	* @param	string	$sex
+	* @param	string	$birthday
+	* @param	string	$email
+	* @param	string	$work_phone
+	* @param	string	$fax
+	* @param	string	$cellular
+	* @param	string	$country
+	* @param	string	$state
+	* @param	string	$city
+	* @param	string	$zip
+	* @param	string	$address
+	* @param	string	$company
+	* @param	string	$work_country
+	* @param	string	$work_state
+	* @param	string	$work_city
+	* @param	string	$work_zip
+	* @param	string	$work_address
+	* @param	string	$work_fax
+	* @param	string	$homepage
+	* @param	string	$department
+	* @param	string	$function
+	* @param	string	$locale_code
+	* @param	string	$theme
+	* @param	string	$start_module
+	* @param	bool	$visible
+	* @param	int		$user_id
+	*
+  	* MKS: Some behaviour has changed.
+  	* Regional settings like language, currency decimal sep etc.
+  	* are stored in language/locale.inc
+  	* They should be retrieved with the given locale_code.
+  	* See sql.users.class.inc for an example.
+  	*/
 
   function add_user($username, $password, $first_name, $middle_name,
       $last_name, $initials, $title, $sex, $birthday,
@@ -258,6 +397,10 @@ class GO_USERS extends base_users {
     }
   }
 
+	/**
+	* Check if number users reach
+	* @return	bool
+	*/
   function max_users_reached() {
     global $GO_CONFIG;
 
@@ -270,7 +413,24 @@ class GO_USERS extends base_users {
   }
 
   // TODO
-  function set_preferences($user_id, $date_format, $time_format, $thousands_seperator, $decimal_seperator, $currency, $mail_client, $max_rows_list, $timezone_offset, $start_module, $language, $theme, $first_weekday)
+  /**
+  * Set preferrences
+  * @param	int		$user_id
+  * @param	string	$date_format
+  * @param	string	$time_format
+  * @param	char	$thousands_seperator
+  * @param	char	$decimal_seperator
+  * @param	int		$currency
+  * @param	string	$mail_client
+  * @param	int		$max_rows_list
+  * @param	string	$timezone_offset
+  * @param	string	$start_module
+  * @param	string	$language
+  * @param	string	$theme
+  * @param	string	$first_weekday
+  */
+  function set_preferences($user_id, $date_format, $time_format, $thousands_seperator, $decimal_seperator, 
+  	$currency, $mail_client, $max_rows_list, $timezone_offset, $start_module, $language, $theme, $first_weekday)
   {
   	global $GO_LANGUAGE;
   	
@@ -287,7 +447,12 @@ class GO_USERS extends base_users {
       $GO_LANGUAGE->set_language($profile['language']);
       $_SESSION['GO_SESSION']['first_weekday'] = $first_weekday;
   }
-
+  
+	/**
+	* Delete a user
+	* @param	int		$user_id
+	* @return	bool
+	*/
   function delete_user($user_id)
   {
     global $GO_CONFIG,$GO_SECURITY, $GO_MODULES, $GO_GROUPS;
@@ -383,6 +548,10 @@ class GO_USERS extends base_users {
     return false;
   }
 
+	/**
+	* Nothing to do
+	* @param	int		$user_id
+	*/
   function increment_logins( $user_id ) {
     // TODO
   }

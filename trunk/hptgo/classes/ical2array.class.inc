@@ -190,6 +190,11 @@ class ical2array
 		return $this->events;
 	}
 
+	/**
+	* Parser 'RRULE:' string
+	* @param	string	$rrule
+	* @return	array	rule array
+	*/
 	function parse_rrule($rrule)
 	{
 		$rrule_arr = array();
@@ -209,6 +214,11 @@ class ical2array
 		return $rrule_arr;
 	}
 
+	/**
+	* Parser a GMT date string from string date
+	* @param	string	$date
+	* @return	int		a GMT date
+	*/
 	function parse_date($date)
 	{
 		$year = substr($date,0,4);
@@ -229,6 +239,9 @@ class ical2array
 		return gmmktime($hour, $min, $sec, $month, $day , $year);
 	}
 
+	/**
+	* Create a buffer
+	*/
 	function add_buffer()
 	{
 		$this->buffer = str_replace('\r\n', "\r\n", $this->buffer);
@@ -260,6 +273,9 @@ class ical2array
 		$this->buffer = '';
 	}
 
+	/**
+	* Add a event into event array
+	*/
 	function add_event()
 	{
 		$this->events[] = $this->event;

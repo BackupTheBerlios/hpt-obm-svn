@@ -7,11 +7,14 @@ class zipfile
     var $eof_ctrl_dir = "\x50\x4b\x05\x06\x00\x00\x00\x00"; //end of Central directory record
     var $old_offset = 0;
 
+    /**
+	* adds "directory" to archive - do this before putting any files in directory!
+    * $name - name of directory... like this: "path/"
+    * ...then you can add files using add_file with names like "path/file.txt"
+	* @param	string	$name name of directory... like this: "path/"
+	*/
     function add_dir($name)
 
-    // adds "directory" to archive - do this before putting any files in directory!
-    // $name - name of directory... like this: "path/"
-    // ...then you can add files using add_file with names like "path/file.txt"
     {
         $name = str_replace("\\", "/", $name);
 
@@ -79,13 +82,12 @@ class zipfile
 
     }
 
-
+    /**
+	* adds "file" to archive
+    * @param	string	$data 	file contents
+    * @param	string	$name	name of file in archive. Add path if your want
+	*/
     function add_file($data, $name)
-
-    // adds "file" to archive
-    // $data - file contents
-    // $name - name of file in archive. Add path if your want
-
     {
         $name = str_replace("\\", "/", $name);
         //$name = str_replace("\\", "\\\\", $name);
@@ -149,7 +151,10 @@ class zipfile
         $this -> ctrl_dir[] = $cdrec;
     }
 
-    function file() { // dump out file
+	/**
+	* dump out file
+	*/
+    function file() { 
         $data = implode("", $this -> datasec);
         $ctrldir = implode("", $this -> ctrl_dir);
 

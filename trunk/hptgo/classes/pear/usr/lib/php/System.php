@@ -61,7 +61,7 @@ class System
     * @param    string  $short_options  the allowed option short-tags
     * @param    string  $long_options   the allowed option long-tags
     * @return   array   the given options and there values
-    * @access private
+    * @access	private
     */
     function _parseArgs($argv, $short_options, $long_options = null)
     {

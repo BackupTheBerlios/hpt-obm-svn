@@ -12,12 +12,33 @@
 
 class statusbar
 {
+	/**
+	* @var string
+	*/
   var $usage_color = "#0000CC";
+	/**
+	* @var string
+	*/
   var $background_color = "#f1f1f1";
+	/**
+	* @var string
+	*/
   var $border_color = "#000000";
+	/**
+	* @var string
+	*/
   var $width = "250";
+	/**
+	* @var string
+	*/
   var $height = "10";
+	/**
+	* @var string
+	*/
   var $info_text;
+	/**
+	* @var int
+	*/
   var $turn_red_point = 0;
 
   /**

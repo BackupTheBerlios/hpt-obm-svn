@@ -17,12 +17,30 @@
  */
 class select
 {
+	/**
+	* @var string
+	*/
   var $value;
+	/**
+	* @var string
+	*/
   var $name;
+	/**
+	* @var string
+	*/
   var $form_name;
+	/**
+	* @var string
+	*/
   var $type;
 
+	/**
+	* @var string
+	*/
   var $name_field_value;
+	/**
+	* @var string
+	*/
   var $name_field;
 
   /**

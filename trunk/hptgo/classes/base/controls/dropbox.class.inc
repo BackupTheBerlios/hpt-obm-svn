@@ -12,8 +12,17 @@
 
 class dropbox
 {
+	/**
+	* @var array
+	*/
   var $value=array();
+  	/**
+	* @var array
+	*/
   var $text=array();
+  	/**
+	* @var int
+	*/
   var $optgroup;
 
   /**
