@@ -269,10 +269,10 @@ if ($fs->has_read_permission($GO_SECURITY->user_id,$folder['path']))
 	print_common_filesystem(array($folder),'',$arguments);
 else
 {
-	$folders = $fs->get_visible_folders($GO_SECURITY->user_id,$folder['path']);
-	for ($i = 0;$i < count($folders);$i ++)
-		$folders[$i]['parent'] = '';
-	print_common_filesystem($folders,'',$arguments);
+	$my_folders = $fs->get_visible_folders($GO_SECURITY->user_id,$folder['path']);
+	for ($i = 0;$i < count($my_folders);$i ++)
+		$my_folders[$i]['parent'] = '';
+	print_common_filesystem($my_folders,'',$arguments);
 }
 
 $users_array = array();

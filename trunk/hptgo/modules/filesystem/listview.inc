@@ -204,7 +204,6 @@ if ($fs_settings['sort_field'] == 'filemtime')
 }
 echo '</td>';
 echo '</tr>';
-
 while ($folder = array_shift($folders))
 {
   $short_name = cut_string($folder['name'], 30);

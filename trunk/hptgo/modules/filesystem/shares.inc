@@ -40,7 +40,6 @@ option) any later version.
 				{
 					if ($fs->is_common_folder($fs->f('path')))
 					{
-						//echo "Blah $count ".$fs->f('path')."<br/>\n";
 						$count --;
 						continue;
 					}
