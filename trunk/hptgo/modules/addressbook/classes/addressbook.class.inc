@@ -833,6 +833,26 @@ class addressbook extends db
     }
   }
 
+  function get_companies_parents($addressbook_id, $user_id=0)
+  {
+    global $GO_SECURITY;
+    if ($user_id == 0)
+      $user_id = $GO_SECURITY->user_id;
+
+    $sql = "SELECT DISTINCT id, parent, name FROM ab_companies ".
+      "WHERE addressbook_id='$addressbook_id'";
+
+    $this->query($sql);
+    
+    $ret = array();
+    while ($this->next_record()) {
+      $ret[$this->f('id')] = array('id' => $this->f('parent'),
+				   'parent' => $this->f('parent'),
+				   'name' => $this->f('name'));
+    }
+    return $ret;
+  }
+
   function search_company($name, $addressbook_id)
   {
     $sql = "SELECT * FROM ab_companies WHERE addressbook_id='$addressbook_id' AND name LIKE '%$name%'";
@@ -877,8 +897,25 @@ class addressbook extends db
     }
   }
 
-  function company_name()
+  function company_name($parents = null)
   {
+    if (is_array($parents)) {
+      $seen = array();
+      $seen[$this->f('id')] = 1;
+      $parent = $this->f('parent');
+      $name = $this->f('name');
+      while ($parent != 0 && !isset($seen[$parent])) {
+	$seen[$parent] = 1;
+	if (isset($parents[$parent])) {
+	  $name = $parents[$parent]['name'].' - '.$name;
+	  $parent = $parents[$parent]['parent'];
+	}
+	else
+	  break;
+      }
+      return $name;
+    }
+
     $seen = array();
     $seen[$this->f('id')] = 1;
     $parent = $this->f('parent');
@@ -886,11 +923,11 @@ class addressbook extends db
     $name = $this->f('name');
     while ($parent != 0 && !isset($seen[$parent]))
     {
-     $seen[$parent] = 1;
+      $seen[$parent] = 1;
       $sql = "SELECT id,parent,name FROM ab_companies WHERE id='$parent'";
       $ab->query($sql);
       if ($ab->num_rows() && $ab->next_record())
-        $name = $ab->f('name').' - '.$name;
+	$name = $ab->f('name').' - '.$name;
       $parent = $ab->f('parent');
     }
     return $name;

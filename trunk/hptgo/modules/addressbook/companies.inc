@@ -81,6 +81,7 @@ if ($ab->get_subscribed_addressbooks($GO_SECURITY->user_id) > 1)
 }
 
 
+$parents = $ab->get_companies_parents($addressbook_id);
 $count = $ab->get_companies($addressbook_id, ($ab_settings['sort_companies_field'] == 'new' ? 'company_id' : $ab_settings['sort_companies_field']), $ab_settings['sort_companies_order'], $first, $max_rows);
 $str_count = $count == 1 ? $ab_companies_count_single : $ab_companies_count;
 echo '</td><td colspan="99" class="small" align="right">'.$count.' '.$str_count.'</td></tr>';
@@ -189,7 +190,7 @@ if ($count > 0)
 //		echo '<td width="16"><input id="'.addslashes($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
 		echo '<td width="16"><input type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
 
-		echo '<td><a class="normal" href="'.$GO_MODULES->url.'company.php?company_id='.$ab->f('id').'&return_to='.rawurlencode($link_back).'">'.htmlspecialchars($ab->company_name()).' </a></td>';
+		echo '<td><a class="normal" href="'.$GO_MODULES->url.'company.php?company_id='.$ab->f('id').'&return_to='.rawurlencode($link_back).'">'.htmlspecialchars($ab->company_name($parents)).' </a></td>';
 		
 	if (count($order) == 0)
 	{

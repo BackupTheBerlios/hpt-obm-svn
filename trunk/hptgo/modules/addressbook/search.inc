@@ -305,6 +305,7 @@ if ($task=='search' || $task == 'show_letter')
 
 		case 'companies':
 
+			$parents = $ab->get_companies_parents($ab_settings['search_addressbook_id'],$GO_SECURITY->user_id);
 			$ab->search_companies($GO_SECURITY->user_id, $query, $search_field, $ab_settings['search_addressbook_id'], $ab_settings['search_category']);
 
 			while ($ab->next_record())
@@ -315,7 +316,7 @@ if ($task=='search' || $task == 'show_letter')
 
 					$results .= '<tr height="20" id="'.$ab->f('id').'">';
 					$results .= '<td><input id="'.htmlspecialchars($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
-					$results .= '<td nowrap><a class="normal" href="'.$GO_MODULES->url.'company.php?company_id='.$ab->f('id').'&return_to='.rawurlencode($link_back).'" title="'.$strShowProfile.'">'.htmlspecialchars($ab->company_name()).'</a>&nbsp;&nbsp;</td>';
+					$results .= '<td nowrap><a class="normal" href="'.$GO_MODULES->url.'company.php?company_id='.$ab->f('id').'&return_to='.rawurlencode($link_back).'" title="'.$strShowProfile.'">'.htmlspecialchars($ab->company_name($parents)).'</a>&nbsp;&nbsp;</td>';
 					$results .= '<td>'.empty_to_stripe($ab->f('city')).'&nbsp;&nbsp;</td>';
 					$results .= "<td>".mail_to(empty_to_stripe($ab->f("email")), empty_to_stripe($ab->f("email")),'normal',true, $ab->f("id"))."&nbsp;&nbsp;</td>\n";
 					$results .= '<td>'.empty_to_stripe($ab->f('phone')).'&nbsp;&nbsp;</td>';
