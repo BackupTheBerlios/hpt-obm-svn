@@ -1,114 +1,160 @@
 <?php
-/*
-  Class pop3.class.inc
-  Author: Jointy <bestmischmaker@web.de>
-  create: 07. May 2003
-  last cahnge: 26. July 2003
-
-  Version: 1.14 (final)
-
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-
-  ChangeLog:
-
-  // 08 May 2003
-  - Version 0.52 (beta) public coming out !!!
-  - add logging
-
-  // 09 May 2003
-  - Version 0.61 out !!!
-  - add get_top() function (public)
-
-  -------------------------
-  ! POP3 Class get Public !
-  -------------------------
-
-  // 10 May 2003
-  - add reset() function (public)
-  - add _checkstate($string) function (private)
-  - add _stats() function (private)
-  - add uidl($msg_number) function (public)
-
-  // 11 May 2003
-  - add save2mysql function (public) (beta)
-  - fixed some errors !!!
-
-  // 14 May 2003
-  - fixed a heavy bug with APOP Server (private func _parse_banner($server_text))
-  (so sometimes the APOP Authorization goes failed, although the password was correct !!)
-
-  // 15 May 2003
-  - changed error handling in get_office_status(), get_top(), get_mail()
-  - add APOP Autodetection !!! more in Readme.txt
-
-  -----------------------------------
-  POP3 Class get Version 1.00 (final)
-  -----------------------------------
-
-  // 16 May 2003
-  - finished save2mysql() function ( public )
-
-  // 17 May 2003
-  - remove some bugs ( save2mysql() )
-  ///////////////////////////////////
-  finished pop3.class.inc  Version: 1.10
-  ///////////////////////////////////
-
-  // 20 May 2003
-  - fixed a bug in get_top()
-
-  // 12. July 2003
-  - fix a bug in get_top()
-
-  // 26. July 2003
-  // fixed an error with noob ! Thanks to "Martin Eisenfuehrer.de" <martin@eisenfuehrer.de>" !
-  !!! it doesn't named "noob", it is named "noop" !!!
-
-  so now the func named "noop()" and it will send the right command "NOOP"
-
-  // version 1.14 (final) out
-
-  // 22. M&auml;rz 2004
-  - fix a bug while checking sock_timeout
-  - fix a bug in _cleanup() while check $this->socket if resource , now it use is_resource function
-  - fix a bug in _cleanup() and _getnextstring() with $this->socket_status
-    ( php always reported a notice: undefined property (thats fixed) dont do an unset() on a class vars :) )
-
-  // 24. M&auml;rz 2004 version 1.15 (-fix update-)
-  
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
+/**
+*  ChangeLog:
+*
+*  // 08 May 2003
+*  - Version 0.52 (beta) public coming out !!!
+*  - add logging
+*
+*  // 09 May 2003
+*  - Version 0.61 out !!!
+*  - add get_top() function (public)
+*
+*  -------------------------
+*  ! POP3 Class get Public !
+*  -------------------------
+*
+*  // 10 May 2003
+*  - add reset() function (public)
+*  - add _checkstate($string) function (private)
+*  - add _stats() function (private)
+*  - add uidl($msg_number) function (public)
+*
+*  // 11 May 2003
+*  - add save2mysql function (public) (beta)
+*  - fixed some errors !!!
+*
+*  // 14 May 2003
+*  - fixed a heavy bug with APOP Server (private func _parse_banner($server_text))
+*  (so sometimes the APOP Authorization goes failed, although the password was correct !!)
+*
+*  // 15 May 2003
+*  - changed error handling in get_office_status(), get_top(), get_mail()
+*  - add APOP Autodetection !!! more in Readme.txt
+*
+*  -----------------------------------
+*  POP3 Class get Version 1.00 (final)
+*  -----------------------------------
+*
+*  // 16 May 2003
+*  - finished save2mysql() function ( public )
+*
+*  // 17 May 2003
+*  - remove some bugs ( save2mysql() )
+*  ///////////////////////////////////
+*  finished pop3.class.inc  Version: 1.10
+*  ///////////////////////////////////
+*
+*  // 20 May 2003
+*  - fixed a bug in get_top()
+*
+*  // 12. July 2003
+*  - fix a bug in get_top()
+*
+*  // 26. July 2003
+*  // fixed an error with noob ! Thanks to "Martin Eisenfuehrer.de" <martin@eisenfuehrer.de>" !
+*  !!! it doesn't named "noob", it is named "noop" !!!
+*
+*  so now the func named "noop()" and it will send the right command "NOOP"
+*
+*  // version 1.14 (final) out
+*
+*  // 22. M&auml;rz 2004
+*  - fix a bug while checking sock_timeout
+*  - fix a bug in _cleanup() while check $this->socket if resource , now it use is_resource function
+*  - fix a bug in _cleanup() and _getnextstring() with $this->socket_status
+*    ( php always reported a notice: undefined property (thats fixed) dont do an unset() on a class vars :) )
+*
+*  // 24. M&auml;rz 2004 version 1.15 (-fix update-)
+*  
+*  @pakage pop3.class.inc
+*  @author Jointy <bestmischmaker@web.de>
+*  create 07. May 2003
+*  last change 26. July 2003
+*  @version 1.14 (final)
 */
 class POP3 {
-    // Socket Vars
+/**
+* Socket Vars
+* @var bool
+*/
     var $socket = FALSE;
+/**
+* Socket status
+* @var bool
+*/
     var $socket_status = FALSE;
+/**
+* Connection timeout for connect to server
+* @var string	$timeout
+*/
     var $socket_timeout = "10,500";
 
+/**
+* Socket error
+* @var string
+*/
     var $error = "No Errors";
+/**
+* Socket state
+* @var string
+*/
     var $state = "DISCONNECTED";
+/**
+* ???
+* @var string
+*/
     var $apop_banner = "";
+/**
+* ???
+* @var bool
+*/
     var $apop_detect;
 
+/**
+* log
+* @var bool
+*/
     var $log;
+/**
+* log file name
+* @var string
+*/
     var $log_file;
+/**
+* ???
+* @var ???
+*/
     var $log_fp;
 
+/**
+* ???
+* @var ???
+*/
     var $file_fp;
+/**
+* ???
+* @var ???
+*/
     var $mysql_socket;
 
-
-    // Constructor
+	/**
+    * Constructor
+	* 
+	* @param	bool	$log	
+	* @param	string	$log_file
+	* @param	bool	$apop_detect
+	*/
     function POP3($log = FALSE, $log_file = "", $apop_detect = FALSE)
     {
         $this->log = $log;
         $this->log_file = $log_file;
         $this->apop_detect = $apop_detect;
     }
-    /*
-      Function _cleanup()
-      Access: Private
+	
+    /**
+    * Closes socket
+    * @access Private
     */
     function _cleanup()
     {
@@ -144,9 +190,11 @@ class POP3 {
         unset($close_log);
     }
 
-    /*
-      Function _logging($string)
-      Access: Private
+    /**
+    * Logging
+    * @access	private
+	* @param	string	$string
+	* @return	bool
     */
     function _logging($string)
     {
@@ -192,18 +240,15 @@ class POP3 {
     }
 
 
-    /*
-      Function connect($server, $port, $timeout, $sock_timeout)
-      Access: Public
-
-      // Vars:
-      - $server ( Server IP or DNS )
-      - $port ( Server port default is "110" )
-      - $timeout ( Connection timeout for connect to server )
-      - $sock_timeout ( Socket timeout for all actions   (10 sec 500 msec) = (10,500))
-
-
-      If all right you get true, when not you get false and on $this->error = msg !!!
+    /**
+    * connect($server, $port, $timeout, $sock_timeout)
+    * @access public
+	*
+    * @param	string	$server			Server IP or DNS
+    * @param	string	$port			Server port default is "110"
+    * @param	string	$timeout		Connection timeout for connect to server
+    * @param	string	$sock_timeout	Socket timeout for all actions   (10 sec 500 msec) = (10,500))
+	* @return	bool	If all right you get true, when not you get false and on $this->error = msg !!!
     */
     function connect( $server, $port="110", $timeout = "25" , $sock_timeout = "10,500")
     {
@@ -285,9 +330,13 @@ class POP3 {
 
     }
 
-    /*
-      Function _login($user, $pass)
-      Access: Public
+    /**
+    * Login
+    * @access	public
+	* @param	string	$user	User name
+	* @param	string	$pass	Password
+	* @param	string	$apop
+	* @return	bool	True if success, else : false
     */
 
     function login($user, $pass, $apop = "0"){
@@ -379,9 +428,13 @@ class POP3 {
 
         return FALSE;
     }
-    /*
-      Func get_top($msg_number,$lines)
-      Access: Public
+
+    /**
+    * Get top mails
+    * @access	public
+	* @param	int		$msg_number	Mail number
+	* @param	string	$lines		Lines
+	* @retunr	mixed	HTML string if success, otherwise : FALSE	
     */
     function get_top( $msg_number , $lines = "0" )
     {
@@ -442,8 +495,10 @@ class POP3 {
 
 
     /*
-      Function get_mail
-      Access: Public
+    * Get mails
+    * @access	public
+	* @param	int		$msg_number	Mail number
+	* @return	mixed	HTML string if success, otherwise : FALSE
     */
     function get_mail( $msg_number )
     {
@@ -500,10 +555,11 @@ class POP3 {
     }
 
 
-    /*
-       Function _check_state()
-       Access: Private
-
+    /**
+    * Check status
+    * @access	private
+	* @param	string	$string
+	* @return	bool
     */
 
     function _checkstate($string)
@@ -546,13 +602,12 @@ class POP3 {
         return FALSE;
     }
 
-    /*
-      Function delete_mail($msg_number)
-      Access: Public
-
-
+    /**
+    * Delete mail
+    * @access	public
+	* @param	string	$msg_number		Mail number
+	* @return	bool
     */
-
     function delete_mail($msg_number = "0")
     {
          if(!$this->socket){
@@ -581,37 +636,36 @@ class POP3 {
     }
 
 
-    /*
-      Function get_office_status
-      Access: Public
-
-      Output an array
-
-      Array
-     (
-        [count_mails] => 3
-        [octets] => 2496
-        [1] => Array
-              (
-                  [size] => 832
-                  [uid] => 617999468
-              )
-
-        [2] => Array
-              (
-                  [size] => 882
-                  [uid] => 617999616
-              )
-
-        [3] => Array
-              (
-                  [size] => 1726
-                  [uid] => 617999782
-              )
-
-        [error] => No Errors
-     )
-
+    /**
+    * Get office status
+    * @access	public
+	* @return	array	Output an array
+	*
+    * Array
+    * (
+    *    [count_mails] => 3
+    *    [octets] => 2496
+    *    [1] => Array
+    *          (
+    *              [size] => 832
+    *              [uid] => 617999468
+    *          )
+	*
+    *    [2] => Array
+    *          (
+    *              [size] => 882
+    *              [uid] => 617999616
+    *          )
+	*
+    *    [3] => Array
+    *          (
+    *              [size] => 1726
+    *              [uid] => 617999782
+    *          )
+	*
+    *    [error] => No Errors
+    * )
+	*
     */
 
     function get_office_status(){
@@ -741,10 +795,11 @@ class POP3 {
     }
 
     /*
-      Function save2file($message,$filename)
-      Access: Public
-
-      return written bytes or "false"
+    *  Save to file
+    *  @access	public
+	*  @param	array	$message
+	*  @param	string	$filename	File name
+    *  @return	mixed	if success written bytes else "false"
     */
     function save2file($message,$filename){
         $this->file_fp = fopen($filename,"w+");
@@ -780,13 +835,9 @@ class POP3 {
         return $count_bytes;
     }
 
-
-
-
-
-    /*
-
-      Access: Public
+    /**
+    *  @access	public
+	*  @return	bool
     */
 
     function noop(){
@@ -813,9 +864,10 @@ class POP3 {
         return TRUE;
     }
 
-    /*
-      Function reset()
-      Access: Public
+    /**
+    * Reset
+    * @access	public
+	* @return	bool
     */
     function reset(){
         if(!$this->socket){
@@ -840,10 +892,11 @@ class POP3 {
         }
         return TRUE;
     }
-    /*
-      Function stats
-      Access: Private
-      Get only count of mails and size of maildrop !!!
+	
+    /**
+    *  Stats
+    *  @access	private
+    *  @return	bool	Get only count of mails and size of maildrop !!!
     */
 
     function _stats(){
@@ -877,9 +930,10 @@ class POP3 {
 
 
 
-    /*
-      Function uidl($msg_number = "0")
-      Access: Public
+    /**
+    *  uidl
+    *  @access	public
+	*  @param	string	$msg_number	Mail number
     */
     function uidl($msg_number = "0"){
         if(!$this->socket){
@@ -977,14 +1031,12 @@ class POP3 {
         return TRUE;
     }
 
-
-
-
-    /*
-      Function _getnextstring()
-      Access: Private
+    /**
+    *  Get next string
+    *  @access	private
+	*  @param	int		$buffer_size	Buffer size
+	*  @return	bool
     */
-
     function _getnextstring( $buffer_size = 512 )
     {
         $buffer = "";
@@ -1002,9 +1054,11 @@ class POP3 {
         return $buffer;
     }
 
-    /*
-      Function _putline()
-      Access: Private
+    /**
+    *  Put line()
+    *  @access	private
+	*  @param	string	$string
+	*  @return	bool
     */
     function _putline($string)
     {
@@ -1019,9 +1073,11 @@ class POP3 {
         return TRUE;
     }
 
-    /*
-      Function _parse_banner( $server_text )
-      Access: Private
+    /**
+    *  Parse banner
+    *  @access	private
+	*  @param	string	$server_text
+	*  @return	banner string
     */
     function _parse_banner ( &$server_text )
     {
@@ -1055,10 +1111,15 @@ class POP3 {
         return;
 	}
 
-    /*
-      Funktion save2mysql($message,$mysql_socket,$dir_table = "inbox",$msg_table = "messages",$read = "0")
-      Access: Public
-
+    /**
+    *  Save to mysql
+    *  @access	public
+	*  @param	string	$message	Message
+	*  @param	int		$socket		Socket
+	*  @param	string	$dir_table	Mail table name in Database, which is used to save
+	*  @param	string	$msg_table
+	*  @param	string	$read		???
+	*  @return	mixed	if success written bytes else "false"
     */
     function save2mysql($message,$socket,$dir_table = "inbox",$msg_table = "messages",$read = "0"){
 
