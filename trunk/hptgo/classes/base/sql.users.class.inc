@@ -462,7 +462,7 @@ class GO_USERS extends base_users
 	  "currency='$currency', ".
 	  "timezone='$timezone_offset', ".
 	  "DST='$DST', ".
-	  "first_weekday='$first_weekday', ".
+	  "first_weekday='$first_weekday' ".
 
 	  "WHERE id='$user_id'"))
     {
