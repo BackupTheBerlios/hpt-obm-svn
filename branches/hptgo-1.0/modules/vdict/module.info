@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<module name="dictionary">
+	<description>
+		English-Vietnamese Dictionary
+	</description>
+	<version>
+		1.0
+	</version>
+	<releaseDate>
+	2004-09-05
+	</releaseDate>
+	<status>
+		Stable
+	</status>
+	<authors>
+		<author name="Dao Hai Lam" email="lamdh@hptvietnam.com.vn" />
+	</authors>
+</module>
