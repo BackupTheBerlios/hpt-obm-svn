@@ -133,6 +133,25 @@ class calendar extends db
     return false;
   }
 
+  function get_view_calendar_ids($view_id)
+  {
+    $cal = new calendar;
+
+    $sql = "SELECT * FROM cal_views_calendars WHERE view_id='$view_id'";
+    $this->query($sql);
+
+    while($this->next_record())
+    {
+      $calendars[] = $this->f("calendar_id");
+    }
+
+    if(isset($calendars))
+    {
+      return $calendars;
+    }
+    return false;
+  }
+
   function add_calendar_to_view($calendar_id, $view_id)
   {
     $sql = "INSERT INTO cal_views_calendars (view_id, calendar_id) ".
