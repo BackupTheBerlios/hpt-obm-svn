@@ -254,11 +254,6 @@ switch ($task)
       if ($is_new_project) {
         if (!mkdir($task_folder))
           error_log("GO: Create $task_folder error");
-        else {
-          require_once($GO_CONFIG->class_path.'filesystem.class.inc');
-          $fs = new filesystem();
-          $fs->add_share($responsible_user_id, $task_folder);
-        }
       }
 
       $projects->query("UPDATE task SET task_person_id=$tpid $tid_time ".

@@ -184,7 +184,7 @@ foreach ( $fs->get_my_shares() as $sharer )
         $is_sub_dir = false;
 				if (file_exists($fs->f('path')))
 				{
-					if (is_dir($fs->f('path')) && !strstr($fs->f('path'),'/.projects'))
+					if (is_dir($fs->f('path')))
 					{
 						$is_sub_dir = isset($last_folder) ? $fs->is_sub_dir($fs->f('path'), $last_folder) : false;
 

@@ -110,6 +110,7 @@ if (!$read_permission && !$write_permission)
   $task = 'access_denied';
 }else
 {
+  if ($GO_CONFIG->window_mode != 'projects')
   $_SESSION['GO_FILESYSTEM_PATH'] = $path;
 }
 
