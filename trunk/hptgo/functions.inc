@@ -522,8 +522,7 @@ function mail_to($email, $name="", $class="normal", $full_link=true, $contact_id
   }
   else
   {
-    global $strInvalidEmail;
-    return $strInvalidEmail;
+    return '';
   }
 }
 
