@@ -17,7 +17,7 @@
 		case $constCompaniesPage:$res = $db->metadata("ab_companies",false); break;
 		case $constMembersPage:$res = $db->metadata("users",false); break;
 		default:
-			$page = $$constContactsPage;		
+			$page = $constContactsPage;		
 			$res = $db->metadata("ab_contacts",false); 
 	}
 	
