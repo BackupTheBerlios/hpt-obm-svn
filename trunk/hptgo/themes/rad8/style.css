@@ -205,7 +205,7 @@ a.FooterBar:hover {
 	background-color: #bbb;
 	border-right: 1px solid #ddd;
 	border-bottom:2px solid #ddd;
-	border-top:2px inset #eee;
+//	border-top:2px inset #eee;
 	text-align: center;
 }
 a.Tab:link, a.Tab:visited, a.Tab:active {
@@ -216,6 +216,7 @@ a.Tab:link, a.Tab:visited, a.Tab:active {
 	font-weight: normal;
 	text-decoration: none;
 	text-align: center;
+	border: 0px;
 }
 a.Tab:hover {
 	color: #0869b5;
@@ -223,11 +224,12 @@ a.Tab:hover {
 }
 .TabBackground {
 	background-color: #aaa;
+	border: 0px;
 }
 .TabSpan {	/*Span-Tab style at end-right Horizontal-TabMenu*/
 	background-color: #bbb;
 	border-bottom:2px solid #ddd;
-	border-top:2px inset #eee;
+//	border-top:2px inset #eee;
 	text-align: center;
 }
 
@@ -257,14 +259,17 @@ a.TabVert:link, a.TabVert:visited, a.TabVert:active {
 	font-style: normal;
 	font-weight: normal;
 	text-decoration: none;
+	border: 0px;
 }
 .TabBackgroundVert {
 	background-color: #fff;
+	border: 0px;
 }
 .TabVertSpan {	/*Span-Tab style at end-bottom Vertical-TabMenu*/
 	background-color: #bbb;
 	border-right: 2px solid #ddd;
 	padding: 2px;
+
 }
 
 
@@ -681,7 +686,7 @@ a.Holiday, a.Holiday:visited, a.Holiday:active {
 
 .textbox{
 	background-color: #FFF7EB;
-	border: 1px inset #666;
+	border: 2px inset #666;
 
 	font-family: tahoma, arial, helvetica, sans-serif;
 	font-size: 12px;
