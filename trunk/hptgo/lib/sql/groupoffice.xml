@@ -112,7 +112,7 @@
 			<NOTNULL/>
 			<DEFAULT value="0"/>
 			<descr>User who is leader of this group</descr>
-			<link table="groups" field="id"/>
+			<link table="users" field="id"/>
 		</field>
 		<descr>User group. This table stores information about user groups.</descr>
 	</table>
