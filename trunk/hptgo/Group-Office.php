@@ -86,7 +86,7 @@ class GO_CONFIG
 * @var     string
 * @access  public
 */
-  var $host = '/';
+  var $host = '/~pclouds/hptgo/';
 
 /**
 * Full URL to reach Group-Office with slash on end
@@ -94,7 +94,7 @@ class GO_CONFIG
 * @var     string
 * @access  public
 */
-  var $full_url = 'http://go-duyntn.hptvietnam.com.vn/';
+  var $full_url = 'http://172.16.32.196/~pclouds/hptgo/';
 
 /**
 * Title of Group-Office
@@ -118,7 +118,7 @@ class GO_CONFIG
 * @var     string
 * @access  public
 */
-  var $root_path = "/home/duyntn/src/go/";
+  var $root_path = "/home/pclouds/public_html/hptgo/";
 
 /**
 * The path to store temporary files with a slash on end
@@ -126,7 +126,7 @@ class GO_CONFIG
 * @var     string
 * @access  public
 */
-  var $tmpdir = "/var/tmp/";
+  var $tmpdir = "/tmp/";
 
 /**
 * The maximum number of users
@@ -171,14 +171,14 @@ class GO_CONFIG
 * @var     string
 * @access  public
 */
-  var $db_user = "groupoffice";
+  var $db_user = "root";
 /**
 * The password to connect to the database
 *
 * @var     string
 * @access  public
 */
-  var $db_pass = "go1wq23re4";
+  var $db_pass = "";
 
 #group configuration
 /**
@@ -203,7 +203,7 @@ class GO_CONFIG
 * @var     string
 * @access  public
 */
-  var $auth_sources = '/home/duyntn/src/go/auth_sources.inc';
+  var $auth_sources = '/home/pclouds/public_html/hptgo/auth_sources.inc';
 
 #FILE BROWSER VARIABLES
 
@@ -224,7 +224,7 @@ class GO_CONFIG
 * @var     string
 * @access  public
 */
-  var $file_storage_path = "/var/www/groupoffice/";
+  var $file_storage_path = "/home/pclouds/groupoffice/";
 
 /**
 * The permissions mode to use when creating files and folders
