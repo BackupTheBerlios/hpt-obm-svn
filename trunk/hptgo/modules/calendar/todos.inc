@@ -99,7 +99,7 @@ $dropbox = new dropbox();
 $dropbox->add_value(SHOW_ALL, $cal_show_all);
 $dropbox->add_value(SHOW_OWN, $cal_show_own);
 $dropbox->add_value(SHOW_RESPONSIBLE, $cal_show_responsible);
-$dropbox->print_dropbox('show_todos', $cal_settings['show_todos'], 'onchange="javascript:document.forms[0].submit();"');
+$dropbox->print_dropbox('show_todos', $cal_settings['show_todos'], 'onchange="javascript:document.forms[0].submit();"', false, 10, 200);
 
 echo '<td></tr></table>';
 
@@ -133,6 +133,7 @@ if ($count == 0)
 {
 	echo '<table border="0" cellspacing="0">';
 
+	echo '<tr><td height="1" colspan="4"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 	while($todos->next_record())
 	{
 		$start_time = $todos->f('start_time')+($_SESSION['GO_SESSION']['timezone']*3600);
@@ -201,7 +202,14 @@ if ($count == 0)
 			}
 			$title .= $sc_location.": ".htmlspecialchars($todos->f('location'));
 		}
-
+		if ($todos->f('description') != '')
+		{
+			if ($title != '')
+			{
+				$title .= "<br />";
+			}
+			$title .= $sc_description.': '.htmlspecialchars($todos->f('description'));
+		}
 		$title .= "<br />".$cal_status.': '.$todos->f('status').'%';
 
 
@@ -283,7 +291,7 @@ if ($count == 0)
 			}
 			$links .= '<br /><a class="normal" href="javascript:change_list(0, 0);">'.$cmdShowAll.'</a></td></tr></table>';
 
-			echo '<tr><td height="1" colspan="3"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
+			echo '<tr><td height="1" colspan="4"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 			echo '<tr height="20"><td colspan="3">'.$links.'</td></tr>';
 		}
 	}

@@ -23,6 +23,7 @@ $post_action = isset($_REQUEST['post_action']) ? $_REQUEST['post_action'] : '';
 $task = isset($_POST['task']) ? $_POST['task'] : '';
 $return_to = isset($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
 $link_back = isset($_REQUEST['link_back']) ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
+$show_all = isset($_REQUEST['show_all']) ? $_REQUEST['show_all'] : 0;
 
 $calendar_id = isset($_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : 0;
 $db = new db();
@@ -41,6 +42,9 @@ switch ($task)
 	$GO_SECURITY->delete_acl($calendar['acl_read']);
       }
     }
+    $db->query('SELECT calendar_id FROM cal_config WHERE user_id="'.$GO_SECURITY->user_id.'"');		
+    while ($db->next_record())
+      $subscribed[] = $db->f('calendar_id');
     break;
 
   case 'save_calendar':
@@ -82,6 +86,10 @@ echo '<input type="hidden" name="task" value="'.$task.'" />';
 echo '<input type="hidden" name="close_action" value="false" />';
 echo '<input type="hidden" name="return_to" value="'.$return_to.'" />';
 echo '<input type="hidden" name="link_back" value="'.$link_back.'" />';
+echo '<input type="hidden" name="show_all" value="'.$show_all.'" />';
+
+$jscript = $show_all ? '_show_subscribed()' : '_show_all()';
+$cmdText = $show_all ? $cmdShowSubscribed : $cmdShowAll;
 
 $tabtable->print_head();
 ?>
@@ -89,7 +97,7 @@ $tabtable->print_head();
 <tr>
 <td>
 <table border="0" cellpadding="3" cellspacing="0">
-<tr><td colspan="5" height="25"><a href="calendar.php" class="normal"><?php echo $cmdAdd; ?></a></td></tr>
+<tr><td colspan="2" height="25"><a href="calendar.php" class="normal"><?php echo $cmdAdd; ?></a></td><td colspan="3" align="right"><a href="javascript:<?php echo $jscript; ?>" class="normal"><?php echo $cmdText; ?></a></td></tr>
   <?php
 if (isset($feedback))
 {
@@ -106,8 +114,6 @@ if ($calendar_count > 0)
   $subscr_count=0;		
   while ($cal->next_record())
   {
-	$subscr_count++;		
-	
   	$checked = '';
   	if (!isset($subscribed))
 		$checked = 'checked';
@@ -115,7 +121,10 @@ if ($calendar_count > 0)
 	{
 		if ( in_array($cal->f('id'),$subscribed) ) 
 			$checked = 'checked';
+		elseif (!$show_all) continue;
 	}
+	
+	$subscr_count++;		
 	
     echo '<tr>';
 //    echo '<td align="center"><input type="radio" name="default_calendar_id" value="'.$cal->f('id').'"></td>';
@@ -138,7 +147,19 @@ $button = new button($cmdClose,"javascript:document.location='".$return_to."'");
 </tr>
 </table>
 
-  <script type="text/javascript">
+<script type="text/javascript">
+function _show_all()
+{
+  document.forms[0].show_all.value='1';
+  document.forms[0].submit();
+}
+
+function _show_subscribed()
+{
+  document.forms[0].show_all.value='0';
+  document.forms[0].submit();
+}
+
 function delete_calendar(calendar_id, message)
 {
   if (confirm(unescape(message)))
