@@ -271,7 +271,7 @@ if ($to == "")
 {
   $to = $ml_no_reciepent;
 }
-echo $to;
+echo htmlspecialchars($to);
 ?>
 </td>
 </tr>
@@ -290,7 +290,7 @@ if (isset($content["cc"]))
   if ($cc != '')
   {
     echo '<tr><td valign="top"><b>Cc:</b>&nbsp;</td><td>';
-    echo $cc;
+    echo htmlspecialchars($cc);
     echo '</td></tr>';
   }
 }
@@ -308,7 +308,7 @@ if (isset($content["bcc"]))
   if ($bcc != '')
   {
     echo '<tr><td valign="top"><b>Bcc:</b>&nbsp;</td><td>';
-    echo $bcc;
+    echo htmlspecialchars($bcc);
     echo '</td></tr>';
   }
 }
@@ -428,9 +428,16 @@ for ($i=0;$i<count($parts);$i++)
     $count++;
 
     $attachments .= '<td><img border="0" width="16" height="16" src="'.$GO_CONFIG->control_url.'icon.php?extension='.get_extension($parts[$i]["name"]).'&mime='.urlencode($parts[$i]["mime"]).'" /></td>';
-    $attachments .= '<td valign="center" nowrap>&nbsp;<a href="'.$link.'" target="'.$target.'" title="'.$parts[$i]["name"].'">'.cut_string($parts[$i]["name"],50).'</a> ('.format_size($parts[$i]["size"]).')</td>';
+    $attachment_name = '';
+    $tmp = imap_mime_header_decode($parts[$i]["name"]);
+    foreach ($tmp as $t)
+      if (isset($t->text))
+        $attachment_name .= $t->text;
+    $attachments .= '<td valign="center" nowrap>&nbsp;<a href="'.$link.'" target="'.$target.'" title="'.$parts[$i]["name"].'">'.cut_string($attachment_name,50).'</a> ('.format_size($parts[$i]["size"]).')</td>';
     $filesystem_module = $GO_MODULES->get_module('filesystem');
-    if ($filesystem_module && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $filesystem_module['acl_read']))
+    if ($filesystem_module &&
+	($GO_SECURITY->has_permission($GO_SECURITY->user_id, $filesystem_module['acl_read']) ||
+	 $GO_SECURITY->has_permission($GO_SECURITY->user_id, $filesystem_module['acl_write'])))
     {
       $attachments .= "<td>&nbsp;<a title=\"".$ml_save_attachment."\" href=\"javascript:popup('save_attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&uid=".$uid."&part=".$parts[$i]["number"]."&transfer=".$parts[$i]["transfer"]."&mime=".$parts[$i]["mime"]."&filename=".urlencode(addslashes($parts[$i]["name"]))."','600','400')\"><img src=\"".$GO_THEME->images['save']."\" border=\"0\" /></a>;&nbsp;</td>\n";
     }else

@@ -12,4 +12,5 @@ $login_missing_field = "You didn't fill out your username or password.";
 $login_bad_login = "Wrong username or password";
 $login_remind = "Keep me logged in till I press the logout button.";
 $login_language = 'Language';
+$login_old_version = 'You are using an old Web browser.<br/>Some functions of OBM may not work properly with this browser.<br/>You should use a newer Web browser.';
 ?>

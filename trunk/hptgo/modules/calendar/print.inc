@@ -78,8 +78,8 @@ if($view_id == 0)
 $week_title = $sc_week.' '.$weeknumber;
 
 $pdf = new pdf();
-$pdf->AddFont('Arial','','arial.php');
-$pdf->AddFont('Arial','B','arialbd.php');
+$pdf->AddFont('Arial','','uhvb8v.php');
+$pdf->AddFont('Arial','B','uhvr8v.php');
 $pdf->Open();
 
 

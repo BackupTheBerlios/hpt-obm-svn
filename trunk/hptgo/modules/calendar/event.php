@@ -951,17 +951,17 @@ switch($tabtable->get_active_tab_id())
       switch ($status)
       {
 	case '0';
-	$button = new button($sc_accept, "javascript:document.location='".$_SERVER['REQUEST_URI']."&status=1'");
+	$button = new button($sc_accept, "javascript:document.event_form.status.value='1';document.event_form.submit();");
 	echo '&nbsp;&nbsp;';
-	$button = new button($sc_decline, "javascript:document.location='".$_SERVER['REQUEST_URI']."&status=2'");
+	$button = new button($sc_decline, "javascript:document.event_form.status.value='2';document.event_form.submit();");
 	break;
 
 	case '1';
-	$button = new button($sc_decline, "javascript:document.location='".$_SERVER['REQUEST_URI']."&status=2'");
+	$button = new button($sc_decline, "javascript:document.event_form.status.value='2';document.event_form.submit();");
 	break;
 
 	case '2';
-	$button = new button($sc_accept, "javascript:document.location='".$_SERVER['REQUEST_URI']."&status=1'");
+	$button = new button($sc_accept, "javascript:document.event_form.status.value='1';document.event_form.submit();");
 	break;
       }
     }

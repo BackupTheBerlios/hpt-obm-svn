@@ -36,6 +36,12 @@ if ($task == 'save')
 	$name = smart_addslashes(trim($_POST['name']));
 	if ($name != "")
 	{
+		if ($_POST['view_start_hour'] > $_POST['view_end_hour'])
+		{
+			$feedback = '<p class="Error">'.$error_invalid_hour_range.'</p>';
+		}
+		else
+		{
 		if ($view_id > 0)
 		{
 			$existing_view = $cal->get_view_by_name($GO_SECURITY->user_id, $name);
@@ -65,6 +71,7 @@ if ($task == 'save')
 					$db->query('INSERT INTO cal_view_subscriptions VALUES ("'.$GO_SECURITY->user_id.'","'.$view_id.'")');
 				}
 			}
+		}
 		}
 	}else
 	{

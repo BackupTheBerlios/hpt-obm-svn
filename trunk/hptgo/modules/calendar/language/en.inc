@@ -227,4 +227,5 @@ $sc_no_ok_in_past = 'This event is done';
 $cmdShowSubscribed = 'Show subscribed';
 $cmdShowOwned = 'Show owned';
 $strSaveOk = "Added event %s.";
+$error_invalid_hour_range = "Start hour must not be larger than end hour";
 ?>

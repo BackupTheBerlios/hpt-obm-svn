@@ -80,4 +80,5 @@ $fs_set_permissions = 'Điều chỉnh quyền truy cập';
 $strUsePermissionsOf = 'Quyền truy cập giống với';
 $fbGroupFolders = 'Thư mục nhóm';
 $fbMyDocuments = 'Cá nhân';
+$name_width_dot_at_begin = 'Tên không thể bắt đầu bằng dấu chấm';
 ?>

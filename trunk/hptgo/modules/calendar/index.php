@@ -233,7 +233,7 @@ if (!$print) {
     <tr>
     <td class="ModuleIcons"><a href="event.php?return_to=<?php echo rawurlencode($link_back);?><?php if (strpos($calendar_view_id,"view:") === 0 && $merged_view) echo '&merged_view='.substr($calendar_view_id,strlen("view:"));?>" class="small"><img src="<?php echo $GO_THEME->images['cal_compose']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_new_app; ?></a></td>
     <td class="ModuleIcons">
-		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?show_days=1&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>" 
+		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?show_days=1&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>&merged_view=<?php echo $merged_view;?>" 
 		class=
 			<?php if ((!isset($found) && ($show_days == 1)) ||
 					  (($cal_settings['show_days'] == 1) && (strpos($link_back, "?") === false))){
@@ -246,7 +246,7 @@ if (!$print) {
 		<img src="<?php echo $GO_THEME->images['cal_day']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_day_view; ?></a></td>
 		
     <td class="ModuleIcons">
-		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?show_days=7&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>" 
+		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?show_days=7&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>&merged_view=<?php echo $merged_view;?>" 
 		class=
 			<?php if ((!isset($found) && ($show_days == 7))||
 					  (($cal_settings['show_days'] == 7) && (strpos($link_back, "?") === false))){
@@ -258,7 +258,7 @@ if (!$print) {
 		>
 		<img src="<?php echo $GO_THEME->images['cal_week']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_week_view; ?></a></td>
     <td class="ModuleIcons">
-		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?show_days=35&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>" 
+		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?show_days=35&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>&merged_view=<?php echo $merged_view;?>" 
 		class=
 			<?php if ((!isset($found) && ($show_days == 35))||
 					  (($cal_settings['show_days'] == 35) && (strpos($link_back, "?") === false))){
@@ -270,7 +270,7 @@ if (!$print) {
 		>
 		<img src="<?php echo $GO_THEME->images['cal_month']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_month_view; ?></a></td>
     <td class="ModuleIcons">
-		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>&task=list_view" 
+		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>&task=list_view&merged_view=<?php echo $merged_view;?>" 
 		class=
 			<?php if (!isset($found) && ($task == 'list_view') && ($show_days == '')){
 				echo '"bold_small" ';

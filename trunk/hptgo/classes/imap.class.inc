@@ -286,7 +286,7 @@ class imap
 
 	      if ($email != '')
 	      {
-		$this->message["to"][$x] .= "&lt;".$email. "&gt;";
+		$this->message["to"][$x] .= "<$email>";
 	      }
 	    }
 	  }
@@ -500,7 +500,7 @@ function mail_fetchparts($msgNo) {
 
 	    if ($email != '')
 	    {
-	      $this->message["to"][$x] .= "&lt;".$email. "&gt;";
+	      $this->message["to"][$x] .= "<$email>";
 	    }
 	  }
 	}
@@ -527,7 +527,7 @@ function mail_fetchparts($msgNo) {
 
 	    if ($email != '')
 	    {
-	      $this->message["cc"][$x] .= "&lt;".$email. "&gt;";
+	      $this->message["cc"][$x] .= "<$email>";
 	    }
 	  }
 	}
@@ -555,7 +555,7 @@ function mail_fetchparts($msgNo) {
 
 	    if ($email != '')
 	    {
-	      $this->message["bcc"][$x] .= "&lt;".$email. "&gt;";
+	      $this->message["bcc"][$x] .= "<$email>";
 	    }
 	  }
 	}

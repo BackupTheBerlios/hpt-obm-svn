@@ -34,6 +34,7 @@ class GO_MODULES extends db
 			{
 				$this->modules[$modules[$i]['id']] = $modules[$i];				
 				
+				$this->modules[$modules[$i]['id']]['enable'] = $modules[$i]['enable'];
 				$this->modules[$modules[$i]['id']]['write_permission'] = 
 					$GO_SECURITY->has_permission($_SESSION['GO_SESSION']['user_id'], 
 						$modules[$i]['acl_write']);
