@@ -231,7 +231,7 @@ if (!$print) {
   	
     <table border="0" cellpadding="0" cellspacing="0">
     <tr>
-    <td class="ModuleIcons"><a href="event.php" class="small"><img src="<?php echo $GO_THEME->images['cal_compose']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_new_app; ?></a></td>
+    <td class="ModuleIcons"><a href="event.php<?php if (strpos($calendar_view_id,"view:") === 0 && $merged_view) echo '?merged_view='.substr($calendar_view_id,strlen("view:"));?>" class="small"><img src="<?php echo $GO_THEME->images['cal_compose']; ?>" border="0" width="32" height="32" /><br /><?php echo $sc_new_app; ?></a></td>
     <td class="ModuleIcons">
 		<a href="<?php echo $_SERVER['PHP_SELF']; ?>?show_days=1&calendar_id=<?php echo $calendar_id; ?>&view_id=<?php echo $view_id; ?>&day=<?php echo $day; ?>&month=<?php echo $month; ?>&year=<?php echo $year; ?>" 
 		class=

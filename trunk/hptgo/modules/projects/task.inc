@@ -125,9 +125,13 @@ else {
   $space = "<img src=\"".$GO_THEME->images['task_space']."\" width=\"".$display_date."\" height=\"7\">";
   echo "<tr class=\"TableInside$n\"><td width=\"25\">&nbsp;</td><td width=\"150\">&nbsp;</td>";
   echo "<td class=\"GanttDate\" nowrap>$space<b>^<br>$space$pm_end_date ($date)</b></td></tr>";
-
-  $return_to = $_SERVER['PHP_SELF'] . "?project_id=$project_id&task=show_task_list";
 }
+
+if (!isset($task) || $task == '' || $task == 'show_task_list')
+  $return_to = '/modules/projects/';
+else
+if ($task != 'show_task_doc')
+  $return_to = $_SERVER['PHP_SELF'] . "?project_id=$project_id&task=show_task_list";
 
 echo "</table><table border=\"0\" cellspacing=\"0\" cellpadding=\"4\">";
 echo "<tr><td colspan=\"2\">&nbsp;</td></tr><tr><td>";

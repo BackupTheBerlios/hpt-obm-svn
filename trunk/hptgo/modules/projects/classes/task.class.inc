@@ -210,6 +210,9 @@ class project_task extends db {
 
     $this->doc_path = $GO_CONFIG->file_storage_path . 'projects/' .
       $this->project_id . '/' . $this->id;
+    $this->doc_url = $_SERVER['PHP_SELF'] . "?task=show_task_doc".
+             "&project_id=".$this->project_id.
+             "&task_id=".$this->id."&task_status=show_doc";
   }
 
   function print_info($member_ids, $member_names, $member_list) {
@@ -243,9 +246,7 @@ class project_task extends db {
         echo "<td>".$pm_task_status_values[$this->status]."</td>";
     }
     echo "<td align=\"center\">".($this->approved ? "<img border=\"0\" src=\"".$GO_THEME->images['checked']."\"/>" : "&nbsp;")."</td>";
-    $url = $_SERVER['PHP_SELF'] . "?task=show_task_doc".
-             "&project_id=".$this->project_id.
-             "&task_id=".$this->id."&task_status=show_doc";
+    $url = $this->doc_url;
 
     if ($this->level == -1) {
       if ($this->is_owner || $this->is_manager)
@@ -367,6 +368,12 @@ class project_task extends db {
     }
     else
       echo "<td align=\"center\">".($this->approved ? "<img border=\"0\" src=\"".$GO_THEME->images['checked']."\"/>" : "&nbsp;")."</td>";
+    if ($this->level >= 0)
+      echo '<td align="center"><a href="'.$this->doc_url.'">'.
+           '<img border="0" src="'.$GO_THEME->images['doc_red'].'"/></a></td>';
+    else
+      echo '<td align="center"><a href="'.$this->doc_url.'">'.
+           '<img border="0" src="'.$GO_THEME->images['doc'].'"/></a></td>';
     echo "</tr>";
     echo "<tr><td>&nbsp;</td></tr>";
     echo "</table>";
@@ -390,22 +397,8 @@ class project_task extends db {
   }
 
   function print_formated_comments() {
-    global $GO_THEME;
-
-    $comments = $this->comments;
-    $data = strtok($comments, "\xFF");
-    while ($data) {
-      if ($data != '') {
-        list($time, $who, $text) = explode("|", $data);
-        echo "<tr class=\"ProjectComment2\"><td height=\"20\"><i>($time)</i>&nbsp;&nbsp;-&nbsp;&nbsp;".
-             "<b>$who</b></td></tr>";
-        $text = str_replace("\n", "<br>", $text);
-        echo '<tr><td height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
-        echo "<tr class=\"ProjectComment1\" height=\"20\"><td>$text</td></tr>";
-        echo '<tr><td height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
-      }
-      $data = strtok("\xFF");
-    }
+	$_SESSION['GO_SESSION']['task_comments'] = $this->comments;
+	echo '<tr><td width="100%"><iframe src="comments.php" width="100%" class="textbox"></iframe></td></tr>';
   }
 
   function show_doc_folder() {
@@ -422,7 +415,7 @@ class project_task extends db {
     echo "</td>";
     echo "<td align=\"center\">".($this->approved ? "<img border=\"0\" src=\"".$GO_THEME->images['checked']."\"/>" : "&nbsp;")."</td>";
     echo "</tr>";
-    echo "<tr><td colspan=\"8\"><iframe src=\""."folder.php?path=".$this->doc_path."\" width=720 height=300>".
+    echo "<tr><td colspan=\"8\" width=\"100%\"><iframe src=\"folder.php?path=".$this->doc_path."\" width=\"100%\" height=\"300\">".
          "</iframe></td></tr>";
   }
 

@@ -1197,6 +1197,9 @@ switch($tabtable->get_active_tab_id())
     echo '</td></tr>';
 
 
+    if (isset($_REQUEST['merged_view']))
+      $marked_calendars = $cal->get_view_calendar_ids($_REQUEST['merged_view']);
+
     $calendar_count = $cal->get_authorised_calendars($GO_SECURITY->user_id);
     $dropbox= new dropbox();
     $count = 0;
@@ -1210,6 +1213,11 @@ switch($tabtable->get_active_tab_id())
 	  $first_writable_cal = $cal->f('id');
 	}
 	$dropbox->add_value($cal->f('id'), $cal->f('name'));
+	if (isset($marked_calendars) &&
+	    in_array($cal->f('id'),$marked_calendars))
+	{
+	  $event['calendars'][] = $cal->f('id');
+	}
 	$count++;
       }
     }
@@ -1235,88 +1243,88 @@ switch($tabtable->get_active_tab_id())
 	while($cal->get_calendar_by_name($new_cal_name))
 	{
 	  $new_cal_name = $cal_name.' ('.$x.')';
-	      $x++;
-	      }
-	      $calendar_id = $cal->add_calendar($GO_SECURITY->user_id, addslashes($new_cal_name), 7, 20);
-	      $dropbox->add_value($calendar_id, $new_cal_name);
-	      }else
-	      {
-	      $calendar_id = $first_writable_cal;
-	      }
-	      }
+	  $x++;
+	}
+	$calendar_id = $cal->add_calendar($GO_SECURITY->user_id, addslashes($new_cal_name), 7, 20);
+	$dropbox->add_value($calendar_id, $new_cal_name);
+      }else
+      {
+	$calendar_id = $first_writable_cal;
+      }
+    }
 
-	      if (count($event['calendars']) == 0)
-	      {
-	      $event['calendars'][] = $calendar_id;
-	      }
+    if (count($event['calendars']) == 0)
+    {
+      $event['calendars'][] = $calendar_id;
+    }
 
-	      for($i=0;$i<count($event['calendars']);$i++)
-	      {
-	      if (!$dropbox->is_in_dropbox($event['calendars'][$i]))
-	      {
-	      echo '<input type="hidden" name="calendars[]" value="'.$event['calendars'][$i].'" />';
-	      }
-	      }
+    for($i=0;$i<count($event['calendars']);$i++)
+    {
+      if (!$dropbox->is_in_dropbox($event['calendars'][$i]))
+      {
+	echo '<input type="hidden" name="calendars[]" value="'.$event['calendars'][$i].'" />';
+      }
+    }
 
-	      echo '<tr><td valign="top">'.$sc_put_in.':</td>';
-	      echo '<td><table border="0">';
-	      $dropbox->print_dropbox('calendars[]', $event['calendars'], '', true, '5', '200');
-	      echo '</table></td></tr>';
+    echo '<tr><td valign="top">'.$sc_put_in.':</td>';
+    echo '<td><table border="0">';
+    $dropbox->print_dropbox('calendars[]', $event['calendars'], '', true, '5', '200');
+    echo '</table></td></tr>';
 
-	      echo '<tr><td colspan="2">';
-	      $button = new button($cmdOk, "javascript:save_event('true');");
-	      echo '&nbsp;&nbsp;';
-	      $button = new button($cmdApply, "javascript:save_event('false');");
-	      echo '&nbsp;&nbsp;';
-	      $button = new button($cmdSave, "javascript:document.event_form.emptyform.value='true';save_event('false');");
-	      echo '&nbsp;&nbsp;';
-	      if ($event_id > 0)
-	      {
-		$button = new button($cal_export, "document.location='export.php?event_id=$event_id';");
-		echo '&nbsp;&nbsp;';
-	      }
-	      $button = new button($cmdCancel, "javascript:document.location='$return_to'");
-	      echo '</td></tr>';
-	      echo '</table>';
-	      ?>
-		<script type="text/javascript" language="javascript">
-		toggle_repeat('<?php echo $event['repeat_type']; ?>');
-	      <?php
+    echo '<tr><td colspan="2">';
+    $button = new button($cmdOk, "javascript:save_event('true');");
+    echo '&nbsp;&nbsp;';
+    $button = new button($cmdApply, "javascript:save_event('false');");
+    echo '&nbsp;&nbsp;';
+    $button = new button($cmdSave, "javascript:document.event_form.emptyform.value='true';save_event('false');");
+    echo '&nbsp;&nbsp;';
+    if ($event_id > 0)
+    {
+      $button = new button($cal_export, "document.location='export.php?event_id=$event_id';");
+      echo '&nbsp;&nbsp;';
+    }
+    $button = new button($cmdCancel, "javascript:document.location='$return_to'");
+    echo '</td></tr>';
+    echo '</table>';
+?>
+<script type="text/javascript" language="javascript">
+  toggle_repeat('<?php echo $event['repeat_type']; ?>');
+<?php
 
-		if ($event['all_day_event'] == '1')
-		{
-		  echo 'disable_time();';
-		}
+if ($event['all_day_event'] == '1')
+{
+  echo 'disable_time();';
+}
 
-	      if ($event['repeat_forever'] == '1')
-	      {
-		echo 'toggle_repeat_end_info();';
-	      }
-	      ?>
+if ($event['repeat_forever'] == '1')
+{
+  echo 'toggle_repeat_end_info();';
+}
+?>
 
 
 
-		function update_end_hour(start_hour)
-		{
-		  if (start_hour == 24)
-		  {
-		    document.event_form.end_hour.value='01';
-		  }else
-		  {
-		    start_hour = parseInt(start_hour)+1
-		      if (start_hour < 10)
-		      {
-			start_hour = "0"+start_hour;
-		      }
-		    document.event_form.end_hour.value= start_hour;
-		  }
-		}
+function update_end_hour(start_hour)
+{
+  if (start_hour == 24)
+  {
+    document.event_form.end_hour.value='01';
+  }else
+  {
+    start_hour = parseInt(start_hour)+1
+      if (start_hour < 10)
+      {
+	start_hour = "0"+start_hour;
+      }
+    document.event_form.end_hour.value= start_hour;
+  }
+}
 
-	      function get_date(dateString)
-	      {
-		<?php
-		  if ($_SESSION['GO_SESSION']['date_format'] == "d-m-Y")
-		  {
+function get_date(dateString)
+{
+<?php
+    if ($_SESSION['GO_SESSION']['date_format'] == "d-m-Y")
+    {
 		    echo "
 		      var date = new Date(dateString.substring(6,10),
 			  dateString.substring(3,5)-1,
@@ -1334,160 +1342,160 @@ switch($tabtable->get_active_tab_id())
 			  dateString.substring(14,16)
 			  );";
 		  }
-		  ?>
+?>
 
-		    return date;
-	      }
+    return date;
+}
 
-	      function save_event(close)
-	      {
-		start_date = get_date(document.event_form.start_date.value.replace(/-/g,'/')+' '+document.event_form.start_hour.value+':'+document.event_form.start_min.value+':00');
-		end_date = get_date(document.event_form.end_date.value.replace(/-/g,'/')+' '+document.event_form.end_hour.value+':'+document.event_form.end_min.value+':00');
-		repeat_end_date = get_date(document.event_form.repeat_end_date.value.replace(/-/g,'/')+' 00:00:00');
+function save_event(close)
+{
+  start_date = get_date(document.event_form.start_date.value.replace(/-/g,'/')+' '+document.event_form.start_hour.value+':'+document.event_form.start_min.value+':00');
+  end_date = get_date(document.event_form.end_date.value.replace(/-/g,'/')+' '+document.event_form.end_hour.value+':'+document.event_form.end_min.value+':00');
+  repeat_end_date = get_date(document.event_form.repeat_end_date.value.replace(/-/g,'/')+' 00:00:00');
 
-		if (start_date > end_date)
-		{
-		  alert("<?php echo $sc_start_later; ?>");
-		  return;
-		}
-		if (document.event_form.repeat_type.value != '0')
-		{
-		  if ((start_date >= repeat_end_date) && document.event_form.repeat_forever.checked == false)
-		  {
-		    alert("<?php echo $sc_cycle_start_later; ?>");
-		    return;
-		  }
-		}
+  if (start_date > end_date)
+  {
+    alert("<?php echo $sc_start_later; ?>");
+    return;
+  }
+  if (document.event_form.repeat_type.value != '0')
+  {
+    if ((start_date >= repeat_end_date) && document.event_form.repeat_forever.checked == false)
+    {
+      alert("<?php echo $sc_cycle_start_later; ?>");
+      return;
+    }
+  }
 
-		if (document.event_form.repeat_type.value == '1' && document.event_form.reminder.value > 43200)
-		{
-		  alert("<?php echo $sc_reminder_set_to_early; ?>");
-		  return;
-		}
+  if (document.event_form.repeat_type.value == '1' && document.event_form.reminder.value > 43200)
+  {
+    alert("<?php echo $sc_reminder_set_to_early; ?>");
+    return;
+  }
 
-		if (document.event_form.repeat_type.value == '2' && document.event_form.reminder.value > 518400)
-		{
-		  alert("<?php echo $sc_reminder_set_to_early; ?>");
-		  return;
-		}
+  if (document.event_form.repeat_type.value == '2' && document.event_form.reminder.value > 518400)
+  {
+    alert("<?php echo $sc_reminder_set_to_early; ?>");
+    return;
+  }
 
-		if (document.event_form.repeat_type.value == '2' || document.event_form.repeat_type.value == '4')
-		{
-		  if (document.event_form.repeat_days_0.checked == false && document.event_form.repeat_days_1.checked == false && document.event_form.repeat_days_2.checked == false && document.event_form.repeat_days_3.checked == false && document.event_form.repeat_days_4.checked == false && document.event_form.repeat_days_5.checked == false && document.event_form.repeat_days_6.checked == false)
-		  {
-		    alert("<?php echo $sc_never_happens; ?>");
-		    return;
-		  }
-		}
-		document.event_form.task.value = 'save_event';
-		document.event_form.close.value = close;
+  if (document.event_form.repeat_type.value == '2' || document.event_form.repeat_type.value == '4')
+  {
+    if (document.event_form.repeat_days_0.checked == false && document.event_form.repeat_days_1.checked == false && document.event_form.repeat_days_2.checked == false && document.event_form.repeat_days_3.checked == false && document.event_form.repeat_days_4.checked == false && document.event_form.repeat_days_5.checked == false && document.event_form.repeat_days_6.checked == false)
+    {
+      alert("<?php echo $sc_never_happens; ?>");
+      return;
+    }
+  }
+  document.event_form.task.value = 'save_event';
+  document.event_form.close.value = close;
 
-		document.event_form.submit();
+  document.event_form.submit();
 
-	      }
+}
 
-	      function remove_client()
-	      {
-		document.event_form.contact_id.value = 0;
-		document.event_form.contact_name.value = '';
-		document.event_form.contact_name_text.value = '';
-	      }
+function remove_client()
+{
+  document.event_form.contact_id.value = 0;
+  document.event_form.contact_name.value = '';
+  document.event_form.contact_name_text.value = '';
+}
 
-	      function toggle_repeat_end_info()
-	      {
-		document.event_form.repeat_end_date.disabled = !document.event_form.repeat_end_date.disabled;
-	      }
+function toggle_repeat_end_info()
+{
+  document.event_form.repeat_end_date.disabled = !document.event_form.repeat_end_date.disabled;
+}
 
-	      function disable_time()
-	      {
-		if (document.event_form.start_hour.disabled==false)
-		{
-		  document.event_form.start_hour.disabled=true;
-		  document.event_form.start_min.disabled=true;
-		  document.event_form.end_hour.disabled=true;
-		  document.event_form.end_min.disabled=true;
-		}else
-		{
-		  document.event_form.start_hour.disabled=false;
-		  document.event_form.start_min.disabled=false;
-		  document.event_form.end_hour.disabled=false;
-		  document.event_form.end_min.disabled=false;
-		}
-	      }
+function disable_time()
+{
+  if (document.event_form.start_hour.disabled==false)
+  {
+    document.event_form.start_hour.disabled=true;
+    document.event_form.start_min.disabled=true;
+    document.event_form.end_hour.disabled=true;
+    document.event_form.end_min.disabled=true;
+  }else
+  {
+    document.event_form.start_hour.disabled=false;
+    document.event_form.start_min.disabled=false;
+    document.event_form.end_hour.disabled=false;
+    document.event_form.end_min.disabled=false;
+  }
+}
 
-	      function toggle_repeat(repeat)
-	      {
+function toggle_repeat(repeat)
+{
 
-		document.event_form.repeat_type.value = repeat;
-		switch(repeat)
-		{
-		  case '0':
-		    disable_days(true);
-		    document.event_form.month_time.disabled = true;
-		    disable_repeat_end_date(true);
-		    document.event_form.repeat_every.disabled = true;
-		    break;
+  document.event_form.repeat_type.value = repeat;
+  switch(repeat)
+  {
+  case '0':
+    disable_days(true);
+    document.event_form.month_time.disabled = true;
+    disable_repeat_end_date(true);
+    document.event_form.repeat_every.disabled = true;
+    break;
+    
+  case '1':
+    disable_days(true);
+    document.event_form.month_time.disabled = true;
+    disable_repeat_end_date(false);
+    document.event_form.repeat_every.disabled = false;
+    break;
 
-		  case '1':
-		    disable_days(true);
-		    document.event_form.month_time.disabled = true;
-		    disable_repeat_end_date(false);
-		    document.event_form.repeat_every.disabled = false;
-		    break;
+  case '2':
+    disable_days(false);
+    document.event_form.month_time.disabled = true;
+    disable_repeat_end_date(false);
+    document.event_form.repeat_every.disabled = false;
+    break;
 
-		  case '2':
-		    disable_days(false);
-		    document.event_form.month_time.disabled = true;
-		    disable_repeat_end_date(false);
-		    document.event_form.repeat_every.disabled = false;
-		    break;
+  case '3':
+    disable_days(true);
+    disable_repeat_end_date(false);
+    break;
+    
+  case '4':
+    disable_days(false);
+    document.event_form.month_time.disabled = false;
+    disable_repeat_end_date(false);
+    document.event_form.repeat_every.disabled = false;
+    break;
+    
+  case '5':
+    disable_days(true);
+    document.event_form.month_time.disabled = true;
+    disable_repeat_end_date(false);
+    document.event_form.repeat_every.disabled = false;
+    break;
+  }
+}
 
-		  case '3':
-		    disable_days(true);
-		    disable_repeat_end_date(false);
-		    break;
+function disable_days(disable)
+{
+  document.event_form.repeat_days_0.disabled=disable;
+  document.event_form.repeat_days_1.disabled=disable;
+  document.event_form.repeat_days_2.disabled=disable;
+  document.event_form.repeat_days_3.disabled=disable;
+  document.event_form.repeat_days_4.disabled=disable;
+  document.event_form.repeat_days_5.disabled=disable;
+  document.event_form.repeat_days_6.disabled=disable;
 
-		  case '4':
-		    disable_days(false);
-		    document.event_form.month_time.disabled = false;
-		    disable_repeat_end_date(false);
-		    document.event_form.repeat_every.disabled = false;
-		    break;
+}
 
-		  case '5':
-		    disable_days(true);
-		    document.event_form.month_time.disabled = true;
-		    disable_repeat_end_date(false);
-		    document.event_form.repeat_every.disabled = false;
-		    break;
-		}
-	      }
+function disable_repeat_end_date(disable)
+{
+  document.event_form.repeat_forever.disabled=disable;
+  if (disable == true || (disable==false && document.event_form.repeat_forever.checked == false))
+  {
+    document.event_form.repeat_end_date.disabled=disable;
+  }
+}
 
-	      function disable_days(disable)
-	      {
-		document.event_form.repeat_days_0.disabled=disable;
-		document.event_form.repeat_days_1.disabled=disable;
-		document.event_form.repeat_days_2.disabled=disable;
-		document.event_form.repeat_days_3.disabled=disable;
-		document.event_form.repeat_days_4.disabled=disable;
-		document.event_form.repeat_days_5.disabled=disable;
-		document.event_form.repeat_days_6.disabled=disable;
-
-	      }
-
-	      function disable_repeat_end_date(disable)
-	      {
-		document.event_form.repeat_forever.disabled=disable;
-		if (disable == true || (disable==false && document.event_form.repeat_forever.checked == false))
-		{
-		  document.event_form.repeat_end_date.disabled=disable;
-		}
-	      }
-
-	      document.event_form.name.focus();
-	      </script>
-		<?php
-		break;
+document.event_form.name.focus();
+</script>
+<?php
+break;
 }
 $tabtable->print_foot();
 echo '</form>';
