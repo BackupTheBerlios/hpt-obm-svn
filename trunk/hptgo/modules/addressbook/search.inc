@@ -100,6 +100,8 @@
 		case 'companies':
 			$search_field = $ab_settings['search_companies_field'];
 			$dropbox->add_value('ab_companies.name', $strName);
+			$dropbox->add_value('ab_companies.shortname', $strShortCompanyName);
+			$dropbox->add_value('ab_companies.engname', $strEnglishCompanyName);
 			$dropbox->add_value('ab_companies.email', $strEmail);
 			$dropbox->add_value('ab_companies.address',$strAddress);
 			$dropbox->add_value('ab_companies.city', $strCity);
@@ -297,7 +299,7 @@ if ($task=='search' || $task == 'show_letter')
 
 					$results .= '<tr height="20" id="'.$ab->f('id').'">';
 					$results .= '<td><input id="'.htmlspecialchars($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
-					$results .= '<td nowrap><a class="normal" href="'.$GO_MODULES->url.'company.php?company_id='.$ab->f('id').'&return_to='.rawurlencode($link_back).'" title="'.$strShowProfile.'">'.htmlspecialchars($ab->f('name')).'</a>&nbsp;&nbsp;</td>';
+					$results .= '<td nowrap><a class="normal" href="'.$GO_MODULES->url.'company.php?company_id='.$ab->f('id').'&return_to='.rawurlencode($link_back).'" title="'.$strShowProfile.'">'.htmlspecialchars($ab->company_name()).'</a>&nbsp;&nbsp;</td>';
 					$results .= '<td>'.empty_to_stripe($ab->f('city')).'&nbsp;&nbsp;</td>';
 					$results .= "<td>".mail_to(empty_to_stripe($ab->f("email")), empty_to_stripe($ab->f("email")),'normal',true, $ab->f("id"))."&nbsp;&nbsp;</td>\n";
 					$results .= '<td>'.empty_to_stripe($ab->f('phone')).'&nbsp;&nbsp;</td>';
