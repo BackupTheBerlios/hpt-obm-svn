@@ -504,11 +504,33 @@ if (isset($feedback)) echo $feedback;
   <?php
 if ($count > 0)
 {
-  echo '<tr><td>'.$ml_from.':</td><td colspan="2">';
+  if (isset($mail_cc) && trim($mail_cc) != '') {
+    $cc_style = 'visibility: visible;';
+    $cc_toggle = $ml_cmd_hide.' CC';
+  } else {
+    $cc_style = 'visibility: hidden; display: none;';
+    $cc_toggle = $ml_cmd_show.' CC';
+  }
+  if (isset($mail_bcc) && trim($mail_bcc) != '') {
+    $bcc_style = 'visibility: visible;';
+    $bcc_toggle = $ml_cmd_hide.' BCC';
+  } else {
+    $bcc_style = 'visibility: hidden; display: none;';
+    $bcc_toggle = $ml_cmd_show.' BCC';
+  }
+
+  echo '<tr><td>'.$ml_from.':</td><td>';
   $dropbox = new dropbox();
   $dropbox->add_arrays($ids, $names);
   $dropbox->print_dropbox('mail_from',$mail_from, 'onchange="javascript:change_mail_from()"');
-  echo '</td></tr>';
+  echo '</td>'.
+       '<td>'.
+       '<a href="javascript:toggle_field(\'CC\')" class="normal">'.
+         '<span id="Toggle_CC">'.$cc_toggle.'</span></a>'.
+       '&nbsp;&nbsp;'.
+       '<a href="javascript:toggle_field(\'BCC\')" class="normal">'.
+         '<span id="Toggle_BCC">'.$bcc_toggle.'</span></a>'.
+       '</td></tr>';
 }
 
 if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_group_id))
@@ -540,7 +562,7 @@ if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_gr
       <input class="textbox" type="text" name="mail_to" size="95" value="<?php echo (isset($mail_to) ? htmlspecialchars($mail_to) : ''); ?>" />
       </td>
       </tr>
-      <tr>
+      <tr id="CC" style="<?php echo $cc_style; ?>">
       <td>
       <?php
       if ($ab_module)
@@ -562,7 +584,7 @@ if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_gr
 	<input class="textbox" type="text" name="mail_cc" size="95" value="<?php echo (isset($mail_cc) ? htmlspecialchars( $mail_cc) : '') ?>" />
 	</td>
 	</tr>
-	<tr>
+	<tr id="BCC" style="<?php echo $bcc_style; ?>">
 	<td>
 	<?php
 	if ($ab_module)
@@ -815,5 +837,20 @@ function send()
       document.sendform.submit();
   }
 
+  function toggle_field(name)
+  {
+    var field = document.getElementById(name);
+    var link = document.getElementById("Toggle_"+name);
+    if (field.style.visibility == 'hidden') {
+      field.style.display = '';
+      field.style.visibility = 'visible';
+      link.innerHTML = '<?php echo $ml_cmd_hide; ?>'+' '+name;
+    }
+    else {
+      field.style.display = 'none';
+      field.style.visibility = 'hidden';
+      link.innerHTML = '<?php echo $ml_cmd_show; ?>'+' '+name;
+    }
+  }
   //-->
   </script>
