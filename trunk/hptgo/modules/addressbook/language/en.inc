@@ -85,7 +85,7 @@ $contacts_colors['brown'] = 'Brown';
 $ab_category_name = 'Category name';
 $ab_new_category = 'New category';
 $ab_category = 'Category';
-$ab_parent_category = 'Danh m?c thêm vào ch?a trong';
+$ab_parent_category = 'New item is in';
 $ab_TOP = '[CATEGORY GROUP]';
 
 $ab_ConfirmDeleteStatus = 'Do you want to delete \"%s\" category ?';

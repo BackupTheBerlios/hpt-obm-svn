@@ -18,11 +18,22 @@ $radio_list->add_option('companies', $ab_companies);
 </td>
 </tr>
 <tr>
+<td valign="top"><?php echo "$ab_file_type:"; ?></td>
+<td>
+<?php
+$droplist = new dropbox();
+$droplist->add_value('csv','CSV');
+$droplist->add_value('xls','Excel (*.XLS)');
+$droplist->print_dropbox('filetype','xls');
+?>
+</td>
+</tr>
+<tr>
 <td valign="top"><?php echo "$ab_encoding:"; ?></td>
 <td>
 <?php
 require_once($GO_CONFIG->class_path."/phpvnconv/LIST.inc");
-$droplist = new dropbox('encoding');
+$droplist = new dropbox();
 $droplist->add_value('none','None');
 foreach ($vnconv_charset_list as $cs => $text) {
   $droplist->add_value($cs,$text);

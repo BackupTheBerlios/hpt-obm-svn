@@ -109,66 +109,125 @@ switch($task)
 	break;
 
 	case 'export':
-		$addressbook = $ab->get_addressbook($addressbook_id);
-		require($GO_CONFIG->class_path."/phpvnconv/phpvnconv.class.inc");
-		$vnconv = new phpVnconv();
+		if ($_REQUEST['filetype'] == 'xls') {
+			$addressbook = $ab->get_addressbook($addressbook_id);
+			require($GO_CONFIG->class_path."/phpvnconv/phpvnconv.class.inc");
+			$vnconv = new phpVnconv();
 
-		$vnconv->set_to("ascii");
-		$browser = detect_browser();
-		header("Content-type: text/x-csv");
-		header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
-		if ($browser['name'] == 'MSIE')
-		{
-			header("Content-Disposition: inline; filename=\"".$vnconv->vnconv($addressbook['name'])."-".$_POST['export_type'].".csv\"");
-			header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-			header('Pragma: public');
-		}else
-		{
-			header('Pragma: no-cache');
-			header("Content-Disposition: attachment; filename=\"".$vnconv->vnconv($addressbook['name']).".csv\"");
-		}
+			ini_set('include_path',ini_get('include_path').':'.$GO_CONFIG->class_path.'pear/usr/lib/php');
+			require_once "Spreadsheet/Excel/Writer.php";
+			$xls =& new Spreadsheet_Excel_Writer();
+			$xls->setVersion(8); // Excel 97/2000
+			$vnconv->set_to("ascii");
+			$xls->send($vnconv->vnconv($addressbook['name']).".xls");
+			$xls->_codepage         = 0x04EA; // CP1258
 
-		$vnconv->set_to($_POST['encoding'] == "none" ? '' : $_POST['encoding']);
-		$quote = smartstrip($_POST['quote']);
-		$crlf = smartstrip($_POST['crlf']);
-		$crlf = str_replace('\\r', "\015", $crlf);
-		$crlf = str_replace('\\n', "\012", $crlf);
-		$crlf = str_replace('\\t', "\011", $crlf);
-		$seperator = smartstrip($_POST['seperator']);
+			//$vnconv->set_to($_POST['encoding'] == "none" ? '' : $_POST['encoding']);
+			$vnconv->set_to('cp1258');
+			$sheet =& $xls->addWorksheet('Sheet1');
+			$line = 0;
 
-		if ($_POST['export_type'] == 'contacts')
-		{
-			$headings = array($strTitle, $strFirstName, $strMiddleName, $strLastName, $strInitials, $strSex, $strBirthday, $strEmail, $strCountry, $strState, $strCity, $strZip, $strAddress, $strPhone, $strWorkphone, $strFax, $strWorkFax, $strCellular, $strCompany, $strDepartment, $strFunction, $ab_comment, $contacts_group);
-			$headings = $quote.implode($quote.$seperator.$quote, $headings).$quote;
-			echo $headings;
-			echo $crlf;
-
-			$ab->get_contacts_for_export($_POST['addressbook_id']);
-			while ($ab->next_record())
+			if ($_POST['export_type'] == 'contacts')
 			{
-				$record = array($ab->f("title"), $ab->f("first_name"),$ab->f("middle_name"), $ab->f("last_name"), $ab->f("initials"), $ab->f("sex"), $ab->f('birthday'), $ab->f("email"), $ab->f("country"), $ab->f("state"), $ab->f("city"), $ab->f("zip"), $ab->f("address"), $ab->f("home_phone"), $ab->f("work_phone"), $ab->f("fax"), $ab->f("work_fax"), $ab->f("cellular"), $ab->f("company"), $ab->f("department"), $ab->f("function"), $ab->f("comment"), $ab->f("group_name"));
-				$record = $quote.implode($quote.$seperator.$quote, $record).$quote;
-				echo $vnconv->VnConv($record);
-				echo $crlf;
+				$headings = array($strTitle, $strFirstName, $strMiddleName, $strLastName, $strInitials, $strSex, $strBirthday, $strEmail, $strCountry, $strState, $strCity, $strZip, $strAddress, $strPhone, $strWorkphone, $strFax, $strWorkFax, $strCellular, $strCompany, $strDepartment, $strFunction, $ab_comment, $contacts_group);
+				$col = 0;
+				foreach ($headings as $heading)
+					$sheet->writeString($line,$col++,$vnconv->VnConv($heading));
+				$line ++;
+
+				$ab->get_contacts_for_export($_POST['addressbook_id']);
+				while ($ab->next_record())
+				{
+					$record = array($ab->f("title"), $ab->f("first_name"),$ab->f("middle_name"), $ab->f("last_name"), $ab->f("initials"), $ab->f("sex"), $ab->f('birthday'), $ab->f("email"), $ab->f("country"), $ab->f("state"), $ab->f("city"), $ab->f("zip"), $ab->f("address"), $ab->f("home_phone"), $ab->f("work_phone"), $ab->f("fax"), $ab->f("work_fax"), $ab->f("cellular"), $ab->f("company"), $ab->f("department"), $ab->f("function"), $ab->f("comment"), $ab->f("group_name"));
+					$col = 0;
+					foreach ($record as $r)
+						$sheet->writeString($line,$col++,$vnconv->VnConv($r));
+					$line ++;
+				}
+
+				$xls->close(); // dump it out
+				exit();
 			}
-		}else
-		{
-			$headings = array($strName, $strCountry, $strState, $strCity, $strZip, $strAddress, $strEmail, $strPhone, $strFax, $strHomepage, $ab_bank_no, $ab_vat_no);
-			$headings = $quote.implode($quote.$seperator.$quote, $headings).$quote;
-			echo $vnconv->VnConv($headings);
-			echo $crlf;
-
-			$ab->get_companies($_POST['addressbook_id']);
-
-			while($ab->next_record())
+			else
 			{
-				$record = array($ab->f("name"), $ab->f("country"), $ab->f("state"), $ab->f("city"), $ab->f("zip"), $ab->f("address"), $ab->f("email"), $ab->f("phone"), $ab->f("fax"), $ab->f("homepage"), $ab->f("bank_no"), $ab->f('vat_no'));
-				$record = $quote.implode($quote.$seperator.$quote, $record).$quote;
-				echo $vnconv->VnConv($record);
+				$headings = array($strName, $strCountry, $strState, $strCity, $strZip, $strAddress, $strEmail, $strPhone, $strFax, $strHomepage, $ab_bank_no, $ab_vat_no);
+				$headings = $quote.implode($quote.$seperator.$quote, $headings).$quote;
+				echo $vnconv->VnConv($headings);
 				echo $crlf;
+				
+				$ab->get_companies($_POST['addressbook_id']);
+				
+				while($ab->next_record())
+				{
+					$record = array($ab->f("name"), $ab->f("country"), $ab->f("state"), $ab->f("city"), $ab->f("zip"), $ab->f("address"), $ab->f("email"), $ab->f("phone"), $ab->f("fax"), $ab->f("homepage"), $ab->f("bank_no"), $ab->f('vat_no'));
+					$record = $quote.implode($quote.$seperator.$quote, $record).$quote;
+					echo $vnconv->VnConv($record);
+					echo $crlf;
+				}
 			}
+			exit();
+		} else {  
+			$addressbook = $ab->get_addressbook($addressbook_id);
+			require($GO_CONFIG->class_path."/phpvnconv/phpvnconv.class.inc");
+			$vnconv = new phpVnconv();
+
+			$vnconv->set_to("ascii");
+			$browser = detect_browser();
+			header("Content-type: text/x-csv");
+			header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
+			if ($browser['name'] == 'MSIE')
+			{
+				header("Content-Disposition: inline; filename=\"".$vnconv->vnconv($addressbook['name'])."-".$_POST['export_type'].".csv\"");
+				header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+				header('Pragma: public');
+			}else
+			{
+				header('Pragma: no-cache');
+				header("Content-Disposition: attachment; filename=\"".$vnconv->vnconv($addressbook['name']).".csv\"");
+			}
+			
+			$vnconv->set_to($_POST['encoding'] == "none" ? '' : $_POST['encoding']);
+			$quote = smartstrip($_POST['quote']);
+			$crlf = smartstrip($_POST['crlf']);
+			$crlf = str_replace('\\r', "\015", $crlf);
+			$crlf = str_replace('\\n', "\012", $crlf);
+			$crlf = str_replace('\\t', "\011", $crlf);
+			$seperator = smartstrip($_POST['seperator']);
+
+			if ($_POST['export_type'] == 'contacts')
+			{
+				$headings = array($strTitle, $strFirstName, $strMiddleName, $strLastName, $strInitials, $strSex, $strBirthday, $strEmail, $strCountry, $strState, $strCity, $strZip, $strAddress, $strPhone, $strWorkphone, $strFax, $strWorkFax, $strCellular, $strCompany, $strDepartment, $strFunction, $ab_comment, $contacts_group);
+				$headings = $quote.implode($quote.$seperator.$quote, $headings).$quote;
+				echo $headings;
+				echo $crlf;
+
+				$ab->get_contacts_for_export($_POST['addressbook_id']);
+				while ($ab->next_record())
+				{
+					$record = array($ab->f("title"), $ab->f("first_name"),$ab->f("middle_name"), $ab->f("last_name"), $ab->f("initials"), $ab->f("sex"), $ab->f('birthday'), $ab->f("email"), $ab->f("country"), $ab->f("state"), $ab->f("city"), $ab->f("zip"), $ab->f("address"), $ab->f("home_phone"), $ab->f("work_phone"), $ab->f("fax"), $ab->f("work_fax"), $ab->f("cellular"), $ab->f("company"), $ab->f("department"), $ab->f("function"), $ab->f("comment"), $ab->f("group_name"));
+					$record = $quote.implode($quote.$seperator.$quote, $record).$quote;
+					echo $vnconv->VnConv($record);
+					echo $crlf;
+				}
+			}else
+			{
+				$headings = array($strName, $strCountry, $strState, $strCity, $strZip, $strAddress, $strEmail, $strPhone, $strFax, $strHomepage, $ab_bank_no, $ab_vat_no);
+				$headings = $quote.implode($quote.$seperator.$quote, $headings).$quote;
+				echo $vnconv->VnConv($headings);
+				echo $crlf;
+				
+				$ab->get_companies($_POST['addressbook_id']);
+				
+				while($ab->next_record())
+				{
+					$record = array($ab->f("name"), $ab->f("country"), $ab->f("state"), $ab->f("city"), $ab->f("zip"), $ab->f("address"), $ab->f("email"), $ab->f("phone"), $ab->f("fax"), $ab->f("homepage"), $ab->f("bank_no"), $ab->f('vat_no'));
+					$record = $quote.implode($quote.$seperator.$quote, $record).$quote;
+					echo $vnconv->VnConv($record);
+					echo $crlf;
+				}
+			}
+			exit();
 		}
-		exit();
 	break;
 }
 
