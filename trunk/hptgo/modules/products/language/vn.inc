@@ -1,4 +1,5 @@
 <?php
+require($GO_LANGUAGE->get_fallback_language_file('products'));
 	$sc_amount = 'Tổng giá trị';
 	$sc_add_category = 'Danh mục sản phẩm mới';
 	$sc_add_attach_category = 'Danh mục Linh kiện mới';

@@ -33,7 +33,7 @@
 	while($pro->next_record())
 		$dropbox->add_value($pro->f('category_id'),$pro->f('category_name'));
 */
-	require('templates\edit_attach_category.tmp.php');
+	require('templates/edit_attach_category.tmp.php');
 
 	require($GO_THEME->theme_path."footer.inc"); 	
 ?>

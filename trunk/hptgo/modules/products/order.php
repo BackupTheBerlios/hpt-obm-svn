@@ -101,13 +101,13 @@ require('../addressbook/classes/addressbook.class.inc');
 			
 			$pitems = $_SESSION['cart']->items;
 			$pro->get_buy_products($_SESSION['cart']->get_productid_list());
-			require('templates\edit_order.tmp.php');
+			require('templates/edit_order.tmp.php');
 		break;
 		case 'delete_detail':
 			if ($pro->delete_product_from_order($_POST['order_number'],$_POST['txt_id']))
 			{
 				$pro->get_orders();
-				require('templates\list_order.tmp.php');
+				require('templates/list_order.tmp.php');
 				break;
 			}
 			$_POST['id'] = $_POST['order_number'];
@@ -126,13 +126,13 @@ require('../addressbook/classes/addressbook.class.inc');
 			$list_id = $pro_order->get_order_productid_list($_POST['id']);
 			$pro_order->get_buy_products($list_id);
 
-			require('templates\edit_update_order.tmp.php');			
+			require('templates/edit_update_order.tmp.php');			
 		break;
 		case 'delete':
 			$pro->delete_order($_POST['id']);
 		default:
 			$pro->get_orders();
-			require('templates\list_order.tmp.php');
+			require('templates/list_order.tmp.php');
 	}
 	if ($_POST['close_win']=='true') goURL('index.php');
 
