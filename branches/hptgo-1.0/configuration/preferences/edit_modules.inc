@@ -16,6 +16,9 @@ if (isset($_REQUEST['active_tab']))
 
 $user = $GO_SECURITY->user_id;
 
+$start_module = ($_SESSION['GO_SESSION']['start_module'] == '' && isset($has_summary_module)) ? 'summary' :  $_SESSION['GO_SESSION']['start_module'];
+
+
 $db = new db();
 
 switch ($task) {
@@ -25,6 +28,11 @@ switch ($task) {
 
 		if ($_REQUEST['com'] > 0) {
 			$com = $_REQUEST['com'];
+
+			// Add start module into the list if it's not in the list yet
+			if (!in_array($start_module,$com))
+				$com[] = $start_module;
+
 			$com_string = implode(" ", $com);
 			$db->query("UPDATE users SET modules='$com_string:$show_text' WHERE id='{$GO_SECURITY->user_id}'");
 		}
@@ -40,7 +48,6 @@ switch ($task) {
     echo '</script>';
 		break;
 }
-
 
 $modules = $GO_MODULES->get_modules_with_locations();
 $user = $GO_USERS->get_user($GO_SECURITY->user_id);
@@ -64,9 +71,14 @@ if ($com_string == '') {
 		if (isset($module_map[$j]))
 			$res[] = $j;
 	$com = $res;
+
 	foreach (array_keys($module_map) as $module)
 		if (!in_array($module,$res))
 			$res[] = $module;
+
+	// Add start module into the list if it's not in the list yet
+	if (in_array($start_module,$res) && !in_array($start_module,$com))
+		$com[] = $start_module;
 }
 
 echo '<table border="0" cellspacing="0" cellpadding="1" width="100%">';
@@ -113,10 +125,10 @@ if ($count > 0)
 			
 			echo '<tr>';
 	
-			if (in_array($res[$i],$com))
-				echo $mi->item($value, '<table border=0><tr><td><img src="'.$icon.'"/><td valign="center">'.$name.'</td></tr></table>', $res[$i],true);
-			else
-				echo $mi->item($value, '<table border=0><tr><td><img src="'.$icon.'"/><td valign="center">'.$name.'</td></tr></table>', $res[$i]);
+			echo $mi->item($value,
+										 '<table border=0><tr><td><img src="'.$icon.'"/><td valign="center">'.$name.'</td></tr></table>',
+										 $res[$i],
+										 in_array($res[$i],$com),$res[$i] == $start_module);
 			
 			$value++;			
 		}

@@ -200,9 +200,9 @@
 			return "javascript:change('$a','$b');";
 		}
 		
-		function item($id, $str, $value, $checked = false)
+		function item($id, $str, $value, $checked = false,$disabled = false)
 		{
-			$str = '<td><div id="item'.$id.'">'.$str.'</div></td><td><input type="checkbox" id="check" name="com[]" value="'.$value.'" '.($checked?'checked':'').'><input type="hidden" id="order_all" name="order_all[]" value="'.$value.'"></td>';
+			$str = '<td><div id="item'.$id.'">'.$str.'</div></td><td><input type="checkbox" id="check" name="com[]" value="'.$value.'" '.($checked?'checked':'').' '.($disabled ? 'disabled' : '').'><input type="hidden" id="order_all" name="order_all[]" value="'.$value.'"></td>';
 			return $str;
 		}
 	
@@ -221,6 +221,10 @@
 						temp = document.forms[0].check[a].checked;
 						document.forms[0].check[a].checked = document.forms[0].check[b].checked;
 						document.forms[0].check[b].checked = temp;
+					
+						temp = document.forms[0].check[a].disabled;
+						document.forms[0].check[a].disabled = document.forms[0].check[b].disabled;
+						document.forms[0].check[b].disabled = temp;
 					
 						temp = document.forms[0].check[a].value;
 						document.forms[0].check[a].value = document.forms[0].check[b].value;
