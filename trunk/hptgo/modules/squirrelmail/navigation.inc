@@ -163,9 +163,9 @@ if ($msg_count > 0)
   //while($mail->next_message($get_to_addresses))// && ($row_count < $max_rows || $max_rows == 0))
   for ($msg_current = 0;$msg_current < $msg_count;$msg_current ++)
   {
-    $mail = $aMailbox['MSG_HEADERS'][$aMailbox['UIDSET'][0][$msg_current]];
-    if (!isset($mail))
+    if (!isset($aMailbox['MSG_HEADERS'][$aMailbox['UIDSET'][0][$msg_current]]))
       continue;
+    $mail = $aMailbox['MSG_HEADERS'][$aMailbox['UIDSET'][0][$msg_current]];
     //print_r($mail);
     $row_count++;
     $continue = false;
