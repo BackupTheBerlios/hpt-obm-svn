@@ -28,7 +28,7 @@ $cmdEdit = 'Sửa';
 $cmdInvertSelection = 'Đảo các chọn lựa';
 
 $strEdit = "Sửa";
-$strThis = 'this';
+$strThis = 'này';
 $strItems = 'mục';
 $strDescription = 'Mô tả';
 
@@ -77,7 +77,7 @@ $AccessDenied_text = "Bạn không được phép xem trang này hoặc thực h
 $invalid_chars = "Những ký tự sau không được phép dùng";
 $strGroups = "Các nhóm";
 $strOwner = "Người lập";
-$strDeletePrefix = "Bạn có chắc bạn là bạn muốn xoá ";
+$strDeletePrefix = "Bạn có chắc là bạn muốn xoá ";
 $strDeleteSuffix = "?";
 //menu
 $menu_logout = "Thoát";
