@@ -86,7 +86,8 @@ if (isset($_REQUEST['new_sort_direction']))
 
 	if ($addressbook_id > 0)
 		$subscribed_addressbook_id = $addressbook_id;
-	$old_subscribed_addressbook_id = $subscribed_addressbook_id;
+	if (isset($subscribed_addressbook_id))
+		$old_subscribed_addressbook_id = $subscribed_addressbook_id;
 	if (isset($first_writable_ab) && (!isset($subscribed_addressbook_id) || $subscribed_addressbook_id == 0))
 		$subscribed_addressbook_id = $first_writable_ab;
 
