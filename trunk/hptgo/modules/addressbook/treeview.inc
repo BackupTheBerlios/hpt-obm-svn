@@ -222,8 +222,8 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 	{
 		echo '<td>'.$ab->f('city').'</td>';
 		echo '<td>'.mail_to($ab->f('email'), $ab->f('email')).'</td>';
-		echo '<td><a class="normal" target="_blank" href="'.$ab->f('homepage').'">'.$ab->f('homepage').'</a></td>';
-		echo '<td>'.$ab->f('phone').'</td></tr>';
+		echo '<td><a class="normal" target="_blank" href="'.htmlspecialchars($ab->f('homepage')).'">'.htmlspecialchars($ab->f('homepage')).'</a></td>';
+		echo '<td>'.htmlspecialchars($ab->f('phone')).'</td></tr>';
 	}
 		print_config_content($order, $ab,$constCompaniesPage);		
 

@@ -559,7 +559,7 @@ switch($tabtable->get_active_tab_id())
         $db->query('SELECT * FROM task_templates '.
                    "WHERE id='".$project['task_template_id']."'");
         $db->next_record();
-        echo "<tr><td>$pm_category:</td><td><b>$catalog&nbsp;&nbsp;-&nbsp;&nbsp;".$db->f('name').'</b></td></tr>';
+        echo "<tr><td>$pm_category:</td><td><b>$catalog&nbsp;&nbsp;-&nbsp;&nbsp;".htmlspecialchars($db->f('name')).'</b></td></tr>';
       }
       ?>
         </td>

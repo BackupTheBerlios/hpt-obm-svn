@@ -29,11 +29,11 @@ switch ($task) {
   case 'add_catalog':
     $catalog_name = $_REQUEST['catalog_name'];
     if (isset($catalog_name) && $catalog_name != '') {
-      $db->query("SELECT * FROM pmCatalog WHERE name='$catalog_name'");
+      $db->query("SELECT * FROM pmCatalog WHERE name='".addslashes($catalog_name)."'");
       if ($db->num_rows() > 0)
-        echo sprintf($pm_CategoryExists, $catalog_name);
+        echo htmlspecialchars(sprintf($pm_CategoryExists, $catalog_name));
       else
-        $db->query("INSERT INTO pmCatalog(id, name) VALUES('', '$catalog_name')");
+        $db->query("INSERT INTO pmCatalog(name) VALUES('".addslashes($catalog_name)."')");
     }
     break;
   case 'delete_catalog':
@@ -50,7 +50,7 @@ switch ($task) {
   case 'update_catalog':
     $catalog_name = $_REQUEST['catalog_name'];
     if (isset($catalog_name) && $catalog_name != '')
-      $db->query("UPDATE pmCatalog SET name='$catalog_name' WHERE id='$cat_id'");
+      $db->query("UPDATE pmCatalog SET name='".addslashes($catalog_name)."' WHERE id='$cat_id'");
     break;
   case 'change_status_order':
     $status_value = $_REQUEST['status_value'];
@@ -75,7 +75,7 @@ switch ($task) {
     $status_value = $_REQUEST['status_value'];
     if ($status_value > 1) {
       $status_name = $_REQUEST['status_name'];
-      $db->query("UPDATE pmStatus SET name='$status_name' ".
+      $db->query("UPDATE pmStatus SET name='".addslashes($status_name)."' ".
                  "WHERE cat_id='$cat_id' AND value='$status_value'");
     }
     break;
@@ -86,7 +86,7 @@ switch ($task) {
     if ($status_value > 1) {
       $db->query("UPDATE pmStatus SET value=value+1 ".
                  "WHERE cat_id='$cat_id' AND value>='$status_value'");
-      $db->query("INSERT INTO pmStatus VALUES('$cat_id', '$status_value', '$status_name')");
+      $db->query("INSERT INTO pmStatus VALUES('$cat_id', '$status_value', '".addslashes($status_name)."')");
     }
     break;
 }
@@ -107,7 +107,7 @@ while ($db->next_record()) {
   if ($cat_id == $db->f('id'))
     $catalog_name = $db->f('name');
 }
-echo '<input type="hidden" name="catalog_name" value="'.$catalog_name.'" />';
+echo '<input type="hidden" name="catalog_name" value="'.htmlspecialchars($catalog_name).'" />';
 $catalog->print_dropbox('cat_id', $cat_id, 'onchange="javascript:frm.submit()"', false, '10', '200');
 echo '</td>';
 echo '<td><a href="javascript:edit_category()" title="'.$pm_EditCategory.'">'.$editor.'</a></td>';
@@ -171,7 +171,7 @@ if ($count > 0)
     echo '<tr>';
     echo '<td align="center">'.$value.'</td>';
     echo '<td colspan="97" nowrap><span id="status_'.$value.'">'.
-         "<a href='javascript:set_edit(\"$name\", $value)'>$name</a>".
+         "<a href='javascript:set_edit(\"".div_confirm_id($name)."\", $value)'>".htmlspecialchars($name)."</a>".
          '</span></td>';
     if ($count == 1)
       $move_up_link = $move_dn_link = '';
@@ -188,7 +188,7 @@ if ($count > 0)
       $move_dn_link = '<a href="javascript:move_status('.$value.', 1)">'.$move_task_dn.'</a>';
     }
     echo '<td width="36" align="center">'.$move_up_link.'&nbsp;'.$move_dn_link.'</td>';
-    echo "<td><a href='javascript:delete_status(\"$delitem\",$value)'>$trash</a></td>";
+    echo "<td><a href='javascript:delete_status(\"".div_confirm_id($delitem)."\",$value)'>$trash</a></td>";
     echo '</tr>';
 
     echo str_replace('[id]', $value + 1, $spliter);
@@ -237,7 +237,7 @@ function move_status(status_value, action)
 
 function delete_status(status_name, status_value)
 {
-  if (confirm(status_name)) {
+  if (div_confirm(status_name)) {
     frm.task.value = 'delete_status';
     frm.status_value.value = status_value;
     frm.submit();
@@ -331,7 +331,7 @@ function set_edit(name, p)
   frm.status_value.value = p;
   frm.task.value = 'update_status';
 
-  show_editor(document.getElementById("status_"+p), status_edit, name, null, 0);
+  show_editor(document.getElementById("status_"+p), status_edit, div_confirm_text(name), null, 0);
 }
 
 function submit_status()

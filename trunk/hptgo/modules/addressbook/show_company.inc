@@ -12,7 +12,7 @@
 	<table border="0" cellpadding="0" cellspacing="3">
 	<tr>
 		<td align="right" nowrap><?php echo $strParentCompany;?>:</td>
-		<td><?php echo empty_to_stripe($ab->parent_companies_urls($company_id)); ?>&nbsp;</td>
+		<td><?php echo htmlspecialchars(empty_to_stripe($ab->parent_companies_urls($company_id))); ?>&nbsp;</td>
 	</tr>
 
 	<tr>
@@ -20,7 +20,7 @@
 		<?php echo $strName; ?>:&nbsp;
 		</td>
 		<td>
-		<?php echo empty_to_stripe($company['name']); ?>
+		<?php echo htmlspecialchars(empty_to_stripe($company['name'])); ?>
 		</td>
 	</tr>
 
@@ -29,7 +29,7 @@
 		<?php echo $strShortCompanyName; ?>:&nbsp;
 		</td>
 		<td>
-		<?php echo empty_to_stripe($company['shortname']); ?>
+		<?php echo htmlspecialchars(empty_to_stripe($company['shortname'])); ?>
 		</td>
 	</tr>
 
@@ -38,7 +38,7 @@
 		<?php echo $strEnglishCompanyName; ?>:&nbsp;
 		</td>
 		<td>
-		<?php echo empty_to_stripe($company['engname']); ?>
+		<?php echo htmlspecialchars(empty_to_stripe($company['engname'])); ?>
 		</td>
 	</tr>
 
@@ -47,7 +47,7 @@
 		<?php echo $strAddress; ?>:&nbsp;
 		</td>
 		<td>
-		<?php echo empty_to_stripe($company['address']); ?>
+		<?php echo htmlspecialchars(empty_to_stripe($company['address'])); ?>
 		</td>
 	</tr>
 
@@ -56,7 +56,7 @@
 		<?php echo $strZip; ?>:&nbsp;
 		</td>
 		<td>
-		<?php echo empty_to_stripe($company['zip']); ?>
+		<?php echo htmlspecialchars(empty_to_stripe($company['zip'])); ?>
 		</td>
 	</tr>
 	<tr>
@@ -64,7 +64,7 @@
 		<?php echo $strCity; ?>:&nbsp;
 		</td>
 		<td>
-		<?php echo empty_to_stripe($company['city']); ?>
+		<?php echo htmlspecialchars(empty_to_stripe($company['city'])); ?>
 		</td>
 	</tr>
 
@@ -74,7 +74,7 @@
 		<?php echo $strState; ?>:&nbsp;
 		</td>
 		<td>
-		<?php echo empty_to_stripe($company['state']); ?>
+		<?php echo htmlspecialchars(empty_to_stripe($company['state'])); ?>
 		</td>
 	</tr>
 
@@ -83,7 +83,7 @@
 		<?php echo $strCountry; ?>:&nbsp;
 		</td>
 		<td>
-		<?php echo empty_to_stripe($company['country']); ?>
+		<?php echo htmlspecialchars(empty_to_stripe($company['country'])); ?>
 		</td>
 	</tr>
 	<tr>
@@ -95,7 +95,7 @@
 		<?php echo $strPhone; ?>:&nbsp;
 		</td>
 		<td>
-		<?php echo empty_to_stripe($company['phone']); ?>
+		<?php echo htmlspecialchars(empty_to_stripe($company['phone'])); ?>
 		</td>
 	</tr>
 	<tr>
@@ -103,7 +103,7 @@
 		<?php echo $strFax; ?>:&nbsp;
 		</td>
 		<td>
-		<?php echo empty_to_stripe($company['fax']); ?>
+		<?php echo htmlspecialchars(empty_to_stripe($company['fax'])); ?>
 		</td>
 	</tr>
 	<tr>
@@ -111,7 +111,7 @@
 		<?php echo $strEmail; ?>:&nbsp;
 		</td>
 		<td>
-		<?php echo empty_to_stripe($company['email']); ?>
+		<?php echo htmlspecialchars(empty_to_stripe($company['email'])); ?>
 		</td>
 	</tr>
 	<tr>
@@ -119,7 +119,7 @@
 		<?php echo $strHomepage; ?>:&nbsp;
 		</td>
 		<td>
-		<?php echo empty_to_stripe($company['homepage']); ?>
+		<?php echo htmlspecialchars(empty_to_stripe($company['homepage'])); ?>
 		</td>
 	</tr>
 	<tr>
@@ -127,7 +127,7 @@
 		<?php echo $ab_bank_no; ?>:&nbsp;
 		</td>
 		<td>
-		<?php echo empty_to_stripe($company['bank_no']); ?>
+		<?php echo htmlspecialchars(empty_to_stripe($company['bank_no'])); ?>
 		</td>
 	</tr>
 	<tr>
@@ -135,7 +135,7 @@
 		<?php echo $ab_vat_no; ?>:&nbsp;
 		</td>
 		<td>
-		<?php echo empty_to_stripe($company['vat_no']); ?>
+		<?php echo htmlspecialchars(empty_to_stripe($company['vat_no'])); ?>
 		</td>
 	</tr>
 	</table>
@@ -153,7 +153,7 @@
 	if ($company['relation_date']=="00-00-0000")
 		$company['relation_date'] = "";
 			
-	echo empty_to_stripe($company['relation_date']);
+	echo htmlspecialchars(empty_to_stripe($company['relation_date']));
 ?>
 				</td>
 			</tr>

@@ -147,7 +147,7 @@ $cmdRecover = 'Phục hồi dự án';
 
 $pm_ConfirmDrop = 'Bạn có chắc chắn là bạn muốn huỷ bỏ dự án ?';
 $pm_ConfirmRecover = 'Bạn có chắc chắn là bạn muốn phục hồi lại dự án ?';
-$pm_ConfirmDeleteStatus = 'Bạn có chắc chắn là bạn muốn xoá trạng thái \"%s\"?';
+$pm_ConfirmDeleteStatus = 'Bạn có chắc chắn là bạn muốn xoá trạng thái "%s"?';
 $pm_ConfirmDeleteCategory = 'Bạn có chắc chắn là bạn muốn xoá loại dự án ';
 $pm_ConfirmDeleteTemplate = 'Bạn có chắc chắn là bạn muốn xoá quy trình ';
 $pm_DeleteCategory = 'Xoá';

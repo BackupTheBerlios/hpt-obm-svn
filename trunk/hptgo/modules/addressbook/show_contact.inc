@@ -16,57 +16,57 @@
 
 		<tr>
 			<td align="right" nowrap><?php echo $strFirstName; ?>:&nbsp;</td>
-			<td width="100%"><?php echo empty_to_stripe($contact["first_name"]); ?></td>
+			<td width="100%"><?php echo htmlspecialchars(empty_to_stripe($contact["first_name"])); ?></td>
 		</tr>
 		<tr heigth="25">
 			<td align="right" nowrap><?php echo $strMiddleName; ?>:&nbsp;</td>
-			<td width="100%"><?php echo empty_to_stripe($contact["middle_name"]); ?></td>
+			<td width="100%"><?php echo htmlspecialchars(empty_to_stripe($contact["middle_name"])); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $strLastName; ?>:&nbsp;</td>
-			<td width="100%"><?php echo empty_to_stripe($contact["last_name"]); ?></td>
+			<td width="100%"><?php echo htmlspecialchars(empty_to_stripe($contact["last_name"])); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $strInitials; ?>:&nbsp;</td>
-			<td width="100%"><?php echo empty_to_stripe($contact["initials"]); ?></td>
+			<td width="100%"><?php echo htmlspecialchars(empty_to_stripe($contact["initials"])); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $strSex; ?>:&nbsp;</td>
-			<td width="100%"><?php echo empty_to_stripe($strSexes[$contact['sex']]); ?></td>
+			<td width="100%"><?php echo htmlspecialchars(empty_to_stripe($strSexes[$contact['sex']])); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $strBirthday; ?>:&nbsp;</td>
 			<?php
 			$birthday = $contact['birthday'] > 0 ? db_date_to_date($contact['birthday']) : '';
 			?>
-			<td width="100%"><?php echo empty_to_stripe($birthday); ?></td>
+			<td width="100%"><?php echo htmlspecialchars(empty_to_stripe($birthday)); ?></td>
 		</tr>
 		<tr>
 			<td colspan="2">&nbsp;</td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $strAddress; ?>:&nbsp;</td>
-			<td width="100%"><?php echo empty_to_stripe($contact["address"]); ?></td>
+			<td width="100%"><?php echo htmlspecialchars(empty_to_stripe($contact["address"])); ?></td>
 		</tr>
 
 		<tr>
 			<td align="right" nowrap><?php echo $strZip; ?>:&nbsp;</td>
-			<td width="100%"><?php echo empty_to_stripe($contact["zip"]); ?></td>
+			<td width="100%"><?php echo htmlspecialchars(empty_to_stripe($contact["zip"])); ?></td>
 		</tr>
 
 		<tr>
 			<td align="right" nowrap><?php echo $strCity; ?>:&nbsp;</td>
-			<td width="100%"><?php echo empty_to_stripe($contact["city"]); ?></td>
+			<td width="100%"><?php echo htmlspecialchars(empty_to_stripe($contact["city"])); ?></td>
 		</tr>
 
 		<tr>
 			<td align="right" nowrap><?php echo $strState; ?>:&nbsp;</td>
-			<td width="100%"><?php echo empty_to_stripe($contact["state"]); ?></td>
+			<td width="100%"><?php echo htmlspecialchars(empty_to_stripe($contact["state"])); ?></td>
 		</tr>
 
 		<tr>
 			<td align="right" nowrap><?php echo $strCountry; ?>:&nbsp;</td>
-			<td width="100%"><?php echo empty_to_stripe($contact["country"]); ?></td>
+			<td width="100%"><?php echo htmlspecialchars(empty_to_stripe($contact["country"])); ?></td>
 		</tr>
 		<tr>
 			<td colspan="2">&nbsp;</td>
@@ -85,15 +85,15 @@
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $strPhone; ?>:&nbsp;</td>
-			<td><?php echo empty_to_stripe($contact["home_phone"]); ?></td>
+			<td><?php echo htmlspecialchars(empty_to_stripe($contact["home_phone"])); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $strFax; ?>:&nbsp;</td>
-			<td><?php echo empty_to_stripe($contact["fax"]); ?></td>
+			<td><?php echo htmlspecialchars(empty_to_stripe($contact["fax"])); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $strCellular; ?>:&nbsp;</td>
-			<td><?php echo empty_to_stripe($contact["cellular"]); ?></td>
+			<td><?php echo htmlspecialchars(empty_to_stripe($contact["cellular"])); ?></td>
 		</tr>
 		<tr>
 			<td colspan="2">&nbsp;</td>
@@ -112,19 +112,19 @@
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $strDepartment; ?>:&nbsp;</td>
-			<td><?php echo empty_to_stripe($contact["department"]); ?></td>
+			<td><?php echo htmlspecialchars(empty_to_stripe($contact["department"])); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $strFunction; ?>:&nbsp;</td>
-			<td><?php echo empty_to_stripe($contact["function"]); ?></td>
+			<td><?php echo htmlspecialchars(empty_to_stripe($contact["function"])); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $strWorkphone; ?>:&nbsp;</td>
-			<td><?php echo empty_to_stripe($contact["work_phone"]); ?></td>
+			<td><?php echo htmlspecialchars(empty_to_stripe($contact["work_phone"])); ?></td>
 		</tr>
 		<tr>
 			<td align="right" nowrap><?php echo $strWorkFax; ?>:&nbsp;</td>
-			<td><?php echo empty_to_stripe($contact["work_fax"]); ?></td>
+			<td><?php echo htmlspecialchars(empty_to_stripe($contact["work_fax"])); ?></td>
 		</tr>
 		<tr>
 			<td colspan="2">&nbsp;</td>

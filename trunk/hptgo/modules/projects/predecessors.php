@@ -22,10 +22,10 @@ if (!$GO_MODULES->write_permissions) {
 require($GO_LANGUAGE->get_language_file('projects'));
 require($GO_THEME->theme_path."header.inc");
 
-$template_id = $_REQUEST['template_id'];
-$task_id = $_REQUEST['task_id'];
-
-if (isset($template_id) && isset($task_id)) {
+$task_pre_list = '';
+if (isset($_REQUEST['template_id']) && isset($_REQUEST['task_id'])) {
+  $template_id = $_REQUEST['template_id'];
+  $task_id = $_REQUEST['task_id'];
   $db = new db();
   $db->query('SELECT * FROM task_template_'.$template_id.' ORDER BY task_order');
   if ($db->num_rows() > 0) {
@@ -88,9 +88,9 @@ function display_tasklist($tasks, $task_pre_list, $predecessors)
   foreach ($tasks as $id => $data) {
     $chk = in_array($id, $predecessors) ? "checked" : "";
     echo '<tr>'.
-           '<td><input type="checkbox" id="cb_'.$id.'" '.$chk.'/></td>'.
-           '<td align="right">'.$data[0].'.</td>'.
-           '<td nowrap>&nbsp;<a href="javascript:toggle('.$id.')">'.$data[1].'</a></td></td>'.
+           '<td><input type="checkbox" id="cb_'.$id.'" '.$chk.' onclick="toggle('.$id.',false)"/></td>'.
+           '<td align="right">'.htmlspecialchars($data[0]).'.</td>'.
+           '<td nowrap>&nbsp;<a href="javascript:toggle('.$id.',true)">'.htmlspecialchars($data[1]).'</a></td></td>'.
          '</tr>';
   }
   echo '</table>';
@@ -98,10 +98,12 @@ function display_tasklist($tasks, $task_pre_list, $predecessors)
 ?>
 <script type="text/javascript">
 var pre_list = new Array(<?php echo $task_pre_list; ?>);
-function toggle(id)
+function toggle(id,do_toggle)
 {
   cb = document.getElementById("cb_"+id);
+  if (do_toggle)
   cb.checked = !cb.checked;
+
   if (cb.checked)
     pre_list[pre_list.length] = id;
   else
