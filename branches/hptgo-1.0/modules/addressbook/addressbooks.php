@@ -132,13 +132,15 @@ $tabtable->print_head();
 			echo '<td>&nbsp;<a href="addressbook.php?addressbook_id='.$ab->f("id").
 						'&return_to='.urlencode($link_back).'" title="'.$strEdit.' \''.
 						htmlspecialchars($ab->f("name")).'\'"><img src="'.
-						$GO_THEME->images['edit'].'" border="0" /></a></td>'.
-					  "<td>&nbsp;<a href='javascript:delete_addressbook(\"".$ab->f("id").
+						$GO_THEME->images['edit'].'" border="0" /></a></td>';
+			if ($ab->f('user_id') == $GO_SECURITY->user_id)
+				echo "<td>&nbsp;<a href='javascript:delete_addressbook(\"".$ab->f("id").
 						"\",\"".rawurlencode($strDeletePrefix."'".
 						addslashes($ab->f("name"))."'".$strDeleteSuffix).
 						"\")' title=\"".$strDeleteItem." '".
 						htmlspecialchars($ab->f("name"))."'\"><img src=\"".
-						$GO_THEME->images['delete']."\" border=\"0\"></a></td></tr>\n";
+						$GO_THEME->images['delete']."\" border=\"0\"></a></td>";
+			echo "</tr>\n";
 		}
 	}
 	echo '</table><br />';
