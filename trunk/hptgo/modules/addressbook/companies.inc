@@ -84,9 +84,12 @@ if ($ab->get_subscribed_addressbooks($GO_SECURITY->user_id) > 1)
 $parents = $ab->get_companies_parents($addressbook_id);
 $count = $ab->get_companies($addressbook_id, ($ab_settings['sort_companies_field'] == 'new' ? 'company_id' : $ab_settings['sort_companies_field']), $ab_settings['sort_companies_order'], $first, $max_rows);
 $str_count = $count == 1 ? $ab_companies_count_single : $ab_companies_count;
-echo '</td><td colspan="99" class="small" align="right">'.$count.' '.$str_count.'</td></tr>';
-echo '<tr height="20">';
+echo '</td><td class="small" align="right">'.$count.' '.$str_count.'</td></tr>';
+echo '<tr height="20" width="100%">';
+echo '<td colspan="100%">';
 
+echo '<table border="0" cellspacing="0" cellpadding="0" width="100%">';
+echo '<tr>';
 require('../../lib/tkdlib.php');
 $order = print_config_title($constCompaniesPage);
 
@@ -176,7 +179,7 @@ if ($myab->query("SELECT * FROM ab_addressbooks WHERE id='$addressbook_id'") &&
 }
 unset($myab);
 
-
+//echo '<td class="TableHead2" colspan="99"></td>';
 echo '</tr>';
 
 
@@ -206,11 +209,14 @@ if ($count > 0)
 		{
 			echo '<td align="center"><input type="checkbox" onchange="javacript:document.forms[0].reviewed.value=\''.$ab->f('id').'\';document.forms[0].submit()" '.(isset($new_companies[$ab->f('id')]) ? 'checked' : '').' /></td>';
 		}
-		
+
+//		echo '<td colspan="99"></td>';		
 		echo '</tr>';
 		echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 	}
 
+	echo '</table>';
+	
 	$links = '';
 	$max_links=10;
 	if ($max_rows != 0)
