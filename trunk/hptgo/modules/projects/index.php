@@ -34,8 +34,11 @@ $date = date($_SESSION['GO_SESSION']['date_format'], $time);
 
 $tabtable = new tabtable('projects_tab', $lang_modules['projects'], '100%', '400');
 $tabtable->add_tab('projects.inc', $lang_modules['projects']);
-$tabtable->add_tab('template.inc', $pm_process_template);
-$tabtable->add_tab('category.inc', $pm_category);
+if ($GO_SECURITY->has_admin_permission($GO_SECURITY->user_id))
+{
+  $tabtable->add_tab('template.inc', $pm_process_template);
+  $tabtable->add_tab('category.inc', $pm_category);
+}
 /*
 $tabtable->add_tab('load.inc', $pm_load);
 $tabtable->add_tab('fees.inc', $pm_fees);

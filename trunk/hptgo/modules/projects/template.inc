@@ -12,6 +12,11 @@
 
 require_once($GO_MODULES->class_path.'task.class.inc');
 
+if (!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
+	header('Location: '.$GO_CONFIG->host.'error_docs/403.php');
+	exit();
+}
+
 $trash = '<img src="'.$GO_THEME->images['delete'].'" border="0">';
 $editor = '<img src="'.$GO_THEME->images['edit'].'" border="0">';
 $cat_id = $_REQUEST['cat_id'];

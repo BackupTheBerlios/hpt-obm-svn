@@ -54,7 +54,7 @@ CREATE TABLE `ab_companies` (
   `acl_write` int(11) NOT NULL default '0',
   `parent` int(11) NOT NULL default '0',
   `shortname` varchar(50) NOT NULL default '',
-  `engname` varchar(50) NOT NULL default '',
+  `engname` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `addressbook_id` (`addressbook_id`)
 ) TYPE=MyISAM;
