@@ -39,7 +39,8 @@ switch ($task)
 
     if($GO_SECURITY->user_id == $view['user_id'])
     {
-      if ($cal->delete_view($_POST['delete_cview_id']))
+      if (isset($_POST['delete_cview_id']) &&
+      	$cal->delete_view($_POST['delete_cview_id']))
       {
 	$GO_SECURITY->delete_acl($view['acl_write']);
 	$GO_SECURITY->delete_acl($view['acl_read']);
@@ -144,9 +145,9 @@ if ($view_count > 0) {
 echo '</table><br /><br/>';
 $tabtable->print_foot();
 
-$button = new button($cmdOk, "javascript:_save('subscribe', 'true', ".$subscr_count.", '".$sc_choice_view_msg."')");
+$button = new button($cmdOk, "javascript:_save('subscribe', 'true', ".(isset($subscr_count) ? $subscr_count : '0').", '".$sc_choice_view_msg."')");
 echo '&nbsp;&nbsp;';
-$button = new button($cmdApply, "javascript:_save('subscribe', 'false', ".$subscr_count.", '".$sc_choice_view_msg."')");
+$button = new button($cmdApply, "javascript:_save('subscribe', 'false', ".(isset($subscr_count) ? $subscr_count : '0').", '".$sc_choice_view_msg."')");
 echo '&nbsp;&nbsp;';
 $button = new button($cmdClose,"javascript:document.location='".$return_to."'");
 
