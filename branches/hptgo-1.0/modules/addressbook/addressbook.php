@@ -128,35 +128,44 @@ switch($task)
 			header("Content-Disposition: attachment; filename=\"".$vnconv->vnconv($addressbook['name']).".csv\"");
 		}
 
-		$vnconv->set_to($_POST['encoding'] == "none" ? '' : $_POST['encoding']);
+		$vnconv->set_to($_POST['encoding'] == "none" || $_POST['encoding'] == "utf16" ? '' : $_POST['encoding']);
+		$utf16 = $_POST['encoding'] == 'utf16';
 		$quote = smartstrip($_POST['quote']);
 		$crlf = smartstrip($_POST['crlf']);
 		$crlf = str_replace('\\r', "\015", $crlf);
 		$crlf = str_replace('\\n', "\012", $crlf);
 		$crlf = str_replace('\\t', "\011", $crlf);
-		$seperator = smartstrip($_POST['seperator']);
+		switch ($_POST['seperator']) {
+			case 'comma': $seperator = ','; break;
+			case 'semicolon': $seperator = ';'; break;
+			case 'colon': $seperator = ':'; break;
+			case 'tab': $seperator = "\t"; break;
+			default: $seperator = '';
+		}
+		if ($utf16) // Windows hack
+			echo "\xFF\xFE";
 
 		if ($_POST['export_type'] == 'contacts')
 		{
 			$headings = array($strTitle, $strFirstName, $strMiddleName, $strLastName, $strInitials, $strSex, $strBirthday, $strEmail, $strCountry, $strState, $strCity, $strZip, $strAddress, $strPhone, $strWorkphone, $strFax, $strWorkFax, $strCellular, $strCompany, $strDepartment, $strFunction, $ab_comment, $contacts_group);
 			$headings = $quote.implode($quote.$seperator.$quote, $headings).$quote;
-			echo $headings;
-			echo $crlf;
+			echo $utf16 ? mb_convert_encoding($headings,"UTF-16LE","UTF-8") : $vnconv->VnConv($headings);
+			echo $utf16 ? mb_convert_encoding($crlf,"UTF-16LE","UTF-8") : $crlf;
 
 			$ab->get_contacts_for_export($_POST['addressbook_id']);
 			while ($ab->next_record())
 			{
 				$record = array($ab->f("title"), $ab->f("first_name"),$ab->f("middle_name"), $ab->f("last_name"), $ab->f("initials"), $ab->f("sex"), $ab->f('birthday'), $ab->f("email"), $ab->f("country"), $ab->f("state"), $ab->f("city"), $ab->f("zip"), $ab->f("address"), $ab->f("home_phone"), $ab->f("work_phone"), $ab->f("fax"), $ab->f("work_fax"), $ab->f("cellular"), $ab->f("company"), $ab->f("department"), $ab->f("function"), $ab->f("comment"), $ab->f("group_name"));
 				$record = $quote.implode($quote.$seperator.$quote, $record).$quote;
-				echo $vnconv->VnConv($record);
-				echo $crlf;
+				echo $utf16 ? mb_convert_encoding($record,"UTF-16LE","UTF-8") : $vnconv->VnConv($record);
+				echo $utf16 ? mb_convert_encoding($crlf,"UTF-16LE","UTF-8") : $crlf;
 			}
 		}else
 		{
 			$headings = array($strName, $strCountry, $strState, $strCity, $strZip, $strAddress, $strEmail, $strPhone, $strFax, $strHomepage, $ab_bank_no, $ab_vat_no);
 			$headings = $quote.implode($quote.$seperator.$quote, $headings).$quote;
-			echo $vnconv->VnConv($headings);
-			echo $crlf;
+			echo $utf16 ? mb_convert_encoding($headings,"UTF-16LE","UTF-8") : $vnconv->VnConv($headings);
+			echo $utf16 ? mb_convert_encoding($crlf,"UTF-16LE","UTF-8") : $crlf;
 
 			$ab->get_companies($_POST['addressbook_id']);
 
@@ -164,8 +173,8 @@ switch($task)
 			{
 				$record = array($ab->f("name"), $ab->f("country"), $ab->f("state"), $ab->f("city"), $ab->f("zip"), $ab->f("address"), $ab->f("email"), $ab->f("phone"), $ab->f("fax"), $ab->f("homepage"), $ab->f("bank_no"), $ab->f('vat_no'));
 				$record = $quote.implode($quote.$seperator.$quote, $record).$quote;
-				echo $vnconv->VnConv($record);
-				echo $crlf;
+				echo $utf16 ? mb_convert_encoding($record,"UTF-16LE","UTF-8") : $vnconv->VnConv($record);
+				echo $utf16 ? mb_convert_encoding($crlf,"UTF-16LE","UTF-8") : $crlf;
 			}
 		}
 		exit();

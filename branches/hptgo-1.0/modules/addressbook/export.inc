@@ -30,12 +30,14 @@ $radio_list->add_option('companies', $ab_companies);
 <td>
 <?php
 require_once($GO_CONFIG->class_path."/phpvnconv/LIST.inc");
+$encoding = isset($_POST['encoding']) ? $_POST['encoding'] : 'none';
 $droplist = new dropbox('encoding');
+$droplist->add_value('utf16','Unicode');
 $droplist->add_value('none','None');
 foreach ($vnconv_charset_list as $cs => $text) {
   $droplist->add_value($cs,$text);
 }
-$droplist->print_dropbox('encoding','none');
+$droplist->print_dropbox('encoding',$encoding);
 ?>
 </td>
 </tr>
@@ -45,14 +47,24 @@ $droplist->print_dropbox('encoding','none');
 <tr>
 <td>
 <?php
-$seperator = isset($_POST['seperator']) ? $_POST['seperator'] : ',';
+$seperator = isset($_POST['seperator']) ? $_POST['seperator'] : 'comma';
 $quote = isset($_POST['quote']) ? $_POST['quote'] : '&quot;';
 $crlf = isset($_POST['crlf']) ? $_POST['crlf'] : '\r\n';
 ?>
 <table border="0"  cellpadding="0" cellspacing="3">
 <tr>
 <td><?php echo $contacts_seperator_text; ?>:</td>
-<td><input class="textbox" type="text" size="3" name="seperator" value="<?php echo $seperator; ?>" /></td>
+<td>
+<?php
+$droplist = new dropbox('encoding');
+$droplist->add_value('comma',$str_sep['comma']);
+$droplist->add_value('semicolon',$str_sep['semicolon']);
+$droplist->add_value('colon',$str_sep['colon']);
+$droplist->add_value('tab',$str_sep['tab']);
+$droplist->print_dropbox('seperator',$seperator);
+?>
+<!-- input class="textbox" type="text" size="3" name="seperator" value="<?php echo $seperator; ?>" / -->
+</td>
 </tr>
 <tr>
 <td><?php echo $contacts_quote; ?>:</td>
