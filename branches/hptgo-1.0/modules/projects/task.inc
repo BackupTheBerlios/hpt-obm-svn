@@ -72,8 +72,10 @@ else {
   echo "<td width=\"150\">&nbsp;</font></td>";
   echo "<td width=\"565\" class=\"GanttDate\" nowrap><b>$pm_start_date ($date)<br>v</b></td></tr>";
 
-  $today = getdate();
-  $today = gmmktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']);
+  if ($today == 0) {
+    $today = getdate();
+    $today = gmmktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']);
+  }
   $duration = round((($today < $pstop_date ? $pstop_date : $today) - $pstart_date) / (24 * 3600));
   if ($duration == 0) $duration = 1;
   $day_space = round(480 / $duration);
