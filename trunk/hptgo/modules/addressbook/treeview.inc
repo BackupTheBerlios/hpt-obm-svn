@@ -250,11 +250,11 @@ if ($ab_settings['sort_companies_field'] == 'name')
 	echo $sort_arrow;
 }
 echo '</td>';
-echo '<tr height="20" width="100%">';
-echo '<td colspan="100%">';
+//echo '<tr height="20" width="100%">';
+//echo '<td colspan="100%">';
 
-echo '<table border="0" cellspacing="0" cellpadding="0" width="100%">';
-echo '<tr>';
+//echo '<table border="0" cellspacing="0" cellpadding="0" width="100%">';
+//echo '<tr>';
 require('../../lib/tkdlib.php');
 $order = print_config_title($constCompaniesPage);
 for ($i=0; $i<count($order); $i++)
@@ -376,7 +376,6 @@ else
 	echo '<tr><td colspan="99">'.$ab_no_companies.'</td></tr>';
 	echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 }
-	echo '</table>';
 echo '</table>';
 ?>
 
