@@ -520,6 +520,11 @@ function mail_to($email, $name="", $class="normal", $full_link=true, $contact_id
       return 'mailto:'.$email;
     }
   }
+  else
+  {
+    global $strInvalidEmail;
+    return $strInvalidEmail;
+  }
 }
 
 /**

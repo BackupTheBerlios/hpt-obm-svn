@@ -98,7 +98,7 @@ switch($task)
 		$name = trim(smart_addslashes($_POST['name']));
 		$shortname = trim(smart_addslashes($_POST['shortname']));
 		$engname = trim(smart_addslashes($_POST['engname']));
-    	$relation_date = smart_addslashes($_POST["relation_date"]);
+		$relation_date = smart_addslashes($_POST["relation_date"]);
 		$address = smart_addslashes($_POST["address"]);
 		$zip = smart_addslashes($_POST["zip"]);
 		$city = smart_addslashes($_POST["city"]);

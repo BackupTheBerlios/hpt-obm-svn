@@ -75,7 +75,7 @@ CREATE TABLE `ab_contacts` (
   `first_name` varchar(50) NOT NULL default '',
   `middle_name` varchar(50) NOT NULL default '',
   `last_name` varchar(50) NOT NULL default '',
-  `initials` varchar(10) NOT NULL default '',
+  `initials` varchar(30) NOT NULL default '',
   `title` varchar(10) NOT NULL default '',
   `sex` enum('M','F') NOT NULL default 'M',
   `birthday` date NOT NULL default '0000-00-00',

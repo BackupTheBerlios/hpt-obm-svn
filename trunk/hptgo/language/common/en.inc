@@ -250,4 +250,6 @@ $lang_modules['notes'] = "Notes";
 $lang_modules['bookmarks'] = "Bookmarks";
 $lang_modules['summary'] = "Summary";
 $lang_modules['todos'] = "Tasks";
+
+$strInvalidEmail = "Invalid email";
 ?>

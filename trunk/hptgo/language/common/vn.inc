@@ -254,4 +254,5 @@ $lang_modules['notes'] = "Ghi chú";
 $lang_modules['bookmarks'] = "Bảng đánh dấu";
 $lang_modules['summary'] = "Tóm lược";
 $lang_modules['todos'] = "Công việc";
+$strInvalidEmail = "Email sai";
 ?>
