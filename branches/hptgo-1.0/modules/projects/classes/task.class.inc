@@ -361,7 +361,7 @@ class project_task extends db {
              '&task_status='.$this->status.
              '&return_to='.rawurlencode($return_to).
              '&return_to2='.rawurlencode($link_back);
-      echo '<td><b><a href="'.$url.'" class="normal">'.$this->name.'</a></b></td>';
+      echo '<td><b><a href="'.$url.'" class="normal">'.htmlspecialchars($this->name).'</a></b></td>';
     }
     else echo '<td>'.htmlspecialchars($this->name).'</td>';
   }
@@ -384,7 +384,7 @@ class project_task extends db {
 
     echo '<tr>';
     echo '<td align="center">'.$this->id.'</td>';
-    echo '<td>'.$this->name.'</td>';
+    echo '<td>'.htmlspecialchars($this->name).'</td>';
     echo '<td>'.$member_list[$this->person_id].'</td>';
     list($pids, $tips) = $this->get_pid_tips();
     echo '<td>'.$tips.$pids.'</td>';

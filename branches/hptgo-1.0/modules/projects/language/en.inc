@@ -147,7 +147,7 @@ $cmdRecover = 'Recover';
 
 $pm_ConfirmDrop = 'Are you sure you want to discontinue this project?';
 $pm_ConfirmRecover = 'Are you sure you want to recover this project?';
-$pm_ConfirmDeleteStatus = 'Are you sure you want to delete status \"%s\"?';
+$pm_ConfirmDeleteStatus = 'Are you sure you want to delete status "%s"?';
 $pm_ConfirmDeleteCategory = 'Are you sure you want to delete project category ';
 $pm_ConfirmDeleteTemplate = 'Are you sure you want to delete process template ';
 $pm_DeleteCategory = 'Delete';

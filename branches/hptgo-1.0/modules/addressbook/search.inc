@@ -291,8 +291,8 @@ if ($task=='search' || $task == 'show_letter')
 					$results .= '<td><input id="'.div_confirm_id($name).'" type="checkbox" onclick="javacript:item_click(this)" name="contact[]" value="'.$ab->f("id").'" /></td>';
 					$results .= "<td nowrap><a".$style." class=\"normal\" href=\"contact.php?contact_id=".$ab->f("id")."&return_to=".$GO_MODULES->url."index.php\" title=\"".$strShowProfile."\">".htmlspecialchars($name)."</a>&nbsp;&nbsp;</td>\n";
 					$results .= "<td>".mail_to(empty_to_stripe($ab->f("email")), empty_to_stripe($ab->f("email")),'normal',true, $ab->f("id"))."&nbsp;&nbsp;</td>\n";
-					$results .= '<td>'.empty_to_stripe($ab->f('home_phone')).'&nbsp;&nbsp;</td>';
-					$results .= '<td>'.empty_to_stripe($ab->f('work_phone')).'&nbsp;&nbsp;</td>';
+					$results .= '<td>'.htmlspecialchars(empty_to_stripe($ab->f('home_phone'))).'&nbsp;&nbsp;</td>';
+					$results .= '<td>'.htmlspecialchars(empty_to_stripe($ab->f('work_phone'))).'&nbsp;&nbsp;</td>';
 					$results .= "</tr>\n";
 					$results .= '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 				}
@@ -402,10 +402,10 @@ if ($task=='search' || $task == 'show_letter')
 					$results .= '<tr height="20" id="'.$ab->f('id').'">';
 					$results .= '<td><input id="'.div_confirm_id($ab->f('name')).'" type="checkbox" onclick="javacript:item_click(this)" name="companies[]" value="'.$ab->f("id").'" /></td>';
 					$results .= '<td nowrap><a class="normal" href="'.$GO_MODULES->url.'company.php?company_id='.$ab->f('id').'&return_to='.rawurlencode($link_back).'" title="'.$strShowProfile.'">'.htmlspecialchars($ab->company_name($parents)).'</a>&nbsp;&nbsp;</td>';
-					$results .= '<td>'.empty_to_stripe($ab->f('city')).'&nbsp;&nbsp;</td>';
+					$results .= '<td>'.htmlspecialchars(empty_to_stripe($ab->f('city'))).'&nbsp;&nbsp;</td>';
 					$results .= "<td>".mail_to(empty_to_stripe($ab->f("email")), empty_to_stripe($ab->f("email")),'normal',true, $ab->f("id"))."&nbsp;&nbsp;</td>\n";
-					$results .= '<td>'.empty_to_stripe($ab->f('phone')).'&nbsp;&nbsp;</td>';
-					$results .=  '<td><a class="normal" target="_blank" href="'.$ab->f('homepage').'">'.$ab->f('homepage').'</a>&nbsp;&nbsp;</td>';
+					$results .= '<td>'.htmlspecialchars(empty_to_stripe($ab->f('phone'))).'&nbsp;&nbsp;</td>';
+					$results .=  '<td><a class="normal" target="_blank" href="'.$ab->f('homepage').'">'.htmlspecialchars($ab->f('homepage')).'</a>&nbsp;&nbsp;</td>';
 					$results .= "</tr>\n";
 					$results .= '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 				}

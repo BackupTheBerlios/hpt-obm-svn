@@ -50,13 +50,13 @@ switch ($task) {
   case 'add_template':
     $template_name = $_REQUEST['template_name'];
     if (isset($template_name) && $template_name != '') {
-      $db->query("SELECT * FROM task_templates WHERE cat_id='$cat_id' AND name='$template_name'");
+      $db->query("SELECT * FROM task_templates WHERE cat_id='$cat_id' AND name='".addslashes($template_name)."'");
       if ($db->num_rows() > 0)
-        echo sprintf($pm_TemplateExists, $catalog_name);
+        echo htmlspecialchars(sprintf($pm_TemplateExists, $template_name));
       else {
         $db->query("INSERT INTO task_templates(id, cat_id, name) ".
-                   "VALUES('', '$cat_id', '$template_name')");
-        $db->query("SELECT * FROM task_templates WHERE cat_id='$cat_id' AND name='$template_name'");
+                   "VALUES('', '$cat_id', '".addslashes($template_name)."')");
+        $db->query("SELECT * FROM task_templates WHERE cat_id='$cat_id' AND name='".addslashes($template_name)."'");
         $db->next_record();
         $id = $template_id = $db->f('id');
         $task_table = "task_template_$id";
@@ -82,7 +82,7 @@ switch ($task) {
           $p = $n - 1;
           $db->query("INSERT INTO $task_table (task_id, task_name, task_time, task_level, ".
                                              "task_predecessors, task_order) ".
-                     "VALUES('$n', '$name', '1', '$value', '$p', '$n')");
+                     "VALUES('$n', '".addslashes($name)."', '1', '$value', '$p', '$n')");
           $n = $n + 1;
         }
         $p = $n - 1;
@@ -108,7 +108,7 @@ switch ($task) {
     if (isset($template_name)) {
       $template_name = trim($template_name);
       if ($template_name != '')
-        $db->query("UPDATE task_templates SET name='$template_name' WHERE id='$template_id'");
+        $db->query("UPDATE task_templates SET name='".addslashes($template_name)."' WHERE id='$template_id'");
     }
     break;
 
@@ -164,13 +164,14 @@ switch ($task) {
     if ($task_value >= 1) {
       $task_name = $_REQUEST['task_name'];
       $task_predecessors = $_REQUEST['task_predecessors'];
+      $extra = '';
       if (isset($task_predecessors) && $task_predecessors != '') {
         $task_predecessors = reformat_predecessors($task_predecessors);
         $task_status = $task_predecessors == '0' ? TASK_ONGOING : TASK_WAITING;
         $extra = ", task_predecessors='$task_predecessors', task_status='$task_status' ";
       }
       $db->query("UPDATE task_template_$template_id ".
-                 "SET task_name='$task_name' ".$extra.
+                 "SET task_name='".addslashes($task_name)."' ".$extra.
                  "WHERE task_order='$task_value'");
     }
     break;
@@ -207,7 +208,7 @@ switch ($task) {
       $sql = "INSERT INTO task_template_$template_id".
                           "(task_id, task_name, task_predecessors, ".
                           "task_time, task_status, task_level, task_order) ".
-                          "VALUES('$last_value', '$task_name', '$task_predecessors', ".
+                          "VALUES('$last_value', '".addslashes($task_name)."', '$task_predecessors', ".
                           "'$task_time', '$task_status', '-1', '$task_value')";
       $db->query($sql);
     }
@@ -230,7 +231,7 @@ while ($db->next_record()) {
   if ($cat_id == $db->f('id'))
     $catalog_name = $db->f('name');
 }
-echo '<input type="hidden" name="catalog_name" value="'.$catalog_name.'" />';
+echo '<input type="hidden" name="catalog_name" value="'.htmlspecialchars($catalog_name).'" />';
 $catalog->print_dropbox('cat_id', $cat_id,
   'onchange="javascript:change_category()"', false, '10', '200');
 $legend = '<table border="0" cellspacing="1" cellpadding="0" width="180" bgcolor="black">'.
@@ -271,7 +272,7 @@ echo '<tr><td>&nbsp;</td>'.
      '</tr>';
 }
 echo '<tr><td align="right" nowrap>'.$pm_process_template.':</td><td>';
-echo '<input type="hidden" name="template_name" value="'.(isset($template_name) ? $template_name : '').'" />';
+echo '<input type="hidden" name="template_name" value="'.(isset($template_name) ? htmlspecialchars($template_name) : '').'" />';
 $template->print_dropbox('template_id', $template_id,
     'onchange="javascript:frm.submit()"', false, '10', '200');
 echo '</td><td width="60">'.
@@ -359,8 +360,8 @@ if ($count > 0) {
     $nolist[] = $n;
 
     $delitem = sprintf($pm_ConfirmDeleteStatus, $name);
-    $dellink = "<a href='javascript:delete_task($id,\"$delitem\",$n)' ".
-               "title=\"$strDeleteItem '$name'\">$trash</a>";
+    $dellink = "<a href='javascript:delete_task($id,\"".div_confirm_id($delitem)."\",$n)' ".
+               "title=\"".htmlspecialchars("$strDeleteItem '$name'")."\">$trash</a>";
     $timelink = '<a href="javascript:set_edit_days('.$n.','.$time.')">'.$time.'</a>';
     $timespan = '[&nbsp;<span id="task_days_'.$n.'">'.$timelink.'</span>&nbsp;]';
 
@@ -387,7 +388,7 @@ if ($count > 0) {
     $tips .=  '</table></td></tr></table></span>';
     $tips_action = 'onmouseover="return show_tips('.$n.');" onmouseout="return hide_tips();';
 
-    $name_link = "<a href='javascript:set_edit_name($n, \"$name\")'>$name</a>";
+    $name_link = "<a href='javascript:set_edit_name($n, \"".div_confirm_id($name)."\")'>".htmlspecialchars($name)."</a>";
     if ($level == 0) $name_link = '<b>'.$name_link.'</b>';
 
     echo '<tr>';
@@ -711,7 +712,7 @@ function move_task(n, action)
 
 function delete_task(task_id, task_name, task_no)
 {
-  if (confirm(task_name)) {
+  if (div_confirm(task_name)) {
     frm.task.value = 'delete_task';
     frm.task_value.value = task_no;
     frm.task_change.value = task_id;
@@ -768,7 +769,7 @@ function set_edit_name(n, name)
   frm.task_value.value = n;
   show_editor(document.getElementById("task_name_"+n),
 //      task_edit, name, task_edit_keypressed, 0);
-      task_edit, name, null, 0);
+      task_edit, div_confirm_text(name), null, 0);
 }
 
 function set_edit_days(n, days)

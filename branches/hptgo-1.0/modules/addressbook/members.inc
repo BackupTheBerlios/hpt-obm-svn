@@ -191,7 +191,7 @@ while ($GO_USERS->next_record())
 if (count($order) == 0)
 {
 	echo "<td>".mail_to(empty_to_stripe($GO_USERS->f("email")))."&nbsp;</td>\n";
-	echo "<td>".empty_to_stripe($GO_USERS->f("company"))."&nbsp;</td>\n";
+	echo "<td>".htmlspecialchars(empty_to_stripe($GO_USERS->f("company")))."&nbsp;</td>\n";
 }
 
 	print_config_content($order,$GO_USERS,$constMembersPage);
