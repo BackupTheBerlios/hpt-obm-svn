@@ -221,7 +221,7 @@ echo '<tr><td>'.
          '<tr><td align="right">'.$pm_category.':</td><td colspan="2">';
 
 $db->query('SELECT * FROM pmCatalog');
-$count = $db->num_rows();
+$category_count = $count = $db->num_rows();
 $catalog = new dropbox();
 $catalog_name = '';
 while ($db->next_record()) {
@@ -264,10 +264,12 @@ while ($db->next_record()) {
   if ($template_id == $db->f('id'))
     $template_name = $db->f('name');
 }
+if ($category_count) {
 echo '<tr><td>&nbsp;</td>'.
      '<td colspan="2">'.
      '<a href="javascript:add_template()" class="normal">'.$pm_new_template.'</a></td>'.
      '</tr>';
+}
 echo '<tr><td align="right" nowrap>'.$pm_process_template.':</td><td>';
 echo '<input type="hidden" name="template_name" value="'.(isset($template_name) ? $template_name : '').'" />';
 $template->print_dropbox('template_id', $template_id,
