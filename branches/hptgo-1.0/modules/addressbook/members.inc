@@ -76,7 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 //define the items to show
 
 $max_rows = isset($_REQUEST['max_rows']) ? $_REQUEST['max_rows'] : $_SESSION['GO_SESSION']['max_rows_list'];
-echo $max_rows;
 $first = isset($_REQUEST['first']) ? $_REQUEST['first'] : 0;
 
 if(isset($_REQUEST['new_sort_order']) && $_REQUEST['new_sort_order'] != $ab_settings['sort_users_order'])
