@@ -481,7 +481,7 @@ class calendar extends db
 
   function insert_reminder($user_id, $event_id, $remind_time)
   {
-    return $this->query("INSERT INTO cal_reminders (user_id, event_id, remind_time) VALUES ('$user_id', '$event_id', '$remind_time')");
+    return $this->query("REPLACE INTO cal_reminders (user_id, event_id, remind_time) VALUES ('$user_id', '$event_id', '$remind_time')");
   }
 
   function update_reminder($user_id, $event_id, $remind_time)
