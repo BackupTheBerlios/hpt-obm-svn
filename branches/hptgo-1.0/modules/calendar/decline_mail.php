@@ -1,4 +1,11 @@
 <?php
+/*
+   This program is free software; you can redistribute it and/or modify it
+   under the terms of the GNU General Public License as published by the
+   Free Software Foundation; either version 2 of the License, or (at your
+   option) any later version.
+ */
+
 	$_SESSION['GO_SESSION']['DST'] = $db->f('DST');
 	$_SESSION['GO_SESSION']['date_format'] = $db->f('date_format');
 	$_SESSION['GO_SESSION']['time_format'] = $db->f('time_format');
