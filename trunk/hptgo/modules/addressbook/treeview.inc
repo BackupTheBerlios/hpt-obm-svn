@@ -307,7 +307,7 @@ if ($count > 0)
 					$links .= '<b><i>'.$page.'</i></b>&nbsp;';
 				}else
 				{
-					$links .= '<a href="'.$_SERVER['PHP_SELF'].'?post_action=projects&first='.$i.'">'.$page.'</a>&nbsp;';
+					$links .= '<a href="javascript:change_list('.$i.', '.$max_rows.');">'.$page.'</a>&nbsp;';
 				}
 			}
 
