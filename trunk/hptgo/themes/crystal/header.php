@@ -15,7 +15,8 @@ $GO_SECURITY->authenticate();
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" height="23">
 <tr>
-	<td class="HeaderBar" align="right">
+	<td class="HeaderBar" align="left" nowrap><?php echo htmlspecialchars($_SESSION['GO_SESSION']['name']); ?></td>
+	<td class="HeaderBar" align="right" width="100%">
 
 			<a class="HeaderBar" href="<?php echo $GO_CONFIG->host; ?>configuration/" target="main">
 			<img src="<?php echo $GO_THEME->images['configuration']; ?>" width="16" height="16" border="0" align="absmiddle" />
