@@ -170,7 +170,8 @@ $dropbox = new dropbox();
 $GO_MODULES->get_modules();
 while ($GO_MODULES->next_record())
 {
-  if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $GO_MODULES->f('acl_read')))
+  if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $GO_MODULES->f('acl_read')) ||
+      $GO_SECURITY->has_permission($GO_SECURITY->user_id, $GO_MODULES->f('acl_write')))
   {
     if ($GO_MODULES->f('id') == 'summary')
     {

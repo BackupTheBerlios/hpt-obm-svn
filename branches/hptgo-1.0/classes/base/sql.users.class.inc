@@ -439,7 +439,8 @@ class GO_USERS extends base_users
       $GO_MODULES->get_modules();
       $modules = array();
       while ($GO_MODULES->next_record())
-	if ($GO_SECURITY->has_permission($user_id, $GO_MODULES->f('acl_read')))
+	if ($GO_SECURITY->has_permission($user_id, $GO_MODULES->f('acl_read')) ||
+	    $GO_SECURITY->has_permission($user_id, $GO_MODULES->f('acl_write')))
 	  $modules[] = $GO_MODULES->f('id');
       $user_modules_properties[0] = implode(' ',$modules);
     }

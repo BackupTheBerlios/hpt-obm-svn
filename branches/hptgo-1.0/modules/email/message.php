@@ -383,7 +383,9 @@ for ($i=0;$i<count($parts);$i++)
         $attachment_name .= $t->text;
     $attachments .= '<td valign="center" nowrap>&nbsp;<a href="'.$link.'" target="'.$target.'" title="'.$parts[$i]["name"].'">'.cut_string($attachment_name,50).'</a> ('.format_size($parts[$i]["size"]).')</td>';
     $filesystem_module = $GO_MODULES->get_module('filesystem');
-    if ($filesystem_module && $GO_SECURITY->has_permission($GO_SECURITY->user_id, $filesystem_module['acl_read']))
+    if ($filesystem_module &&
+	($GO_SECURITY->has_permission($GO_SECURITY->user_id, $filesystem_module['acl_read']) ||
+	 $GO_SECURITY->has_permission($GO_SECURITY->user_id, $filesystem_module['acl_write'])))
     {
       $attachments .= "<td>&nbsp;<a title=\"".$ml_save_attachment."\" href=\"javascript:popup('save_attachment.php?account_id=".$account['id']."&mailbox=".urlencode($mailbox)."&uid=".$uid."&part=".$parts[$i]["number"]."&transfer=".$parts[$i]["transfer"]."&mime=".$parts[$i]["mime"]."&filename=".urlencode(addslashes($parts[$i]["name"]))."','600','400')\"><img src=\"".$GO_THEME->images['save']."\" border=\"0\" /></a>;&nbsp;</td>\n";
     }else
