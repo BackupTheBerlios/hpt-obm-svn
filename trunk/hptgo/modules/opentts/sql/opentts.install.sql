@@ -191,7 +191,6 @@ INSERT INTO `tts_permissions` VALUES (1, 36, '');
 INSERT INTO `tts_permissions` VALUES (2, 35, '');
 INSERT INTO `tts_permissions` VALUES (2, 34, '');
 INSERT INTO `tts_permissions` VALUES (1, 28, '');
-INSERT INTO `tts_permissions` VALUES (5, 25, '');
 INSERT INTO `tts_permissions` VALUES (2, 33, '');
 INSERT INTO `tts_permissions` VALUES (2, 32, '');
 INSERT INTO `tts_permissions` VALUES (2, 28, '');

@@ -311,10 +311,16 @@ if (Security::is_action_allowed("change_end_date",0,$acl_write)){
         $end_date=$datepicker->get_date_picker('end_date_d_m_y',$_SESSION['GO_SESSION']['date_format'], $today);
 $dropbox = new dropbox();
 $dropbox->add_arrays($hours, $hours);
-$end_date.='<td>' . $dropbox->get_dropbox("end_date_h",$end_date_h);
+$end_date.='<td>';
+$end_date_h_value=$dropbox->get_dropbox("end_date_h",$end_date_h);
 $dropbox = new dropbox();
 $dropbox->add_arrays($mins, $mins);
-$end_date.=':' . $dropbox->get_dropbox("end_date_i",$end_date_i);
+$end_date_i_value= $dropbox->get_dropbox("end_date_i",$end_date_i);
+	if ($htmldirection=='rtl'){
+		$end_date.="$end_date_i_value:$end_date_h_value";
+	}else{
+		$end_date.="$end_date_h_value:$end_date_i_value";
+	}
 
         $tts_lang_end_date_value="$end_date&nbsp;";
 }else{
@@ -335,11 +341,19 @@ if (Security::is_action_allowed("change_due_date",0,$acl_write)){
         $due_date=$datepicker->get_date_picker('due_date_d_m_y',$_SESSION['GO_SESSION']['date_format'], $today, '', '', 'onchange="javascript:document.change_status.end_date_d_m_y.value=this.value;"');
 $dropbox = new dropbox();
 $dropbox->add_arrays($hours, $hours);
-$due_date.='<td>' . $dropbox->get_dropbox("due_date_h",$due_date_h, 'onchange="javascript:update_end_hour(this.value);"');
+$due_date.='<td>';
+$due_date_h_value=$dropbox->get_dropbox("due_date_h",$due_date_h, 'onchange="javascript:update_end_hour(this.value);"');
 $dropbox = new dropbox();
 $dropbox->add_arrays($mins, $mins);
-$due_date.=':' . $dropbox->get_dropbox("due_date_i",$due_date_i, 'onchange="javascript:update_end_min(this.value);"');
+$due_date_i_value= $dropbox->get_dropbox("due_date_i",$due_date_i, 'onchange="javascript:update_end_min(this.value);"');
+	if ($htmldirection=='rtl'){
+		$due_date.="$due_date_i_value:$due_date_h_value";
+	}else{
+		$due_date.="$due_date_h_value:$due_date_i_value";
+	}
+
 	$tts_lang_due_date_value="$due_date&nbsp;";
+
 }else{
 	$tts_lang_due_date_value="{$tts_lang_due_date}$due_date";
 }
