@@ -228,7 +228,7 @@ switch ($content["priority"])
 <table border="0" cellpadding="1" cellspacing="0">
 <tr>
 <td nowrap><b><?php echo $ml_subject; ?>:&nbsp;</b></td>
-<td><?php echo $subject; ?></td>
+<td><?php echo htmlspecialchars($subject); ?></td>
 </tr>
 
 <tr>
