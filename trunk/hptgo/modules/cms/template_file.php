@@ -22,9 +22,20 @@ if ($file = $cms->get_template_file($_REQUEST['template_file_id']))
 {
   $browser = detect_browser();
 
-  header("Cache-Control: max-age=2592000\n");
-  header("Content-Disposition: filename=".$file['name']."\n");
+  //header('Content-Length: '.$file['size']);
+  header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
+  if ($browser['name'] == 'MSIE')
+  {
   header('Content-Type: '.$file['content_type']);
+    header('Content-Disposition: inline; filename="'.$file['name'].'"');
+    header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+    header('Pragma: public');
+  }else
+  {
+    header('Content-Type: '.$file['content_type']);
+    header('Pragma: no-cache');
+    header('Content-Disposition: inline; filename="'.$file['name'].'"');
+  }
   header('Content-Transfer-Encoding: binary');
   echo $file['content'];
   exit();

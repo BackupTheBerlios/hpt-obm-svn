@@ -1,19 +1,8 @@
-<?xml version="1.0"?>
-<module name="search">
-	<description>
-		Very simple Google search module.
-	</description>
-	<version>
-		1.0
-	</version>
-	<releaseDate>
-	2004-04-05
-	</releaseDate>
-	<status>
-		Stable
-	</status>
-	<authors>
-		<author name="Merijn Schering" email="mschering@intermesh.nl" />
-	</authors>
-</module>
+<?php
+$module['search']['description'] = 'A very simple Google search module';
+$module['search']['version'] = '1.0';
+$module['search']['release_date'] = '2004-04-05';
+$module['search']['status'] = 'Stable';
+$module['search']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
+?>	
 	

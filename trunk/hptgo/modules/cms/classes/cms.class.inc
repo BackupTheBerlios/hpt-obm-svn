@@ -12,8 +12,6 @@
 
 define('NORMAL_DISPLAY', 0);
 define('MULTIPAGE_DISPLAY', 1);
-define('HOT_ITEM_DISPLAY', 2);
-
 
 class cms extends db
 {
@@ -222,7 +220,7 @@ class cms extends db
 		  }
 
 		  //functions for personal sites
-		  function add_site($user_id, $name, $domain, $acl_read, $acl_write, $description, $keywords, $template_id, $display_type=0)
+		  function add_site($user_id, $name, $domain, $acl_read, $acl_write, $description, $keywords, $template_id, $display_type)
 		  {
 			$domain = $this->prepare_domain($domain);  
 		    //create a root folder for the new site
@@ -358,9 +356,16 @@ class cms extends db
 
 
 		  //functions for files and folders of sites
-		  function get_files($folder_id, $sort = "name", $direction = "ASC")
+		  function get_files($folder_id, $sort = "priority", $direction = "ASC")
 		  {
 		    $sql = "SELECT cms_files.*, filetypes.friendly FROM cms_files INNER JOIN filetypes ON filetypes.extension=cms_files.extension WHERE folder_id='$folder_id' ORDER BY $sort $direction";
+		    $this->query($sql);
+		    return $this->num_rows();
+		  }
+
+		  function get_hot_items($folder_id)
+		  {
+		  	$sql = "SELECT * FROM cms_files WHERE folder_id='$folder_id' AND hot_item='1' ORDER BY priority ASC";
 		    $this->query($sql);
 		    return $this->num_rows();
 		  }
@@ -371,7 +376,7 @@ class cms extends db
 		    return $this->num_rows();
 		  }
 
-		  function get_folders($folder_id, $sort = "name", $direction = "ASC")
+		  function get_folders($folder_id, $sort = "priority", $direction = "ASC")
 		  {
 		    $this->query("SELECT * FROM cms_folders WHERE parent_id='$folder_id' ORDER BY '$sort' $direction");
 		    return $this->num_rows();
@@ -403,11 +408,11 @@ class cms extends db
 
 		  }
 
-		  function update_folder($folder_id, $name, $disabled, $priority, $display_type=0)
+		  function update_folder($folder_id, $name, $disabled, $priority, $disable_multipage=false)
 		  {
 		  	$sql = "UPDATE cms_folders SET name='$name', mtime='".get_gmt_time().
 							"', disabled='$disabled', priority='$priority', ".
-							"display_type='$display_type' WHERE id='$folder_id'";
+							"disable_multipage='$disable_multipage' WHERE id='$folder_id'";
 		    return $this->query($sql);
 		  }
 
@@ -488,7 +493,7 @@ class cms extends db
 		    return false;
 		  }
 
-		  function update_file($file_id, $name, $content, $title='', $description='', $keywords='', $priority='0')
+		  function update_file($file_id, $name, $content, $title='', $description='', $keywords='', $priority='0', $hot_item='0')
 		  {
 		    $size = strlen($content);
 		    $extension = get_extension($name);
@@ -497,7 +502,7 @@ class cms extends db
 		    $sql = "UPDATE cms_files SET name='$name', extension='$extension', ".
 		      "mtime='$mtime', size='$size', content='$content', ".
 		      "title='$title', description='$description', ".
-		      "keywords='$keywords', priority='$priority' ".
+		      "keywords='$keywords', priority='$priority', hot_item='$hot_item' ".
 		      "WHERE id='$file_id'";
 		    return $this->query($sql);
 		  }
@@ -682,10 +687,10 @@ class cms extends db
 					case "'":
 						if($in_value && $escape_char == "'")
 						{
-						  if($template_file_id = $cms->template_file_exists($template_id, addslases(basename($url))))
+						  if($template_file_id = $cms->template_file_exists($template_id, addslashes(basename($url))))
 						  {
 							$replacement['old'] = $url;
-							$replacement['new'] = $cms_module['url'].'template_file.php?template_id='.$template_file_id;
+							$replacement['new'] = $cms_module['url'].'template_file.php?template_file_id='.$template_file_id;
 							$replacements[] = $replacement;
 						  }
 						  $url = '';
@@ -849,9 +854,31 @@ class cms extends db
 		  {
 		    $cms = new cms();
 		    $search_word = $this->get_search_word($search_word_id);
+		    $search_word1 = addslashes($search_word['search_word']);
 		    $files = array();
-		    $sql = "SELECT id FROM cms_files WHERE extension='html' AND folder_id='$folder_id' AND (UPPER(content) REGEXP '[[:<:]]".strtoupper($search_word['search_word'])."[[:>:]]' OR UPPER(content) REGEXP '[[:<:]]".htmlentities(strtoupper($search_word['search_word']))."[[:>:]]')";
+		    /*$sql = "SELECT id FROM cms_files WHERE extension='html' AND folder_id='$folder_id' AND (UPPER(content) REGEXP '[[:<:]]".$search_word1."[[:>:]]'";
+			
+				$search_word2 = htmlspecialchars($search_word1);
+				if($search_word2 != $search_word1)
+				{
+					$sql .= " OR UPPER(content) REGEXP '[[:<:]]".$search_word2."[[:>:]]')";
+				}else
+				{
+					$sql .= ")";
+				}*/
+				
+				$sql = "SELECT id FROM cms_files WHERE (extension='html' OR extension='htm') AND folder_id='$folder_id' AND (content LIKE '%".$search_word1."%'";
+			
+				$search_word2 = htmlspecialchars($search_word1);
+				if($search_word2 != $search_word1)
+				{
+					$sql .= " OR LIKE '%".$search_word2."%')";
+				}else
+				{
+					$sql .= ")";
+				}
 		    $this->query($sql);
+		    
 		    while ($this->next_record())
 		    {
 		      if ($attach_results && !$cms->file_is_attached($this->f('id'), $search_word_id))

@@ -24,13 +24,29 @@ $GO_MODULES->authenticate('cms');
 require($GO_MODULES->class_path.'cms.class.inc');
 $cms = new cms();
 
+/*
+MS: If a standard user has only one site redirect him there directly.
+*/
+if(!$GO_MODULES->write_permissions)
+{
+	if($count = $cms->get_authorized_sites($GO_SECURITY->user_id))
+	{
+		if($count == 1)
+		{
+			$cms->next_record();
+			header('Location: browse.php?site_id='.$cms->f('id'));
+			exit();
+		}
+	}
+}
+
 
 //get the language file
 require($GO_LANGUAGE->get_language_file('cms'));
 
 //create a tab window
 $tabtable = new tabtable('sites', $lang_modules['cms'], '100%', '400');
-$tabtable->add_tab('subscribed.inc', $cms_your_sites);
+//$tabtable->add_tab('subscribed.inc', $cms_your_sites);
 $tabtable->add_tab('sites.inc', $cms_all_sites);
 
 if ($GO_MODULES->write_permissions)
@@ -49,6 +65,9 @@ if(isset($_REQUEST['tabindex']))
 
 switch($task)
 {
+/*
+MS: Removed subscribing to sites
+
   case 'sites':
     if($_SERVER['REQUEST_METHOD'] == 'POST')
     {
@@ -73,7 +92,7 @@ switch($task)
       }
     }
     break;
-
+*/
   case 'configuration':
     if($_SERVER['REQUEST_METHOD'] == 'POST')
     {

@@ -10,8 +10,6 @@ Free Software Foundation; either version 2 of the License, or (at your
 option) any later version.
 */
 
-require($GO_CONFIG->class_path.'xpath.class.inc');
-$xpath = new XPath();
 
 $selected_modules = array();
 $selected_count = 0;
@@ -38,37 +36,20 @@ while($module = array_shift($modules))
 		
 		echo '<table border="0">';	
 		$info_file = $module['path'].'/module.info';
-		if (file_exists($info_file) && function_exists('xml_parser_create'))
-		{
-			$xpath->reset();
-			if ($xpath->importFromFile($info_file))
-			{
-				if ($description = $xpath->getData("/module[1]/description[1]"))
-				{
-					echo '<tr><td valign="top">'.$strDescription.':</td><td>'.text_to_html(trim(htmlspecialchars($description))).'</td></tr>';
-				}
-				if ($version = $xpath->getData("/module[1]/version[1]"))
-				{
-					echo '<tr><td>'.$strVersion.':</td><td>'.trim($version).'</td></tr>';
-				}
-				if ($status = $xpath->getData("/module[1]/status[1]"))
-				{
-					echo '<tr><td>'.$strStatus.':</td><td>'.trim($status).'</td></tr>';
-				}
-				if ($releaseDate = $xpath->getData("/module[1]/releaseDate[1]"))
-				{
-					echo '<tr><td>'.$strReleaseDate.':</td><td>'.db_date_to_date(trim($releaseDate)).'</td></tr>';
-				}
+		$module_info = $GO_MODULES->get_module_info($module['name']);
 				
+		if ($module_info)
+		{
+				echo '<tr><td valign="top">'.$strDescription.':</td><td>'.text_to_html(trim(htmlspecialchars($module_info['description']))).'</td></tr>';
+				echo '<tr><td>'.$strVersion.':</td><td>'.trim($module_info['version']).'</td></tr>';
+				echo '<tr><td>'.$strStatus.':</td><td>'.trim($module_info['status']).'</td></tr>';
+				echo '<tr><td>'.$strReleaseDate.':</td><td>'.db_date_to_date(trim($module_info['release_date'])).'</td></tr>';			
 				echo '<tr><td valign="top">'.$strAuthors.':</td><td>';
-				$i=1;
-				while ($author = $xpath->getAttributes("/module[1]/authors[1]/author[$i]"))
+				while ($author = array_shift($module_info['authors']))
 				{
 					echo trim(htmlspecialchars($author['name']).' &lt;'.mail_to($author['email']).'&gt;').'<br />';
-					$i++;
 				}
 				echo '</td></tr>';
-			}			
 		}else
 		{
 			echo '<tr><td></td><td>'.$strNoModuleInfo.'</td></tr>';

@@ -10,7 +10,7 @@ $fbNewFolder = "Nieuwe map";
 $fbDelete = "Verwijder";
 $fbCut = "Knippen";
 $fbPaste = "Plakken";
-$fbCopy = "Kopiëren";
+$fbCopy = "KopiÃ«ren";
 $fbFiletypes = "Bestandstypes";
 $fbPath = "Pad";
 $fbFolders = "mappen";
@@ -86,13 +86,13 @@ $cms_no_themes = 'U heeft nog geen thema\'s. Maak eerst een thema.';
 $cms_edit_search_words = 'zoekwoorden aanpassen';
 $cms_id = 'Site ID';
 
-$cms_cleanup = 'Opschonen';
+$cms_cleanup = 'HTML&nbsp;Opschonen';
 $cms_settings = 'Instellingen';
 $cms_site_exists = 'Er bestaat al een site met deze naam';
 $cms_main_template = 'Hoofd';
 $cms_confirm_close = 'Wijzigingen gaan verloren. Weet u het zeker?';
 
-$cms_additional_style = 'Stijl die niet in de tekstverwerker wordt weergegeven';
+$cms_additional_style = 'Stijl die in de tekstverwerker wordt weergegeven';
 $cms_restrict_editor = 'Beperk tekstverwerker tot de gedefinieerde stijlen';
 $cms_enable_publish = 'Schakel lokale website publicatie in';
 $cms_path_not_writable = 'Het pad dat u invoerde is ongeldig of niet beschrijfbaar voor Group-Office.';
@@ -113,13 +113,11 @@ $cms_domain = 'Domein';
 $cms_replace_filenames = 'Vervang bestandsnamen';
 
 //2.06
-$cms_multipage_display = 'Geef deze map weer in de opgesomde pagina weergave.';
-$cms_hot_items = 'Geef deze map weer in de Hot items';
-$cms_normal_display = 'Geef deze map alleen weer wanneer deze direct wordt opgevraagd';
-
-$cms_display_type = 'Wanneer een gebruiker een map opend:';
-$cms_site_normal_display = 'Wordt het eerste bestand uit de map getoond';
-$cms_site_multipage_display = 'Wordt een opsomming van alle eerste bestanden uit deelnemende mappen getoond.';
-
+$cms_multipage_display = 'Wordt deze website gepresenteerd in knipselopmaak';
+$cms_hot_item = 'Geef deze pagina weer bij de Hot items';
+$cms_normal_display = 'Wordt het eerste bestand uit de geopende map weergegeven';
+$cms_display_type = 'Wanneer een bezoeker een map opent:';
 $cms_read_more = 'Lees meer';
+
+$cms_disable_multipage = 'Geen knipselopmaak';
 ?>

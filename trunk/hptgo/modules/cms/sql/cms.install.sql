@@ -3,7 +3,7 @@
 # http://www.phpmyadmin.net
 #
 # Host: localhost
-# Generatie Tijd: 07 Jun 2004 om 23:11
+# Generatie Tijd: 06 Jul 2004 om 13:12
 # Server versie: 3.23.58
 # PHP Versie: 4.3.6
 # 
@@ -48,7 +48,7 @@ CREATE TABLE `cms_folders` (
   `name` char(50) NOT NULL default '',
   `disabled` enum('0','1') NOT NULL default '0',
   `priority` int(11) NOT NULL default '0',
-  `display_type` enum('0','1','2') NOT NULL default '0',
+  `disable_multipage` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   KEY `id` (`id`),
   KEY `parent_id` (`parent_id`)

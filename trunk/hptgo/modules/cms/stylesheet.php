@@ -17,10 +17,10 @@ $cms = new cms();
 if ($template = $cms->get_template($_REQUEST['template_id']))
 {
   header('Content-Type: text/css');
-  header('Content-Length: '.strlen($template['style'].$template['additional_style']));
+  #header('Content-Length: '.strlen($template['style']));
   header("Cache-Control: max-age=2592000");
   header('Content-Disposition: inline; filename=stylesheet.css');
-  echo $template['style'].$template['additional_style'];
+  echo $template['style'];
   exit();
 }
 ?>

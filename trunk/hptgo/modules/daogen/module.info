@@ -1,19 +1,8 @@
-<?xml version="1.0"?>
-<module name="news">
-	<description>
-		MOdule to generate Database Objects.
-	</description>
-	<version>
-		1.0
-	</version>
-	<releaseDate>
-	2004-04-05
-	</releaseDate>
-	<status>
-		Alpha
-	</status>
-	<authors>
-		<author name="Mike Hostetler" email="mike@tm-web.com" />
-	</authors>
-</module>
+<?php
+$module['daogen']['description'] = 'Module to generate Database Objects.';
+$module['daogen']['version'] = '1.0';
+$module['daogen']['release_date'] = '2004-04-05';
+$module['daogen']['status'] = 'Alpha';
+$module['daogen']['authors'][] = array('name'=>'Mike Hostetler', 'email'=>'mike@tm-web.com');
+?>
 	

@@ -12,9 +12,6 @@
 require('../../../Group-Office.php');
 require($GO_LANGUAGE->get_language_file('cms'));
 
-//change this address to the reciepent if necessary
-$email_to = $GO_CONFIG->webmaster_email;
-
 $datepicker = new date_picker();
 $GO_HEADER['head'] = $datepicker->get_header();
 
@@ -27,9 +24,15 @@ if(isset($_REQUEST['site_id']) && $cms_module)
   $cms_site = new cms_site($_REQUEST['site_id']);
 }
 
+$email_to = $GO_CONFIG->webmaster_email;
 if(isset($cms_site) && $cms_site)
 {
   echo $cms_site->generate_header();
+  
+  if($site_owner = $GO_USERS->get_user($cms_site['user_id']))
+  {
+  	$email_to = $site_owner['email'];
+  } 
 }else
 {  
   require($GO_THEME->theme_path."header.inc");

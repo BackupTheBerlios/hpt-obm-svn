@@ -24,6 +24,24 @@ class GO_MODULES extends db
   {
     $this->db();
   }
+  
+  function get_module_info($module_id)
+  {
+  	global $GO_CONFIG;
+  	
+  	$info_file = $GO_CONFIG->root_path.'modules'.$GO_CONFIG->slash.$module_id.$GO_CONFIG->slash.'module.info';
+  	
+  	if(file_exists($info_file))
+  	{
+  		require($info_file);
+  		if(isset($module[$module_id]))
+  		{
+  			return $module[$module_id];
+  		}
+  	}
+  	return false;  	
+  }
+  
   function authenticate($module_id, $admin=false)
   {
     global $GO_CONFIG, $GO_SECURITY;

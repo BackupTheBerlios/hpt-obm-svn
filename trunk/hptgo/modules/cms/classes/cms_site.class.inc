@@ -30,8 +30,20 @@ class cms_site extends cms
 			// requesting the site through a domain. Try to get the site by domain.  
       if(!$this->site = $this->get_site_by_domain($domain))
       {
+      	//try higher domain (eg.: www.intermesh.nl failed now try intermesh.nl)
+      	$pos = strpos($domain,'.');
+      	if($pos)
+      	{
+      		$domain = substr($domain, $pos+1);
+      		if(!$this->site = $this->get_site_by_domain($domain))
+      		{
+      			return false;
+      		}      		
+      	}else
+      	{
 	return false;
       }
+    }
     }
 
     $publish_path = $this->site['publish_path'];
@@ -126,7 +138,7 @@ class cms_site extends cms
     $file = '';
     if ($template = $this->get_template($this->site['template_id']))
     {
-      $file = $template['style'].$template['additional_style'];
+      $file = $template['style'];
     }
 
     if (!$fp = fopen($path, 'w+'))
@@ -231,11 +243,12 @@ class cms_site extends cms
 
   function generate_header($title='', $keywords='', $description='')
   {
-    global $GO_CONFIG, $GO_MODULES;
+    global $GO_CONFIG, $GO_MODULES, $charset;
 
     $cms_module = isset($cms_module) ? $cms_module : $GO_MODULES->get_module('cms');
 
     $header = '<html><head>'.
+      '<meta http-equiv="Content-Type" content="text/html; charset='.$charset.'" />'.
       '<meta name="keywords" content="'.$keywords.'" />'.
       '<meta name="description" content="'.$description.'" />'.
       '<meta name="Generator" content="Group-Office '.$GO_CONFIG->version.'" />'.
@@ -259,9 +272,9 @@ class cms_site extends cms
 
   function generate_page($_file_id=0, $task='', $search_word_id='')
   {
-    global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE;
+    global $GO_CONFIG, $GO_MODULES, $GO_LANGUAGE, $file_id;
 
- $cms_module = isset($cms_module) ? $cms_module : $GO_MODULES->get_module('cms');
+    $cms_module = $GO_MODULES->get_module('cms');
 
     //set the folder id we are in
     $file_id = $_file_id;
@@ -269,12 +282,12 @@ class cms_site extends cms
 
     require($GO_LANGUAGE->get_language_file('cms'));
     
-    if ($file_id == 0)
-		{
-			if($this->site['display_type'] == MULTIPAGE_DISPLAY)
+    $folder = $this->get_folder($folder_id);
+    if($task == '' && ($this->site['display_type'] == MULTIPAGE_DISPLAY && $folder['disable_multipage'] != '1'))
 			{
 				$task = 'multipage_display';
-			}else
+    }
+	    if ($file_id == 0)
 			{
 			  $this->get_files($folder_id, 'priority', 'ASC');
 			  while($this->next_record())
@@ -286,7 +299,7 @@ class cms_site extends cms
 			    }
 			  }
 			 }
-		}
+	   
 
     if ($file_id > 0)
     {
@@ -308,7 +321,7 @@ class cms_site extends cms
 
       if ($file['title'] == '')
       {
-				$file['title'] = $this->site['name'];
+	$file['title'] = strip_extension($file['name']);
       }
       $folder_id = $file['folder_id'];
 
@@ -327,13 +340,38 @@ class cms_site extends cms
 
     $main_template_item = $this->get_main_template_item($this->site['template_id']);
 
+    $max_length = 300;
+    $print_title = 'false';
+    $title_class = '';
+    $class = '';
+    $read_more_class = '';
+    $read_more_text = '';
+    $template = '';
+
+    if ($main_template_item)
+    {
+      $main_template_content =  $this->parse_template($main_template_item['content']);
+      $content_tag = $this->get_tag('content', $main_template_content);
+      $attributes = $this->get_attributes($content_tag);
+
+      //max_length for multipage display
+      $max_length = isset($attributes['max_length']) ? $attributes['max_length'] : $max_length;
+      $class = isset($attributes['class']) ? $attributes['class'] : $class;
+      $print_title = isset($attributes['print_title']) ? $attributes['print_title'] : $print_title;
+      $title_class = isset($attributes['title_class']) ? $attributes['title_class'] : $title_class;
+      $read_more_class = isset($attributes['read_more_class']) ? $attributes['read_more_class'] : $read_more_class;
+      $read_more_text = isset($attributes['read_more_text']) ? $attributes['read_more_text'] : $read_more_text;
+      $template = isset($attributes['template']) ? $attributes['template'] : $template;
+    }
+
     //get the search words so we can highlight them
     $this->search_words=array();
     $this->get_search_words($this->site['id']);
     while ($this->next_record())
     {
-      $search_word1 = $this->f('search_word');
-      $search_word2 = htmlentities($this->f('search_word'));
+    	$search_word1 = str_replace('/', '\/', addslashes($this->f('search_word')));
+      $search_word2 = htmlspecialchars($search_word1);
+     
       $this->search_words[] = $search_word1;
       if ($search_word1 != $search_word2)
       {
@@ -403,7 +441,17 @@ class cms_site extends cms
 			break;
 	
 			case 'multipage_display':
-			$content = $this->build_multipage($folder_id, 300);
+
+  $content = '';
+	if ($file_id > 0)
+	{
+	  if($print_title == 'true')
+	  {
+	    $content = '<p class="'.$title_class.'">'.$file['title'].'</p>';
+	  }
+	  $content .= $file['content'];
+	}
+	$content .= $this->build_multipage($folder_id, $max_length, $template, $class, $print_title, $title_class, $read_more_class, $read_more_text);
 				 require_once($GO_CONFIG->class_path.'highlighting_skipphtml.class.inc');
 				 $hl = new highlighting_skipphtml();
 
@@ -413,16 +461,9 @@ class cms_site extends cms
 			  {
 			    $content = str_replace($cms_module['full_url'].'view.php', $_SERVER['PHP_SELF'], $content);
 			  }
-			  if (isset($main_template_item))
-			  {
-			    if ($main_template_item)
+	if (isset($content_tag))
 			    {
-			      $main_template_content =  $this->parse_template($main_template_item['content']);
-			      $page .= str_replace($this->get_tag('content', $main_template_content), $content, $main_template_content);
-			    }else
-			    {
-			      $page .= $content;
-			    }
+	  $page .= str_replace($content_tag, $content, $main_template_content);
 			  }else
 			  {
 			    $page .= $content;
@@ -433,7 +474,13 @@ class cms_site extends cms
 
 	if ($file_id > 0)
 	{
-	  $content = $this->parse_template($file['content']);
+	  $content = '';
+	  if($print_title == 'true')
+	  {
+	    $content = '<p class="'.$title_class.'">'.$file['title'].'</p>';
+	  }
+
+	  $content .= $this->parse_template($file['content']);
 	  require_once($GO_CONFIG->class_path.'highlighting_skipphtml.class.inc');
 
 	  $hl = new highlighting_skipphtml();
@@ -487,136 +534,143 @@ class cms_site extends cms
     return $page;
   }
   
-  function build_multipage($folder_id, $max_length)
+  function build_multipage($folder_id, $max_length, $template_name, $class, $print_title, $title_class, $read_more_class, $read_more_text, $hot_items=false)
   {
-  	global $cms_read_more;
-  	$multipage='';
-  	if($folder = $this->get_folder($folder_id))
-  	{  	
-  		if($folder['display_type'] == MULTIPAGE_DISPLAY)
-			{
-				$this->get_files($folder_id);
-				if($this->next_record())
-				{
-					$content = cut_string($this->f('content'), $max_length);
-					$multipage .= '<p>'.cut_string($content, $max_length);
+  	global $file_id;
 					
-					if(strlen($this->f('content')) > strlen($content))
+  	$template = $this->get_template_item_by_name($this->site['template_id'], $template_name);
+		if($template)
 					{
-						$multipage .= '<a href="'.$this->create_url($folder['id'], $this->f('id')).
-												'">'.$cms_read_more.'</a>';
-					}
-					$multipage .= '</p>';
-				}  				 				
-			}
-			return $this->build_multipage_recursive($folder_id, $max_length, $multipage);
+			$template_content = $this->parse_template($template['content']);
   	}else
 		{
-			return false; 
-		}
+			$template_content = false;
   }
   
-  function build_multipage_recursive($folder_id, $max_length, $multipage='')
-  {
-  	global $cms_read_more;
-  	$cms_site = new cms_site($this->site['id']);
-  	
-  	if($this->get_folders($folder_id))
-  	{
-  	
-  		while($this->next_record())
+    $show = $file_id > 0 ? false : true;
+    $multipage='';
+    if($folder = $this->get_folder($folder_id))
   		{
-  			if($this->f('display_type') == MULTIPAGE_DISPLAY)
+      if($this->f('disabled') != '1' && ($folder['disable_multipage'] != '1' || $hot_items))
   			{
-  				$cms_site->get_files($this->f('id'));
-  				if($cms_site->next_record())
+				if($hot_items)
   				{
-  					$content = cut_string($cms_site->f('content'), $max_length);
-  					$multipage .= '<p>'.cut_string($content, $max_length);
-  					
-  					if(strlen($cms_site->f('content')) > strlen($content))
+				  $this->get_hot_items($folder_id);
+				}else
   					{
-  						$multipage .= '<a href="'.$this->create_url($this->f('id'), $cms_site->f('id')).
-  												'">'.$cms_read_more.'</a>';
-  					}
-  					$multipage .= '</p>';
-  				}  				 				
-  			}
-  			$multipage .= $cms_site->build_multipage_recursive($this->f('id'), $max_length); 
-  		}
-  	}
- 		return $multipage;
+				  $this->get_files($folder_id);
   }
   
-  
-  function print_hot_items($folder_id, $template_name, $class)
-  {
-  	$multipage='';
-  	
-  	$template = $this->get_template_item_by_name($this->site['template_id'], $template_name);
-  	
-  	if($folder = $this->get_folder($folder_id))
+				while($this->next_record())
   	{  	
-  		if($folder['display_type'] == HOT_ITEM_DISPLAY)
+				  if((($show && $this->f('hot_item') == '0') || $hot_items) 				 
+							&& eregi('htm',$this->f('extension')))
 			{
-				$this->get_files($folder_id);
-				if($this->next_record())
+				  	$multipage_item = '<div class="'.$class.'">';
+				    if($print_title == 'true')
 				{				
 					$title = $this->f('title') != '' ? $this->f('title') : strip_extension($this->f('name'));
+				      $multipage_item .= '<p class="'.$title_class.'">'.$title.'</p>';
+				    }
+				    if($max_length > 0)
+				    {	      
+				      $stripped_content = strip_tags($this->f('content'), '<br>');
+				      $content = cut_string($stripped_content, $max_length);
+				      $multipage_item .= $content;
 				
+				      if(strlen($this->f('content')) != strlen($content))
+				      {
+								$multipage_item .= '<br /><p align="right"><a class="'.$read_more_class.'" href="'.$this->create_url($this->f('folder_id'), $this->f('id')).
+					  '">'.$read_more_text.'</a></div>';
+				      }	     
+				    }
+				    $multipage_item .= '</div>';
 					
-					$link = '<a class="'.$class.'" href="'.
-												$this->create_url($folder['id'], $this->f('id')).
-												'">'.$title.'</a>';
-					if($template)
+				   	if ($template_content)
 					{
-						$hot_item = $this->parse_template($template['content']);
-						$multipage = str_replace($this->get_tag('content', $hot_item), $link, $hot_item);
+				      $multipage .= str_replace($this->get_tag('content', $template_content), $multipage_item, $template_content);
 					}else
 					{
-						$multipage = $link;
+				    	$multipage .= $multipage_item;
+				    }			    
+				  }
+				  if($file_id == $this->f('id'))
+					{
+						$show = true;
 					}					
 				}  				 				
 			}
-			return $this->print_hot_items_recursive($folder_id, $template, $class, $multipage);
+      return $this->build_multipage_recursive($folder_id, $max_length, $template_content, $class, $print_title, $title_class, $read_more_class, $read_more_text, $hot_items, $multipage);
   	}else
 		{
 			return false; 
 		}
   }
   
-  function print_hot_items_recursive($folder_id, $template, $class, $multipage='')
+  function build_multipage_recursive($folder_id, $max_length, $template_content, $class,  $print_title, $title_class, $read_more_class, $read_more_text, $hot_items=false, $multipage='')
   {
+    global $file_id;
   	$cms_site = new cms_site($this->site['id']);
   	
   	if($this->get_folders($folder_id))
   	{  	
   		while($this->next_record())
   		{
-  			if($this->f('display_type') == HOT_ITEM_DISPLAY)
+	if($this->f('disabled') != '1' && ($this->f('disable_multipage') != '1' || $hot_items))
+	{
+	  if($hot_items)
+	  {
+	    $cms_site->get_hot_items($this->f('id'));
+	  }else
   			{
   				$cms_site->get_files($this->f('id'));
+	  }
   				if($cms_site->next_record())
   				{
+	  	if((($file_id != $cms_site->f('id') && $cms_site->f('hot_item') == '0') || $hot_items) 				 
+				&& eregi('htm',$cms_site->f('extension')))
+	    {
+	    	$multipage_item = '<div class="'.$class.'">';
+	      if($print_title == 'true')
+	      {
   					$title = $cms_site->f('title') != '' ? $cms_site->f('title') : strip_extension($cms_site->f('name'));					
+		$multipage_item .= '<p class="'.$title_class.'">'.$title.'</p>';
+	      }
+	      if($max_length > 0)
+	      {
 						
-						$link = '<a class="'.$class.'" href="'.
-													$this->create_url($this->f('id'), $cms_site->f('id')).
-													'">'.$title.'</a>';
-						if($template)
+		$stripped_content = strip_tags($cms_site->f('content'), '<br>');
+		$content = cut_string($stripped_content, $max_length);
+		$multipage_item .= $content;
+
+		if(strlen($cms_site->f('content')) != strlen($content))
 						{
-							$hot_item = $cms_site->parse_template($template['content']);
-							$multipage .= str_replace($this->get_tag('content', $hot_item), $link, $hot_item);
+		  $multipage_item .= '<br /><p align="right"><a class="'.$read_more_class.'" href="'.$this->create_url($cms_site->f('folder_id'), $cms_site->f('id')).
+		    '">'.$read_more_text.'</a></p>';
+		}
+		
+	      }
+	      $multipage_item .= '</div>';
+	      if ($template_content)
+		    {
+		      $multipage .= str_replace($this->get_tag('content', $template_content), $multipage_item, $template_content);
 						}else
 						{
-							$multipage .= $link;							
+		    	$multipage .= $multipage_item;
 						}						
   				}  				 				
   			}
-  			$multipage .= $cms_site->print_hot_items_recursive($this->f('id'), $template, $class); 
+	}
+	$multipage .= $cms_site->build_multipage_recursive($this->f('id'), $max_length, $template_content, $class, $print_title, $title_class, $read_more_class, $read_more_text, $hot_items);
   		}
   	}
  		return $multipage;
+  }
+
+
+  function print_hot_items($template, $class = '', $print_title=true, $title_class='', $max_length=0, $print_title=false, $title_class='', $read_more_class='', $read_more_text)
+  {
+    return $this->build_multipage($this->site['root_folder_id'], $max_length, $template, $class, $print_title, $title_class, $read_more_class, $read_more_text, true);
   }
 
   function create_url($folder_id,$file_id=0)
@@ -1035,9 +1089,12 @@ class cms_site extends cms
 	  break;
 
 	case ' ':
+	  if(!$in_value)
+	  {
 	  $i++;
-	  $char = $tag[$i];
 	  $in_name = true;
+	  }
+	  $char = $tag[$i];	  
 	  break;
 
 	case '=':
@@ -1121,7 +1178,7 @@ class cms_site extends cms
       $search = '<a class="'.$class.'" href="'.$this->publish_url.'_search/index.php?task=search&site_id='.$this->site['id'].'">'.$text.'</a>';
     }else
     {
-      $search = '<a class="'.$class.'" href="'.$cms_module['full_url'].'view.php?task=search&site_id='.$this->site['id'].'">'.$text.'</a>';
+      $search = '<a class="'.$class.'" href="'.$cms_module['url'].'view.php?task=search&site_id='.$this->site['id'].'">'.$text.'</a>';
     }
     if($template)
     {
@@ -1297,9 +1354,17 @@ class cms_site extends cms
     while($tag = $this->get_tag('hot_items', $content))
     {
     	$attributes = $this->get_attributes($tag);
-    	$template = isset($attributes['template']) ? $attributes['template'] : '';
+      //$template = isset($attributes['template']) ? $attributes['template'] : '';
       $class = isset($attributes['class']) ? $attributes['class'] : '';
-    	$content = str_replace($tag, $this->print_hot_items($folder_id, $template, $class), $content);
+      $max_length = isset($attributes['max_length']) ? $attributes['max_length'] : '0';
+      $print_title = isset($attributes['print_title']) ? $attributes['print_title'] : 'true';
+      $title_class = isset($attributes['title_class']) ? $attributes['title_class'] : '';
+      $read_more_class = isset($attributes['read_more_class']) ? $attributes['read_more_class'] : '';
+      $read_more_text = isset($attributes['read_more_text']) ? $attributes['read_more_text'] : 'Read more';
+      
+      $template = isset($attributes['template']) ? $attributes['template'] : '';
+
+      $content = str_replace($tag, $this->print_hot_items($template, $class, $print_title, $title_class, $max_length, $print_title, $title_class, $read_more_class, $read_more_text), $content);
     }
     
     return $content;

@@ -77,13 +77,15 @@ switch ($task)
 	$feedback = '<p class="Error">'.$strSaveError.'</p>';
       }else
       {
+      	$hot_item = isset($_POST['hot_item']) ? '1' : '0';
 	if (!$cms->update_file($_POST['file_id'],
 	      $name,
 	      addslashes($file['content']),
 	      smart_addslashes($_POST['title']),
 	      smart_addslashes($_POST['description']),
 	      smart_addslashes($_POST['keywords']),
-	      $_POST['priority']))
+	      $_POST['priority'],
+				$hot_item))
 	{
 	  $feedback = '<p class="Error">'.$strSaveError.'</p>';
 	}else
@@ -110,7 +112,9 @@ switch ($task)
     }else
     {
       $disabled = isset($_POST['disabled']) ? '1' : '0';
-      if (!$cms->update_folder($folder_id, $name, $disabled, $_POST['priority'], $_POST['display_type']))
+      $disable_multipage = isset($_POST['disable_multipage']) ? '1' : '0';
+      
+      if (!$cms->update_folder($folder_id, $name, $disabled, $_POST['priority'], $disable_multipage))
       {
 	$feedback = '<p class="Error">'.$strSaveError.'</p>';
       }else
@@ -287,7 +291,9 @@ switch($tabtable->get_active_tab_id())
     }
     while ($cms->next_record())
     {
-      if(!isset($search_file) || preg_match("/\b(?<!\/)".$cms->f('search_word')."\b/i", $item['content']) || preg_match("/\b(?<!\/)".htmlentities($cms->f('search_word'))."\b/i", $item['content']))
+    	$search_word = str_replace('/','\/', addslashes($cms->f('search_word')));
+      if(!isset($search_file) || preg_match("/\b(?<!\/)".$search_word."\b/i", $item['content']) || 
+					preg_match("/\b(?<!\/)".htmlspecialchars($search_word)."\b/i", $item['content']))
       {
 	echo '<tr><td><input type="checkbox" name="selected_search_words[]" value="'.$cms->f('id').'" checked />';
 	echo '<td>'.$cms->f('search_word').'</td></tr>';
@@ -407,22 +413,19 @@ switch($tabtable->get_active_tab_id())
 		echo '</td></tr>';
 		
 		$display_type = isset($item['display_type']) ? $item['display_type'] : NORMAL_DISPLAY;
-		if($site['display_type'] != MULTIPAGE_DISPLAY && $display_type == MULTIPAGE_DISPLAY)
-		{
-			$display_type = NORMAL_DISPLAY;
-		}
-		
-		echo '<tr><td colspan="2">';
-		$radio_list = new radio_list('display_type', $display_type);
-		$radio_list->add_option(NORMAL_DISPLAY, $cms_normal_display);
 		
 		if($site['display_type'] == MULTIPAGE_DISPLAY)
 		{
-			echo '<br />';
-			$radio_list->add_option(MULTIPAGE_DISPLAY, $cms_multipage_display);			
+						$disable_multipage_check = ($item['disable_multipage'] == '1') ? true : false;
+						echo '<tr><td colspan="2">';
+						$checkbox = new checkbox('disable_multipage', '1',$cms_disable_multipage, $disable_multipage_check);					
+						echo '</td></tr>';
 		}
-		echo '<br />';
-		$radio_list->add_option(HOT_ITEM_DISPLAY, $cms_hot_items);		
+	      }else
+	      {
+		      $hot_item_check = ($item['hot_item'] == '1') ? true : false;
+	      	echo '<tr><td colspan="2">';
+					$checkbox = new checkbox('hot_item', '1', $cms_hot_item, $hot_item_check);
 		echo '</td></tr>';
 	      }
 	    ?>

@@ -37,15 +37,15 @@ if ($site['acl_read'] == 0 || $GO_SECURITY->has_permission($GO_SECURITY->user_id
     header('Expires: '.gmdate('D, d M Y H:i:s') . ' GMT');
     if ($browser['name'] == 'MSIE')
     {
-      header('Content-Type: application/octet-stream');
-      header('Content-Disposition: attachment; filename="'.$file['name'].'"');
+      header('Content-Type: '.$file['content_type']);
+      header('Content-Disposition: inline; filename="'.$file['name'].'"');
       header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
       header('Pragma: public');
     }else
     {
       header('Content-Type: '.$file['content_type']);
       header('Pragma: no-cache');
-      header('Content-Disposition: attachment; filename="'.$file['name'].'"');
+      header('Content-Disposition: inline; filename="'.$file['name'].'"');
     }
     header('Content-Transfer-Encoding: binary');
     echo $file['content'];

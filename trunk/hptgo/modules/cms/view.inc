@@ -19,7 +19,7 @@ require_once($GO_LANGUAGE->get_language_file('cms'));
 
 if(!isset($site_id))
 {
-  //site_id will be determnined in cms_site.class.inc by the domain.
+  //site_id will be determined in cms_site.class.inc by the domain.
   $site_id = 0;
 }
 
@@ -72,5 +72,8 @@ $file_id =  isset($_REQUEST['file_id']) ? $_REQUEST['file_id'] : 0;
 
 $task = isset($_REQUEST['task']) ? $_REQUEST['task'] : '';
 $search_word_id = isset($_REQUEST['search_word_id']) ? $_REQUEST['search_word_id'] : '';
+
+header('Content-Type: text/html; charset='.$charset);
+
 echo $cms_site->generate_page($file_id, $task, $search_word_id);
 ?>

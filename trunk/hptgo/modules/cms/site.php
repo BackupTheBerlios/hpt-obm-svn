@@ -282,7 +282,7 @@ if ($site_id > 0)
 switch($task)
 {
   case 'save_search_word':
-    $search_word_name = smart_addslases(trim($_POST['search_word_name']));
+    $search_word_name = smart_addslashes(trim($_POST['search_word_name']));
     if ($search_word_name == '')
     {
       $feedback= '<p class="Error">'.$error_missing_field.'</p>';
@@ -427,10 +427,10 @@ switch($tabtable->get_active_tab_id())
 	<?php
 	if(isset($feedback)) echo '<tr><td colspan="2">'.$feedback.'&nbsp;</td></tr>';
 
-      if ($site_id > 0)
+      /*if ($site_id > 0)
       {
 	echo '<tr><td>'.$cms_id.':</td><td>'.$site_id.'</td></tr>';
-      }
+      }*/
       ?>
 
 	<tr>
@@ -488,11 +488,7 @@ switch($tabtable->get_active_tab_id())
 	<tr>
 	<td colspan="2">
 	<?php
-	echo $cms_display_type.'<br />';
-	$radio_list = new radio_list('display_type', $display_type);
-	$radio_list->add_option(NORMAL_DISPLAY, $cms_site_normal_display);
-	echo '<br />';
-	$radio_list->add_option(MULTIPAGE_DISPLAY, $cms_site_multipage_display);
+	$checkbox = new checkbox('secure', 'true', $cms_use_go_auth, $secure_check);
   ?>
 	</td>
 	</tr>
@@ -500,7 +496,11 @@ switch($tabtable->get_active_tab_id())
 	<tr>
 	<td colspan="2">
 	<?php
-	$checkbox = new checkbox('secure', 'true', $cms_use_go_auth, $secure_check);
+	echo '<br />'.$cms_display_type.'<br />';
+	$radio_list = new radio_list('display_type', $display_type);
+	$radio_list->add_option(NORMAL_DISPLAY, $cms_normal_display);
+	echo '<br />';
+	$radio_list->add_option(MULTIPAGE_DISPLAY, $cms_multipage_display);	
       ?>
 	</td>
 	</tr>

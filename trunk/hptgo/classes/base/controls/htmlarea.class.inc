@@ -152,12 +152,14 @@ function get_textarea_header($width, $height)
       textarea_obj.style.width = newWidth + "px";
     }
   }
+  
+  
   </script>';
 
   return $header;
 }
 
-function get_header($name, $width='600px', $height='400px', $rows='0', $pagestyle='', $config_options='', $table_operations=false)
+function get_header($name, $width='600px', $height='400px', $rows='0', $pagestyle='', $config_options='', $table_operations=false, $restrict_editor=false)
 {
   global $GO_CONFIG, $htmlarea_language_name;
   $this->width = 0;
@@ -195,6 +197,33 @@ function get_header($name, $width='600px', $height='400px', $rows='0', $pagestyl
     config = editor.config;
     config.killWordOnPaste=true;
     ';
+
+    if($restrict_editor)
+    {
+    	$header .= 'config.toolbar = ['.
+									'["formatblock", "space",'.
+									  '"bold", "italic", "underline", "strikethrough", "separator",'.
+									  '"subscript", "superscript", "separator",'.
+									  '"copy", "cut", "paste", "space", "undo", "redo" ],'.							
+									 '[ "justifyleft", "justifycenter", "justifyright", "justifyfull", "separator",'.
+									  '"lefttoright", "righttoleft", "separator",'.
+									  '"orderedlist", "unorderedlist", "outdent", "indent", "separator",'.
+									  '"inserthorizontalrule", "createlink", "insertimage", "inserttable", "htmlmode", "separator",'.
+									  '"popupeditor", "separator", "showhelp", "about" ]'.
+								'];';
+    }
+    
+    $header.='config.fontname = {'.
+    '"Default":	   \'\','.
+		'"Arial":	   \'arial,helvetica,sans-serif\','.
+		'"Courier New":	   \'courier new,courier,monospace\','.
+		'"Georgia":	   \'georgia,times new roman,times,serif\','.
+		'"Tahoma":	   \'tahoma,arial,helvetica,sans-serif\','.
+		'"Times New Roman": \'times new roman,times,serif\','.
+		'"Verdana":	   \'verdana,arial,helvetica,sans-serif\','.
+		'"impact":	   \'impact\','.
+		'"WingDings":	   \'wingdings\''.
+	 '};';
 
     if ($width <= 0)
     {
@@ -339,8 +368,76 @@ function get_header($name, $width='600px', $height='400px', $rows='0', $pagestyl
     editor._textArea.style.height = editor._iframe.style.height = newHeight + "px";
     editor._textArea.style.width = editor._iframe.style.width = newWidth + "px";
   }
-  </script>
     ';
+  $header .= "
+  function clean_editor_html() {
+		var D = editor.getInnerHTML();
+		
+		// make one line
+		D = D.replace(/\\r\\n/g, ' ').
+			replace(/\\n/g, ' ').
+			replace(/\\r/g, ' ').
+			replace(/\\&nbsp\\;/g,' ');
+
+		// keep tags, strip attributes
+		D = D.replace(/ class=[^\s|>]*/gi,'').
+			//replace(/<p [^>]*TEXT-ALIGN: justify[^>]*>/gi,'<p align=\"justify\">').
+			replace(/ style=\\\"[^>]*\\\"/gi,'').
+			replace(/ align=[^\\s|>]*/gi,'');
+
+		//clean up tags
+		D = D.replace(/<b [^>]*>/gi,'<b>').
+			replace(/<i [^>]*>/gi,'<i>').
+			replace(/<li [^>]*>/gi,'<li>').
+			replace(/<ul [^>]*>/gi,'<ul>');
+
+		// replace outdated tags
+		D = D.replace(/<b>/gi,'<strong>').
+			replace(/<\\/b>/gi,'</strong>');
+
+		// mozilla doesn't like <em> tags
+		D = D.replace(/<em>/gi,'<i>').
+			replace(/<\\/em>/gi,'</i>');
+
+		// kill unwanted tags
+		D = D.replace(/<\\?xml:[^>]*>/g, '').       // Word xml
+			replace(/<\\/?st1:[^>]*>/g,'').     // Word SmartTags
+			replace(/<\\/?[a-z]\:[^>]*>/g,'').  // All other funny Word non-HTML stuff
+			replace(/<\\/?font[^>]*>/gi,'').    // Disable if you want to keep font formatting
+			replace(/<\\/?span[^>]*>/gi,' ').
+			replace(/<\\/?div[^>]*>/gi,' ').
+			replace(/<\\/?pre[^>]*>/gi,' ');
+
+
+		//remove empty tags
+		//D = D.replace(/<strong><\/strong>/gi,'').
+		//replace(/<i><\\/i>/gi,'').
+		//replace(/<P[^>]*><\\/P>/gi,'');
+
+		// nuke double tags
+		oldlen = D.length + 1;
+		while(oldlen > D.length) {
+			oldlen = D.length;
+			// join us now and free the tags, we'll be free hackers, we'll be free... ;-)
+			D = D.replace(/<([a-z][a-z]*)> *<\\/\\1>/gi,' ').
+				replace(/<([a-z][a-z]*)> *<([a-z][^>]*)> *<\\/\\1>/gi,'<$2>');
+		}
+		D = D.replace(/<([a-z][a-z]*)><\\1>/gi,'<$1>').
+			replace(/<\\/([a-z][a-z]*)><\\/\1>/gi,'<\\/$1>');
+
+		// nuke double spaces
+		D = D.replace(/  */gi,' ');
+
+		//Convert P to BR
+		D = D.replace(/<\\/p>/gi,'<br />').
+			replace(/<p[^>]*>/gi, '');
+
+		editor.setHTML(D);
+		editor.updateToolbar();
+  
+  }
+  </script>
+     ";
 
   return $header;
 }
@@ -374,9 +471,13 @@ options: {"CSS":""';
   }
 }
 
-function print_htmlarea($value)
+function print_htmlarea($value='')
 {
-  echo '<textarea id="'.$this->name.'" style="width: '.$this->width.'" name="'.$this->name.'" rows="'.$this->rows.'">'.$value.'</textarea>';
+	echo $this->get_htmlarea($value);
+}
+function get_htmlarea($value='')
+{
+  return '<textarea id="'.$this->name.'" style="width: '.$this->width.'" name="'.$this->name.'" rows="'.$this->rows.'">'.$value.'</textarea>';
 }
 
 function browser_is_supported()

@@ -80,12 +80,12 @@ $cms_no_themes = 'You don\'t have any themes yet. Create a theme first.';
 $cms_edit_search_words = 'edit search words';
 $cms_id = 'Site ID';
 
-$cms_cleanup = 'Cleanup';
+$cms_cleanup = 'Cleanup&nbsp;HTML';
 $cms_settings = 'Settings';
 $cms_site_exists = 'A site with that name already exists';
 $cms_main_template = 'Main';
 $cms_confirm_close = 'Changes will be lost are you sure?';
-$cms_additional_style = 'Style that is hidden from the editor';
+
 $cms_restrict_editor = 'Restrict editor to predefined styles';
 $cms_enable_publish = 'Enable local website publishing';
 
@@ -107,12 +107,11 @@ $cms_domain = 'Domain';
 $cms_replace_filenames = 'Replace filenames';
 
 //2.06
-$cms_multipage_display = 'Display this folder in the multi page view';
-$cms_hot_items = 'Display this folder in the hot items';
-$cms_normal_display = 'Only display when accessed directly';
+$cms_multipage_display = 'Sum up all pages of the folders and the first pages of the subfolders';
+$cms_hot_item = 'Display this page in the hot items';
+$cms_normal_display = 'Display the first page of this folder';
 
-$cms_display_type = 'When a viewer opens a folder on the web page:';
-$cms_site_normal_display = 'Display the first file of a folder';
-$cms_site_multipage_display = 'Display a multipage view';
+$cms_display_type = 'When a visitor opens a folder on this web page:';
 $cms_read_more = 'Read more';
+$cms_additional_style = 'Style that is used in the editor';
 ?>

@@ -462,6 +462,12 @@ class base_users extends db
       $_SESSION['GO_SESSION']['timezone'] = $userdata['timezone'];
       $_SESSION['GO_SESSION']['start_module'] = isset($userdata['start_module']) ? $userdata['start_module'] : 'summary';
       $_SESSION['GO_SESSION']['DST'] = $userdata['DST'];
+      /*--- Take care of $_SESSION['GO_SESSION']['timezone'] before uncommenting this
+      if($_SESSION['GO_SESSION']['DST'] > 0 && date('I') > 0)
+			{
+				$_SESSION['GO_SESSION']['timezone'] = $_SESSION['GO_SESSION']['timezone']+$_SESSION['GO_SESSION']['DST'];
+			}
+*/
       $_SESSION['GO_SESSION']['theme'] = $userdata['theme'];
       $_SESSION['GO_SESSION']['first_weekday'] = $userdata['first_weekday'];
       return true;

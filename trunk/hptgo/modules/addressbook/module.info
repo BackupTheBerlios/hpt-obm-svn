@@ -1,20 +1,9 @@
-<?xml version="1.0"?>
-<module name="addressbook">
-	<description>
-		A very fast and feature rich addressbook for Group-Office. 
-		It is integrated in other modules as well
-	</description>
-	<version>
-		1.0
-	</version>
-	<releaseDate>
-	2004-04-05
-	</releaseDate>
-	<status>
-		Stable
-	</status>
-	<authors>
-		<author name="Merijn Schering" email="mschering@intermesh.nl" />
-	</authors>
-</module>
+<?php
+$module['addressbook']['description'] = 'A very fast and feature rich addressbook for '.
+								'Group-Office. It is integrated in other modules as well';
+$module['addressbook']['version'] = '1.1';
+$module['addressbook']['release_date'] = '2004-07-15';
+$module['addressbook']['status'] = 'Stable';
+$module['addressbook']['authors'][] = array('name'=>'Merijn Schering', 'email'=>'mschering@intermesh.nl');
+?>
 	

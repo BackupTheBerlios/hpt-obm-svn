@@ -79,7 +79,6 @@ $cms_no_themes = 'Vous n\'avez pas encore de thème. Commencez par en créer un.';
 $cms_edit_search_words = 'éditer les mots recherchés';
 $cms_id = 'Identifiant du site';
 
-//translation required
 $cms_cleanup = 'Nettoyage';
 $cms_settings = 'Réglages';
 $cms_site_exists = 'Un site avec ce nom existe déjà';
@@ -100,4 +99,12 @@ $cms_publish_static = 'Publication statique';
 
 //rajouté
 $fbEmailFile = "envoyer le fichier par email";
+
+//2.05
+$cms_sendmail_error = 'Votre message n\'a pu être envoyé. SVP, essayer encore.';
+$cms_sendmail_success = 'Merci. Votre message a été envoyé.';
+$cms_message = 'Message';
+$cms_subject = 'Sujet';
+$cms_domain = 'Domain';
+$cms_replace_filenames = 'Remplacer le nom de fichier';
 ?>

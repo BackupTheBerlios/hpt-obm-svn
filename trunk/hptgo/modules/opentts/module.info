@@ -1,19 +1,8 @@
-<?xml version="1.0"?>
-<module name="opentts">
-	<description>
-	  Helpdesk for Group-Office.
-	</description>
-	<version>
-		1.0
-	</version>
-	<releaseDate>
-	2004-07-18
-	</releaseDate>
-	<status>
-		Stable
-	</status>
-	<authors>
-		<author name="Meir Michanie" email="meirm@riunx.com" />
-	</authors>
-</module>
+<?php
+$module['opentts']['description'] = 'Helpdesk for Group-Office.';
+$module['opentts']['version'] = '1.0';
+$module['opentts']['release_date'] = '2004-07-18';
+$module['opentts']['status'] = 'Stable';
+$module['opentts']['authors'][] = array('name'=>'Meir Michanie', 'email'=>'meirm@riunx.com');
+?>
 	

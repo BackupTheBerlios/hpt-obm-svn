@@ -51,7 +51,8 @@ if($task=='save')
 	smart_addslashes($_POST['title']),
 	smart_addslashes($_POST['description']),
 	smart_addslashes($_POST['keywords']),
-	$_POST['priority']);
+	$_POST['priority'],
+	$_POST['hot_item']);
   }else
   {
     $name = smart_addslashes(trim($_POST['name']));
@@ -85,6 +86,7 @@ if ($file_id > 0)
   $description = $file['description'];
   $keywords = $file['keywords'];
   $priority = $file['priority'];
+  $hot_item = $file['hot_item'];
 }else
 {
   require($GO_THEME->theme_path."header.inc");
@@ -95,11 +97,6 @@ if ($file_id > 0)
 
 $link_back = 'edit.php?site_id='.$site_id.'&file_id='.$file_id.'&folder_id='.$folder_id;
 
-if ($task == 'clean_formatting')
-{
-  $content = $cms->clean_up_html($content);
-}
-
 //set the page title for the header file
 $page_title = $lang_modules['cms'];
 
@@ -109,7 +106,7 @@ if($site = $cms->get_site($site_id))
   $template = $cms->get_template($site['template_id']);
 }
 
-$pagestyle = (isset($template)) ? $template['style'] : '';
+$pagestyle = (isset($template)) ? $template['additional_style'] : '';
 $pagestyle = str_replace("\r", '', $pagestyle);
 $pagestyle = str_replace("\n", '', $pagestyle);
 $pagestyle = str_replace("\t", '', $pagestyle);
@@ -141,7 +138,7 @@ if($com_plugin)
 	
 }
 
-$GO_HEADER['head'] = $htmlarea->get_header('content', -70, -125, 25, $pagestyle, "config.baseURL='';", true);
+$GO_HEADER['head'] = $htmlarea->get_header('content', -70, -125, 25, $pagestyle, "config.baseURL='';", true, $template['restrict_editor']);
 $GO_HEADER['body_arguments'] = 'onload="initEditor()"';
 
 //require the header file. This will draw the logo's and the menu
@@ -158,6 +155,7 @@ echo '<input type="hidden" name="title" value="'.htmlspecialchars($title).'" />'
 echo '<input type="hidden" name="description" value="'.htmlspecialchars($description).'" />';
 echo '<input type="hidden" name="keywords" value="'.htmlspecialchars($keywords).'" />';
 echo '<input type="hidden" name="priority" value="'.$priority.'" />';
+echo '<input type="hidden" name="hot_item" value="'.$hot_item.'" />';
 echo '<input type="hidden" name="unedited" value = "" />';
 echo '<input type="hidden" name="task" value="save" />';
 echo '<input type="hidden" name="name" value="'.htmlspecialchars($name).'" />';
@@ -177,8 +175,8 @@ echo '<td class="ModuleIcons"  nowrap>';
 echo '<a class="small" href="javascript:confirm_close(\''.$GO_MODULES->url.'browse.php?site_id='.$site_id.'&folder_id='.$folder_id.'\')"><img src="'.$GO_THEME->images['close'].'" border="0" height="32" width="32" /><br />'.$cmdClose.'</a></td>';
 
 
-/*echo '<td class="ModuleIcons" nowrap>';
-echo '<a class="small" href=\'javascript:clean_formatting()\'><img src="'.$GO_THEME->images['filters'].'" border="0" height="32" width="32" /><br />Cleanup</a></td>';*/
+echo '<td class="ModuleIcons" nowrap>';
+echo '<a class="small" href=\'javascript:clean_editor_html()\'><img src="'.$GO_THEME->images['filters'].'" border="0" height="32" width="32" /><br />'.$cms_cleanup.'</a></td>';
 echo '</table>';
 
 $tabtable = new tabtable('cms_edit', htmlspecialchars($name));

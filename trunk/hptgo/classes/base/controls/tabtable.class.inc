@@ -82,6 +82,30 @@ class tabtable
     }
   }
 
+//set active tab by name
+function set_active_tab_by_name($name)
+  {
+	if ($needle=array_search ($name, $this->docs))
+    {
+      $this->active_tab = $needle;
+      return true;
+    }else
+    {
+      return false;
+    }
+  }
+
+//get active tab by name
+function get_active_tab_by_name($name)
+  {
+        if ($needle=array_search ($name, $this->docs))
+    {
+     return $needle;
+    }else
+    {
+      return 0;
+    }
+  }
   /*last three functions should be called in this order
     $tabtable->print_head();
     require($tabtable->get_active_tab_id());
