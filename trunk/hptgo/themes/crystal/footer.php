@@ -39,7 +39,7 @@ function Bold_Text(id, url){
 }
 </script>
 -->
-<script language="JavaScript" src="<?php echo $GO_THEME->theme_path;?>../Bold_Text.js"></script>
+<script language="JavaScript" src="<?php echo $GO_THEME->theme_url;?>../Bold_Text.js"></script>
 </head>
 <body marginwidth="0" marginheight="0" leftmargin="0" topmargin="0">
 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="FooterBar">
