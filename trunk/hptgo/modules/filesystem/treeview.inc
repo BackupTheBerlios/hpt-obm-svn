@@ -19,6 +19,7 @@ $image['pnode'] = '<img src="'.$GO_THEME->images['pnode'].'" border="0" height="
 $image['vertline'] = '<img src="'.$GO_THEME->images['vertline'].'" border="0" height="22" width="16" align="absmiddle" />';
 $image['blank'] = '<img src="'.$GO_THEME->images['blank'].'" border="0" height="22" width="16" align="absmiddle" />';
 $image['group'] = '<img src="'.$GO_THEME->images['workgroup'].'" border="0" height="22" width="24" align="absmiddle" />';
+$image['group_disable'] = '<img src="'.$GO_THEME->images['workgroup_disable'].'" border="0" height="22" width="24" align="absmiddle" />';
 $image['user'] = '<img src="'.$GO_THEME->images['workstation'].'" border="0" height="22" width="20" align="absmiddle" />';
 
 $image['opened_folder'] = '<img src="'.$GO_THEME->images['folderopen'].'" border="0" height="22" width="24" align="absmiddle" />';
@@ -276,7 +277,7 @@ if (count($my_folders) > 0) {
   echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.($from_root ? $GO_CONFIG->file_storage_path.'common' : urlencode($path)).$arguments.'">'.$image['group'].$fbWorkspace.'</a><br />';
 } else {
   echo ($has_children ? ($is_expanded ? $image['mnode'] : $image['pnode']) : $image['emptynode']);
-  echo $image['group'].'<font color="#cccccc">'.$fbWorkspace.'</font><br />';
+  echo $image['group_disable'].'<font color="#cccccc">'.$fbWorkspace.'</font><br />';
 }
 
 if ($is_expanded && $has_children) {
@@ -379,7 +380,7 @@ if ($count > 0)
   echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//sharefolder'.$arguments.'">'.$image['group'].$fbShares.'</a><br />';
 } else {
   echo ($count > 0 ? ($is_expanded ? $image['mnode'] : $image['pnode']) : $image['emptynode']);
-  echo $image['group'].'<font color="#cccccc">'.$fbShares.'</font><br />';
+  echo $image['group_disable'].'<font color="#cccccc">'.$fbShares.'</font><br />';
 }
 if ($count > 0)
 {
@@ -425,6 +426,6 @@ if (count($group_folders) > 0) {
     print_filesystem($group_folders, $image['blank'], '');
 } else {
   echo (count($group_folders) > 0 ? ($is_expanded ? $image['mlastnode'] : $image['plastnode']) : $image['emptylastnode']);
-  echo $image['group'].'<font color="#cccccc">'.$fbGroupFolders.'</font><br />';
+  echo $image['group_disable'].'<font color="#cccccc">'.$fbGroupFolders.'</font><br />';
 }
 ?>
