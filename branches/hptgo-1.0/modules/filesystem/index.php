@@ -60,8 +60,8 @@ $home_path = $GO_CONFIG->file_storage_path.'users/'.$_SESSION['GO_SESSION']['use
 if (!isset($_SESSION['GO_FILESYSTEM_PATH']))
 {
   if (file_exists($home_path) || 
-    ((file_exists($GO_CONFIG->file_storage_path.'users/') || mkdir($GO_CONFIG->file_storage_path.'users/')) &&
-     mkdir($home_path)))
+    ((file_exists($GO_CONFIG->file_storage_path.'users/') || @mkdir($GO_CONFIG->file_storage_path.'users/', $GO_CONFIG->create_mode)) &&
+     @mkdir($home_path, $GO_CONFIG->create_mode)))
   {
     $_SESSION['GO_FILESYSTEM_PATH'] = $home_path;
   }else
