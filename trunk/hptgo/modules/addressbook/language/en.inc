@@ -209,6 +209,6 @@ $contacts_import_text = "Select a file containing data to be imported and click 
 $strParentCompany = "Parent Company";
 $strNone = "None";
 $strParentCompanyError = "Parent company's invalid";
-$strListView = "Listview";
-$strTreeView = "Treeview";
+$strListView = "View as list";
+$strTreeView = "View as tree";
 ?>

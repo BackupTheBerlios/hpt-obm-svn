@@ -69,10 +69,8 @@ if ($ab->get_subscribed_addressbooks($GO_SECURITY->user_id) > 1)
 	$subscribed_addressbooks->print_dropbox('addressbook_id', $addressbook_id, 'onchange="javascript:document.forms[0].submit()"');
 	echo '&nbsp;&nbsp;&nbsp;';
 
-	$viewtype = new dropbox();
-	$viewtype->add_value('0',$strListView);
-	$viewtype->add_value('1',$strTreeView);
-	$viewtype->print_dropbox('treeview',$is_treeview,'onchange="javascript:document.forms[0].submit()"');
+	echo '<input type="hidden" name="treeview" value="'.$is_treeview.'"/>';
+	echo '<a href="javascript:document.forms[0].treeview.value=\''.(1-$is_treeview).'\';document.forms[0].submit()">'.($is_treeview ? $strListView : $strTreeView).'</a>';
 	echo '</td></tr></table>';
 }else
 {
