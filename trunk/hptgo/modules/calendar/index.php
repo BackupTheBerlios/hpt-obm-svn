@@ -97,8 +97,35 @@ if(!isset($view) || !$view)
 	$calendar['write_permission'] = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']);
 	if (!$calendar['read_permission'] && !$calendar['write_permission'] )
 	{
-	  header('Location: '.$GO_CONFIG->host.'error_docs/401.php');
-	  exit();
+
+	  //hmm no calendar_id given and default calendar is set
+	  //Does this user even have calendars?
+	  $cal->get_user_calendars($GO_SECURITY->user_id);
+	  if ($cal->next_record()) {
+	    //yes he does so set it default
+	    $calendar_id = $cal->f('id');
+	  } else {
+	    $calendar_name = $_SESSION['GO_SESSION']['name'];
+	    $new_calendar_name = $calendar_name;
+	    $x = 1;
+	    while($cal->get_calendar_by_name($new_calendar_name)) {
+	      $new_calendar_name = $calendar_name.' ('.$x.')';
+	      $x++;
+	    }
+	    if (!$calendar_id = $cal->add_calendar($GO_SECURITY->user_id, addslashes($new_calendar_name), 7, 20)) {
+	      $feedback = '<p class="Error">'.$strSaveError.'</p>';
+	    }
+	  }
+
+	  $calendar = $cal->get_calendar($calendar_id);
+	  if ($calendar) {
+	    $calendar['read_permission'] = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_read']);
+	    $calendar['write_permission'] = $GO_SECURITY->has_permission($GO_SECURITY->user_id, $calendar['acl_write']);
+	  }
+	  if (!$calendar['read_permission'] && !$calendar['write_permission'] ) {
+	    header('Location: '.$GO_CONFIG->host.'error_docs/401.php');
+	    exit();
+	  }
 	}
 	$title = $calendar['name'];
 	$cal_start_hour = $calendar['start_hour'];
