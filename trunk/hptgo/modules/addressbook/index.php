@@ -112,16 +112,6 @@ require($GO_THEME->theme_path."header.inc");
 <tr>
 	<td class="ModuleIcons">
 	<a class=
-		<?php if (!isset($found) && (($post_action == 'search') || ($post_action == ''))){
-			echo '"bold_small" ';
-			$found=true;
-		}else{
-			echo '"small" ';
-		} ?> 
-		href="<?php echo $_SERVER['PHP_SELF']; ?>?post_action=search&addressbook_id=<?php echo $addressbook_id; ?>"><img src="<?php echo $GO_THEME->images['ab_search']; ?>" border="0" height="32" width="32" /><br /><?php echo $contacts_search; ?></a>
-	</td>
-	<td class="ModuleIcons">
-	<a class=
 		<?php if (!isset($found) && ($post_action == 'browse')){
 			echo '"bold_small" ';
 			$found=true;
@@ -199,7 +189,18 @@ switch($post_action)
 	{
 		echo '<td class="ModuleIcons">';
 		echo '<a class="small" href="custom_fields/"><img src="'.$GO_THEME->images['ab_custom_fields'].'" border="0" height="32" width="32" /><br />'.$ab_custom_fields.'</a></td>';
-	}
+	}?>
+	<td class="ModuleIcons">
+	<a class=
+		<?php if (!isset($found) && (($post_action == 'search') || ($post_action == ''))){
+			echo '"bold_small" ';
+			$found=true;
+		}else{
+			echo '"small" ';
+		} ?> 
+		href="<?php echo $_SERVER['PHP_SELF']; ?>?post_action=search&addressbook_id=<?php echo $addressbook_id; ?>"><img src="<?php echo $GO_THEME->images['ab_search']; ?>" border="0" height="32" width="32" /><br /><?php echo $contacts_search; ?></a>
+	</td>
+	<?php
 	if ($post_action != 'members' && $post_action != 'addressbooks' && $post_action != 'categories')
 	{
 		echo '<td class="ModuleIcons">';
