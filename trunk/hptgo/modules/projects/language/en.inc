@@ -146,4 +146,8 @@ $subjectTaskStatusChanged = '[Projects] Status of task %s (project %s) has chang
 $subjectTaskAssigneeChanged = '[Projects] Task responsibility has changed (task %s - project %s)';
 $mailTaskAssigneeLeft = '<html><body>Công việc bạn đang thực hiện đã được chuyển sang người khác: <br/><br/>Tên dự án: %s<br/>Mô tả dự án: %s<br/>Tên công việc: %s</body></html>';
 $mailTaskAssigneeJoined  = '<html><body>Bạn được chọn thực hiện công việc:<br/><br/>Project name: %s<br/>Project description: %s<br/>Task name: %s<br/>Days: %s<br/><br/>Please click <a href="%s>here</a> or go to the project section for more information.</body></html>';
+
+$pm_show_as = 'Show as';
+$pm_list = 'List';
+$pm_graph = 'Graph';
 ?>

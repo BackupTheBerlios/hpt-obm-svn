@@ -152,4 +152,8 @@ $mailTaskStatusChanged  = '<html><body>Công việc "<a href="%s">%s</a>" thuộ
 $subjectTaskStatusChanged = '[Projects] Trạng thái công việc %s (dự án %s) đã thay đổi sang %s';
 $mailTaskAssigneeLeft = '<html><body>Công việc bạn đang thực hiện đã được chuyển sang người khác: <br/><br/>Tên dự án: %s<br/>Mô tả dự án: %s<br/>Tên công việc: %s</body></html>';
 $mailTaskAssigneeJoined = '<html><body>Bạn được chọn thực hiện một công việc: <br/><br/>Tên dự án: %s<br/>Mô tả dự án: %s<br/>Tên công việc: %s<br/>Days: %s<br/><br/>Vui lòng nhấn <a href="%s">vào đây</a> hoặc vào phần dự án để biết thêm thông tin chi tiết.</body></html>';
+
+$pm_show_as = 'Xem kiểu';
+$pm_list = 'Danh sách';
+$pm_graph = 'Đồ thị';
 ?>

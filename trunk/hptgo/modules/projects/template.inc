@@ -16,6 +16,7 @@ if (!$GO_SECURITY->has_admin_permission($GO_SECURITY->user_id)) {
 	header('Location: '.$GO_CONFIG->host.'error_docs/403.php');
 	exit();
 }
+$showasgraph = isset($_REQUEST['show_as']) && (int)$_REQUEST['show_as'] != 0 ? 1 : 0;
 
 $trash = '<img src="'.$GO_THEME->images['delete'].'" border="0">';
 $editor = '<img src="'.$GO_THEME->images['edit'].'" border="0">';
@@ -180,7 +181,14 @@ $template->print_dropbox('template_id', $template_id,
 echo '</td>';
 echo '<td><a href="javascript:edit_template()" title="'.$cmdEdit.'">'.$editor.'</a></td>';
 echo "<td><a href=\"javascript:delete_template('$pm_ConfirmDeleteTemplate')\" title=\"$cmdDelete\">$trash</a></td>";
-echo '</tr></table>';
+echo '</tr>';
+$showas_dropbox = new dropbox();
+$showas_dropbox->add_value('0',$pm_list);
+$showas_dropbox->add_value('1',$pm_graph);
+echo '<tr><td colspan="2">'.$pm_show_as.'</td><td colspan="5">';
+$showas_dropbox->print_dropbox('show_as',$showasgraph,'onchange="javascript:document.forms[0].submit()"',false,'10','200');
+echo '</td></tr>';
+echo '</table>';
 echo '<table border="0" cellpadding="2" cellspacing="0">';
 
 if ($count > 0) {
@@ -193,6 +201,19 @@ $move_task_dn = '<img src="'.$GO_THEME->images['task_dn'].'" border="0">';
 $move_space = '<img src="'.$GO_THEME->images['task_space'].'" border="0" width="12" height="12">';
 $spliter = '<tr><td colspan="102" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 
+if ($showasgraph) {
+  require_once($GO_MODULES->class_path.'graph.class.inc');
+?>
+<map name="template_map">
+<?php build_template_image($template_id,'cmap'); ?>
+</map>
+<img src="<?php echo $GO_MODULES->url.'template_graph.php?template_id='.$template_id; ?>" usemap="#template_map" border="0"/>
+<?php
+  // get last id
+  while ($db->next_record()) {
+    $id = $db->f('task_id');
+  }
+} else {
 echo '<tr class="TableHead2" height="20">';
 echo '<td align="center" width="20">#</td>';
 echo '<td width="320" colspan="30" nowrap>'.$pm_task_name.'</td>';
@@ -201,6 +222,7 @@ echo '<td nowrap colspan="9">'.$pm_task_days.'</td>';
 echo '<td nowrap colspan="30">'.$pm_task_level.'</td>';
 echo '<td nowrap colspan="2">&nbsp;</td>';
 echo '</tr>';
+
 
 $value = 1;
 if ($count > 0) {
@@ -248,6 +270,7 @@ if ($count > 0) {
 else {
   echo '<tr><td colspan="102">&nbsp;</td></tr>';
   echo '<tr><td colspan="102" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
+}
 }
 echo '<input type="hidden" name="last_value" value="'.$id.'" />';
 echo '<input type="hidden" name="task_value" value="0" />';
