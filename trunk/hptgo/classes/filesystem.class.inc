@@ -140,7 +140,10 @@ class filesystem extends db
   function update_system_folder($old_folder,$new_folder)
   {
     $db = new db();
-    return $db->query("UPDATE fsSystemFolders SET path='$new_folder' WHERE path='".$old_folder."'");
+    if ($this->is_common_folder($new_folder))
+      return $db->query("UPDATE fsSystemFolders SET path='$new_folder' WHERE path='".$old_folder."'");
+    else
+      return $db->query("DELETE FROM fsSystemFolders WHERE path='".$old_folder."'");
   }
 
   function get_shares($user_id)
