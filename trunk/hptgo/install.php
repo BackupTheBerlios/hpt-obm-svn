@@ -1342,7 +1342,7 @@ Please make sure OBMConfig.php is not writable anymore now.<br />
 <br />
 <font color="#003399"><i>
 $ chown -R someuser:someuser <?php echo $GO_CONFIG->root_path; ?><br />
-$ chmod 644 <?php echo $GO_CONFIG->root_path; ?><br />
+$ chmod 755 <?php echo $GO_CONFIG->root_path; ?><br />
 $ chmod 644 <?php echo $GO_CONFIG->root_path; ?>OBMConfig.php
 
 </i></font>

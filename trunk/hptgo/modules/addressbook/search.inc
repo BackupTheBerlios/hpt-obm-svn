@@ -139,7 +139,7 @@ $first = isset($_REQUEST['first']) ? $_REQUEST['first'] : 0;
 				}
 			}
 			$db = new db();
-			$db->query("SELECT * FROM ab_categories WHERE parent_id<>0");
+			$db->query("SELECT * FROM ab_categories WHERE parent_id<>'0'");
 			
 			$catedrop = new dropbox();
 

@@ -115,9 +115,9 @@ class notes extends db
     $sql = "SELECT DISTINCT no_notes.* FROM no_notes ".
       "INNER JOIN acl ON (no_notes.acl_read = acl.acl_id OR no_notes.acl_write = acl.acl_id) ".
       "LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
-      " WHERE ((users_groups.user_id = ".$_SESSION['GO_SESSION']['user_id']." AND acl.user_id = 0 ) OR (".
-      "acl.group_id = 0 AND acl.user_id = ".$_SESSION['GO_SESSION']['user_id'].")) ".
-      "AND mtime>".$_SESSION['GO_SESSION']['lastlogin'];
+      " WHERE ((users_groups.user_id = '".$_SESSION['GO_SESSION']['user_id']."' AND acl.user_id = '0' ) OR (".
+      "acl.group_id = '0' AND acl.user_id = '".$_SESSION['GO_SESSION']['user_id']."')) ".
+      "AND mtime>'".$_SESSION['GO_SESSION']['lastlogin']."'";
 
     $this->query($sql);
     return $this->num_rows();
@@ -131,8 +131,8 @@ class notes extends db
       "INNER JOIN acl ON (no_notes.acl_read = acl.acl_id OR no_notes.acl_write = acl.acl_id) ".
       "LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) ".
       "LEFT JOIN no_catagories ON (no_notes.catagory_id=no_catagories.id)".
-      " WHERE ((users_groups.user_id = ".$user_id." AND acl.user_id = 0 ) OR (".
-      "acl.group_id = 0 AND acl.user_id = ".$user_id."))";
+      " WHERE ((users_groups.user_id = '".$user_id."' AND acl.user_id = '0' ) OR (".
+      "acl.group_id = '0' AND acl.user_id = '".$user_id."'))";
 
 
     if ($contact_id != 0)

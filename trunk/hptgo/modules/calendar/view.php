@@ -68,7 +68,7 @@ if ($task == 'save')
 				else
 				{
 					$db = new db();
-					$db->query('INSERT INTO cal_view_subscriptions VALUES ("'.$GO_SECURITY->user_id.'","'.$view_id.'")');
+					$db->query("INSERT INTO cal_view_subscriptions VALUES ('".$GO_SECURITY->user_id."','".$view_id."')");
 				}
 			}
 		}

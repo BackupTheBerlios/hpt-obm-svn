@@ -37,10 +37,10 @@ switch ($task) {
     }
     break;
   case 'delete_catalog':
-    $db->query("SELECT * FROM pmProjects WHERE cat_id=$cat_id");
+    $db->query("SELECT * FROM pmProjects WHERE cat_id='$cat_id'");
     if ($db->num_rows() == 0) {
-      $db->query("DELETE FROM pmStatus WHERE cat_id=$cat_id");
-      $db->query("DELETE FROM pmCatalog WHERE id=$cat_id");
+      $db->query("DELETE FROM pmStatus WHERE cat_id='$cat_id'");
+      $db->query("DELETE FROM pmCatalog WHERE id='$cat_id'");
       $cat_id = 0;
     }
     else {
@@ -50,25 +50,25 @@ switch ($task) {
   case 'update_catalog':
     $catalog_name = $_REQUEST['catalog_name'];
     if (isset($catalog_name) && $catalog_name != '')
-      $db->query("UPDATE pmCatalog SET name='$catalog_name' WHERE id=$cat_id");
+      $db->query("UPDATE pmCatalog SET name='$catalog_name' WHERE id='$cat_id'");
     break;
   case 'change_status_order':
     $status_value = $_REQUEST['status_value'];
     if ($status_value > 1) {
       $status_change = $_REQUEST['status_change'];
       $related_status = $status_value + $status_change;
-      $db->query('UPDATE pmStatus SET value=999 WHERE value='.$status_value);
-      $db->query('UPDATE pmStatus SET value='.$status_value.' WHERE value='.$related_status);
-      $db->query('UPDATE pmStatus SET value='.$related_status.' WHERE value=999');
+      $db->query("UPDATE pmStatus SET value='999' WHERE value='$status_value'");
+      $db->query("UPDATE pmStatus SET value='$status_value' WHERE value='$related_status'");
+      $db->query("UPDATE pmStatus SET value='$related_status' WHERE value='999'");
     }
     break;
   case 'delete_status':
     $status_value = $_REQUEST['status_value'];
     if ($status_value > 1) {
       $db->query("DELETE FROM pmStatus ".
-                 "WHERE cat_id=$cat_id AND value=$status_value");
+                 "WHERE cat_id='$cat_id' AND value='$status_value'");
       $db->query("UPDATE pmStatus SET value=value-1 ".
-                 "WHERE cat_id=$cat_id AND value>$status_value");
+                 "WHERE cat_id='$cat_id' AND value>'$status_value'");
     }
     break;
   case 'update_status':
@@ -76,7 +76,7 @@ switch ($task) {
     if ($status_value > 1) {
       $status_name = $_REQUEST['status_name'];
       $db->query("UPDATE pmStatus SET name='$status_name' ".
-                 "WHERE cat_id=$cat_id AND value=$status_value");
+                 "WHERE cat_id='$cat_id' AND value='$status_value'");
     }
     break;
   case 'add_status':
@@ -85,8 +85,8 @@ switch ($task) {
     if (isset($status_name)) $status_name = trim($status_name);
     if ($status_value > 1) {
       $db->query("UPDATE pmStatus SET value=value+1 ".
-                 "WHERE cat_id=$cat_id AND value>=$status_value");
-      $db->query("INSERT INTO pmStatus VALUES($cat_id, $status_value, '$status_name')");
+                 "WHERE cat_id='$cat_id' AND value>='$status_value'");
+      $db->query("INSERT INTO pmStatus VALUES('$cat_id', '$status_value', '$status_name')");
     }
     break;
 }
@@ -116,7 +116,7 @@ echo '</tr></table>';
 echo '<table border="0" cellpadding="2" cellspacing="0" width="400">';
 
 if ($count > 0) {
-  $db->query('SELECT * FROM pmStatus WHERE cat_id='.$cat_id.' ORDER BY value');
+  $db->query("SELECT * FROM pmStatus WHERE cat_id='$cat_id' ORDER BY value");
   $count = $db->num_rows();
 }
 

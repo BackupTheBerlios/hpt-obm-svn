@@ -26,7 +26,7 @@ class GO_SECURITY extends base_security {
     parent::logged_in( $user_id );
 
     // create temporary table
-    $sql = "DELETE FROM users_groups WHERE user_id=$user_id";
+    $sql = "DELETE FROM users_groups WHERE user_id='$user_id'";
     $this->query( $sql );
 
     // Get the UserID Entries from LDAP for checking
@@ -38,7 +38,7 @@ class GO_SECURITY extends base_security {
       $GO_LDAP->BaseDN, array("gidNumber") );
     $groups = $GO_LDAP->get_entries();
     for ( $i=0; $i<$groups["count"]; $i++ ) {
-      $sql = "INSERT INTO users_groups VALUES ( ".$groups[$i]["gidnumber"][0].", $user_id )";
+      $sql = "INSERT INTO users_groups VALUES ( '".$groups[$i]["gidnumber"][0]."', '$user_id' )";
       $this->query( $sql );
     }
   }
@@ -63,8 +63,8 @@ class GO_SECURITY extends base_security {
 
       // We find out all groups that are associated with this ACL-ID, and
       // check if the user is member of any of them.
-      $sql = "SELECT acl.group_id FROM acl WHERE acl.acl_id=".
-	$acl_id." AND acl.user_id='0' ORDER BY group_id ASC";
+      $sql = "SELECT acl.group_id FROM acl WHERE acl.acl_id='".
+	$acl_id."' AND acl.user_id='0' ORDER BY group_id ASC";
       $this->query($sql);
       $this->next_record();
 
@@ -87,7 +87,7 @@ class GO_SECURITY extends base_security {
   function get_groups_in_acl($acl_id)
   {
     global $GO_CONFIG, $auth_sources;
-      $sql = "SELECT * FROM acl WHERE acl_id='$acl_id' AND user_id=0";
+      $sql = "SELECT * FROM acl WHERE acl_id='$acl_id' AND user_id='0'";
       $this->query($sql);
       return $this->num_rows();
 /*

@@ -303,7 +303,7 @@ if (!$print) {
     if ($cal->get_authorised_calendars($GO_SECURITY->user_id))
     {
 	  $db = new db();
-	  $db->query('SELECT calendar_id FROM cal_config WHERE user_id="'.$GO_SECURITY->user_id.'"');		
+	  $db->query("SELECT calendar_id FROM cal_config WHERE user_id='".$GO_SECURITY->user_id."'");
 	  while ($db->next_record())
 	  	$subscribed[] = $db->f('calendar_id');
 		
@@ -325,7 +325,7 @@ if (!$print) {
     if($cal->get_authorised_views($GO_SECURITY->user_id))
     {
       $db = new db();
-      $db->query('SELECT view_id FROM cal_view_subscriptions WHERE user_id="'.$GO_SECURITY->user_id.'"');		
+      $db->query("SELECT view_id FROM cal_view_subscriptions WHERE user_id='".$GO_SECURITY->user_id."'");
       while ($db->next_record())
 	$views_subscribed[] = $db->f('view_id');
 

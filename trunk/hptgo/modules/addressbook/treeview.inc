@@ -137,7 +137,7 @@ function print_companies($parent, $path = '', $images='', $arguments='')
 	$has_parent = array();
 	$ab->query("SELECT DISTINCT a1.id AS id ".
 		   "FROM ab_companies AS a1, ab_companies AS a2 ".
-		   "WHERE a1.id=a2.parent AND a1.parent=".(int)$parent);
+		   "WHERE a1.id=a2.parent AND a1.parent='".(int)$parent."'");
 	while ($ab->next_record())
 		$has_parent[$ab->f('id')] = true;
 

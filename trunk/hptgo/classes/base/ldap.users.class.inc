@@ -93,8 +93,8 @@ class GO_USERS extends base_users {
       $sort = 'users.first_name AND users.last_name';
     }
     $sql = "SELECT DISTINCT users.* FROM users, users_groups INNER JOIN acl ON users.acl_id= acl.acl_id WHERE ".
-      "((acl.group_id = users_groups.group_id AND users_groups.user_id = ".$user_id.") OR (".
-      "acl.user_id = ".$user_id." )) ORDER BY ".$sort." ".$direction;
+      "((acl.group_id = users_groups.group_id AND users_groups.user_id = '".$user_id."') OR (".
+      "acl.user_id = '".$user_id."' )) ORDER BY ".$sort." ".$direction;
 
     $this->query($sql);
     return $this->num_rows();

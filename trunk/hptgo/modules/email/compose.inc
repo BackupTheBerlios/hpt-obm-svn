@@ -171,8 +171,8 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
       {
 	for ($i=0;$i<sizeof($content["to"]);$i++)
 	{
-	  $lt = strpos($content["to"][$i], "&lt") + 4;
-	  $gt = strpos($content["to"][$i], "&gt");
+	  $lt = strpos($content["to"][$i], "<") + 1;
+	  $gt = strpos($content["to"][$i], ">");
 
 	  $length = $gt-$lt;
 
@@ -189,8 +189,8 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
       {
 	for ($i=0;$i<sizeof($content["cc"]);$i++)
 	{
-	  $lt = strpos($content["cc"][$i], "&lt") + 4;
-	  $gt = strpos($content["cc"][$i], "&gt");
+	  $lt = strpos($content["cc"][$i], "<") + 1;
+	  $gt = strpos($content["cc"][$i], ">");
 
 	  $length = $gt-$lt;
 
@@ -360,8 +360,8 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
 	{
 	  for ($i=0;$i<sizeof($content["to"]);$i++)
 	  {
-	    $lt = strpos($content["to"][$i], "&lt") + 4;
-	    $gt = strpos($content["to"][$i], "&gt");
+	    $lt = strpos($content["to"][$i], "<") + 1;
+	    $gt = strpos($content["to"][$i], ">");
 
 	    $length = $gt-$lt;
 
@@ -392,8 +392,8 @@ if ($uid > 0 && ($_SERVER['REQUEST_METHOD']  != 'POST' || $sendaction == 'load_t
 	$om_to = '';
 	for ($i=0;$i<sizeof($content["to"]);$i++)
 	{
-	  $lt = strpos($content["to"][$i], "&lt") + 4;
-	  $gt = strpos($content["to"][$i], "&gt");
+	  $lt = strpos($content["to"][$i], "<") + 1;
+	  $gt = strpos($content["to"][$i], ">");
 
 	  $length = $gt-$lt;
 
@@ -650,7 +650,7 @@ if ($count > 0)
   }
   $db->query('SELECT first_name, middle_name, last_name, email '.
              'FROM ab_contacts '.
-             'WHERE ab_contacts.user_id='.$GO_SECURITY->user_id);
+             "WHERE ab_contacts.user_id='".$GO_SECURITY->user_id."'");
   while ($db->next_record()) {
     $em = strtolower($db->f('email'));
     if ($em != '' && !in_array($em, $emails)) {

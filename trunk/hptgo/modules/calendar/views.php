@@ -46,17 +46,17 @@ switch ($task)
 	$GO_SECURITY->delete_acl($view['acl_read']);
       }
     }
-    $db->query('SELECT view_id FROM cal_view_subscriptions WHERE user_id="'.$GO_SECURITY->user_id.'"');		
+    $db->query("SELECT view_id FROM cal_view_subscriptions WHERE user_id='".$GO_SECURITY->user_id."'");
     while ($db->next_record())
       $subscribed[] = $db->f('view_id');
     break;
 
   case 'subscribe':
-    $db->query('DELETE FROM cal_view_subscriptions WHERE user_id="'.$GO_SECURITY->user_id.'"');
+    $db->query("DELETE FROM cal_view_subscriptions WHERE user_id='".$GO_SECURITY->user_id."'");
 
     $subscribed = $_REQUEST['subscribed'];
     for ($i=0; $i<sizeof($subscribed); $i++)
-      $db->query('INSERT INTO cal_view_subscriptions VALUES ("'.$GO_SECURITY->user_id.'","'.$subscribed[$i].'")');
+      $db->query("INSERT INTO cal_view_subscriptions VALUES ('".$GO_SECURITY->user_id."','".$subscribed[$i]."')");
     if ($_POST['close_action'] == 'true')
     {
       header('Location: '.$return_to);
@@ -65,7 +65,7 @@ switch ($task)
     break;
 
   default:
-    $db->query('SELECT view_id FROM cal_view_subscriptions WHERE user_id="'.$GO_SECURITY->user_id.'"');
+    $db->query("SELECT view_id FROM cal_view_subscriptions WHERE user_id='".$GO_SECURITY->user_id."'");
     while ($db->next_record())
       $subscribed[] = $db->f('view_id');
 }

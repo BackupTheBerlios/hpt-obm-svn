@@ -51,13 +51,13 @@ switch ($task) {
   case 'add_template':
     $template_name = $_REQUEST['template_name'];
     if (isset($template_name) && $template_name != '') {
-      $db->query("SELECT * FROM task_templates WHERE cat_id=$cat_id AND name='$template_name'");
+      $db->query("SELECT * FROM task_templates WHERE cat_id='$cat_id' AND name='$template_name'");
       if ($db->num_rows() > 0)
         echo sprintf($pm_TemplateExists, $catalog_name);
       else {
         $db->query("INSERT INTO task_templates(id, cat_id, name) ".
-                   "VALUES('', $cat_id, '$template_name')");
-        $db->query("SELECT * FROM task_templates WHERE cat_id=$cat_id AND name='$template_name'");
+                   "VALUES('', '$cat_id', '$template_name')");
+        $db->query("SELECT * FROM task_templates WHERE cat_id='$cat_id' AND name='$template_name'");
         $db->next_record();
         $id = $template_id = $db->f('id');
         $task_table = "task_template_$id";
@@ -73,7 +73,7 @@ switch ($task) {
               "task_level tinyint(4) default '-1',".
               "task_approved_date datetime default NULL,".
               "task_order tinyint(4) default '0')");
-        $db->query("SELECT * FROM pmStatus WHERE cat_id=$cat_id");
+        $db->query("SELECT * FROM pmStatus WHERE cat_id='$cat_id'");
         $pstatus = array();
         while ($db->next_record()) {
           $pstatus[$db->f('value')] = $db->f('name');
@@ -81,23 +81,23 @@ switch ($task) {
         $n = 1;
         foreach ($pstatus as $value => $name) {
           $p = $n - 1;
-          $db->query("INSERT INTO $task_table(task_id, task_name, task_time, task_level, ".
+          $db->query("INSERT INTO $task_table (task_id, task_name, task_time, task_level, ".
                                              "task_predecessors, task_order) ".
-                     "VALUES($n, '$name', 1, $value, '$p', $n)");
+                     "VALUES('$n', '$name', '1', '$value', '$p', '$n')");
           $n = $n + 1;
         }
         $p = $n - 1;
-        $db->query("INSERT INTO $task_table(task_id, task_name, task_time, task_level, ".
+        $db->query("INSERT INTO $task_table (task_id, task_name, task_time, task_level, ".
                                            "task_predecessors, task_order) ".
-                   "VALUES($n, '$pm_status_done', 1, ".STATUS_DONE.", '$p', $n)");
+                   "VALUES('$n', '$pm_status_done', '1', '".STATUS_DONE."', '$p', '$n')");
       }
     }
     break;
   case 'delete_template':
-    $db->query("SELECT * FROM task_templates WHERE cat_id=$cat_id AND id=$template_id");
+    $db->query("SELECT * FROM task_templates WHERE cat_id='$cat_id' AND id='$template_id'");
     if ($db->num_rows() > 0) {
       $db->query("DROP TABLE task_template_$template_id");
-      $db->query("DELETE FROM task_templates WHERE id=$template_id");
+      $db->query("DELETE FROM task_templates WHERE id='$template_id'");
       $template_id = 0;
     }
     else {
@@ -109,7 +109,7 @@ switch ($task) {
     if (isset($template_name)) {
       $template_name = trim($template_name);
       if ($template_name != '')
-        $db->query("UPDATE task_templates SET name='$template_name' WHERE id=$template_id");
+        $db->query("UPDATE task_templates SET name='$template_name' WHERE id='$template_id'");
     }
     break;
 
@@ -121,12 +121,12 @@ switch ($task) {
       if ($related_task >= 1) {
         error_log("$task_value <=> $related_task: $task_change");
         $tt_table = "task_template_$template_id";
-        $db->query("SELECT * FROM $tt_table WHERE task_order IN ($task_value, $related_task)");
+        $db->query("SELECT * FROM $tt_table WHERE task_order IN ('$task_value', '$related_task')");
         $new_order = array($task_value => $related_task, $related_task => $task_value);
         while ($db->next_record())
           $cur_order[$db->f('task_id')] = $db->f('task_order');
         foreach ($cur_order as $id => $order)
-          $db->query("UPDATE $tt_table SET task_order=".$new_order[$order]." WHERE task_id=$id");
+          $db->query("UPDATE $tt_table SET task_order='".$new_order[$order]."' WHERE task_id='$id'");
       }
     }
     break;
@@ -148,16 +148,16 @@ switch ($task) {
         }
       }
       $db->query("DELETE FROM $tt_table ".
-                 "WHERE task_order=$task_value");
+                 "WHERE task_order='$task_value'");
       foreach ($tp as $no => $p) {
         $p = array_unique(array_merge($p, $pre));
         sort($p);
         $p = implode(",", $p);
-        $db->query("UPDATE $tt_table SET task_predecessors='$p' WHERE task_order=$no");
+        $db->query("UPDATE $tt_table SET task_predecessors='$p' WHERE task_order='$no'");
       }
       $db->query("UPDATE $tt_table ".
                  "SET task_order=task_order-1 ".
-                 "WHERE task_order>$task_value");
+                 "WHERE task_order>'$task_value'");
     }
     break;
   case 'update_task':
@@ -168,11 +168,11 @@ switch ($task) {
       if (isset($task_predecessors) && $task_predecessors != '') {
         $task_predecessors = reformat_predecessors($task_predecessors);
         $task_status = $task_predecessors == '0' ? TASK_ONGOING : TASK_WAITING;
-        $extra = ", task_predecessors='$task_predecessors', task_status=$task_status ";
+        $extra = ", task_predecessors='$task_predecessors', task_status='$task_status' ";
       }
       $db->query("UPDATE task_template_$template_id ".
                  "SET task_name='$task_name' ".$extra.
-                 "WHERE task_order=$task_value");
+                 "WHERE task_order='$task_value'");
     }
     break;
   case 'update_task_days':
@@ -180,7 +180,7 @@ switch ($task) {
     $task_time = $_REQUEST['task_time'] + 0;
     if ($task_value >= 1 && $task_time > 0) {
       $db->query("UPDATE task_template_$template_id ".
-                 "SET task_time='$task_time' WHERE task_order=$task_value");
+                 "SET task_time='$task_time' WHERE task_order='$task_value'");
     }
     break;
   case 'update_task_predecessors':
@@ -190,8 +190,8 @@ switch ($task) {
       $task_status = $task_predecessors == '0' ? TASK_ONGOING : TASK_WAITING;
       $db->query("UPDATE task_template_$template_id ".
                  "SET task_predecessors='$task_predecessors',".
-                     "task_status=$task_status ".
-                 "WHERE task_id=$task_value");
+                     "task_status='$task_status' ".
+                 "WHERE task_id='$task_value'");
     }
     break;
   case 'add_task':
@@ -203,13 +203,13 @@ switch ($task) {
     if ($task_time <= 0) $task_time = 1;
     if (isset($task_name) && $task_name != '') {
       $db->query("UPDATE task_template_$template_id ".
-                 "SET task_order=task_order+1 WHERE task_order>=$task_value");
+                 "SET task_order=task_order+1 WHERE task_order>='$task_value'");
       $task_status = $task_predecessors == '0' ? TASK_ONGOING : TASK_WAITING;
       $sql = "INSERT INTO task_template_$template_id".
                           "(task_id, task_name, task_predecessors, ".
                           "task_time, task_status, task_level, task_order) ".
-                          "VALUES($last_value, '$task_name', '$task_predecessors', ".
-                          "$task_time, $task_status, -1, $task_value)";
+                          "VALUES('$last_value', '$task_name', '$task_predecessors', ".
+                          "'$task_time', '$task_status', '-1', '$task_value')";
       $db->query($sql);
     }
     break;
@@ -256,7 +256,7 @@ $legend = '<table border="0" cellspacing="1" cellpadding="0" width="180" bgcolor
           '</table>';
 echo '</td><td rowspan="3" align="right">'.$legend.'</td></tr>';
 
-$db->query('SELECT * FROM task_templates WHERE cat_id='.$cat_id);
+$db->query("SELECT * FROM task_templates WHERE cat_id='$cat_id'");
 $count = $db->num_rows();
 $template = new dropbox();
 while ($db->next_record()) {

@@ -714,7 +714,7 @@ class email extends db
    */
   function folder_exists($account_id, $name)
   {
-    $sql = "SELECT id FROM emFolders WHERE name='$name' AND ">
+    $sql = "SELECT id FROM emFolders WHERE name='$name' AND ".
       "account_id='$account_id'";
     $this->query($sql);
     if ($this->next_record())

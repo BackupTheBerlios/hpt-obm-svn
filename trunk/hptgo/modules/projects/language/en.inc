@@ -157,6 +157,7 @@ $pm_EditCategory = 'Rename category:';
 $pm_AddCategory = 'Add new category:';
 $pm_EditTemplate = 'Rename process template: ';
 $pm_AddTemplate = 'Add process template:';
+$pm_TemplateExists = "Template with name '%s' is already exists";
 
 $strReadRights = 'Monitors';
 $strWriteRights = 'Members';

@@ -148,7 +148,10 @@ switch ($task)
 
 	while ($file = smartstrip(array_shift($_SESSION['copy_files'])))
 	{
-	  $new_path = $path.'/'.basename($file);
+	  $basename = basename($file);
+	  if ($basename[0] == '.') // automatically remove the beginning dot
+	    $basename = substr($basename,1);
+	  $new_path = $path.'/'.$basename;
 	  if (!$write_permission)
 	  {
 	    $popup_feedback .= access_denied_box($path);
@@ -171,7 +174,7 @@ switch ($task)
 	    }
 	  }else
 	  {
-	    $fs->chroot_copy_r1($file, $path.'/'.basename($file));
+	    $fs->chroot_copy_r1($file, $path.'/'.$basename);
 	  }
 	}
       }else
@@ -432,7 +435,11 @@ switch ($task)
       {
 	$feedback = '<p class="Error">'.$error_missing_field.'</p>';
 	$task = 'create_archive';
-      }else
+      }elseif ($name[0] == '.')
+      {
+	$feedback = '<p class="Error">'.$name_width_dot_at_begin.'</p>';
+      }
+      else
       {
 
 	switch ($_POST['compression_type'])

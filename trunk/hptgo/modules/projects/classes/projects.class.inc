@@ -298,18 +298,18 @@ class projects extends db
     if ($filter < STATUS_RUNNING)
       $filter = '';
     elseif ($filter == STATUS_RUNNING)
-      $filter = ' AND status >= '.STATUS_BEGIN;
+      $filter = " AND status >= '".STATUS_BEGIN."'";
     else
-      $filter = ' AND status = '.$filter;
+      $filter = " AND status = '".$filter."'";
 
     $sql = "SELECT DISTINCT pmProjects.* FROM pmProjects ".
       "INNER JOIN acl ON (pmProjects.acl_read = acl.acl_id OR pmProjects.acl_write = acl.acl_id) ".
       "LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) WHERE ((".
-      "users_groups.user_id = ".$user_id." AND acl.user_id = 0 ) OR (".
-      "acl.group_id = 0 AND acl.user_id = ".$user_id."))".$filter;
+      "users_groups.user_id = '".$user_id."' AND acl.user_id = '0' ) OR (".
+      "acl.group_id = '0' AND acl.user_id = '".$user_id."'))".$filter;
 
     if ($catalog > 0)
-      $sql .= " AND cat_id=$catalog";
+      $sql .= " AND cat_id='$catalog'";
 
     if ($contact_id > 0)
       $sql .= " AND contact_id='$contact_id' ";
@@ -323,8 +323,8 @@ class projects extends db
       $sql2 = "SELECT DISTINCT pmProjects.id FROM pmProjects ".
         "INNER JOIN acl ON (pmProjects.acl_read = acl.acl_id OR pmProjects.acl_write = acl.acl_id) ".
         "LEFT JOIN users_groups ON (acl.group_id = users_groups.group_id) WHERE ((".
-        "users_groups.user_id = ".$user_id." AND acl.user_id = 0 ) OR (".
-        "acl.group_id = 0 AND acl.user_id = ".$user_id."))";
+        "users_groups.user_id = '".$user_id."' AND acl.user_id = '0' ) OR (".
+        "acl.group_id = '0' AND acl.user_id = '".$user_id."'))";
 
       if ($filter != '') $sql2 .= $filter;
       if ($contact_id > 0) $sql2 .= " AND contact_id='$contact_id'";
@@ -352,8 +352,8 @@ class projects extends db
   {
     $sql = "SELECT DISTINCT pmProjects.* FROM pmProjects, acl, users_groups WHERE (".
       "pmProjects.acl_write = acl.acl_id".
-      ") AND ( ( acl.group_id = users_groups.group_id AND users_groups.user_id = ".$user_id." AND acl.user_id = 0 ) OR (".
-      "acl.group_id = 0 AND acl.user_id = ".$user_id." ))";
+      ") AND ( ( acl.group_id = users_groups.group_id AND users_groups.user_id = '".$user_id."' AND acl.user_id = '0' ) OR (".
+      "acl.group_id = '0' AND acl.user_id = '".$user_id."' ))";
     $this->query($sql);
     return $this->num_rows();
   }

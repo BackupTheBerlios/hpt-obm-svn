@@ -157,6 +157,7 @@ $pm_EditCategory = 'Đổi tên loại dự án';
 $pm_AddCategory = 'Thêm loại dự án mới:';
 $pm_EditTemplate = 'Đổi tên quy trình mẫu';
 $pm_AddTemplate = 'Thêm quy trình mẫu:';
+$pm_TemplateExists = "Đã có quy trình mẫu '%s'";
 
 $strReadRights = 'Giám sát';
 $strWriteRights = 'Thành viên';

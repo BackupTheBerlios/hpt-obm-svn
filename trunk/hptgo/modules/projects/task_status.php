@@ -24,7 +24,7 @@ $projects = new projects();
 $project_id = isset($_GET['project_id']) ? $_GET['project_id'] : '0';
 $project_task_id = isset($_GET['project_task_id']) ? $_GET['project_task_id'] : '0';
 
-$projects->query("SELECT * FROM task WHERE task_project_id=$project_id AND task_id=$project_task_id");
+$projects->query("SELECT * FROM task WHERE task_project_id='$project_id' AND task_id='$project_task_id'");
 if ($projects->next_record()) {
 	$tstat = $projects->f("task_status");
 	$tcomm = $projects->f("task_comment");

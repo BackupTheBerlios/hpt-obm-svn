@@ -88,7 +88,7 @@ switch($task)
 					if ($calendar_id = $cal->add_calendar($GO_SECURITY->user_id, $name, $_POST['calendar_start_hour'], $_POST['calendar_end_hour']))
 					{
 						$db = new db();
-						$db->query('INSERT INTO cal_config VALUES ("'.$GO_SECURITY->user_id.'","'.$calendar_id.'")');
+						$db->query("INSERT INTO cal_config VALUES ('".$GO_SECURITY->user_id."','".$calendar_id."')");
 						if ($_POST['close'] == 'true')
 						{
 							header('Location: '.$return_to);

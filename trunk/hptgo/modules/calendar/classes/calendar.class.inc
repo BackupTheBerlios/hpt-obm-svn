@@ -121,8 +121,8 @@ class calendar extends db
   {
     $sql = "SELECT DISTINCT cal_views.* FROM cal_views, acl, users_groups WHERE ".
       "(cal_views.acl_read = acl.acl_id OR cal_views.acl_write = acl.acl_id ".
-      ") AND ( ( acl.group_id = users_groups.group_id AND users_groups.user_id = ".$user_id." AND acl.user_id = 0 ) OR (".
-      "acl.group_id = 0 AND acl.user_id = ".$user_id." ) ) ORDER BY cal_views.name ASC";
+      ") AND ( ( acl.group_id = users_groups.group_id AND users_groups.user_id = '".$user_id."' AND acl.user_id = '0' ) OR (".
+      "acl.group_id = '0' AND acl.user_id = '".$user_id."' ) ) ORDER BY cal_views.name ASC";
     $this->query($sql);
     return $this->num_rows();
   }
@@ -405,8 +405,8 @@ class calendar extends db
   {
     $sql = "SELECT DISTINCT cal_calendars.* FROM cal_calendars, acl, users_groups WHERE (".
       "cal_calendars.acl_read = acl.acl_id OR cal_calendars.acl_write = acl.acl_id".
-      ") AND ( ( acl.group_id = users_groups.group_id AND users_groups.user_id = ".$user_id." AND acl.user_id = 0 ) OR (".
-      "acl.group_id = 0 AND acl.user_id = ".$user_id." ) ) ORDER BY cal_calendars.name ASC";
+      ") AND ( ( acl.group_id = users_groups.group_id AND users_groups.user_id = '".$user_id."' AND acl.user_id = '0' ) OR (".
+      "acl.group_id = '0' AND acl.user_id = '".$user_id."' ) ) ORDER BY cal_calendars.name ASC";
     $this->query($sql);
     return $this->num_rows();
   }
