@@ -627,15 +627,23 @@ if ($task == 'save_event')
 
 	  if ($id == 0)
 	  {
-	    $nouser_link = '<p><a href="'.$GO_MODULES->full_url.
+/*	    $nouser_link = '<p><a href="'.$GO_MODULES->full_url.
 	      'accept.php?event_id='.$event_id.
 	      '&member=false&email='.$participants[$i].
 	      '" class="blue">'.$sc_accept.'</a>&nbsp|&nbsp;<a href="'.
 	      $GO_MODULES->url.'decline.php?event_id='.
 	      $event_id.'&member=false&email='.$participants[$i].
 	      '" class="blue">'.$sc_decline.'</a></p>';
-	     
+*/	     
+		$nouser_link = '<p><a href="'.$GO_MODULES->full_url.
+	      'accept.php?event_id='.$event_id.
+	      '&member=false&email='.$participants[$i].
+	      '" class="blue">'.$sc_accept.'</a>&nbsp|&nbsp;<a href="'.
+	      $GO_MODULES->full_url.'decline.php?event_id='.
+	      $event_id.'&member=false&email='.$participants[$i].
+	      '" class="blue">'.$sc_decline.'</a></p>';
 			 $mail->Body = $mail_body.$nouser_link;
+			 
 	     $mail->ClearAllRecipients();
 	     $mail->AddAddress($participants[$i]);
 
@@ -645,7 +653,7 @@ if ($task == 'save_event')
 	    }
 	  }else
 	  {
-	    $user_link = '<p class="cmd"><a href="'.$GO_CONFIG->full_url.
+/*	    $user_link = '<p class="cmd"><a href="'.$GO_CONFIG->full_url.
 	      'index.php?return_to='.	urlencode($GO_MODULES->url.
 		  'accept.php?event_id='.$event_id.'&member=true&email='.
 		  $participants[$i]).'" class="blue">'.$sc_accept.
@@ -653,7 +661,16 @@ if ($task == 'save_event')
 	      'index.php?return_to='.urlencode($GO_MODULES->url.
 		  'decline.php?event_id='.$event_id.'&member=true&email='.
 		  $participants[$i]).'" class="blue">'.$sc_decline.'</a></p>';
-
+*/
+		$user_link = '<p class="cmd"><a href="'.$GO_CONFIG->full_url.
+	      'index.php?return_to='.	urlencode($GO_MODULES->full_url.
+		  'accept.php?event_id='.$event_id.'&member=true&email='.
+		  $participants[$i]).'" class="blue">'.$sc_accept.
+	      '</a>&nbsp|&nbsp;<a href="'.$GO_CONFIG->full_url.
+	      'index.php?return_to='.urlencode($GO_MODULES->full_url.
+		  'decline.php?event_id='.$event_id.'&member=true&email='.
+		  $participants[$i]).'" class="blue">'.$sc_decline.'</a></p>';
+		  
 	    if ($GO_SECURITY->user_id != $id)
 	    {
 	    	$mail->Body = $mail_body.$user_link;
