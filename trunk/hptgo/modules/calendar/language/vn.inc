@@ -213,4 +213,5 @@ $cal_event_calendars = 'Lịch';
 $cal_view_merged = 'kết hợp';
 $cal_view_emerged = 'tách riêng';
 $strNoPastEvent = 'Bạn không được thêm một sự kiện vào quá khứ';
+$subjectEventInvitation = '[Calendar] Bạn được mời tham dự sự kiện %s';
 ?>

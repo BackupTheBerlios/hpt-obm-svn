@@ -588,7 +588,7 @@ if ($task == 'save_event')
   $mail->AddReplyTo($_SESSION['GO_SESSION']["email"],$_SESSION['GO_SESSION']["name"]);
   $mail->WordWrap = 50;
   $mail->IsHTML(true);
-  $mail->Subject = $name;
+  $mail->Subject = sprintf($subjectEventInvitation,$name);
   
   require_once($GO_MODULES->class_path.'go_ical.class.inc');
 	$ical = new go_ical();
