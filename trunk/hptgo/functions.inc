@@ -18,6 +18,40 @@
 * @since    Group-Office 1.0
 */
 
+// New function, use only when timezone problem is gone
+function get_timezone_offset($time)
+{
+  if($_SESSION['GO_SESSION']['DST'] > 0 && date('I', $time) == 0)
+	{
+		return $_SESSION['GO_SESSION']['timezone']-$_SESSION['GO_SESSION']['DST'];
+	}else
+	{
+		return $_SESSION['GO_SESSION']['timezone'];
+	}
+}
+
+/**
+* Adds paramaters to an URL
+*
+* @param	string $url
+* @param	string $params
+* @access public
+* @return string
+*/
+
+// New function, use only when timezone problem is gone
+function add_params_to_url($url, $params)
+{
+	if(strpos($url, '?') === false)
+	{
+		$url .= '?'.$params;
+	}else
+	{
+		$url .= '&'.$params;
+	}
+	return $url;
+}
+
 /**
 * Get's all queries from an SQL dump file in an array
 *
@@ -346,6 +380,15 @@ function get_gmt_time($local_time=0)
   return $time;
 }
 
+// New function, use only when timezone problem is gone
+function gmt_to_local_time($gmt_time)
+{
+	$timezone_offset = get_timezone_offset($gmt_time);
+  $local_time = $gmt_time+($timezone_offset*3600);
+
+  return $local_time;
+}
+
 /**
 * Give it a full name and it tries to determine the First, Middle and Lastname
 *
@@ -487,7 +530,7 @@ function empty_to_stripe($input)
 * @access public
 * @return string URL to open e-mail client
 */
-function mail_to($email, $name="", $class="normal", $full_link=true, $contact_id=0)
+function mail_to($email, $name="", $class="normal", $full_link=true, $contact_id=0, $company_id=0)
 {
   if (validate_email($email))
   {
@@ -504,10 +547,10 @@ function mail_to($email, $name="", $class="normal", $full_link=true, $contact_id
       {
 	if ($full_link == true)
 	{
-	  return "<a class=\"".$class."\" title=\"".$strEmailTo.$email."\" href='javascript:popup(\"".$module['url']."send.php?mail_to=".$email."&contact_id=".$contact_id."\",\"".$GO_CONFIG->composer_width."\",\"".$GO_CONFIG->composer_height."\")'>".$name."</a>";
+	  return "<a class=\"".$class."\" title=\"".$strEmailTo.$email."\" href='javascript:popup(\"".$module['url']."send.php?mail_to=".$email."&contact_id=".$contact_id."&company_id=".$company_id."\",\"".$GO_CONFIG->composer_width."\",\"".$GO_CONFIG->composer_height."\")'>".$name."</a>";
 	}else
 	{
-	  return 'javascript:popup("'.$module['url'].'send.php?mail_to='.$email.'&contact_id='.$contact_id.'","'.$GO_CONFIG->composer_width.'","'.$GO_CONFIG->composer_height.'")';
+	  return 'javascript:popup("'.$module['url'].'send.php?mail_to='.$email.'&contact_id='.$contact_id.'&company_id='.$company_id.'","'.$GO_CONFIG->composer_width.'","'.$GO_CONFIG->composer_height.'")';
 	}
       }
     }
@@ -573,13 +616,13 @@ function show_profile($user_id, $linktext='', $class='normal', $return_to='')
       $style = '';
     }
     $link = "<a ".$style." href=\"".$ab_module['url']."contact.php?contact_id=".$contact['id']."&return_to=".urlencode($return_to)."\" class=\"".$class."\" title=\"".$strShowProfile."\">";
-    $link .= $linktext." </a>\n";
+    $link .= $linktext."</a>\n";
   }else
   {
     if ($GO_SECURITY->user_is_visible($user_id))
     {
       $link = '<a href="'.$GO_CONFIG->control_url.'user.php?id='.$user_id.'&return_to='.urlencode($return_to).'" class="'.$class.'" title="'.$strShowProfile.'">';
-      $link .= $linktext." </a>\n";
+      $link .= $linktext."</a>\n";
     }else
     {
       $link = $linktext;
