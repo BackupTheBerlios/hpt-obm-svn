@@ -88,10 +88,10 @@ function save_config($config)
 function print_head()
 {
   header('Content-Type: text/html; charset='.$charset);
-  echo '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Group-Office Installation</title></head><body style="font-family: Arial,Helvetica">';
+  echo '<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><title>Cài đặt HPT Open Bussiness Management</title></head><body style="font-family: Arial,Helvetica">';
   echo '<form method="post" action="install.php">';
   echo '<table align="center" style="background: #f1f1f1;border-width: 1px;border-color: black;border-style: solid;font-family: Arial,Helvetica; font-size: 12px; width: 500px;">';
-  echo '<tr><td align="center"><h2><img src="lib/intermesh.gif" border="0" /><br />Group-Office installation</h2></td></tr>';
+  echo '<tr><td align="center"><h2><img src="lib/hpt-obm.gif" border="0" /><br />Cài đặt HPT Open Bussiness Management</h2></td></tr>';
   echo '<tr><td><table style="border-width: 0px;padding: 20px;font-family: Arial,Helvetica; width: 500px;font-weight: normal; font-size: 12px;"><tr><td>';
 }
 
@@ -131,7 +131,7 @@ if ($config_exists && !is_writable('Group-Office.php'))
   print_head();
   echo 'Tập tin cấu hình Group-Office.php đã có tại '.$root_path.' nhưng không thể hiệu chỉnh. Nếu bạn muốn thay đổi cấu hình, bạn phải cho phép ghi vào Group-Office.php trong suốt tiến trình cài đặt.';
   echo '<br /><br />Hãy điều chỉnh và nhấn Refresh để cập nhật trang này.';
-  echo '<br /><br /><font color="#003399">Với Linux, thực hiện lệnh: <i>$ chmod 777 '.$root_path.'Group-Office.php<br /></i></font>';
+  echo '<br /><br />Với Linux, thực hiện lệnh: <br/><font color="#003399"><i>$ chmod 777 '.$root_path.'Group-Office.php<br /></i></font>';
   print_foot();
   exit();
 }elseif(!$config_exists && !is_writable($root_path))
@@ -139,7 +139,7 @@ if ($config_exists && !is_writable('Group-Office.php'))
   print_head();
   echo 'Không thể tạo tập tin cấu hình trong '.$root_path.'. Nếu bạn muốn cài đặt HPT-OBM bạn phải tạm thời cho phép ghi vào '.$root_path.'.';
   echo '<br /><br />Hãy điều chỉnh và nhấn Refresh để cập nhật lại trang này.';
-  echo '<br /><br /><font color="#003399">Với Linux, thực hiện lệnh: <i>$ chmod 777 '.$root_path.'<br /></i></font>';
+  echo '<br /><br />Với Linux, thực hiện lệnh: <br/><font color="#003399"><i>$ chmod 777 '.$root_path.'<br /></i></font>';
   print_foot();
   exit();
 }elseif(!function_exists('mysql_connect'))
@@ -169,7 +169,7 @@ if (!$config_exists)
   }
   fclose($fp);
 
-  $config_data = str_replace('%title%', 'Group-Office', $config_data);
+  $config_data = str_replace('%title%', 'HPT Open Bussiness Management', $config_data);
   $config_data = str_replace('%slash%', '/', $config_data);
 
   $host= str_replace('//','/',substr(str_replace(str_replace('\\','/',$_SERVER['DOCUMENT_ROOT']),"",$root_path),0,-1));
@@ -542,25 +542,6 @@ if ($_SERVER['REQUEST_METHOD'] =='POST')
       }
       break;
 
-    case 'send_info':
-      if ($_REQUEST['info'] != 'no')
-      {
-	$body = "Group-Office title: ".$GO_CONFIG->title."\r\n";
-	$body .= "Usage: ".$_REQUEST['info']."\r\n";
-	$body .= "Users: ".$_REQUEST['users']."\r\n";
-	$body .= "Host: ".$GO_CONFIG->full_url."\r\n";
-	$body .= "Webmaster: ".$GO_CONFIG->webmaster_email."\r\n";
-	if ($_REQUEST['email'] != '')
-	{
-	  $body .= "Contact about Group-Office Professional at: ".$_REQUEST['email']."\r\n";
-	  $body .= "Name: ".$_REQUEST['name']."\r\n";
-	}
-
-	sendmail('notify@intermesh.nl', $GO_CONFIG->webmaster_email, $GO_CONFIG->title, "Group-Office usage information", $body);
-      }
-      $_SESSION['completed']['send_info'] = true;
-      break;
-
   }
 }else
 {
@@ -805,7 +786,7 @@ if (!isset($_SESSION['completed']['userdir']))
     Người dùng chạy webserver cần được phép ghi vào thư mục này (Trong Linux, hãy đặt quyền 0777 và owner là người dùng chạy webserver - Bạn có thể sẽ cần quyền root để thực hiện điều này).
     <br />Ngoài ra cần nhập kích thước tối đa cho phép đưa tập tin lên server (và quyền truy cập tập tin dạng bát phân với Linux).
     <br /><br />
-    Trong Linux, thực hiện lệnh:
+    Trong Linux, thực hiện lệnh:<br/>
     <font color="#003399"><i>
     $ su<br />
     $ mkdir /home/groupoffice<br />
@@ -1258,7 +1239,7 @@ Quá trình cài đặt đã hoàn tất!<br />
 <br />
 Vui lòng kiểm tra lại và đảm bảo là không ai được phép sửa chữa tập tin Group-Office.php từ lúc này.<br />
 <br />
-Trong Linux, hãy thực hiện:
+Trong Linux, hãy thực hiện:<br/>
 <font color="#003399"><i>
 $ chown -R someuser:someuser <?php echo $GO_CONFIG->root_path; ?><br />
 $ chmod 644 <?php echo $GO_CONFIG->root_path; ?><br />
