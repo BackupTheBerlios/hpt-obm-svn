@@ -45,6 +45,9 @@ while ($projects->next_record()) {
     $projects->f('last_name') . $middle_name . $projects->f('first_name');
 }
 
+$today = getdate();
+$today = gmmktime(0, 0, 0, $today['mon'], $today['mday'], $today['year']);
+
 $tasks = load_project_task($projects, $project_id);
 
 if ($task != 'show_task_gantt') {
@@ -226,6 +229,7 @@ function show_planned_eslapsed_times() {
   }
   $plan_days = round(($pstop_date - $pstart_date) / (24 * 3600));
   $done_days = round(($today - $pstart_date) / (24 * 3600));
+
   if ($done_days > $plan_days)
     $delay_days = "$pm_delay: ".($done_days - $plan_days)." $pm_days";
   else {
@@ -249,13 +253,16 @@ function show_planned_eslapsed_times() {
     }
   }
 
-  echo '<tr><td colspan="8">'.
-       "$pm_legend_planning: $plan_days $pm_days,".
-       '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.
-       "$pm_legend_current: $done_days $pm_days,".
-       '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.
-       "$delay_days$predict_delay_days</td></tr>";
-  echo '<tr><td colspan="8">&nbsp;</td></tr>';
+  if ($done_days >= 0)
+  {
+	  echo '<tr><td colspan="8">'.
+    	   "$pm_legend_planning: $plan_days $pm_days,".
+	       '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.
+    	   "$pm_legend_current: $done_days $pm_days,".
+	       '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.
+    	   "$delay_days$predict_delay_days</td></tr>";
+	  echo '<tr><td colspan="8">&nbsp;</td></tr>';
+  }
 }
 
 ?>
