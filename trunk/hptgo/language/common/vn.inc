@@ -31,7 +31,7 @@ $strThis = 'this';
 $strItems = 'mục';
 $strDescription = 'Mô tả';
 
-$strName = "Tên giao dịch";
+$strName = "Tên";
 $strEnglishName = "Tên Tiếng Anh";
 $strNickName = "Tên viết tắt";
 $strUser = "Người dùng";
