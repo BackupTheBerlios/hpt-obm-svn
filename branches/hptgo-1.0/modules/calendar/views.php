@@ -39,8 +39,8 @@ switch ($task)
 
     if($GO_SECURITY->user_id == $view['user_id'])
     {
-      if (isset($_POST['delete_cview_id']) &&
-      	$cal->delete_view($_POST['delete_cview_id']))
+      if (isset($_POST['delete_view_id']) &&
+      	$cal->delete_view($_POST['delete_view_id']))
       {
 	$GO_SECURITY->delete_acl($view['acl_write']);
 	$GO_SECURITY->delete_acl($view['acl_read']);
