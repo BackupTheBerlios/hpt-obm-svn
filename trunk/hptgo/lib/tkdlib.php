@@ -359,6 +359,52 @@
 		}
 	}
 
+	function fill_config_content($order, $ab, $page, &$row)
+	{
+		global $strSexes, $GO_USERS;
+	
+		$db = new db();
+
+		for ($i=0; $i<count($order); $i++)
+		{
+			switch ($order[$i])
+			{
+				case 'email' :
+					if ($page==0)
+						$row[] = array(
+							'html' => mail_to(empty_to_stripe($ab->f("email")),
+	    							empty_to_stripe($ab->f("email")),
+	    							'normal',
+	    							true,
+	    							$ab->f("id"))
+							);
+					if ($page==1)
+						$row[] = array(
+							'html' => mail_to($ab->f('email'), $ab->f('email'))
+						);
+					if ($page==2)
+						$row[] = array(
+							'html' => mail_to(empty_to_stripe($GO_USERS->f("email")))
+						);
+				break;
+				case 'sex':
+					$row[] = $strSexes[$ab->f('sex')];
+				break;
+				case 'birthday':
+				case 'relation_date':
+					$day = ($ab->f($order[$i])>0?db_date_to_date($ab->f($order[$i])):'');
+					$row[] = empty_to_stripe($day);
+				break;
+				case 'company_id':
+				case 'parent':
+					$db->query("SELECT name FROM ab_companies WHERE id = '".(int)$ab->f($order[$i])."'");
+					$row[] = empty_to_stripe($db->next_record()?$db->f('name'):'');
+				break;
+				case '':break;
+				default: $row[] = empty_to_stripe($ab->f($order[$i]));
+			}
+		}
+	}
 /**
 * URL navigation
 *
