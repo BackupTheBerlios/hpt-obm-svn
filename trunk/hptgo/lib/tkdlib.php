@@ -1,15 +1,28 @@
 <?php 
-/*
-   Copyright (2004)
-   Author: Tran Kien Duc <ductk@hptvietnam.com.vn>
-   Version: 1.0 Release date: 13 July 2004
+/**
+* Copyright (2004)
+* Author: Tran Kien Duc <ductk@hptvietnam.com.vn>
+* Version: 1.0 Release date: 13 July 2004
+*
+* This program is free software; you can redistribute it and/or modify it
+* under the terms of the GNU General Public License as published by the
+* Free Software Foundation; either version 2 of the License, or (at your
+* option) any later version.
+*/
 
-   This program is free software; you can redistribute it and/or modify it
-   under the terms of the GNU General Public License as published by the
-   Free Software Foundation; either version 2 of the License, or (at your
-   option) any later version.
- */
-
+/**
+* Print HTML <FILE INPUT> tag as button style
+*
+* @author   Duc Kien Tran
+* @since    OBM 1.0
+* @param	string	$frm		Form name, where <FILE INPUT> control is
+* @param	string	$name		Name of button
+* @param	string	$value		Caption of button
+* @param	string	$class		Style class of button
+* @param	string	$mo_class	Style class of mouse overed button
+* @param	string	$attributes	Other attributes
+* @param	int		$width		Width of button
+*/
 	function print_input_file($frm, $name,$value,$class,$mo_class,$attributes='',$width='')
 	{
 		$button = "document.$frm.".$name."_button";
@@ -28,7 +41,18 @@
 			</script>';
   		echo $str;
 	}
- 
+	
+/**
+* Add GET params in URL. 
+* This function is used in PageNumber function
+*
+* @author   Duc Kien Tran
+* @since    OBM 1.0
+* @see		PageNumber function
+* @param	string	$ME		URL 
+* @param	string	$str	GET params is added $ME string
+* @return	string	URL string $ME + $str
+*/
  	function AddToME($ME,$str)
 	{
 		if ($ME[strlen($ME)-1]!="?" || $ME[strlen($ME)-1]!="&")
@@ -36,7 +60,22 @@
 		else
 			return $ME.$str;
 	}
-	
+
+/**
+* Create "page number" string
+*
+* @author   Duc Kien Tran
+* @since    OBM 1.0
+* @param	int		$sumrow		Sum rows 
+* @param	int		$maxrow		Max row number is showed per page
+* @param	int		$maxpage	Max page number is showed per page
+* @param	int		$curpage	Current page number 
+* @param	string	$ME			URL of current page
+* @param	string	$strCurPage	Current Page string is showed. Ex : Page 11/20
+* @param	string	$strPrev	The link string for Previous pages
+* @param	string	$strNext	The link string for Next pages
+* @return	string	Pages navigation link string 
+*/
 	function PageNumber($sumrow,$maxrow,$maxpage,&$curpage,$ME,&$strCurPage,$strPrev,$strNext)
 	{
 		if ($maxrow>0)
@@ -80,6 +119,15 @@
 		}
 	}
  
+/**
+* Init VietUni modules
+*
+*	Init Vietnamese typer in (2) VNI mode
+*
+* @author   Duc Kien Tran
+* @since    OBM 1.0
+* @param	string	$root_path	Root path of website
+*/ 
  	function initTyping($root_path)
 	{
 		$str = '<script language="javascript" src="'.$root_path.'lib/vietuni.js"></script>'.
@@ -89,9 +137,18 @@
 				'</script>';
 		echo $str;
 	}
-	
-function checkFile($userfile, $maxsize)
-{
+
+/**
+* Check upload file type
+*
+* @author   Duc Kien Tran
+* @since    OBM 1.0
+* @param	array	$userfile	Array upload file ($_FILE)
+* @param	int		$maxsize	Max file size
+* @return	bool	<b>"true"</b> if (upload) valid; <b>"false"</b> if (upload) invalid
+*/ 
+	function checkFile($userfile, $maxsize)
+	{
 		$mimetypes = array(
 			"image/x-png" 			=> 1, 
 		    "video/vivo"			=> 1, 
@@ -116,30 +173,42 @@ function checkFile($userfile, $maxsize)
 			//return false;		
 			
 		return true;
-}
-	
-function uploadFile($userfile, $maxsize, $upload_dir)
-{		
-	if (!checkFile($userfile, $maxsize))
-		return false;
+	}
 
-	$tmp_dir = $userfile['tmp_name'];
-	$name = $upload_dir."/".$userfile['name'];
-	
-	if (!@move_uploaded_file($tmp_dir, $name))
-		return false;
+/**
+* Upload file
+*
+* @author   Duc Kien Tran
+* @since    OBM 1.0
+* @param	array	$userfile	Array upload file ($_FILE)
+* @param	int		$maxsize	Max file size
+* @param	string	$upload_dir	Upload directory
+* @return	bool	<b>"true"</b> if success; <b>"false"</b> if unsuccess
+*/	
+	function uploadFile($userfile, $maxsize, $upload_dir)
+	{		
+		if (!checkFile($userfile, $maxsize))
+			return false;
 
-	return true;	
-}
+		$tmp_dir = $userfile['tmp_name'];
+		$name = $upload_dir."/".$userfile['name'];
 	
+		if (!@move_uploaded_file($tmp_dir, $name))
+			return false;
+
+		return true;	
+	}
+	
+/**
+* Get current date/time
+*
+* @author   Duc Kien Tran
+* @since    OBM 1.0
+* @return	string	Current Date/Time string
+*/	
 	function get_today()
 	{
 		$local_time = get_time();
-//		$year = isset($_REQUEST['year']) ? $_REQUEST['year'] : date("Y", $local_time);
-//		$month = isset($_REQUEST['month']) ? $_REQUEST['month'] : date("m", $local_time);
-//		$day = isset($_REQUEST['day']) ? $_REQUEST['day'] : date("j", $local_time);
-//		$hour = isset($_REQUEST['hour']) ? $_REQUEST['hour'] : date("H", $local_time);
-//		$min = isset($_REQUEST['min']) ? $_REQUEST['min'] : date("i", $local_time);
 
 		$year = date("Y", $local_time);
 		$month = date("m", $local_time);
@@ -153,19 +222,24 @@ function uploadFile($userfile, $maxsize, $upload_dir)
 		return $requested_date;
 	}
 
-
+/**
+* Send a mail
+*
+* @author   Duc Kien Tran
+* @since    OBM 1.0
+* @param	string	$mail_to		To address
+* @param	string	$mail_body		Content mail
+* @param	string	$mail_subject	Mail subject
+* @param	string	$mail_name		Sender name
+* @param	string	$mail_from		From address
+* @param	int		$mail_priority	Mail priority
+* @param	int		$mail_wordwarp	Wordwrap number
+* @param	string	$mail_altbody	Mail altbody
+* @return	string	HTML send result string
+*/	
 	function send_mail($mail_to, $mail_body, $mail_subject='No title',$mail_name='No name', $mail_from='',$mail_priority=3, $mail_wordwrap=50, $mail_altbody='')
 	{
 		global $GO_CONFIG;
-	
-//	$mail_to='ductk@hptvietnam.com.vn';		
-	
-//	$mail_from = 'bigduck1004@yahoo.com';
-//	$mail_name = "333";
-//	$mail_subject = 'subject';
-	
-//	$mail_body = '123456789';
-//	$mail_altbody = 'qqqqqqqqqqqqqqqq';
 	
 		require($GO_CONFIG->class_path."phpmailer/class.phpmailer.php");
 		require($GO_CONFIG->class_path."phpmailer/class.smtp.php");
@@ -212,6 +286,16 @@ function uploadFile($userfile, $maxsize, $upload_dir)
 			return '<p class="Error">'.$ml_send_error.' '.$mail->ErrorInfo.'</p>';
 	}
 
+/**
+* Get current config of user
+* 
+* Support for View modify part for Addressbook module
+*
+* @author   Duc Kien Tran
+* @since    OBM 1.0
+* @param	int		$page	Contact, Member or Company
+* @return	string	Current field order
+*/	
 	function print_config_title($page=0)
 	{
 		global $GO_SECURITY;
@@ -223,7 +307,16 @@ function uploadFile($userfile, $maxsize, $upload_dir)
 
 		return $order;
 	}
-	
+
+/**
+* Show View modify Page
+*
+* @author   Duc Kien Tran
+* @since    OBM 1.0
+* @param	string	$order	Current field order (get by above print_config_title function)
+* @param	address	$ab		Addressbook object
+* @param	int		$page	Contact, Member or Company
+*/	
 	function print_config_content($order, $ab, $page)
 	{
 		global $strSexes, $GO_USERS;
@@ -265,16 +358,39 @@ function uploadFile($userfile, $maxsize, $upload_dir)
 		}
 	}
 
+/**
+* URL navigation
+*
+* @author   Duc Kien Tran
+* @since    OBM 1.0
+* @param	string	$url	URL
+*/	
 	function goURL($url)
 	{
 		echo '<script language="javascript"> document.location = "'.$url.'" </script>';
 	}
-	
+
+/**
+* Show message box
+*
+* @author   Duc Kien Tran
+* @since    OBM 1.0
+* @param	string	$msg	Message is showed in message box
+*/	
 	function alert($msg)
 	{
 		echo '<script language="javascript"> alert("'.$msg.'") </script>';
 	}
  
+/**
+* Show account managers
+*
+* @see		edit_company.php, show_company.php
+* @author   Duc Kien Tran
+* @since    OBM 1.0
+* @param	int		$acl_id		ACL_ID
+* @access	public
+*/	
 	function account_manager($acl_id)
 	{
 		global $GO_SECURITY, $GO_USERS, $strAccountManager;
@@ -304,17 +420,76 @@ function uploadFile($userfile, $maxsize, $upload_dir)
 	}
 	
 //----------------------------- CHOICE LIST ----------------------------------------------------	
-	
+
+/**
+* Create Choice list control
+*
+*   It shows as a control has 2 list box width 4 moving button
+*
+*   User clicks any moving button to move a option from left list box to right list box and vice versa
+*
+*   Purpose of control is to list options and user picks out one or many options in it
+*
+* @see		Sale module
+* @author   Duc Kien Tran <ductk@hptvietnam.com.vn>
+* @since    1.0
+* @access	public
+*/
 class choice_list
 {
+/**
+* Text array of option in left list
+*
+* @var		string[]
+* @access	private
+*/
 	var $text1;
+/**
+* Value array of option in left list
+*
+* @var		mixed[]
+* @access	private
+*/
 	var $value1;
+/**
+* Text array of option in right list
+*
+* @var		string[]
+* @access	private
+*/
 	var $text2;
+/**
+* Value array of option in right list
+*
+* @var		mixed[]
+* @access	private
+*/
 	var $value2;
+/**
+* Control number in a show
+*
+* @var		int
+* @access	private
+*/	
 	var $num;
+/**
+* Name control array
+*
+* @var		string[]
+* @access	private
+*/	
 	var $name;
+/**
+* Form name, where choice list is
+*
+* @var		string
+* @access	private
+*/	
 	var $form_name;
 
+/**
+* Contructor
+*/	
 	function choice_list()
 	{	
 		$this->num=0;
@@ -337,30 +512,16 @@ class choice_list
 			select1.options[0] = null;
 		}
 	}
-	
-/*	function move_value(value)
-	{
-		len ='.$select2.'.length; 
-		for (i=0; i<len; i++)
-		{
-			alert(i+"-"+'.$select2.'.length);
-			'.$select2.'.options[0] = null;
-		}
-			
-		for (i=0; i<value.length; i++)
-		{
-			for (j=0; j<$select1.length; j++)
-				if ($select1.options[j].value == value[i]) 
-				{
-					select2.options[select2.options.length] = new Option(select1.options[0].text,select1.options[0].value);
-				}
-		}
-	}*/
 	</script>';
 
 		echo $str;
 	}
-	
+
+/**
+* Clear options of choice list
+*
+* @param	int		$list_num	<b>"0"</b>:clear all; <b>"1"</b>:clear left list; <b>"2"</b>:clear right list; 
+*/	
 	function clear($list_num = 0)
 	{
 		if ($list_num == 1 || $list_num == 0)
@@ -375,6 +536,13 @@ class choice_list
 		}
 	}
 
+/**
+* Add a new option into choice list
+*
+* @param	string	$text		Text of option
+* @param	mixed	$value		Value of option
+* @param	bool	$to_list	Which list is added into : <b>"true"</b> left list; <b>"false"</b> right list
+*/	
 	function add_option($text,$value,$to_list=false)
 	{
 		if ($to_list)
@@ -387,9 +555,16 @@ class choice_list
 			$this->text1[] = $text;
 			$this->value1[] = $value;
 		}
-		
 	}
-	
+
+/**
+* Show choice list
+*
+* @param	string	$form_name	Form name, where choice list is
+* @param	string	$name		Name of choice list
+* @param	string	$width		Width of list box
+* @param	int		$size		Height of list box
+*/	
 	function print_choice_list($form_name, $name, $width='100pt', $size = '6')
 	{
 		$this->form_name = $form_name;
@@ -440,7 +615,10 @@ class choice_list
 
 		echo $str;
 	}
-	
+
+/**
+* Select all options
+*/	
 	function select_all()
 	{
 		$str = '<script language="javascript">
@@ -460,7 +638,14 @@ class choice_list
 		
 		echo $str;
 	}
-	
+
+/**
+* This method is called when form submits. 
+*
+* Link it into Submit event
+*
+* @return string Javascript method calling.
+*/	
 	function onSubmit_event()
 	{
 		return "selectall();";
@@ -468,20 +653,46 @@ class choice_list
 }
 
 //----------------------------------- CHANGE ITEM (UP, DOWN) --------------------------------
-
+/**
+* Create a items list and allow items move up or down.
+*
+* @see		Config of AddressBook
+* @author   Duc Kien Tran <ductk@hptvietnam.com.vn>
+* @since    1.0
+* @access	public
+*/
 	class move_item
 	{
+/**
+* Change position of 2 item
+*
+*  This method call a Javascript function : change(), which is created by move_item method
+*
+* @param	int		$a		Index of item 1
+* @param	int		$b		Index of item 2
+* @return	string	Javascript function calling
+*/	
 		function change($a, $b)
 		{
 			return "javascript:change('$a','$b');";
 		}
-		
+/**
+* Add a new item into MOVE_ITEM
+*
+* @param	int		$id			Id of new item
+* @param	string	$str		Text of new item
+* @param	int		$value		Value of new item
+* @param	bool	$checked	Check item or no
+*/	
 		function item($id, $str, $value, $checked = false)
 		{
 			$str = '<td><div id="item'.$id.'">'.$str.'</div></td><td><input type="checkbox" id="check" name="com[]" value="'.$value.'" '.($checked?'checked':'').'><input type="hidden" id="order_all" name="order_all[]" value="'.$value.'"></td>';
 			return $str;
 		}
-	
+		
+/**
+* Contructor
+*/	
 		function move_item()
 		{	
 			$str = <<<EOF
@@ -531,7 +742,11 @@ EOF;
 	};
 
 //------------------------------ CALENDAR ---------------------------------
-
+/**
+* Show calendar control
+*
+* Don't use now
+*/	
 	class tkdCalendar
 	{
 		function init($calendarpath, $langfile, $themepath)
