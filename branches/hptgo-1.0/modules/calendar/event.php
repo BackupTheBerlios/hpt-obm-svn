@@ -20,7 +20,7 @@ if (!$ab_module ||
   $ab_module = false;
 }else
 {
-  require_once ($ab_module['class_path'].'addressbook.class.inc');
+  require_once ($ab_module['path'].'classes/addressbook.class.inc');
   $ab = new addressbook();	
 }
 
@@ -68,10 +68,10 @@ if ($task == 'save_event')
   $name = smart_addslashes(trim($_POST['name']));
   if ($name == '')
   {
-    $feedback = '<p class="Error">'.$error_missing_field.'</p>';
+    $feedback .= '<p class="Error">'.$error_missing_field.'</p>';
   }elseif(!isset($_POST['calendars']) || count($_POST['calendars']) == 0)
   {
-    $feedback = '<p class="Error">'.$sc_select_calendar_please.'</p>';
+    $feedback .= '<p class="Error">'.$sc_select_calendar_please.'</p>';
   }else
   {
     $repeat_forever = isset($_POST['repeat_forever']) ? '1' : '0';
@@ -171,7 +171,7 @@ if ($task == 'save_event')
 	    $repeat_every,  $mon, $tue, $wed, $thu, $fri,
 	    $sat, $sun))
       {
-	$feedback = '<p class="Error">'.$strSaveError.'</p>';
+	$feedback .= '<p class="Error">'.$strSaveError.'</p>';
       }else
       {
 	
@@ -225,7 +225,7 @@ if ($task == 'save_event')
       {
 	$GO_SECURITY->delete_acl($acl_read);
 	$GO_SECURITY->delete_acl($acl_write);
-	$feedback = '<p class="Error">'.$strSaveError.'</p>';
+	$feedback .= '<p class="Error">'.$strSaveError.'</p>';
       }else
       {
 	$GO_SECURITY->add_user_to_acl($GO_SECURITY->user_id, $acl_write);	
@@ -695,6 +695,10 @@ if ($task == 'save_event')
       }else
       {
 	$task = '';
+	if (isset($_POST['emptyform']) && $_POST['emptyform'] == 'true') {
+	  $event_id = 0;
+	  $feedback .= '<p class="Success">'.sprintf($strSaveOk,$name).'</p>';
+	}
       }
     }
   }
@@ -883,6 +887,7 @@ echo '<input type="hidden" name="calendar_id" value="'.$calendar_id.'" />';
 echo '<input type="hidden" name="event_id" value="'.$event_id.'" />';
 echo '<input type="hidden" name="task" value="" />';
 echo '<input type="hidden" name="close" value="false" />';
+echo '<input type="hidden" name="emptyform" value="false" />';
 echo '<input type="hidden" name="return_to" value="'.$return_to.'" />';
 echo '<input type="hidden" name="link_back" value="'.$link_back.'" />';
 
@@ -1208,7 +1213,7 @@ switch($tabtable->get_active_tab_id())
 	  $first_writable_cal = $cal->f('id');
 	}
 	$dropbox->add_value($cal->f('id'), $cal->f('name'));
-	if (isset($marked_calendars) &&
+	if (isset($marked_calendars) && is_array($marked_calendars) &&
 	    in_array($cal->f('id'),$marked_calendars))
 	{
 	  $event['calendars'][] = $cal->f('id');
@@ -1270,6 +1275,8 @@ switch($tabtable->get_active_tab_id())
     $button = new button($cmdOk, "javascript:save_event('true');");
     echo '&nbsp;&nbsp;';
     $button = new button($cmdApply, "javascript:save_event('false');");
+    echo '&nbsp;&nbsp;';
+    $button = new button($cmdSave, "javascript:document.event_form.emptyform.value='true';save_event('false');");
     echo '&nbsp;&nbsp;';
     if ($event_id > 0)
     {

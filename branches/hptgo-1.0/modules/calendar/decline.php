@@ -42,7 +42,7 @@ if ($_REQUEST['event_id'] > 0 && $_REQUEST['email'] != '')
 			
 			require('decline_mail.php');
 			
-			require_once($GO_CONFIG->root_path.'lib/tkdlib.php');
+			require("../../lib/tkdlib.php");
 			
 			echo send_mail($mail_to,$mail_body,$sc_declined_mail_title,$name,$email);
 			
