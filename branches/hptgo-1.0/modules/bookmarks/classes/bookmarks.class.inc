@@ -118,8 +118,8 @@ class bookmarks extends db
 		if ($catagory_id > 0)
 		{
 			if($this->query("INSERT INTO bm_catagories ".
-							"(id, name, acl_read, acl_write) VALUES ".
-							"('$catagory_id', '$name', '$acl_read', ".
+							"(id, user_id, name, acl_read, acl_write) VALUES ".
+							"('$catagory_id', '$user_id', '$name', '$acl_read', ".
 							"'$acl_write')"))
 			{
 				return $catagory_id;

@@ -82,7 +82,7 @@ require($GO_THEME->theme_path."header.inc");
 	<a class="small" href="bookmark.php"><img src="<?php echo $GO_THEME->images['bm_add_bookmark_big']; ?>" border="0" height="32" width="32" /><br /><?php echo $bm_add_bookmark; ?></a></td>
 	</td>
 	<?php
-	if ($GO_MODULES->write_permissions)
+	//if ($GO_MODULES->write_permissions)
 	{
 		echo '<td class="ModuleIcons">';
 		echo '<a class="small" href="catagory.php"><img src="'.$GO_THEME->images['bm_catagories'].'" border="0" height="32" width="32" /><br />'.$bm_add_catagory.'</a></td>';
