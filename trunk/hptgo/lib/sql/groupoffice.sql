@@ -21,6 +21,7 @@ CREATE TABLE `acl` (
   `acl_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
   `group_id` int(11) NOT NULL default '0',
+  PRIMARY KEY  (`acl_id`,`user_id`,`group_id`),
   KEY `acl_id` (`acl_id`),
   KEY `user_id` (`user_id`),
   KEY `group_id` (`group_id`)

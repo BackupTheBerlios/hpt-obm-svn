@@ -133,7 +133,7 @@ CREATE TABLE `pm_settings` (
 DROP TABLE IF EXISTS `pmCatalog`;
 CREATE TABLE `pmCatalog` (
   `id` int(11) NOT NULL auto_increment,
-  `name` char(100) NOT NULL default '',
+  `name` varchar(100) NOT NULL default '',
   PRIMARY KEY  (`id`)
 ) TYPE=MyISAM COMMENT='Project catalog';
 

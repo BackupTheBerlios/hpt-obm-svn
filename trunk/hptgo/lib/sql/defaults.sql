@@ -389,6 +389,7 @@ DROP TABLE IF EXISTS `users_groups`;
 CREATE TABLE `users_groups` (
   `group_id` int(11) NOT NULL default '0',
   `user_id` int(11) NOT NULL default '0',
+  PRIM?Y KEY (`group_id`, `user_id`)
   KEY `group_id` (`group_id`),
   KEY `user_id` (`user_id`)
 ) TYPE=MyISAM;
