@@ -29,7 +29,10 @@ if ($fs_settings['sort_order'] == "DESC")
   $new_sort_order = "DESC";
 }
 
-$folders = $fs->get_folders_sorted($path, $fs_settings['sort_field'], $fs_settings['sort_order']);
+if ($fs->is_common_folder($path))
+  $folders = $fs->get_visible_folders_sorted($GO_SECURITY->user_id,$path, $fs_settings['sort_field'], $fs_settings['sort_order']);
+else
+  $folders = $fs->get_folders_sorted($path, $fs_settings['sort_field'], $fs_settings['sort_order']);
 $files = $fs->get_files_sorted($path, $fs_settings['sort_field'], $fs_settings['sort_order']);
 $item_count = count($files) + count($folders);
 if (!$is_project_folder) {
