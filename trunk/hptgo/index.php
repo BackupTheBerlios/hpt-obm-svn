@@ -21,7 +21,7 @@ if(!file_exists("Group-Office.php"))
     webserver user.</b></font>';
   exit();
 }
-header('Content-Type: text/html; charset='.$charset);
+header('Content-Type: text/html; charset=utf-8');//'.$charset);
 
 $_COOKIE['GO_AUTH_SOURCE_KEY'] = isset($_COOKIE['GO_AUTH_SOURCE_KEY']) ? $_COOKIE['GO_AUTH_SOURCE_KEY'] : '0';
 $_REQUEST['auth_source_key'] = isset($_REQUEST['auth_source_key']) ? $_REQUEST['auth_source_key'] : $_COOKIE['GO_AUTH_SOURCE_KEY'];

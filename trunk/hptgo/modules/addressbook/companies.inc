@@ -168,20 +168,27 @@ if ($myab->query("SELECT * FROM ab_addressbooks WHERE id='$addressbook_id'") &&
 				$new_companies[$id] = 1;
 			}
 		}
-		echo '<td class="TableHead2" align="center"><a class="TableHead2" href="javascript:_sort(\'company_id\',\''.$new_sort_order.'\');">'.$strNew.'</a>';
-		if ($ab_settings['sort_companies_field'] == 'company_id')
+		
+		$db = new db();
+		$db->query('SELECT name FROM users_groups ug, groups g WHERE g.name="Admins" AND ug.group_id=g.id AND ug.user_id='.$GO_SECURITY->user_id);
+
+		$isAdmin = ($db->num_rows()>0?true:false);
+
+		if ($GO_SECURITY->user_id != $owner || $isAdmin)
 		{
-			echo $sort_arrow;
+			echo '<td class="TableHead2" align="center"><a class="TableHead2" href="javascript:_sort(\'company_id\',\''.$new_sort_order.'\');">'.$strNew.'</a>';
+			if ($ab_settings['sort_companies_field'] == 'company_id')
+			{
+				echo $sort_arrow;
+			}
+			echo '</td>';
 		}
-		echo '</td>';
 		echo '<input type="hidden" name="reviewed" value="" />';
 	}
 }
 unset($myab);
 
-//echo '<td class="TableHead2" colspan="99"></td>';
 echo '</tr>';
-
 
 if ($count > 0)
 {
@@ -205,12 +212,14 @@ if ($count > 0)
 
 		print_config_content($order, $ab, $constCompaniesPage);		
 		
-		if (isset($new_companies))
+		if ($isAdmin)
 		{
-			echo '<td align="center"><input type="checkbox" onchange="javacript:document.forms[0].reviewed.value=\''.$ab->f('id').'\';document.forms[0].submit()" '.(isset($new_companies[$ab->f('id')]) ? 'checked' : '').' /></td>';
+			if (isset($new_companies))
+			{
+				echo '<td align="center"><input type="checkbox" onchange="javacript:document.forms[0].reviewed.value=\''.$ab->f('id').'\';document.forms[0].submit()" '.(isset($new_companies[$ab->f('id')]) ? 'checked' : '').' /></td>';
+			}
 		}
 
-//		echo '<td colspan="99"></td>';		
 		echo '</tr>';
 		echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
 	}
