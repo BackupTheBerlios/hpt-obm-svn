@@ -18,11 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
 {
 	$profile = $GO_USERS->get_user($GO_SECURITY->user_id);
 
-	$middle_name = $profile['middle_name'] == '' ? '' : ' '.$profile['middle_name'];
-	$body = $ml_displayed.$profile["first_name"]." ".$middle_name.$profile['last_name']." <".$profile["email"].">\r\n\r\n";
+  $reader = $profile['last_name'].
+    ($profile['middle_name'] == '' ? ' ' : ' '.$profile['middle_name'].' ').
+    $profile['first_name'];
+	$body = $ml_displayed."\r\n".$reader." <".$profile["email"].">\r\n\r\n";
 	$body .= $ml_subject.": ".$_POST['subject']."\r\n".$strDate.": ".$_POST['date'];
 
-	if (!sendmail($_POST['email'], $profile["email"], $profile["first_name"]." ".$profile['last_name'], $ml_notify, $body))
+	if (!sendmail($_POST['email'], $profile["email"], $reader, $ml_notify, $body))
 	{
 		$feedback = '<p class="Error">'.$ml_send_error.'</p>';
 	}else
