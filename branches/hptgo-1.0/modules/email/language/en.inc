@@ -138,6 +138,6 @@ $ml_before = 'Older then';
 $ml_since = 'Newer then';
 $ml_select_one_criteria = 'Please select or enter at least one search criteria.';
 
-$ml_cmd_show = 'Show';
-$ml_cmd_hide = 'Hide';
+$ml_cmd_show = 'Add';
+$ml_cmd_hide = 'Remove';
 ?>

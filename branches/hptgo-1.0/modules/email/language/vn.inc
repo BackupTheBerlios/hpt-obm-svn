@@ -141,6 +141,6 @@ $ml_select_one_criteria = 'Hãy chọn hoặc nhập vào ít nhất một thôn
 $cmdNext = 'Tin kế';
 $cmdPrevious = 'Tin trước';
 
-$ml_cmd_show = 'Hiện';
-$ml_cmd_hide = 'Ẩn';
+$ml_cmd_show = 'Thêm';
+$ml_cmd_hide = 'Bỏ';
 ?>
