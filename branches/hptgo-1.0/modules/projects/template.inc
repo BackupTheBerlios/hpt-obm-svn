@@ -269,7 +269,7 @@ echo '<tr><td>&nbsp;</td>'.
      '<td colspan="2">'.
      '<a href="javascript:add_template()" class="normal">'.$pm_new_template.'</a></td>'.
      '</tr>';
-echo '<tr><td align="right">'.$pm_process_template.':</td><td>';
+echo '<tr><td align="right" nowrap>'.$pm_process_template.':</td><td>';
 echo '<input type="hidden" name="template_name" value="'.$template_name.'" />';
 $template->print_dropbox('template_id', $template_id,
     'onchange="javascript:frm.submit()"', false, '10', '200');
