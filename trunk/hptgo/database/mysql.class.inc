@@ -87,7 +87,7 @@ class db {
   var $Record   = array();
   
   /**
-   * Storing a record in a recordset
+   * Retain a record in a recordset
    *
    * @access public
    */
@@ -143,7 +143,6 @@ class db {
    *
    * @access public
    * @param string $query
-   * @return mixed true on success, PEAR_Error on failure
    */
   /* public: constructor */
   function db($query = "") {
@@ -268,8 +267,9 @@ class db {
   }
 
   /**
-   * Return next record in the current recordset
-   * @return mixed array (next record) on success, 0 on failure
+   * Fetch next record in the current recordset
+   * @access public
+   * @return int 1 on success, 0 on failure
    */
   /* public: walk result set */
   function next_record() {
@@ -413,7 +413,7 @@ class db {
   /**
    * Print the number of rows
    *
-   * Print the value returned by num_rows() function 
+   * Print the value returned by <i> num_rows() </i> function 
    * @access public
    */
   function np() {

@@ -1,6 +1,6 @@
 <?php
 
-/*
+/**
  * Oracle/OCI8 accessor based on Session Management for PHP3
  *
  * (C) Copyright 1999-2000 Stefan Sels phplib@sels.com
@@ -12,19 +12,91 @@
  */
 
 class db {
+  /** 
+   * Configuration parameter 
+   *
+   * Set to 1 for debugging messages
+   * 
+   * @access public
+   *
+   */
   var $Debug    =  0;
+  
+  
   var $sqoe     =  1; // sqoe= show query on error
 
+  /**
+   * Host name or database server name 
+   *
+   * @access public
+   */
+  var $Host = "";
+  
+  /**
+   * Database name 
+   * 
+   * @access public
+   */
   var $Database = "";
+  
+  /**
+   * User name - used to connect database server 
+   *
+   * @access public
+   */
   var $User     = "";
+  
+  /**
+   * Password connecting
+   *
+   * @access public
+   */
   var $Password = "";
 
+  /**
+   * Link identifier 
+   *
+   * The positive number is returned by <i> mysql_pconnect() </i> or <i> mysql_connect() </i> functions
+   *
+   * @access private 
+   */
   var $Link_ID    = 0;
+  
+  /**
+   * Result array and current row number 
+   *
+   * @access public
+   */
   var $Record    = array();
+  
+  /**
+   * Storing a record in a recordset
+   *
+   * @access public
+   */
   var $Row;
+  
+  /**
+   * Retain an statement identifier returned by ociparse()/oci_parse() functions
+   * 
+   * The identifier can be used with <i> oci_execute() </i> function 
+   * @access public
+   */
   var $Parse;
+  
+  /**
+   * Current error text
+   * 
+   * @access public
+   */
   var $Error     = "";
 
+  /**
+   * The class constructor
+   *
+   * @access public
+   * @param string $query
+   */
   /* public: constructor */
   function db($query = "") {
 	  global $GO_CONFIG;
@@ -35,6 +107,12 @@ class db {
       $this->query($query);
   }
 
+  /**
+   * Connecting database
+   *
+   * If the web page is in debug mode, the web browser will display all statements executed 
+   * @access public
+   */
   function connect() {
       if ( 0 == $this->Link_ID ) {
           if($this->Debug) {
@@ -54,6 +132,13 @@ class db {
       }
   }
 
+  /**
+   * Execute a query
+   *
+   * @access public
+   * @param string $Query_String 
+   * @return int positive value (statement identifier) on success, 0 on failure
+   */
   function query($Query_String) {
 
     /* No empty queries, please, since PHP4 chokes on them. */
@@ -85,6 +170,11 @@ class db {
       return $this->Parse;
   }
 
+  /**
+   * Fetch next record in the current recordset
+   * @access public
+   * @return int 1 on success, 0 on failure
+   */
   function next_record() {
       if(0 == OCIFetchInto($this->Parse,$result,OCI_ASSOC+OCI_RETURN_NULLS)) {
           if ($this->Debug) {
@@ -119,10 +209,25 @@ class db {
   return $stat;
   }
 
+  /**
+   * Set the internal row pointer to $pos 
+   *
+   * @access public
+   * @param int $pos
+   */
   function seek($pos) {
       $this->Row=$pos;
   }
 
+  /**
+   * Return metadata of a table (determined by $table parameter) or of a query result
+   *
+   * Depending on $full parameter, this function returns the short/full values:  
+   * @access public
+   * @param string $table
+   * @param int $full
+   * @return mixed array of metadata on success
+   */
   function metadata($table,$full=false) {
       $count = 0;
       $id    = 0;
@@ -202,28 +307,65 @@ class db {
       return $res;
   }
 
-
+  /**
+   * Return number of rows affected during statement execution
+   *
+   * The function invoked <i> num_rows() </i> function
+   * @access public
+   * @return int
+   */
   function affected_rows() {
     return $this->num_rows();
   }
 
+  /**
+   * Return number of rows affected during statement execution
+   *
+   * Note: This function does not return number of rows selected
+   * @access public
+   * @return int
+   */
   function num_rows() {
     return OCIrowcount($this->Parse);
   }
 
+  /**
+   * Return the number of fields in a result set
+   * @access public
+   * @return int
+   */
   function num_fields() {
       return OCINumcols($this->Parse);
   }
 
+  /**
+   * Return the number of rows affected during statement execution
+   *
+   * Shorthand notation - invoke <i> num_rows() </i> function
+   * @access public
+   * @return int
+   */
   function nf() {
     return $this->num_rows();
   }
 
+  /**
+   * Print the number of rows
+   *
+   * Print the value returned by <i> num_rows() </i> function 
+   * @access public
+   */
   function np() {
     print $this->num_rows();
   }
-
-  function f($Name) {
+  
+  /**
+   * Return the value of $Name field in the current record
+   * @access public
+   * @param string $Name
+   * @return mixed
+   */
+  function f($Name){
     if (is_object($this->Record[$Name]))
     {
       return $this->Record[$Name]->load();
@@ -233,10 +375,21 @@ class db {
     }
   }
 
+  /**
+   * Print the value of $Name field in the current record
+   * @access public
+   * @param string $Name
+   */
   function p($Name) {
     print $this->f($Name);
   }
 
+  /**
+   * Return the next ID value of $seq_name table
+   * @access public
+   * @param string $seq_name
+   * @return int
+   */
   function nextid($seqname)
   {
     $this->connect();
@@ -272,6 +425,11 @@ class db {
     return $next_id;
   }
 
+  /**
+   * Free all associated data in memory
+   *
+   * @access public
+   */
   function disconnect() {
       if($this->Debug) {
           printf("Disconnecting...<br>\n");
@@ -279,6 +437,11 @@ class db {
       OCILogoff($this->Link_ID);
   }
 
+  /**
+   * Error handling
+   * @access private
+   * @param string $msg
+   */
   function halt($msg) {
     printf("</td></tr></table><b>Database error:</b> %s<br>\n", $msg);
     printf("<b>ORACLE Error</b>: %s<br>\n",
@@ -286,21 +449,39 @@ class db {
     die("Session halted.");
   }
 
+  /**
+   * Locking a table in the current database
+   *
+   * @access public
+   * @param string $table
+   * @param string $mode
+   * @return int 1 (true) on success, 0 (false) on failure
+   */
   function lock($table, $mode = "write") {
     $this->connect();
     if ($mode == "write") {
       $Parse=OCIParse($this->Link_ID,"lock table $table in row exclusive mode");
-      OCIExecute($Parse);
+      $result = OCIExecute($Parse);
     } else {
       $result = 1;
     }
     return $result;
   }
 
+  /**
+   * Unlock all tables in the current database
+   * @access public
+   * @return int true on success, false on failure
+   */
   function unlock() {
     return $this->query("commit");
   }
 
+  /**
+   * Return an array listing names of the permanent table (Non-Temporary tables) in the current database
+   * @access private
+   * @return mixed 
+   */
   function table_names() {
    $this->connect();
    $this->query("
@@ -316,14 +497,26 @@ class db {
   return $info;
   }
 
+  /**
+   * Add special characters to query string
+   * @access private
+   * @param string $query
+   * @return string
+   */
   function add_specialcharacters($query)
   {
-  return str_replace("'","''",$query);
+  	return str_replace("'","''",$query);
   }
 
+  /**
+   * Split special characters in query string
+   * @access private
+   * @param string $query
+   * @return string
+   */
   function split_specialcharacters($query)
   {
-  return str_replace("''","'",$query);
+  	return str_replace("''","'",$query);
   }
 }
 ?>
