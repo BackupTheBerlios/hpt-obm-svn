@@ -120,6 +120,7 @@ if ($email_module && ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $email
   }
 }
 ?>
+<link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" />
 </head>
 <body>
 </body>
