@@ -240,6 +240,7 @@ if ($company_id == 0 || $task == 'save_company')
 
 	$addressbook_id = $company['addressbook_id'];
 	$cp = new addressbook();
+	$parent_dropbox = new dropbox();
 	$company['parent_id'] = 0;
 	if ($company_id)
 	{
@@ -247,7 +248,7 @@ if ($company_id == 0 || $task == 'save_company')
 		$company['parent_id'] = $cp->f('parent');
 	}
 	$count = $cp->get_companies($addressbook_id);
-	$company['parents'] = "<option value='0'>$strNone</option>";
+	$parent_dropbox->add_value(0,$strNone);
 	if ($count)
 	while ($cp->next_record())
 	{
@@ -255,7 +256,7 @@ if ($company_id == 0 || $task == 'save_company')
 		if ($id == $company_id)
 			continue;
 		$name = $cp->f('name');
-		$company['parents'] .= "<option value='$id'".($id == $company['parent_id'] ? "selected" : "").">$name</option>";
+		$parent_dropbox->add_value($id,$name);
 	}
 
 
