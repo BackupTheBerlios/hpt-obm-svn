@@ -276,7 +276,7 @@ echo '<input type="hidden" name="last_value" value="'.$id.'" />';
 echo '<input type="hidden" name="task_value" value="0" />';
 echo '<input type="hidden" name="task_change" value="0" />';
 echo '<br />';
-echo '<tr><td colspan="100">'.$pm_task_name.':</td></tr>';
+echo '<tr><td id="edit" colspan="100">'.$pm_task_name.':</td></tr>';
 echo '<tr><td colspan="31">';
 echo '<input type="text" class="textbox" style="width: 350px;" name="task_name" value="" maxlength="50" /></td>';
 echo '<td colspan="30">';
@@ -314,6 +314,7 @@ function set_edit(name, pre, days, task_value)
   document.forms[0].task_time.value = days;
   document.forms[0].task_predecessors.value = pre;
   document.forms[0].task_value.value = task_value;
+  document.location.hash='edit';
 }
 
 function add_task()
