@@ -12,12 +12,29 @@
 
 class button
 {
+  /**
+   * Constructor.
+   *
+   * @param $text the text button. default is null. If $text is not null, then echo the button.
+   * @param $action default is null
+   * @size default is 100
+   * @return none
+   */
   function button($text=null, $action=null, $size='100')
   {
        if ($text){
        echo $this->get_button($text, $action, $size);
        }
   }
+
+  /**
+   * Get button.
+   *
+   * @param $text the text button. default is null
+   * @param $action default is null
+   * @size default is 100
+   * @return the html string of the button.
+   */
   function get_button($text, $action, $size='100')
   {
     return '<input type="button" class="button" style="width: '.$size.'px;" value="'.$text.'" onclick="'.$action.'" onmouseover="javascript:this.className=\'button_mo\';" onmouseout="javascript:this.className=\'button\';" />';

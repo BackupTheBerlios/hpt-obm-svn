@@ -16,6 +16,13 @@ class dropbox
   var $text=array();
   var $optgroup;
 
+  /**
+   * Add new (text/value) to the dropbox.
+   *
+   * @param $value
+   * @param $text
+   * @return true/false.
+   */
   function add_value($value, $text)
   {
     if ($text != '')
@@ -29,6 +36,13 @@ class dropbox
     }
   }
 
+  /**
+   * Check if value $value (or text if $is_text is true) is in the dropbox.
+   *
+   * @param $value
+   * @param $is_text
+   * @return true/false.
+   */
   function is_in_dropbox($value, $is_text=false)
   {
     if ($is_text)
@@ -40,12 +54,25 @@ class dropbox
     }
   }
 
-
+  /**
+   * Add optgroup $name.
+   *
+   * @param $name
+   * @return none
+   */
   function add_optgroup($name)
   {
     $this->optgroup[count($this->value)] = $name;
   }
 
+  /**
+   * Add all data from sql object named $sql_object to the dropbox.
+   *
+   * @param $sql_object object name
+   * @param $value sql field to get value
+   * @param $text sql field to get text
+   * @return none
+   */
   function add_sql_data($sql_object, $value, $text)
   {
     global $$sql_object;
@@ -57,6 +84,13 @@ class dropbox
     }
   }
 
+  /**
+   * Add an array of values.
+   *
+   * @param $value array of values
+   * @param $text the text
+   * @return true
+   */
   function add_arrays($value, $text)
   {
     if (is_array($this->value))
@@ -71,17 +105,43 @@ class dropbox
     return true;
   }
 
+  /**
+   * Count options of the dropbox.
+   *
+   * @return the count.
+   */
   function count_options()
   {
     return count($this->value);
   }
 
+  /**
+   * Print the dropbox.
+   *
+   * @param $name field name of the dropbox in form.
+   * @param $selected_field selected field(s) (default is empty)
+   * @param $attributes additional attributes (default is empty)
+   * @param $multiple allow multiple choice or not (default is false)
+   * @param $size default is 10
+   * @param $width default is 0
+   * @return none
+   */
   function print_dropbox($name, $selected_field='', $attributes='', $multiple=false, $size='10', $width='0')
   {
 	echo $this->get_dropbox($name, $selected_field, $attributes, $multiple, $size, $width);	
   }
 
-
+  /**
+   * Return html code of  the dropbox.
+   *
+   * @param $name field name of the dropbox in form.
+   * @param $selected_field selected field(s) (default is empty). this is an array if multiple selections
+   * @param $attributes additional attributes (default is empty)
+   * @param $multiple allow multiple choice or not (default is false)
+   * @param $size default is 10
+   * @param $width default is 0
+   * @return none
+   */
   function get_dropbox($name, $selected_field='', $attributes='', $multiple=false, $size='10', $width='0')
   {
     $return_str='';

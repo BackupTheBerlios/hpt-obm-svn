@@ -20,6 +20,13 @@ class statusbar
   var $info_text;
   var $turn_red_point = 0;
 
+  /**
+   * Print the progress bar.
+   *
+   * @param $usage
+   * @param $limit
+   * @return none
+   */
   function print_bar($usage, $limit)
   {
     if ($limit != 0)

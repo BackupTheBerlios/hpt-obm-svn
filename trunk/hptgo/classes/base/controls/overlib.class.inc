@@ -12,6 +12,11 @@
 
 class overlib
 {
+  /**
+   * Get header
+   *
+   * @return header html code
+   */
   function get_header()
   {
     global $GO_CONFIG, $GO_THEME;
@@ -23,6 +28,14 @@ class overlib
       '<link href="'.$GO_THEME->theme_url.'overlib.css" type="text/css" rel="stylesheet" />';
   }
 
+  /**
+   * Get overlib.
+   *
+   * @param $text text to display.
+   * @param $caption default is empty.
+   * @param $option default is empty.
+   * @return overlib html code.
+   */
   function print_overlib($text, $caption='', $options='')
   {
     if ($text != '')

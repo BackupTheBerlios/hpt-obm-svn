@@ -34,7 +34,23 @@ class tabtable
   var $css_tab_background = 'TabBackground';
   var $css_tab_background_vert = 'TabBackgroundVert';
 
-  //constructor sets basic propertiesz
+  /**
+   * constructor sets basic properties
+   *
+   * @param $id
+   * @param $title default is empty
+   * @param $width default is empty
+   * @param $height default is empty
+   * @param $tabwidth default is 120
+   * @param $arguments default is empty
+   * @param $submit_form default is false
+   * @param $align is left
+   * @param $valign is top
+   * @param $form_name default is 'forms[0]'
+   * @param $tab_direction default is horizontal
+   * @param $right_title default is empty
+   * @return none
+   */
   function tabtable($id, $title='', $width='', $height='', $tabwidth='120', $arguments='', $submit_form=false, $align='left', $valign='top', $form_name='forms[0]', $tab_direction='horizontal', $right_title = '')
   {
     $this->id = $id;
@@ -54,6 +70,9 @@ class tabtable
     $this->active_tab = isset($_REQUEST[$active_tab_ref]) ? $_REQUEST[$active_tab_ref] : 0;
   }
 
+  /**
+   * Set css info. FIXME
+   */
   function set_classnames($table, $tab, $active_tab, $tab_background)
   {
     $this->css_table= $table;
@@ -62,14 +81,26 @@ class tabtable
     $this->css_tab_background = $tab_background;
   }
 
-  //hint: Id could be a document to include
+  /**
+   * Add a tab with $id and name $name.
+   *
+   * @param $id Hint: Id could be a document to include
+   * @param $name
+   * @return none
+   */
   function add_tab($id, $name)
   {
     $this->tabs[] = $name;
     $this->docs[] = $id;
   }
 
-  //set the active tab manually call this before the print_head() function
+  /**
+   * set the active tab manually call this before the print_head() function
+   *
+   * @param $index
+   * @return true/false
+   * @see print_head
+   */
   function set_active_tab($index)
   {
     if (isset($this->tabs[$index]))
@@ -82,8 +113,13 @@ class tabtable
     }
   }
 
-//set active tab by name
-function set_active_tab_by_name($name)
+  /**
+   * set active tab by name
+   *
+   * @param $name
+   * @return true/false
+   */
+  function set_active_tab_by_name($name)
   {
 	if ($needle=array_search ($name, $this->docs))
     {
@@ -95,8 +131,13 @@ function set_active_tab_by_name($name)
     }
   }
 
-//get active tab by name
-function get_active_tab_by_name($name)
+  /**
+   * get active tab by name
+   *
+   * @param $name
+   * @return index or 0
+   */
+  function get_active_tab_by_name($name)
   {
         if ($needle=array_search ($name, $this->docs))
     {
@@ -106,10 +147,15 @@ function get_active_tab_by_name($name)
       return 0;
     }
   }
-  /*last three functions should be called in this order
-    $tabtable->print_head();
-    require($tabtable->get_active_tab_id());
-    $tabtable->print_foot();
+
+  /**
+   * Print tabtable's head.
+   * last three functions should be called in this order
+   * $tabtable->print_head();
+   * require($tabtable->get_active_tab_id());
+   * $tabtable->print_foot();
+   *
+   * @return none
    */
   function print_head()
   {
@@ -204,6 +250,11 @@ function get_active_tab_by_name($name)
 
   }
 
+  /**
+   * get active tab id
+   *
+   * @return id or false
+   */
   function get_active_tab_id()
   {
     if (isset($this->docs[$this->active_tab]))
@@ -215,6 +266,9 @@ function get_active_tab_by_name($name)
     }
   }
 
+  /**
+   * Print tabtable's foot.
+   */
   function print_foot()
   {
     echo '</td></tr></table>';

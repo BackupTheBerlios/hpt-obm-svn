@@ -12,6 +12,9 @@
 
 class date_picker
 {
+  /**
+   * return date picker's header
+   */
   function get_header()
   {
     global $GO_CONFIG, $jscalendar_language_name;
@@ -24,14 +27,39 @@ class date_picker
     return $headers;
   }
 
+  /**
+   * Print the date picker.
+   *
+   * @param $name
+   * @param $date_format
+   * @param $set_date default is empty
+   * @param $flat_div_id default is empty
+   * @param $flat_callbackfunction default is empty
+   * @param $arguments default is empty
+   * @param $disabled default is false
+   * @return none
+   * @see get_date_picker
+   */
   function print_date_picker($name, $date_format, $set_date='', $flat_div_id='', $flat_callbackfunction='', $arguments='', $disabled=false)
   {
 	echo  $this->get_date_picker($name, $date_format, $set_date, $flat_div_id, $flat_callbackfunction, $arguments, $disabled);
   }
 
+  /**
+   * Get the date picker.
+   *
+   * @param $name
+   * @param $date_format
+   * @param $set_date default is empty
+   * @param $flat_div_id default is empty
+   * @param $flat_callbackfunction default is empty
+   * @param $arguments default is empty
+   * @param $disabled default is false
+   * @return html code of the date picker
+   */
   function get_date_picker($name, $date_format, $set_date='', $flat_div_id='', $flat_callbackfunction='', $arguments='', $disabled=false)
   {
-	$str_return='';
+    $str_return='';
     //dirty hack for mysql default date
     if ($set_date == '00-00-0000')
     {
@@ -63,25 +91,31 @@ firstDay  : '.$first_weekday.',
 inputField  : "'.$name.'_input",
 ifFormat    : "'.$date_format.'",';
 
-if ($set_date != '')
-{
-$str_return.='date :  "'.str_replace('-','/',$set_date).'",';
-}
-
-if ($flat_div_id != '')
-{
-$str_return.='flat : "'.$flat_div_id.'", flatCallback : '.$flat_callbackfunction;
-}else
-{
-$str_return.='button      : "'.$name.'_button"';
-}
-$str_return.='});</script>';
-return $str_return;
+    if ($set_date != '')
+      {
+	$str_return.='date :  "'.str_replace('-','/',$set_date).'",';
       }
 
-function convert_date_format($php_date_format)
-{
-  /*
+    if ($flat_div_id != '')
+    {
+      $str_return.='flat : "'.$flat_div_id.'", flatCallback : '.$flat_callbackfunction;
+    }else
+    {
+      $str_return.='button      : "'.$name.'_button"';
+    }
+    $str_return.='});</script>';
+    return $str_return;
+  }
+
+  /**
+   * Convert date format.
+   *
+   * @param $php_date_format
+   * @return converted format
+   */
+  function convert_date_format($php_date_format)
+  {
+    /*
      %a 	abbreviated weekday name
      %A 	full weekday name
      %b 	abbreviated month name
@@ -108,45 +142,45 @@ function convert_date_format($php_date_format)
      %y 	year without the century ( 00 .. 99 )
      %Y 	year including the century ( ex. 1979 )
      %% 	a literal % character
-   */
+    */
 
 
-  $cal_format[] = '%e';
-  $php_format[] = 'j';
+    $cal_format[] = '%e';
+    $php_format[] = 'j';
 
-  $cal_format[] = '%d';
-  $php_format[] = 'd';
+    $cal_format[] = '%d';
+    $php_format[] = 'd';
 
-  $cal_format[] = '%H';
-  $php_format[] = 'H';
+    $cal_format[] = '%H';
+    $php_format[] = 'H';
 
-  $cal_format[] = '%I';
-  $php_format[] = 'G';
+    $cal_format[] = '%I';
+    $php_format[] = 'G';
 
-  $cal_format[] = '%k';
-  $php_format[] = 'h';
+    $cal_format[] = '%k';
+    $php_format[] = 'h';
 
-  $cal_format[] = '%l';
-  $php_format[] = 'g';
+    $cal_format[] = '%l';
+    $php_format[] = 'g';
 
-  $cal_format[] = '%P';
-  $php_format[] = 'a';
+    $cal_format[] = '%P';
+    $php_format[] = 'a';
 
-  $cal_format[] = '%Y';
-  $php_format[] = 'Y';
+    $cal_format[] = '%Y';
+    $php_format[] = 'Y';
 
-  $cal_format[] = '%y';
-  $php_format[] = 'y';
+    $cal_format[] = '%y';
+    $php_format[] = 'y';
 
-  $cal_format[] = '%m';
-  $php_format[] = 'm';
+    $cal_format[] = '%m';
+    $php_format[] = 'm';
 
-  for ($i=0;$i<count($php_format);$i++)
-  {
-    $php_date_format = str_replace($php_format[$i], $cal_format[$i], $php_date_format);
+    for ($i=0;$i<count($php_format);$i++)
+    {
+      $php_date_format = str_replace($php_format[$i], $cal_format[$i], $php_date_format);
+    }
+    return $php_date_format;
   }
-  return $php_date_format;
-}
 
 
 }

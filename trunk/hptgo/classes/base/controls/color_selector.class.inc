@@ -14,11 +14,25 @@ class color_selector
 {
   var $colors = array();
 
+  /**
+   * Add new color $color_code to the color selector.
+   *
+   * @param $color_code
+   * @return none
+   */
   function add_color($color_code)
   {
     $this->colors[] = $color_code;
   }
 
+  /**
+   * Print the color selector.
+   *
+   * @param $name name of the color selector field
+   * @param $selected_color default color
+   * @param $form_name default is 'forms[0]'
+   * @return none
+   */
   function print_color_selector($name, $selected_color, $form_name ='forms[0]')
   {
     global $GO_THEME;

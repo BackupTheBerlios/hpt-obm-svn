@@ -80,44 +80,44 @@ class htmlarea
 id: "'.$id.'",
 tooltip: "'.$tooltip.'",
 options: {';
-$option_count = count($options);
-for($i=0;$i<$option_count;$i++)
-{
-if ($i!=0)
-{
-$button['code'] .= ',';
-}
-$button['code'] .= '"'.$options[$i]['text'].'":"'.$options[$i]['value'].'"';
-}
-
-$button['code'] .= '},
+    $option_count = count($options);
+    for($i=0;$i<$option_count;$i++)
+      {
+	if ($i!=0)
+	{
+	  $button['code'] .= ',';
+	}
+	$button['code'] .= '"'.$options[$i]['text'].'":"'.$options[$i]['value'].'"';
+      }
+    
+    $button['code'] .= '},
 context : "'.$context.'",
 action: '.$action.',
 refresh: '.$refresh.'
 });';
-$button['id'] = $id;
-$this->buttons[] = $button;
-}
+    $button['id'] = $id;
+    $this->buttons[] = $button;
+  }
 
-function add_button($id, $tooltip, $image, $textmode, $action)
-{
-  $button['code'] =  '
+  function add_button($id, $tooltip, $image, $textmode, $action)
+  {
+    $button['code'] =  '
     config.registerButton("'.$id.'",  "'.$tooltip.'", "'.$image.'", '.$textmode.', '.$action.');
   ';
-  $button['id'] = $id;
-  $this->buttons[] = $button;
-}
+    $button['id'] = $id;
+    $this->buttons[] = $button;
+  }
 
-function add_font($name, $family)
-{
-  $font['name']  = $name;
-  $font['family']  = $family;
-  $this->fonts[] = $font;
-}
+  function add_font($name, $family)
+  {
+    $font['name']  = $name;
+    $font['family']  = $family;
+    $this->fonts[] = $font;
+  }
 
-function get_textarea_header($width, $height)
-{
-  $header = '
+  function get_textarea_header($width, $height)
+  {
+    $header = '
     <script type="text/javascript">
     function initEditor()
     {
@@ -156,25 +156,25 @@ function get_textarea_header($width, $height)
   
   </script>';
 
-  return $header;
-}
-
-function get_header($name, $width='600px', $height='400px', $rows='0', $pagestyle='', $config_options='', $table_operations=false, $restrict_editor=false)
-{
-  global $GO_CONFIG, $htmlarea_language_name;
-  $this->width = 0;
-  $this->name = $name;
-  $this->rows = 0;
-
-  if (!$this->browser_is_supported)
-  {
-    return $this->get_textarea_header($width, $height);
+    return $header;
   }
 
-  $this->pagestyle = $pagestyle == '' ? $this->pagestyle : $pagestyle;
+  function get_header($name, $width='600px', $height='400px', $rows='0', $pagestyle='', $config_options='', $table_operations=false, $restrict_editor=false)
+  {
+    global $GO_CONFIG, $htmlarea_language_name;
+    $this->width = 0;
+    $this->name = $name;
+    $this->rows = 0;
 
-  $editor_url = $GO_CONFIG->control_url.'htmlarea/';
-  $header = '
+    if (!$this->browser_is_supported)
+    {
+      return $this->get_textarea_header($width, $height);
+    }
+
+    $this->pagestyle = $pagestyle == '' ? $this->pagestyle : $pagestyle;
+
+    $editor_url = $GO_CONFIG->control_url.'htmlarea/';
+    $header = '
     <script type="text/javascript">
     _editor_url = "'.$editor_url.'";
   _editor_lang = "'.$htmlarea_language_name.'";
@@ -184,11 +184,11 @@ function get_header($name, $width='600px', $height='400px', $rows='0', $pagestyl
     <script type="text/javascript">
     HTMLArea.loadPlugin("CSS");
   ';
-  if ($table_operations)
-  {
-    $header .= 'HTMLArea.loadPlugin("TableOperations");';
-  }
-  $header .= '
+    if ($table_operations)
+    {
+      $header .= 'HTMLArea.loadPlugin("TableOperations");';
+    }
+    $header .= '
     var editor = null;
 
   function initEditor()
@@ -200,30 +200,30 @@ function get_header($name, $width='600px', $height='400px', $rows='0', $pagestyl
 
     if($restrict_editor)
     {
-    	$header .= 'config.toolbar = ['.
-									'["formatblock", "space",'.
-									  '"bold", "italic", "underline", "strikethrough", "separator",'.
-									  '"subscript", "superscript", "separator",'.
-									  '"copy", "cut", "paste", "space", "undo", "redo" ],'.							
-									 '[ "justifyleft", "justifycenter", "justifyright", "justifyfull", "separator",'.
-									  '"lefttoright", "righttoleft", "separator",'.
-									  '"orderedlist", "unorderedlist", "outdent", "indent", "separator",'.
-									  '"inserthorizontalrule", "createlink", "insertimage", "inserttable", "htmlmode", "separator",'.
-									  '"popupeditor", "separator", "showhelp", "about" ]'.
-								'];';
+      $header .= 'config.toolbar = ['.
+	'["formatblock", "space",'.
+	'"bold", "italic", "underline", "strikethrough", "separator",'.
+	'"subscript", "superscript", "separator",'.
+	'"copy", "cut", "paste", "space", "undo", "redo" ],'.							
+	'[ "justifyleft", "justifycenter", "justifyright", "justifyfull", "separator",'.
+	'"lefttoright", "righttoleft", "separator",'.
+	'"orderedlist", "unorderedlist", "outdent", "indent", "separator",'.
+	'"inserthorizontalrule", "createlink", "insertimage", "inserttable", "htmlmode", "separator",'.
+	'"popupeditor", "separator", "showhelp", "about" ]'.
+	'];';
     }
     
     $header.='config.fontname = {'.
-    '"Default":	   \'\','.
-		'"Arial":	   \'arial,helvetica,sans-serif\','.
-		'"Courier New":	   \'courier new,courier,monospace\','.
-		'"Georgia":	   \'georgia,times new roman,times,serif\','.
-		'"Tahoma":	   \'tahoma,arial,helvetica,sans-serif\','.
-		'"Times New Roman": \'times new roman,times,serif\','.
-		'"Verdana":	   \'verdana,arial,helvetica,sans-serif\','.
-		'"impact":	   \'impact\','.
-		'"WingDings":	   \'wingdings\''.
-	 '};';
+      '"Default":	   \'\','.
+      '"Arial":	   \'arial,helvetica,sans-serif\','.
+      '"Courier New":	   \'courier new,courier,monospace\','.
+      '"Georgia":	   \'georgia,times new roman,times,serif\','.
+      '"Tahoma":	   \'tahoma,arial,helvetica,sans-serif\','.
+      '"Times New Roman": \'times new roman,times,serif\','.
+      '"Verdana":	   \'verdana,arial,helvetica,sans-serif\','.
+      '"impact":	   \'impact\','.
+      '"WingDings":	   \'wingdings\''.
+      '};';
 
     if ($width <= 0)
     {
@@ -295,19 +295,19 @@ function get_header($name, $width='600px', $height='400px', $rows='0', $pagestyl
     //add buttons
     $first=true;
     $push = 'config.toolbar.push([';
-	while ($button = array_shift($this->buttons))
-	{
-	$header .= $button['code'];
-	if ($first)
-	{
+    while ($button = array_shift($this->buttons))
+    {
+      $header .= $button['code'];
+      if ($first)
+      {
 	$first=false;
 	$push .= "'".$button['id']."'";
-	}else
-	{
+      }else
+      {
 	$push .= ",'".$button['id']."'";
-	}
-	}
-	$push .= ']);';
+      }
+    }
+    $push .= ']);';
 
     $header .= $push;
     if ($table_operations)
@@ -369,7 +369,7 @@ function get_header($name, $width='600px', $height='400px', $rows='0', $pagestyl
     editor._textArea.style.width = editor._iframe.style.width = newWidth + "px";
   }
     ';
-  $header .= "
+    $header .= "
   function clean_editor_html() {
 		var D = editor.getInnerHTML();
 		
@@ -439,64 +439,65 @@ function get_header($name, $width='600px', $height='400px', $rows='0', $pagestyl
   </script>
      ";
 
-  return $header;
-}
+    return $header;
+  }
 
-function generate_combos()
-{
-  $styles = $this->get_styles($this->pagestyle);
-
-  if (count($styles) > 0)
+  function generate_combos()
   {
-    $combos = '
+    $styles = $this->get_styles($this->pagestyle);
+
+    if (count($styles) > 0)
+    {
+      $combos = '
     {
 combos : [
 	 { label: "Syntax:",
 
 options: {"CSS":""';
 
-	   for ($i=0;$i<count($styles);$i++)
-	   {
-	     $combos .= ', "'.$styles[$i].'":"'.$styles[$i].'"';
-	   }
+      for ($i=0;$i<count($styles);$i++)
+      {
+	$combos .= ', "'.$styles[$i].'":"'.$styles[$i].'"';
+      }
 
-	   $combos .= '}
+      $combos .= '}
 	 }
 	 ]
     }';
-    return $combos;
-  }else
-  {
-    return false;
+      return $combos;
+    }else
+    {
+      return false;
+    }
   }
-}
 
-function print_htmlarea($value='')
-{
-	echo $this->get_htmlarea($value);
-}
-function get_htmlarea($value='')
-{
-  return '<textarea id="'.$this->name.'" style="width: '.$this->width.'" name="'.$this->name.'" rows="'.$this->rows.'">'.$value.'</textarea>';
-}
-
-function browser_is_supported()
-{
-  return $this->browser_is_supported;
-}
-
-function force_textmode()
-{
-  $this->browser_is_supported = false;
-}
-
-function htmlarea()
-{
-  $browser = detect_browser();
-  if ($browser['name'] == 'MSIE' && $browser['version'] >= 5.5 || $browser['name'] == 'MOZILLA' && $browser['version'] > 4.0 && $browser['subversion'] >= 20030210)
+  function print_htmlarea($value='')
   {
-    $this->browser_is_supported = true;
+    echo $this->get_htmlarea($value);
   }
-}
+
+  function get_htmlarea($value='')
+  {
+    return '<textarea id="'.$this->name.'" style="width: '.$this->width.'" name="'.$this->name.'" rows="'.$this->rows.'">'.$value.'</textarea>';
+  }
+
+  function browser_is_supported()
+  {
+    return $this->browser_is_supported;
+  }
+
+  function force_textmode()
+  {
+    $this->browser_is_supported = false;
+  }
+
+  function htmlarea()
+  {
+    $browser = detect_browser();
+    if ($browser['name'] == 'MSIE' && $browser['version'] >= 5.5 || $browser['name'] == 'MOZILLA' && $browser['version'] > 4.0 && $browser['subversion'] >= 20030210)
+    {
+      $this->browser_is_supported = true;
+    }
+  }
 }
 ?>

@@ -10,6 +10,11 @@
    option) any later version.
  */
 
+/**
+ * This class is used to build a user/contact selection field in any form.
+ * The field will have button to pupup  addressbooks so that people can select
+ * users/contacts they want.
+ */
 class select
 {
   var $value;
@@ -20,6 +25,15 @@ class select
   var $name_field_value;
   var $name_field;
 
+  /**
+   * Constructor.
+   *
+   * @param $type 'user' to select users only, or else select contacts only
+   * @param $form_name form name
+   * @param $name name of an field in form
+   * @param value default value of the field
+   * @return none
+   */
   function select($type, $form_name, $name, $value)
   {
     $this->name_field = $name.'_name';
@@ -29,11 +43,24 @@ class select
     $this->value = $value;
   }
 
+  /**
+   * Print the link with caption $text.
+   *
+   * @param $text
+   * @return none
+   * @see get_link
+   */
   function print_link($text)
   {
     echo $this->get_link($text);
   }
 
+  /**
+   * Return the link to popup addressbook selector with caption $text.
+   *
+   * @param $text
+   * @return the link
+   */
   function get_link($text)
   {
     global $GO_THEME, $GO_CONFIG;
@@ -58,7 +85,11 @@ class select
       'border="0" style="margin-right: 5px;" />'.$text.'</a>';
   }
 
-
+  /**
+   * Return the user/contact selection field.
+   *
+   * @return html code of the field.
+   */
   function get_field()
   {
     global $GO_THEME, $GO_CONFIG, $strDeleteItem, $GO_USERS;
@@ -100,6 +131,11 @@ class select
 	return $return_string;
   }
 
+  /**
+   * Print the field.
+   *
+   * @see get_field
+   */
   function print_field()
   {
     echo $this->get_field();

@@ -15,12 +15,28 @@ class radio_list
   var $group;
   var $selected;
 
+  /**
+   * Constructor.
+   *
+   * @param $group
+   * @param $selected default is empty
+   * @return none
+   */
   function radio_list($group, $selected='')
   {
     $this->group = $group;
     $this->selected = $selected;
   }
 
+  /**
+   * Add new option, print it too.
+   *
+   * @param $value
+   * @param $text
+   * @param $disabled default is empty
+   * @param $attributes additional attributes (default is empty)
+   * @return none
+   */
   function add_option($value, $text, $disabled=false, $attributes='')
   {
     if ($this->selected == $value)

@@ -12,6 +12,17 @@
 
 class checkbox
 {
+  /**
+   * Constructor. Echo the checkbox.
+   *
+   * @param $name the checkbox id.
+   * @param $value the checkbox value
+   * @param $text the checkbox caption
+   * @param $checked checked status
+   * @param $disabled
+   * @param $attributes additional attributes, default is empty
+   * @return none
+   */
   function checkbox($name, $value, $text, $checked=false, $disabled=false, $attributes='')
   {
     $id = uniqid(time());
