@@ -132,7 +132,7 @@ class GO_MODULES extends db
     {
       $GO_SECURITY->delete_acl($module['acl_read']);
       $GO_SECURITY->delete_acl($module['acl_write']);
-      $sql = "DELETE FROM modules WHERE id='".$module_id."'";
+      $sql = "DELETE FROM modules WHERE id='".addslashes($module_id)."'";
       if($this->query($sql))
       {
 	$uninstall_sql_file = $GO_CONFIG->root_path.'modules'.
