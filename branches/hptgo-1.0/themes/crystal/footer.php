@@ -7,27 +7,32 @@ header('Content-Type: text/html; charset='.$charset);
 var prevId='';
 var prevFontWeight = 'normal';
 var prevFontSize=10;
-//function Bold_Text(id, url){
-function Bold_Text(id){
-	if (document.getElementById){
-		if (prevId != ''){
-			document.getElementById(prevId).style.fontWeight = prevFontWeight;
-			document.getElementById(prevId).style.fontSize = prevFontSize;
-		}
-		prevFontWeight = document.getElementById(id).style.fontWeight;
-		prevFontSize = document.getElementById(id).style.fontSize;
-		document.getElementById(id).style.fontWeight = 'bold';
-		document.getElementById(id).style.fontSize = 11;
-	}
-	else if (document.all){
-		if (prevId != ''){
-			document.all[prevId].style.fontWeight = prevFontWeight;
-			document.all[prevId].style.fontSize = prevFontSize;
-		}
-		prevFontWeight = document.all[id].style.fontWeight;
-		prevFontSize = document.all[id].style.fontSize;
-		document.all[id].style.fontWeight = 'bold';
-		document.all[id].style.fontSize = 11;		
+
+function get_object(name)
+{
+	if (document.getElementById)
+		return document.getElementById(name);
+ 	else if (document.all)
+  		return document.all[name];
+ 	else if (document.layers)
+  		return document.layers[name];
+	return false;
+}
+
+function Bold_Text(id)
+{
+	if (obj = get_object(id))
+	{
+		if ( prevId != '')
+			if (pre_obj = get_object(prevId) )
+			{
+				pre_obj.style.fontWeight = prevFontWeight;
+				pre_obj.style.fontSize = prevFontSize;
+			}
+		prevFontWeight = obj.style.fontWeight;
+		prevFontSize = obj.style.fontSize;
+		obj.style.fontWeight = 'bold';
+		obj.style.fontSize = 11;
 	}
 	prevId = id;
 }
