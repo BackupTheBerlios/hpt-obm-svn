@@ -88,7 +88,8 @@ class GO_MODULES extends db
       $this->full_url = $GO_CONFIG->full_url.'modules/'.$module_id.'/';
       $this->url = $GO_CONFIG->host.'modules/'.$module_id.'/';
 
-      if ($this->read_permissions || $this->write_permissions)
+      if ($this->modules[$module_id]['enable'] &&
+      ($this->read_permissions || $this->write_permissions))
       {
 	if ($admin)
 	{

@@ -71,7 +71,9 @@ function Bold_Text(id)
 				if (!isset($module_map[$module])) continue;
 				$module = $modules[$module_map[$module]];
 				echo "\n<!-- ".$module['id']." -->\n";
-				if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read']))
+				if ($module['enable'] && 
+				($GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read']) ||
+				$GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read'])))
 				{
 					$GO_THEME->images[$module['id']] = isset($GO_THEME->images[$module['id']]) ? $GO_THEME->images[$module['id']] : $GO_THEME->images['unknown'];
 					if ($show_text)
