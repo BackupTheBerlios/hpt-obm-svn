@@ -16,7 +16,7 @@
 	$sc_quantity = 'Quantity';
 	$sc_price = 'Price';
 	$sc_total = 'Total';
-	$sc_inc_dec = 'Increase/Decrease';
+	$sc_inc_dec = 'Inc/Dec';
 	$sc_category = 'Category';
 	$sc_be_attachment = 'is accessory';
 	$sc_of = 'of';
@@ -70,7 +70,7 @@
 	
 	$sc_clear_cart = 'Clear cart';
 	
-	$sc_buy = 'Buy';
-	$sc_buy_all = 'Buy checked items';
+	$sc_buy = 'Bring in quotation';
+	$sc_buy_all = 'Bring checked items in quotation';
 	$sc_export = 'Export';
 ?>

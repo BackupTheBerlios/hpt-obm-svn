@@ -1,10 +1,34 @@
+<?php 
+	$image_string = '<img src="'.$GO_THEME->images['arrow_down'].'" border="0">';
+	if ($_POST['direction'] == 'DESC')
+		$image_string = '<img src="'.$GO_THEME->images['arrow_up'].'" border="0">';
+?>
 <form name="frmProList" method="post" action="">
 <input type="hidden" name="task">
 <input type="hidden" name="id">
 <input type="hidden" name="list_id" value="<?php echo $_POST['list_id']?>">
 <input type="hidden" name="txt_name">
 <input type="hidden" name="close_win">
-<?php echo $sc_amount.' :'.$_SESSION['cart']->total.'  - '.$sc_quantity.' :'.$_SESSION['cart']->itemcount(); ?>
+<input type="hidden" name="sort_fld" value="<?php echo $_POST['sort_fld']?>">
+<input type="hidden" name="direction" value="<?php echo $_POST['direction']=='ASC'?'DESC':'ASC';?>">
+<table width="100%"  border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<td valign="middle" width="1%">
+			<img src="<?php echo $GO_THEME->images['quantity']?>" border="0">
+		</td>
+		<td valign="middle" width="1%" nowrap>
+			<b>&nbsp; x &nbsp;&nbsp;<?php echo $_SESSION['cart']->itemcount(); ?></b>
+		</td>
+		<td width="3%" align="center">-</td>
+		<td valign="middle" width="1%" nowrap>
+			<img src="<?php echo $GO_THEME->images['amount']?>" border="0">
+		</td>
+		<td valign="middle" width="1%" nowrap>
+			<b>&nbsp; = &nbsp;&nbsp;<?php echo $_SESSION['cart']->total?> $</b>
+		</td>
+		<td>&nbsp;</td>
+	</tr>
+</table>
 <table width="100%"  border="0" cellspacing="0" cellpadding="5">
 <tr>
 	<td valign="top" width="15%">
@@ -108,11 +132,31 @@
 <table width="100%"  border="0" cellspacing="0" cellpadding="0">
   <tr class="TableHead2" height="20">
     <td width="1">&nbsp;</td>
-	<td><?php echo $sc_part_number?></td>
-	<td><?php echo $sc_product_name?></td>
-    <td><?php echo $sc_category?></td>
-	<td><?php echo $sc_price?></td>
-    <td>&nbsp;</td>
+    <td width="3%" nowrap>&nbsp;&nbsp;<?php//echo $sc_buy?>&nbsp;&nbsp;</td>	
+	<td><a class="TableHead2" href="javascript:click_txt(document.frmProList,'sort',document.frmProList.sort_fld,'part_number','')">
+		<?php 	
+			echo $sc_part_number;
+			if ($_POST['sort_fld'] == 'part_number') echo ' '.$image_string;
+		?>
+	</a></td>
+	<td><a class="TableHead2" href="javascript:click_txt(document.frmProList,'sort',document.frmProList.sort_fld,'product_name','')">
+		<?php 	
+			echo $sc_product_name;
+			if ($_POST['sort_fld'] == 'product_name') echo ' '.$image_string;
+		?>
+	</a></td>
+    <td><a class="TableHead2" href="javascript:click_txt(document.frmProList,'sort',document.frmProList.sort_fld,'category_name','')">
+		<?php 	
+			echo $sc_category;
+			if ($_POST['sort_fld'] == 'category_name') echo ' '.$image_string;
+		?>
+	</a></td>
+	<td><a class="TableHead2" href="javascript:click_txt(document.frmProList,'sort',document.frmProList.sort_fld,'price','')">
+		<?php 	
+			echo $sc_price;
+			if ($_POST['sort_fld'] == 'price') echo ' '.$image_string;
+		?>
+	</a></td>
 	<td>&nbsp;</td>
   </tr>
 <?php
@@ -124,9 +168,9 @@
 	else
 	{
 		if (!empty($_POST['list_id']))
-			$pro->get_products($_POST['list_id'],true);
+			$pro->get_products($_POST['list_id'],true,false,$_POST['sort_fld'],$_POST['direction']);
 		else
-			$pro->get_products(-1,false,true);
+			$pro->get_products(-1,false,true,$_POST['sort_fld'],$_POST['direction']);
 		$task = 'edit';
 	}
 	
@@ -143,11 +187,11 @@
 ?>  
   <tr>
   	<td width="1"><input type="checkbox" name="buy_id[]" value="<?php echo $id?>"> </td>
+	<td align="center"><a href="javascript:click_txt(document.frmProList,'buy',document.frmProList.id,'<?php echo $id?>','')"><img src="<?php echo $GO_THEME->images['cart16']?>" border="0"></a></td>	
 	<td><?php echo $pro->f('part_number')?></td>
     <td><a href="javascript:click_txt(document.frmProList,'<?php echo $task?>',document.frmProList.id,'<?php echo $id?>','')"><?php echo $name?> </a></td>
     <td><?php echo $cate?> </td>
 	<td><?php echo $pro->f('price')?> </td>
-	<td><a href="javascript:click_txt(document.frmProList,'buy',document.frmProList.id,'<?php echo $id?>','')"><b><?php echo $sc_buy?></b></a></td>
     <td><a href='<?php echo $click_del?>'><?php if ($GO_MODULES->write_permissions) echo $trash ?></a>&nbsp;</td>
   </tr>
 <?php
@@ -157,7 +201,7 @@
 ?>  
 	<tr><td colspan="99">&nbsp;</td></tr>
 	<tr>
-	  <td colspan="99"><a href="javascript:click_but(document.frmProList,'buy_all',false)"><b><?php echo $sc_buy_all?></b></a></td>
+	  <td colspan="99"><a href="javascript:click_txt(document.frmProList,'buy',document.frmProList.id,'<?php echo $id?>','')"><img src="<?php echo $GO_THEME->images['cart']?>" border="0"></a><a href="javascript:click_but(document.frmProList,'buy_all',false)"></a></td>
 	</tr>
 </table>
 

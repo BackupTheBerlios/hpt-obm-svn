@@ -261,4 +261,15 @@ $images['task_space'] = 'task_transparent.gif';
 $images['task_on'] = 'task_ongoing.png';
 $images['task_up'] = 'task_up.gif';
 $images['task_dn'] = 'task_dn.gif';
+
+$images['products'] = 'buttons/sale.gif';
+$images['product_category'] = 'buttons/product_category.gif';
+$images['accessory_category'] = 'buttons/accessory_category.gif';
+$images['quotation'] = 'buttons/quotation.gif';
+$images['create_quotation'] = 'buttons/create_quotation.gif';
+$images['cart'] = 'buttons/cart.gif';
+$images['cart16'] = 'buttons/cart16.gif';
+$images['new_product'] = 'buttons/new_product.gif';
+$images['quantity'] = 'buttons/quantity.gif';
+$images['amount'] = 'buttons/amount.gif';
 ?>

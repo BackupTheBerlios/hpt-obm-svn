@@ -143,7 +143,7 @@ require('../addressbook/classes/addressbook.class.inc');
 		case 'delete':
 			$pro->delete_order($_POST['id']);
 		default:
-			$pro->get_orders();
+			$pro->get_orders(false,'',$_POST['sort_fld'],$_POST['direction']);
 			require('templates/list_order.tmp.php');
 	}
 	if ($_POST['close_win']=='true') goURL('order.php');

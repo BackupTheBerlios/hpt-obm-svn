@@ -300,7 +300,7 @@
 			return true;
 		}
 	
-		function get_products($id = -1, $category_id = false, $with_attach=false)
+		function get_products($id = -1, $category_id = false, $with_attach=false, $sort_fld = '', $direction='ASC')
 		{
 			$sql = "SELECT p.* , p.product_id as id, c.category_id, c.category_name
 					FROM sc_products p
@@ -310,6 +310,7 @@
 			if (!$category_id && $id>-1) $sql.= "WHERE p.product_id = '$id' ";
 			if ($category_id) $sql.= "WHERE cp.category_id = '$id' ";
 			
+			if (!empty($sort_fld)) $sql.=" ORDER BY $sort_fld $direction";
 /*			if ($with_attach) 
 				$sql .= "union
 						select p.*, p.product_id as id, ac.id, ac.name
@@ -468,11 +469,12 @@
 			return false;
 		}
 		
-		function get_orders($has_id=false, $id='')
+		function get_orders($has_id=false, $id='', $sort_fld = '', $direction = '')
 		{
 			$sql = "SELECT o.*
-					FROM sc_orders o";
-			if ($has_id) $sql.="WHERE so.order_number ='".$id."'";
+					FROM sc_orders o ";
+			if ($has_id) $sql.=" WHERE so.order_number ='".$id."'";
+			if (!empty($sort_fld)) $sql .= " ORDER BY $sort_fld $direction";
 			if (!$this->query($sql)) return false;
 			return true;
 		}

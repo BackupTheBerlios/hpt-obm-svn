@@ -71,7 +71,7 @@ require($GO_LANGUAGE->get_fallback_language_file('products'));
 	
 	$sc_clear_cart = 'Xóa bảng báo giá';
 	
-	$sc_buy = 'Mua';
-	$sc_buy_all = 'Mua các món hàng đã chọn';	
+	$sc_buy = 'Đưa vào bảng giá';
+	$sc_buy_all = 'Đưa các món hàng đã chọn vào bảng giá';	
 	$sc_export = 'Xuất';
 ?>

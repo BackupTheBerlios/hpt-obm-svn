@@ -251,7 +251,7 @@ $lang_modules['notes'] = "Notes";
 $lang_modules['bookmarks'] = "Bookmarks";
 $lang_modules['summary'] = "Summary";
 $lang_modules['todos'] = "Tasks";
-$lang_modules['products'] = "Sale";
+$lang_modules['products'] = "Sales";
 
 $strInvalidEmail = "Invalid email";
 $add_group_showall = 'Show all groups';
