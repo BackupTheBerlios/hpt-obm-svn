@@ -160,6 +160,11 @@ $images['users']		= 'buttons/users.png';
 $images['small_user_icon']	= 'buttons/small_user_icon.gif';
 $images['week']			= 'buttons/week.png';
 
+$images['add_project_task'] = 'buttons/add_project_task.png';
+$images['task_list_close'] = 'buttons/task_list_close.png';
+$images['task_pre_save'] = 'buttons/task_pre_save.png';
+$images['task_edit_cancel'] = 'buttons/task_edit_cancel.png';
+
 $images['arrow']		= 'menu/arrow.gif';
 $images['arrowdown']		= 'menu/arrowdown.gif';
 $images['spacer']		= 'menu/spacer.gif';
