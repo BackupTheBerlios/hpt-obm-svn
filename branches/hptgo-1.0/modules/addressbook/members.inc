@@ -194,7 +194,7 @@ if (count($order) == 0)
 	echo "<td>".empty_to_stripe($GO_USERS->f("company"))."&nbsp;</td>\n";
 }
 
-	print_config_content($order,$ab,$constMembersPage);
+	print_config_content($order,$GO_USERS,$constMembersPage);
 
 	echo "<td><a href=\"contact.php?user_id=".$GO_USERS->f("id")."&return_to=".urlencode($link_back)."\" title=\"".$contacts_add_member."\"><img src=\"".$GO_THEME->images['save']."\" border=\"0\" />";
 	echo "</tr>\n";
