@@ -138,16 +138,16 @@ class filesystem extends db
     if ($GO_CONFIG->file_storage_path.'common' == $folder)
       return true;
     $db = new db();
-    return $db->query("SELECT * FROM fsSystemFolders WHERE path='".$folder."'") && $db->num_rows();
+    return $db->query("SELECT * FROM fsSystemFolders WHERE path='".addslashes($folder)."'") && $db->num_rows();
   }
 
   function update_system_folder($old_folder,$new_folder)
   {
     $db = new db();
     if ($this->is_common_folder($new_folder))
-      return $db->query("UPDATE fsSystemFolders SET path='$new_folder' WHERE path='".$old_folder."'");
+      return $db->query("UPDATE fsSystemFolders SET path='".addslashes($new_folder)."' WHERE path='".addslashes($old_folder)."'");
     else
-      return $db->query("DELETE FROM fsSystemFolders WHERE path='".$old_folder."'");
+      return $db->query("DELETE FROM fsSystemFolders WHERE path='".addslashes($old_folder)."'");
   }
 
   function get_shares($user_id)
@@ -193,15 +193,13 @@ class filesystem extends db
 
   function add_share($user_id, $path)
   {
-    $path = addslashes($path);
-
     global $GO_SECURITY;
-    $acl_read = $GO_SECURITY->get_new_acl('read: '.$path);
-    $acl_write = $GO_SECURITY->get_new_acl('write: '.$path);
+    $acl_read = $GO_SECURITY->get_new_acl('read: '.addslashes($path));
+    $acl_write = $GO_SECURITY->get_new_acl('write: '.addslashes($path));
     if($acl_read && $acl_write)
     {
       $sql = "INSERT INTO fsShares (user_id, path, acl_read, acl_write) 
-	VALUES ('$user_id', '$path', '$acl_read', '$acl_write')";
+	VALUES ('$user_id', '".addslashes($path)."', '$acl_read', '$acl_write')";
 	
       global $GO_CONFIG;
       if($GO_CONFIG->dav_switch) {
@@ -236,12 +234,11 @@ class filesystem extends db
   {
     if ($share = $this->get_share($path))
     {
-      $path = addslashes($path);
       global $GO_SECURITY;
       $GO_SECURITY->delete_acl($share['acl_read']);
       $GO_SECURITY->delete_acl($share['acl_write']);
 
-      $sql = "DELETE FROM fsShares WHERE path='$path'";
+      $sql = "DELETE FROM fsShares WHERE path='".addslashes($path)."'";
 
       global $GO_CONFIG;
       if($GO_CONFIG->dav_switch) {
@@ -273,8 +270,7 @@ class filesystem extends db
 
   function get_share($path)
   {
-    $path = addslashes($path);
-    $sql = "SELECT * FROM fsShares WHERE path='$path'";
+    $sql = "SELECT * FROM fsShares WHERE path='".addslashes($path)."'";
     $this->query($sql);
     if($this->next_record())
     {
@@ -566,7 +562,7 @@ class filesystem extends db
 	if ($this->is_system_folder($source_path))
 	{
 	  $db = new db();
-	  $db->query("DELETE FROM fsSystemFolders WHERE path='$source_path'");
+	  $db->query("DELETE FROM fsSystemFolders WHERE path='".addslashes($source_path)."'");
 	  unset($db);
 	}
 
@@ -1022,7 +1018,7 @@ class filesystem extends db
     }
 
     $db = new db();
-    @$db->query("REPLACE INTO fsSystemFolders SET path='$path'");
+    @$db->query("REPLACE INTO fsSystemFolders SET path='".addslashes($path)."'");
     return true;
   }
 
@@ -1039,7 +1035,7 @@ class filesystem extends db
       }
     }
     $db = new db();
-    @$db->query("DELETE FROM fsSystemFolders WHERE path='$path'");
+    @$db->query("DELETE FROM fsSystemFolders WHERE path='".addslashes($path)."'");
     return true;
   }
 }
