@@ -22,22 +22,6 @@
 		<input type="text" class="textbox"  name="name" size="40" value="<?php echo htmlspecialchars($company['name']); ?>" maxlength="50">
 		</td>
 	</tr>
-	<tr>
-		<td align="right" nowrap>
-		<?php echo $strEnglishName; ?>*:&nbsp;
-		</td>
-		<td>
-		<input type="text" class="textbox"  name="englishname" size="40" value="<?php echo htmlspecialchars($company['name']); ?>" maxlength="50">
-		</td>
-	</tr>
-	<tr>
-		<td align="right" nowrap>
-		<?php echo $strNickName; ?>*:&nbsp;
-		</td>
-		<td>
-		<input type="text" class="textbox"  name="nickname" size="40" value="<?php echo htmlspecialchars($company['name']); ?>" maxlength="50">
-		</td>
-	</tr>
 
 	<tr>
 		<td align="right" nowrap>
