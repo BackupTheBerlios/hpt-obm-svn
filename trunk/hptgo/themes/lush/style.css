@@ -645,6 +645,12 @@ a.Holiday, a.Holiday:visited, a.Holiday:active {
         font-weight: italic;
 }
 
+.bold_small{
+        font-family: arial, helvetica, sans-serif;
+        font-size: 11px;
+        font-weight:  bold;
+}
+
 a.small_underline, a.small_underline:visited, a.small_underline:active{
         font-family: arial, helvetica, sans-serif;
         font-size: 10px;	
