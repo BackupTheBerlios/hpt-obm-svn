@@ -122,7 +122,7 @@ if (isset($_REQUEST['account_id']) && $_SERVER['REQUEST_METHOD'] != "POST")
   $spam = $account["spam"];
   $trash = $account["trash"];
   $sent = $account["sent"];
-  $sent = $account["draft"];
+  $draft = $account["draft"];
   $auto_check = $account['auto_check'] == '1' ? true : false;
   $use_ssl = $account['use_ssl'] == '1' ? true : false;
   $novalidate_cert = $account['novalidate_cert'] == '1' ? true : false;
