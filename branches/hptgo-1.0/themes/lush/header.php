@@ -22,7 +22,7 @@ header('Content-Type: text/html; charset='.$charset);
 			<?php echo $menu_configuration; ?>
 			</a>
 
-			<a class="HeaderBar" href="javascript:popup('<?php echo $GO_CONFIG->host; ?>doc/index.php', 500, 500);">
+			<a class="HeaderBar" href="javascript:popup('<?php echo $GO_CONFIG->host; ?>doc/Vietnamese/index.php', 500, 500);">
 			<img src="<?php echo $GO_THEME->images['help']; ?>" width="16" height="16" border="0" align="absmiddle" />
 			<?php echo $menu_help; ?>
 			</a>
