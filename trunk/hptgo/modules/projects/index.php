@@ -44,10 +44,10 @@ require($GO_THEME->theme_path."header.inc");
 <?php
      
   echo '<td class="ModuleIcons">';
-  echo '<a href="'.$projects_module['url'].'index.php?page=projects&return_to='.rawurlencode($link_back).'"><img src="'.$GO_THEME->images['project'].'" border="0" height="32" width="32" /><br />'.$pm_project.'</a></td>';
+  echo '<a href="'.$GO_MODULES->url.'index.php?page=projects&return_to='.rawurlencode($link_back).'"><img src="'.$GO_THEME->images['project'].'" border="0" height="32" width="32" /><br />'.$pm_project.'</a></td>';
   
   echo '<td class="ModuleIcons">';
-  echo '<a href="'.$projects_module['url'].'project.php?contact_id='.$contact_id.'&return_to='.rawurlencode($link_back).'"><img src="' .$GO_THEME->images['pr_new_project'].'" border="0" height="32" width="32" /><br />' .$pm_new_project.'</a></td>';
+  echo '<a href="'.$GO_MODULES->url.'project.php?return_to='.rawurlencode($link_back).'"><img src="' .$GO_THEME->images['pr_new_project'].'" border="0" height="32" width="32" /><br />' .$pm_new_project.'</a></td>';
 
   echo '<!-- ';    
   
@@ -62,7 +62,7 @@ require($GO_THEME->theme_path."header.inc");
   
   if ($GO_MODULES->write_permissions) {
   echo '<td class="ModuleIcons">';
-  echo '<a href="'.$projects_module['url'].'index.php?page=config&return_to='.rawurlencode($link_back).'"><img src="'.$GO_THEME->images['pr_fees'].'" border="0" height="32" width="32" /><br />'.$pm_config.'</a></td>';
+  echo '<a href="'.$GO_MODULES->url.'index.php?page=config&return_to='.rawurlencode($link_back).'"><img src="'.$GO_THEME->images['pr_fees'].'" border="0" height="32" width="32" /><br />'.$pm_config.'</a></td>';
 }    
  
 ?>
@@ -76,7 +76,9 @@ echo '<input type="hidden" name="task" />';
 echo '<br />';
 
 if (isset($feedback)) echo $feedback;
-switch ($_REQUEST['page'])
+$page = (isset($_REQUEST['page'])) ? $_REQUEST['page'] : 'projects';
+echo '<input type="hidden" name="page" value="'.$page.'"/>';
+switch ($page)
 {
 	case 'config':
 		if ($GO_MODULES->write_permissions)
