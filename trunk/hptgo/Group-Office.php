@@ -19,6 +19,33 @@
 * @since    Group-Office 1.0
 */
 
+// If config.inc.php exists, use it
+// It's actually an INI file with root_path and database parameters.
+// Others parameters are stored in settings table.
+$cfg_path = str_replace('Group-Office.php','config.inc.php',__FILE__);
+if (file_exists($cfg_path) && is_readable($cfg_path))
+{
+	$GO_CFG = parse_ini_file($cfg_path);
+	// Fake $GO_CONFIG so that other classes work.
+	// We only need GO_PARAMS class work to get other info
+	$GO_CONFIG->root_path = $GO_CFG['cfg_root'].'/';
+	$GO_CONFIG->class_path = $GO_CONFIG->root_path.'classes/';
+	$GO_CONFIG->db_host = $GO_CFG['db_hostname'];
+	$GO_CONFIG->db_user = $GO_CFG['db_username'];
+	$GO_CONFIG->db_pass = $GO_CFG['db_password'];
+	$GO_CONFIG->db_name = $GO_CFG['db_name'];
+	$GO_CONFIG->db_type = $GO_CFG['db_type'];
+	require_once($GO_CONFIG->root_path.'database/'.$GO_CFG['db_type'].".class.inc");
+	require($GO_CONFIG->class_path.'base/sql.params.class.inc');
+
+	// Get the rest
+	$i = new GO_PARAMS();
+
+	// $GO_CFG keeps all info
+	foreach ($i->params as $key => $val)
+		$GO_CFG[$key] = $val;
+}
+
 class GO_CONFIG
 {
 #FRAMEWORK VARIABLES
@@ -548,6 +575,36 @@ class GO_CONFIG
      *
      */
     require_once('OBMConfig.php');
+
+    global $GO_CFG;
+    if (isset($GO_CFG))
+    {
+      $map = array(
+	      	'db_hostname' => 'db_host',
+		'db_username' => 'db_user',
+		'db_password' => 'db_pass',
+		'db_name' => 'db_name',
+		'db_type' => 'db_type',
+		'cfg_relative_url' => 'host',
+		'cfg_absolute_url' => 'full_url',
+		'cfg_language' => 'language',
+		'cfg_title' => 'title',
+		'cfg_webmaster_email' => 'webmaster_email',
+		'cfg_tmpdir' => 'tmpdir',
+		'cfg_max_users' => 'max_users',
+		'cfg_refresh_rate' => 'refresh_rate',
+		'cfg_user_quota' => 'user_quota',
+		'cfg_mailer' => 'mailer',
+		'cfg_smtp_port' => 'smtp_port',
+		'cfg_smtp_server' => 'smtp_server',
+		'cfg_max_attachment_size' => 'max_attachment_size',
+		'cfg_file_storage' => 'file_storage_path'
+	);
+      foreach ($map as $key1 => $key2)
+      	if (isset($GO_CFG[$key1]))
+	  $this->$key2 = $GO_CFG[$key1];
+    }
+	    
     
 #path to classes
     $this->class_path = $this->root_path.$this->class_path.$this->slash;
