@@ -27,7 +27,7 @@ $em_new_folder = "Thêm thư mục";
 $ml_your_accounts = "Các tài khoản E-mail của bạn";
 $ml_no_accounts = "Bạn chưa thiết lập các tài khoản E-mail.";
 $ml_original_follows = "----- Tin gốc -----";
-$ml_welcome = "Chào mừng bạn đến với Group-Office E-mail";
+$ml_welcome = "Chào mừng bạn đến với HPT-OBM E-mail";
 $ml_text = "Nhấn lên tài khoản để thêm.";
 $ml_accounts = "Tài khoản";
 $ml_compose = "Soạn thảo";
@@ -125,8 +125,8 @@ $ml_attention= 'Chú ý';
 //2.02
 $ml_autocheck_disabled = ' không thể kết nối. Chế độ kiểm tra tự động cho tài khoản này đã được tắt.';
 $ml_mark = 'Đánh dấu tin...';
-$ml_flag = 'flagged';
-$ml_clearflag = 'unflagged';
+$ml_flag = 'Đánh dấu bằng cờ';
+$ml_clearflag = 'Xoá đánh dấu cờ';
 $ml_expand_all = 'Mở tất cả các thư mục';
 $ml_collapse_all = 'Đóng tất cả các thư mục';
 
@@ -135,8 +135,8 @@ $ml_search = 'Tìm';
 $ml_answered = 'Trả lời';
 $ml_doesnt_matter = 'Không quan tâm';
 $ml_body = 'Thân';
-$ml_before = 'Cũ hơn';
-$ml_since = 'Mới hơn';
+$ml_before = 'Trước ngày';
+$ml_since = 'Từ ngày';
 $ml_select_one_criteria = 'Hãy chọn hoặc nhập vào ít nhất một thông tin tìm kiếm.';
 
 $cmdNext = 'Tin kế';
