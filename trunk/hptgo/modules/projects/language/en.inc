@@ -108,7 +108,7 @@ $pm_task_order = '#';
 $pm_task_name = 'Task name';
 $pm_task_person = 'Responsibility';
 $pm_task_predecessors = 'Predecessors';
-$pm_task_days = 'Days';
+$pm_task_time = 'Days';
 $pm_task_status = 'Status';
 $pm_task_approved = 'Check';
 $pm_task_document = 'Doc';
@@ -126,10 +126,18 @@ $pm_task_day      = 'day';
 
 $pm_task_comments = 'Comments';
 $pm_task_new_comments = 'Type new comments here';
+$pm_insert_task = 'Insert new task';
+$pm_task_list_predecessors = 'Predecessors';
+$pm_move_task_up = 'Move up';
+$pm_move_task_dn = 'Move down';
 
 $pm_legend_planning = 'Planning';
 $pm_legend_ongoing = 'Ongoing';
 $pm_legend_done = 'Done';
+
+$pm_legend_addtask = 'Insert new task';
+$pm_legend_movetask = 'Move task up/down';
+$pm_legend_deltask = 'Delete task/template';
 
 $cmdGantt = 'Gantt chart';
 $cmdDrop = 'Discontinue';

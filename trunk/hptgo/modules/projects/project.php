@@ -610,11 +610,13 @@ switch($tabtable->get_active_tab_id())
             echo '<tr><td>'.$pm_end_date.':</td><td>';
             $datepicker->print_date_picker('end_date', $_SESSION['GO_SESSION']['date_format'], $end_date, '', '', 'onchange="javascript:is_valid_date(\'start_date\', this.value)"');
             echo '</td></tr>';
-            $pstate = $project_id < 1 ? STATUS_OFFER : $projects->f('status');
-            echo "<tr><td>$pm_status:</td><td><b>".$pm_status_values[$pstate]."</b></td></tr>";
-            echo '<tr><td>'.$pm_progress.':</td><td>'.$progress.'%</td></tr>';
+            if ($project_id > 0) {
+              $pstate = $projects->f('status');
+              echo '<tr><td>'.$pm_status.':</td><td><b>'.$pm_status_values[$pstate].'</b></td></tr>';
+              echo '<tr><td>'.$pm_progress.':</td><td>'.$progress.'%</td></tr>';
+            }
 
-            echo '<tr><td>'.$pm_budget.':</td><td><input type="text" class="textbox" size="10" name="budget" value="'.$budget.'" maxlength="50" /> '.$_SESSION['GO_SESSION']['currency'].'</td></tr>';
+            echo '<tr><td>'.$pm_budget.':</td><td><input type="text" class="textbox" size="10" name="budget" value="'.$budget.'" maxlength="50" style="text-align: right;" /> '.$_SESSION['GO_SESSION']['currency'].'</td></tr>';
           }else
           {
             echo '<tr><td>'.$pm_client.':</td><td>';
@@ -633,10 +635,9 @@ switch($tabtable->get_active_tab_id())
             echo '<tr><td>'.$pm_end_date.':</td><td>';
             echo $end_date;
             echo '</td></tr>';
-            echo '<tr><td>'.$pm_status.'</td><td>';
-
+            echo '<tr><td>'.$pm_status.'</td><td><b>';
             $status = $pm_status_values[$projects->f('status')];
-            echo $status.'</td></tr>';
+            echo $status.'</b></td></tr>';
             echo '<tr><td>'.$pm_progress.':</td><td>'.$progress.'%</td></tr>';
             echo '<tr><td>'.$pm_budget.':</td><td>'.$budget.' '.$_SESSION['GO_SESSION']['currency'].'</td></tr>';
           }
@@ -866,7 +867,8 @@ function notify_relevant_members($project_id,$task_id,$person_id,$assigned = tru
         $mail->From = $db->f('email');
         $mail->Sender = $db->f('email');
 
-        if (!$mail->Send()) echo "Failed: ".$mail->ErrorInfo;
+        //if (!$mail->Send()) echo "Failed: ".$mail->ErrorInfo;
+        $mail->Send();
         //$mail->Send();
       }
 }

@@ -136,7 +136,7 @@ function load_project_task($projects, $project_id) {
 
   update_all_tasks($projects, $project_id);
 
-  $projects->query("SELECT * FROM task WHERE task_project_id=$project_id ORDER BY task_id");
+  $projects->query("SELECT * FROM task WHERE task_project_id=$project_id ORDER BY task_order");
 
   // Copy from Template if first time
   if (!$projects->next_record() && $template_id > 0) {
@@ -184,6 +184,7 @@ class project_task extends db {
   var $days = 0;
   var $comments = "";
   var $approved_date;
+  var $order;
 
   var $elapsed = -1;
   var $start_date = 0;
@@ -212,6 +213,7 @@ class project_task extends db {
     $this->days = $projects->f('task_time');
     $this->comments = $projects->f('task_comment');
     $this->approved_date = $projects->f('task_approved_date');
+    $this->order = $projects->f('task_order');
     $this->project_status = $pstate;
 
     if ($this->person_id == 0)
@@ -230,55 +232,82 @@ class project_task extends db {
   }
 
   function print_info($member_ids, $member_names, $member_list) {
-    global $GO_THEME, $pm_task_status_values, $responsible_user_id, $is_new_project;
+    global $GO_THEME, $pm_task_status_values, $pm_status_begin,
+           $responsible_user_id, $is_new_project, $tasks;
 
     if ($this->level == -1)
-      echo "<tr>";
+      echo '<tr>';
     else
-      echo "<tr class=\"ProjectTask0\">";
+      echo '<tr class="ProjectTask0">';
 
-    $id = $this->id < 10 ? "0" . $this->id : $this->id;
-    echo "<td align=\"center\">$id</td>";
+    echo '<td align="center">'.$this->order.'</td>';
     $this->print_name();
     $this->print_members($member_ids, $member_names, $member_list);
-    $pids = $this->pids == '0' ? '&nbsp;' : $this->pids;
-    echo "<td>$pids</td>";
+    if ($this->pids == '0') {
+      $pids = '&nbsp;';
+      $tips = '';
+    }
+    else {
+      $nolist = array();
+      $tips = '<span id="task_tips_'.$this->order.'" '.
+                'style="position: absolute; visibility:hidden; display: none;">'.
+                '<table border="0" cellspacing="1" cellpadding="0" bgcolor="black">'.
+                '<tr><td>'.
+                '<table border="0" cellspacing="0" cellpadding="2" bgcolor="#FFF7EB">';
+      foreach (explode(',', $this->pids) as $p) {
+        if ($p == 0) {
+          $to = 0;
+          $tn = $pm_status_begin;
+        } else {
+          $to = $tasks[$p]->order;
+          $tn = $tasks[$p]->name;
+        }
+        $tips .= '<tr><td align="right">'.$to.'.</td><td>&nbsp;'.$tn.'</td></tr>';
+        $nolist[] = $to;
+      }
+      $tips .= '</table></td></tr></table></span>';
+      $pids = '<span id="task_pre_'.$this->order.'" style="cursor: default;"'.
+              ' onmouseover="return show_tips('.$this->order.')"'.
+              ' onmouseout="return hide_tips()">'.
+              implode(",", $nolist).
+              '</span>';
+    }
+    echo '<td>'.$tips.$pids.'</td>';
     if ($this->is_manager && $is_new_project && ($this->status > TASK_DONE))
     {
-      echo "<td><input class=\"textbox\" style=\"width: 30px;\" type=\"text\" name=\"task_time_".$this->id."\" value=\"0\" align=\"right\"></td>";
-      echo "<td align=\"center\"> - </td>";
-    }else
-    {
+      echo '<td><input class="textbox" style="width: 30px;" type="text" name="task_time_'.$this->id.'" value="0" align="right"></td>';
+      echo '<td align="center"> - </td>';
+    } else {
       $this->get_elapsed();
       $progress = $this->elapsed."/".$this->days;
       if ($this->elapsed > $this->days)
-        $progress = "<font color=\"red\"><b>".$progress."</b></font>";
-      echo "<td>".$progress."</td>";
+        $progress = '<font color="red"><b>'.$progress.'</b></font>';
+      echo '<td>'.$progress.'</td>';
       if ($this->status == TASK_ONGOING)
         echo "<td><b>".$pm_task_status_values[$this->status]."</b></td>";
       else
         echo "<td>".$pm_task_status_values[$this->status]."</td>";
     }
-    echo "<td align=\"center\">".($this->approved ? "<img border=\"0\" src=\"".$GO_THEME->images['checked']."\"/>" : "&nbsp;")."</td>";
+    echo '<td align="center">'.($this->approved ? '<img border="0" src="'.$GO_THEME->images['checked'].'"/>' : '&nbsp;').'</td>';
     $url = $this->doc_url;
 
     if ($this->level == -1) {
       if ($this->is_owner || $this->is_manager || $this->is_monitor)
-        echo "<td align=\"center\"><a href=\"$url\">".
-           "<img border=\"0\" src=\"".$GO_THEME->images['doc']."\"/></a></td>";
+        echo '<td align="center"><a href="'.$url.'">'.
+           '<img border="0" src="'.$GO_THEME->images['doc'].'"/></a></td>';
       else
-        echo "<td align=\"center\">".
-           "<img border=\"0\" src=\"".$GO_THEME->images['doc_disable']."\"/></td>";
+        echo '<td align="center">'.
+           '<img border="0" src="'.$GO_THEME->images['doc_disable'].'"/></td>';
     }
     else {
       if ($this->is_owner || $this->is_manager || $this->is_monitor)
-        echo "<td align=\"center\"><a href=\"$url\">".
-           "<img border=\"0\" src=\"".$GO_THEME->images['doc_red']."\"/></a></td>";
+        echo '<td align="center"><a href="'.$url.'">'.
+           '<img border="0" src="'.$GO_THEME->images['doc_red'].'"/></a></td>';
       else
-        echo "<td align=\"center\">".
-           "<img border=\"0\" src=\"".$GO_THEME->images['doc_disable']."\"/></td>";
+        echo '<td align="center">'.
+           '<img border="0" src="'.$GO_THEME->images['doc_disable'].'"/></td>';
     }
-    echo "</tr>";
+    echo '</tr>';
   }
   
   function print_name() {
@@ -417,8 +446,8 @@ class project_task extends db {
   }
 
   function print_formated_comments() {
-	$_SESSION['GO_SESSION']['task_comments'] = $this->comments;
-	echo '<tr><td width="100%"><iframe src="comments.php" width="100%" class="textbox"></iframe></td></tr>';
+    $_SESSION['GO_SESSION']['task_comments'] = $this->comments;
+    echo '<tr><td width="100%"><iframe src="comments.php" width="100%" class="textbox"></iframe></td></tr>';
   }
 
   function show_doc_folder() {
@@ -474,9 +503,9 @@ class project_task extends db {
                 $latency = $diff;
         }
         elseif ($today > $rsd) {
-			$sd = $pstart_date + $this->start_date * $day_sec;
+          $sd = $pstart_date + $this->start_date * $day_sec;
             $latency = round(($today - $sd) / $day_sec) - $this->days;
-		}
+        }
     }
 
     if (is_numeric($advance)) {

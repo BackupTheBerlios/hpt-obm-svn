@@ -183,6 +183,7 @@ CREATE TABLE `task` (
   `task_approved` char(1) default NULL,
   `task_level` tinyint(4) default NULL,
   `task_approved_date` datetime default NULL,
+  `task_order` tinyint(4) NOT NULL default '0',
   PRIMARY KEY  (`task_project_id`,`task_id`)
 ) TYPE=MyISAM;
 

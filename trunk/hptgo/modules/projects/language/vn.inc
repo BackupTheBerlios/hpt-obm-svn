@@ -108,7 +108,7 @@ $pm_task_order = '#';
 $pm_task_name = 'Tên công việc';
 $pm_task_person = 'Người thực hiện';
 $pm_task_predecessors = 'Công việc<br>trước đó';
-$pm_task_days = 'Số ngày';
+$pm_task_time = 'Số ngày';
 $pm_task_status = 'Trạng thái';
 $pm_task_approved = 'Duyệt';
 $pm_task_document = 'Tài liệu';
@@ -126,10 +126,18 @@ $pm_task_day      = 'ngày';
 
 $pm_task_comments = 'Chú thích';
 $pm_task_new_comments = 'Thêm chú thích mới';
+$pm_insert_task = 'Thêm công việc mới';
+$pm_task_list_predecessors = 'Công việc trước đó';
+$pm_move_task_up = 'Chuyển lên';
+$pm_move_task_dn = 'Chuyển xuống';
 
 $pm_legend_planning = 'Dự kiến';
 $pm_legend_ongoing = 'Tiến hành';
 $pm_legend_done = 'Hoàn tất';
+
+$pm_legend_addtask = 'Thêm công việc mới';
+$pm_legend_movetask = 'Thay đổi thứ tự công việc';
+$pm_legend_deltask = 'Xoá công việc hoặc quy trình';
 
 $cmdGantt = 'Biểu đồ Gantt';
 $cmdDrop = 'Huỷ bỏ dự án';
