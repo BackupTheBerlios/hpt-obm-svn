@@ -228,11 +228,11 @@ class db {
   }
 
   function f($Name) {
-    return $this->Record[$Name];
+    return isset($this->Record[$Name]) ? $this->Record[$Name] : null;
   }
 
   function p($Name) {
-    print $this->Record[$Name];
+    print isset($this->Record[$Name]) ? $this->Record[$Name] : '';
   }
 
   /* public: sequence numbers */

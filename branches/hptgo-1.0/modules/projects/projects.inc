@@ -93,8 +93,7 @@ echo '<input type="hidden" name="new_pr_sort_field" value="'.$pm_settings['sort_
 echo '<input type="hidden" name="new_pr_sort_order" value="'.$pm_settings['sort_order'].'" />';
 echo '<input type="hidden" name="delete_project_id" value="0" />';
 
-$show_catalog = $_REQUEST['show_catalog'];
-if (!isset($show_catalog)) $show_catalog = 0;
+$show_catalog = isset($_REQUEST['show_catalog']) ? $_REQUEST['show_catalog'] : 0;
 
 $db = new db();
 $db->query('SELECT * FROM pmCatalog');

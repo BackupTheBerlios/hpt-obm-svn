@@ -293,6 +293,7 @@ if ($company_id == 0 || $task == 'save_company')
 	$company['homepage'] = isset($_REQUEST['homepage']) ? smartstrip($_REQUEST['homepage']) : 'http://';
 	$company['bank_no'] = isset($_REQUEST['bank_no']) ? smartstrip($_REQUEST['bank_no']) : '';
 	$company['vat_no'] = isset($_REQUEST['vat_no']) ? smartstrip($_REQUEST['vat_no']) : '';
+	$company['acl_write'] = 0;
 
 }
 
