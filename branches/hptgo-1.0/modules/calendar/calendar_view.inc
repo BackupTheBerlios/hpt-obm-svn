@@ -244,13 +244,12 @@ for($row=0;$row<$rows;$row++)
 	{
 	  $style = '';
 	}
-	echo '<td height="100%"'.$style.'>';
 	if(!$print)
 	{
 	  if ($new_date > date('Ymd', time()) || ($new_date == date('Ymd', time()) && $hour_of_day >= date('H',time()))) {
-	    echo '<a onmouseover="javascript:glow_row(\''.$current_row.'_'.$hour_of_day.'\');" onmouseout="javascript:unglow_row(\''.$current_row.'_'.$hour_of_day.'\');" href="event.php?calendar_id='.$calendar_id.'&day='.$new_day.'&month='.$new_month.'&year='.$new_year.'&hour='.$hour_of_day.((strpos($calendar_view_id,"view:") === 0 && $merged_view) ? '&merged_view='.substr($calendar_view_id,strlen("view:")) : '').'"><img border="0" width="100%" height="12" src="'.$GO_THEME->images['blank'].'" /></a>';
+	    echo '<td onmouseover="javascript:glow_row(\''.$current_row.'_'.$hour_of_day.'\');" onmouseout="javascript:unglow_row(\''.$current_row.'_'.$hour_of_day.'\');" onclick="document.location=\'event.php?calendar_id='.$calendar_id.'&day='.$new_day.'&month='.$new_month.'&year='.$new_year.'&hour='.$hour_of_day.((strpos($calendar_view_id,"view:") === 0 && $merged_view) ? '&merged_view='.substr($calendar_view_id,strlen("view:")) : '').'\'"" height="100%"'.$style.'>&nbsp;';
 	  } else
-	    echo '<a onmouseover="javascript:glow_row(\''.$current_row.'_'.$hour_of_day.'\');" onmouseout="javascript:unglow_row(\''.$current_row.'_'.$hour_of_day.'\');" href="javascript:alert(\''.$strNoPastEvent.'\')"><img border="0" width="100%" height="12" src="'.$GO_THEME->images['blank'].'" /></a>';
+	    echo '<td onmouseover="javascript:glow_row(\''.$current_row.'_'.$hour_of_day.'\');" onmouseout="javascript:unglow_row(\''.$current_row.'_'.$hour_of_day.'\');" onclick="alert(\''.$strNoPastEvent.'\')" height="100%"'.$style.'>&nbsp;';
 	}
 
       }
