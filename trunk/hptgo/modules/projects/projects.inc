@@ -26,7 +26,7 @@ if (isset($_REQUEST['delete_project_id']) && $_REQUEST['delete_project_id'] > 0)
       $GO_SECURITY->delete_acl($project['acl_write']);
       $GO_SECURITY->delete_acl($project['acl_read']);
       $projects->query("DELETE FROM task WHERE task_project_id=$pid");
-      $project_folder = $GO_CONFIG->file_storage. 'projects/' . $pid;
+      $project_folder = $GO_CONFIG->file_storage_path. 'projects/' . $pid;
       require_once($GO_CONFIG->class_path.'filesystem.class.inc');
       $fs = new filesystem();
       $fs->delete($project_folder);
@@ -47,11 +47,13 @@ $projects_module_url = isset($projects_module_url) ? $projects_module_url : $GO_
 $contact_id = isset($contact_id) ? $contact_id : 0;
 echo '<a href="'.$projects_module_url.'project.php?contact_id='.$contact_id.'&return_to='.rawurlencode($link_back).'" class="normal">'.$pm_new_project.'</a><br /><br />';
 
+/*
 if ($timer = $projects->get_timer($GO_SECURITY->user_id))
 {
   echo '<table border="0" class="alert"><tr><td><img src="'.$GO_THEME->images['alert'].'" border="0" /></td>'.
     '<td><a class="normal" href="'.$projects_module_url.'project.php?task=stop_timer&project_id='.$timer['project_id'].'&return_to='.rawurlencode($link_back).'&contact_id='.$contact_id.'">'.$pm_clocked_in.'</a></td></tr></table>';
 }
+*/
 if(isset($_REQUEST['show_projects']) && $_REQUEST['show_projects'] != $pm_settings['show_projects'])
 {
   $projects->set_show_projects($GO_SECURITY->user_id, $_REQUEST['show_projects']);
@@ -233,9 +235,10 @@ if ($count > 0)
     {
     echo '<td colspan="2">&nbsp;</td>';
     }
-    echo "<td><a href='javascript:confirm_action(\"javascript:delete_project(".$projects->f("id").")\",\"".rawurlencode($strDeletePrefix."'".$project_name."'".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".$project_name."'\"><img src=\"".$GO_THEME->images['delete']."\" border=\"0\"></a></td>\n";
+    $pid = $projects->f("id");
+    echo '<td><span id="project_'.$pid.'" style="display: none; visibility: hidden;">'.$project_name.
+         '</span><a href="javascript:confirm_delete('.$pid.')" title="'.$strDeleteItem.' \''.$project_name.'\'"><img src="'.$GO_THEME->images['delete'].'" border="0"></a></td>';
     echo '<tr><td colspan="99" height="1"><img src="'.$GO_THEME->images['cccccc'].'" border="0" height="1" width="100%" /></td></tr>';
-
   }
   $links = '';
   $max_links=10;
@@ -315,24 +318,33 @@ echo '</table>';
 ?>
 
 <script type="text/javascript">
+var frm = document.forms[0];
 
 function _sort(field, direction)
 {
-  document.forms[0].new_pr_sort_field.value=field;
-  document.forms[0].new_pr_sort_order.value=direction;
-  document.forms[0].submit();
+  frm.new_pr_sort_field.value=field;
+  frm.new_pr_sort_order.value=direction;
+  frm.submit();
 }
 
 function delete_project(id)
 {
-  document.forms[0].delete_project_id.value=id;
-  document.forms[0].submit();
+  frm.delete_project_id.value=id;
+  frm.submit();
 }
 
 function change_list(first, max_rows)
 {
-  document.forms[0].first.value=first;
-  document.forms[0].max_rows.value=max_rows;
-  document.forms[0].submit();
+  frm.first.value=first;
+  frm.max_rows.value=max_rows;
+  frm.submit();
+}
+
+function confirm_delete(id)
+{
+  var msg = "<?php echo $strDeletePrefix; ?>'"+
+            document.getElementById('project_'+id).innerHTML+
+            "'<?php echo $strDeleteSuffix; ?>";
+  if (confirm(msg)) delete_project(id);
 }
 </script>

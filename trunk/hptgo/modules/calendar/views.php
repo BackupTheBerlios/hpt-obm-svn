@@ -26,6 +26,7 @@ $cal = new calendar();
 $post_action = isset($_REQUEST['post_action']) ? $_REQUEST['post_action'] : '';
 $task = isset($_POST['task']) ? $_POST['task'] : '';
 $return_to = isset($_REQUEST['return_to']) ? $_REQUEST['return_to'] : $_SERVER['HTTP_REFERER'];
+$link_back = isset($_REQUEST['link_back']) ? $_REQUEST['link_back'] : $_SERVER['REQUEST_URI'];
 $view_type = isset($_REQUEST['view_type']) ? $_REQUEST['view_type'] : 0;
 
 $calendar_id = isset($_REQUEST['calendar_id']) ? $_REQUEST['calendar_id'] : 0;

@@ -135,7 +135,7 @@ else {
     $space = '<img src="'.$GO_THEME->images['task_space'].'" width="'.$display_date.'" height="7">';
     $image = '<img src="'.$GO_THEME->images['task_wait'].'" width="'.$ndays.'" height="7">';
     echo '<tr class="TableInside'.$n.'"><td width="25" align="center" nowrap>'.$t->order.'</td>';
-    echo '<td width="150"><font size="0">'.$t->name.'</font></td>';
+    echo '<td nowrap>'.$t->name.'</td>';
     echo '<td width="565" class="GanttDate" nowrap>'.$space.$image.'&nbsp;<font color="blue"><i>'.$date.'<br>'.$current_space.$current.'</i></font></td></tr>';
     $n = $n == 1 ? 2 : 1;
   }

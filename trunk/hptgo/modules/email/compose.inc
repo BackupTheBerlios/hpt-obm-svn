@@ -559,6 +559,7 @@ if ($sendaction == 'load_template')
   }
 }
 
+$mail_list = '';
 ?>
 <form name="sendform" enctype="multipart/form-data" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <input type="hidden" name="sendaction" value="" />
@@ -583,11 +584,61 @@ if (isset($feedback)) echo $feedback;
   <?php
 if ($count > 0)
 {
-  echo '<tr><td>'.$ml_from.':</td><td colspan="2">';
+  if (isset($mail_cc) && trim($mail_cc) != '') {
+    $cc_style = 'visibility: visible;';
+    $cc_toggle = $ml_cmd_hide.' CC';
+  } else {
+    $cc_style = 'visibility: hidden; display: none;';
+    $cc_toggle = $ml_cmd_show.' CC';
+  }
+  if (isset($mail_bcc) && trim($mail_bcc) != '') {
+    $bcc_style = 'visibility: visible;';
+    $bcc_toggle = $ml_cmd_hide.' BCC';
+  } else {
+    $bcc_style = 'visibility: hidden; display: none;';
+    $bcc_toggle = $ml_cmd_show.' BCC';
+  }
+
+  echo '<tr><td>'.$ml_from.':</td><td>';
   $dropbox = new dropbox();
   $dropbox->add_arrays($ids, $names);
   $dropbox->print_dropbox('mail_from',$mail_from, 'onchange="javascript:change_mail_from()"');
-  echo '</td></tr>';
+  echo '</td>'.
+       '<td>'.
+       '<a href="javascript:toggle_field(\'CC\')" class="normal">'.
+         '<span id="Toggle_CC">'.$cc_toggle.'</span></a>'.
+       '&nbsp;&nbsp;'.
+       '<a href="javascript:toggle_field(\'BCC\')" class="normal">'.
+         '<span id="Toggle_BCC">'.$bcc_toggle.'</span></a>'.
+       '</td></tr>';
+
+  $db = new db();
+  $db->query('SELECT first_name, middle_name, last_name, email FROM users');
+  $emails = array();
+  $fnames = array();
+  while ($db->next_record()) {
+    $m = $db->f('middle_name');
+    $m = (isset($m) && trim($m) != '') ? ' '.$m.' ' : '';
+    $fnames[] = $db->f('last_name').$m.$db->f('first_name');
+    $emails[] = trim(strtolower($db->f('email')));
+  }
+  $db->query('SELECT first_name, middle_name, last_name, email '.
+             'FROM ab_contacts '.
+             'WHERE ab_contacts.user_id='.$GO_SECURITY->user_id);
+  while ($db->next_record()) {
+    $em = strtolower($db->f('email'));
+    if ($em != '' && !in_array($em, $emails)) {
+      $m = $db->f('middle_name');
+      $m = (isset($m) && trim($m) != '') ? ' '.$m.' ' : '';
+      $fnames[] = $db->f('last_name').$m.$db->f('first_name');
+      $emails[] = $em;
+    }
+  }
+  $mail_list = '<span id="maillist" '.
+    'style="visibility: hidden; display: none; position: absolute; z-index: +999;">'.
+    '<table cellpadding="1" cellspacing="0" border="0" bgcolor="black">'.
+    '<tr><td><span id="maillist_contents" style="cursor: hand;"></span></td></tr>'.
+    '</table></span>';
 }
 
 if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_group_id))
@@ -616,10 +667,10 @@ if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_gr
     ?>
       </td>
       <td colspan="2">
-      <input class="textbox" type="text" name="mail_to" size="95" value="<?php echo (isset($mail_to) ? htmlspecialchars($mail_to) : ''); ?>" />
+      <input class="textbox" type="text" name="mail_to" size="95" value="<?php echo (isset($mail_to) ? htmlspecialchars($mail_to) : ''); ?>" onkeydown="return display_list(event);" onblur="cleanup(event);" />
       </td>
       </tr>
-      <tr>
+      <tr id="CC" style="<?php echo $cc_style; ?>">
       <td>
       <?php
       if ($ab_module)
@@ -638,10 +689,10 @@ if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_gr
       ?>
 	</td>
 	<td colspan="2">
-	<input class="textbox" type="text" name="mail_cc" size="95" value="<?php echo (isset($mail_cc) ? htmlspecialchars( $mail_cc) : '') ?>" />
+	<input class="textbox" type="text" name="mail_cc" size="95" value="<?php echo (isset($mail_cc) ? htmlspecialchars( $mail_cc) : '') ?>" onkeydown="return display_list(event);" onblur="cleanup(event);" />
 	</td>
 	</tr>
-	<tr>
+	<tr id="BCC" style="<?php echo $bcc_style; ?>">
 	<td>
 	<?php
 	if ($ab_module)
@@ -659,7 +710,7 @@ if ($mailing_group_id > 0 && $mailing_group = $tp->get_mailing_group($mailing_gr
 	}
 	?>
 	  </td>
-	  <td colspan="2"><input class="textbox" type="text" name="mail_bcc" size="95" value="<?php echo (isset($mail_bcc) ? htmlspecialchars($mail_bcc) : '') ?>" /></td>
+	  <td colspan="2"><input class="textbox" type="text" name="mail_bcc" size="95" value="<?php echo (isset($mail_bcc) ? htmlspecialchars($mail_bcc) : '') ?>" onkeydown="return display_list(event);" onblur="cleanup(event);" /></td>
 	  </tr>
 	  <?php
 }//endif mailing_group_id
@@ -777,6 +828,7 @@ $htmlarea->print_htmlarea(stripslashes(htmlspecialchars($mail_body)));
 <tr>
 <td align="center" colspan="3">
 <?php
+echo $mail_list;
 $button = new button($ml_send,"javascript:send()");
 echo '&nbsp;&nbsp;';
 if ($account['draft'] != '') {
@@ -793,7 +845,10 @@ $button = new button($cmdCancel,"javascript:window.close()");
 
 <script type="text/javascript">
 <!--
-
+var emails = ['<?php echo implode("','", $emails); ?>'];
+var fnames = ['<?php echo implode("','", $fnames); ?>'];
+var agent = navigator.userAgent.toLowerCase();
+var is_ie = ((agent.indexOf("msie") != -1) && (agent.indexOf("opera") == -1));
 
 function validate()
 {
@@ -920,6 +975,217 @@ function savedraft()
       }
     ?>
       document.sendform.submit();
+  }
+
+  function toggle_field(name)
+  {
+    var field = document.getElementById(name);
+    var link = document.getElementById("Toggle_"+name);
+    if (field.style.visibility == 'hidden') {
+      field.style.display = '';
+      field.style.visibility = 'visible';
+      link.innerHTML = '<?php echo $ml_cmd_hide; ?>'+' '+name;
+    }
+    else {
+      field.style.display = 'none';
+      field.style.visibility = 'hidden';
+      link.innerHTML = '<?php echo $ml_cmd_show; ?>'+' '+name;
+    }
+  }
+
+  function get_position(element)
+  {
+    var elem = element, tagname = "", x = 0, y = 0;
+
+    while ((typeof(elem) == "object") && (typeof(elem.tagName) != "undefined"))
+    {
+      y += elem.offsetTop;
+      x += elem.offsetLeft;
+      tagname = elem.tagName.toUpperCase();
+
+      if (tagname == "BODY") elem = 0;
+      if (typeof(elem) == "object")
+        if (typeof(elem.offsetParent) == "object")
+          elem=elem.offsetParent;
+    }
+
+    position = new Object();
+    position.x = x;
+    position.y = y;
+    return position;
+  }
+
+  function get_target(event)
+  {
+    if (event == null)
+      event = window.event;
+
+    if (event == null)
+      return null;
+
+    if (event.srcElement != null)
+      return event.srcElement;
+
+    var r = event.target;
+    while (r && r.nodeType != 1)
+      r = r.parentNode;
+
+    return r;
+  }
+
+  var sel_idx = 0;
+  var sel_row = null;
+  var sel_emails = null;
+
+  function highlight(r)
+  {
+    sel_row = document.getElementById('sel_'+r);
+    sel_row.style.backgroundColor = '#CCCCCC';
+    sel_idx = r;
+  }
+
+  function restore()
+  {
+    if (sel_row) {
+      sel_row.style.backgroundColor = 'white';
+      sel_row = null;
+    }
+  }
+
+  var field = null;
+  function add_email(r)
+  {
+    var s = '';
+    var m = field.value.split(',');
+    for (i = 0; i < m.length - 1; i++)
+      s += m[i].replace(/^\s+|\s+$/g, '') + ', ';
+    s += sel_emails[r] + ', ';
+    field.value = s;
+    hide_maillist();
+  }
+
+  function cancel_event(e)
+  {
+    e.returnValue = false;
+    if (e.preventDefault) e.preventDefault();
+  }
+
+  var ml_visible = false;
+  function display_list(e)
+  {
+    if (ml_visible)
+    switch (e.keyCode) {
+      case 9: // tab
+      case 13: // enter
+      case 39: // right arrow
+        add_email(sel_idx);
+        cancel_event(e);
+        return false;
+      case 35: // home
+        restore();
+        highlight(sel_idx = sel_emails.length - 1);
+        return false;
+      case 36: // home
+        restore();
+        highlight(sel_idx = 0);
+        return false;
+      case 38: // up
+        restore();
+        sel_idx = sel_idx - 1;
+        if (sel_idx < 0) sel_idx = sel_emails.length - 1;
+        highlight(sel_idx);
+        return false;
+      case 40: // down
+        restore();
+        sel_idx = sel_idx + 1;
+        if (sel_idx >= sel_emails.length) sel_idx = 0;
+        highlight(sel_idx);
+        return false;
+      case 27: // esc
+      case 44: // comma
+      case 188:
+        hide_maillist();
+        return false;
+    }
+
+    var f = get_target(e);
+    var m = f.value.split(',');
+    var n = emails.length;
+    var ml = document.getElementById('maillist');
+
+    field = f;
+    switch (e.keyCode) {
+      case 9: // tab
+        return false;
+      case 8: // backspace
+        m = m[m.length - 1].replace(/.$/g, '');
+        break;
+      default:
+        m = m[m.length - 1] + String.fromCharCode(e.keyCode);
+    }
+    m = m.replace(/^\s+|\s+$/g, '').toLowerCase();
+    if (m == '' || m.length < 2) {
+      hide_maillist();
+      return true;
+    }
+
+    var contents = "";
+    sel_emails = new Array();
+    for (i = 0; i < n; i++) {
+      var name = fnames[i].toLowerCase();
+      var match = name.indexOf(m) == 0;
+      if (!match) {
+        var j = 0;
+        name = name.split(' ');
+        while (!match && j < name.length)
+          match = name[j++].indexOf(m) == 0;
+        if (!match) {
+          var em = emails[i].toLowerCase();
+          match = em.indexOf(m) == 0;
+        }
+      }
+
+      if (match) {
+        var z = sel_emails.length;
+        var fn_add_email = 'javascript:add_email('+z+')';
+        var mouse_events = 'onmouseover="highlight('+z+')" onmouseout="restore()" '+
+                           'onclick="'+fn_add_email+'"';
+        contents += '<tr id="sel_'+z+'" '+mouse_events+'>'+
+          '<td nowrap>&nbsp;'+fnames[i]+'&nbsp;</td>'+
+          '<td nowrap>&lt;'+emails[i]+'&gt;</td></tr>';
+        sel_emails[z] = emails[i];
+      }
+    }
+
+    if (contents != '') {
+      var p = get_position(f);
+      var mc = document.getElementById('maillist_contents');
+      mc.innerHTML = '<table cellspacing="0" cellpadding="0" border="0" bgcolor="white">'
+        +contents+'</table>';
+      ml.style.top = (p.y + f.offsetHeight) + "px";
+      ml.style.left = p.x + "px";
+      ml.style.display = '';
+      ml.style.visibility = 'visible';
+      highlight(sel_idx = 0);
+      ml_visible = true;
+    }
+    return true;
+  }
+
+  function hide_maillist()
+  {
+    ml_visible = false;
+    ml = document.getElementById('maillist');
+    ml.style.display = 'none';
+    ml.style.visibility = 'hidden';
+    field.focus();
+  }
+
+  function cleanup(e)
+  {
+    var f = get_target(e);
+    var s = f.value.replace(/^\s+|\s+$|,\s+$/g, '');
+    if (f.value != s) f.value = s;
   }
 
   //-->

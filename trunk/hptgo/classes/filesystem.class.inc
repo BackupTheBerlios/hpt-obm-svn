@@ -401,14 +401,14 @@ class filesystem extends db
     {
       global $GO_CONFIG;
       $parent = dirname($path);
-      if ($parent == $GO_CONFIG->file_storage_path || $parent == '' || $parent == $GO_CONFIG->slash)
+      if ($parent == $GO_CONFIG->file_storage_path || $parent == '' || $parent == '.' || $parent == $GO_CONFIG->slash)
       {
 	return false;
       }else
       {
 	// prevent loops on Windows when $parent reachs C:\
-	if (stristr(php_uname(), 'windows') && strlen($parent) == 3 && substr($parent,1) == ":\\")
-	  return false;
+	if (stristr(php_uname(), 'windows') && ereg('^[A-Za-z]:[\\/]?$', $parent))
+    return false;
 	return $this->find_share($parent);
       }
     }

@@ -146,4 +146,7 @@ $ml_appointment = 'Thư này có chứa cuộc hẹn. Bạn có muốn xem cuộ
 $ml_mails_were_sent = 'thư đã gửi';
 $ml_novalidate_cert = 'Không xác minh chứng nhận';
 $ml_appointment_vcf = 'Thư này chứa địa chỉ liên hệ. Bạn có muốn xem địa chỉ này trong sổ địa chỉ không?';
+
+$ml_cmd_show = 'Hiện';
+$ml_cmd_hide = 'Ẩn';
 ?>

@@ -146,4 +146,7 @@ $ml_appointment = 'This message contains an appointment. Do you want to view thi
 $ml_mails_were_sent = 'mail messages sent';
 $ml_novalidate_cert = 'Don\'t validate certificate';
 $ml_appointment_vcf = 'This message contains a contact address. Do you want to view this address in the addressbook?';
+
+$ml_cmd_show = 'Show';
+$ml_cmd_hide = 'Hide';
 ?>

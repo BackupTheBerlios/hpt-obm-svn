@@ -34,7 +34,8 @@ $modules = $GO_MODULES->get_modules_with_locations();
 $user = $GO_USERS->get_user($GO_SECURITY->user_id);
 
 foreach ($modules as $id => $module) {
-	if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read']))
+	if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read']) ||
+		$GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_write']))
 		$module_map[$module['id']] = $id;
 }
 
@@ -47,7 +48,10 @@ if ($com_string == '') {
 	$com = $res;
 } else {
 	$com = explode(' ',$com_string);
-	$res = $com;
+	foreach ($com as $j)
+		if (isset($module_map[$j]))
+			$res[] = $j;
+	$com = $res;
 	foreach (array_keys($module_map) as $module)
 		if (!in_array($module,$res))
 			$res[] = $module;

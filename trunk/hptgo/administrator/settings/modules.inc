@@ -40,11 +40,11 @@ while($module = array_shift($modules))
 				
 		if ($module_info)
 		{
-				echo '<tr><td valign="top">'.$strDescription.':</td><td>'.text_to_html(trim(htmlspecialchars($module_info['description']))).'</td></tr>';
-				echo '<tr><td>'.$strVersion.':</td><td>'.trim($module_info['version']).'</td></tr>';
-				echo '<tr><td>'.$strStatus.':</td><td>'.trim($module_info['status']).'</td></tr>';
-				echo '<tr><td>'.$strReleaseDate.':</td><td>'.db_date_to_date(trim($module_info['release_date'])).'</td></tr>';			
-				echo '<tr><td valign="top">'.$strAuthors.':</td><td>';
+				echo '<tr><td nowrap valign="top">'.$strDescription.':</td><td>'.text_to_html(trim(htmlspecialchars($module_info['description']))).'</td></tr>';
+				echo '<tr><td nowrap>'.$strVersion.':</td><td>'.trim($module_info['version']).'</td></tr>';
+				echo '<tr><td nowrap>'.$strStatus.':</td><td>'.trim($module_info['status']).'</td></tr>';
+				echo '<tr><td nowrap>'.$strReleaseDate.':</td><td>'.db_date_to_date(trim($module_info['release_date'])).'</td></tr>';			
+				echo '<tr><td valign="top" nowrap>'.$strAuthors.':</td><td>';
 				while ($author = array_shift($module_info['authors']))
 				{
 					echo trim(htmlspecialchars($author['name']).' &lt;'.mail_to($author['email']).'&gt;').'<br />';
