@@ -62,8 +62,8 @@ $home_path = '/users/'.$_SESSION['GO_SESSION']['username'];
 if (!isset($_SESSION['GO_FILESYSTEM_PATH']))
 {
   if ($fs->chroot_file_exists($home_path) || 
-    (($fs->chroot_file_exists('/users/') || $fs->chroot_mkdir('/users/')) &&
-     $fs->chroot_mkdir($home_path)))
+    (($fs->chroot_file_exists('/users/') || $fs->chroot_mkdir('/users/', $GO_CONFIG->create_mode)) &&
+     $fs->chroot_mkdir($home_path, $GO_CONFIG->create_mode)))
   {
     $_SESSION['GO_FILESYSTEM_PATH'] = $home_path;
   }else

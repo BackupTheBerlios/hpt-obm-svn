@@ -138,6 +138,7 @@ if ($msg_module) {
 }
 
 ?>
+<link rel="shortcut icon" href="<?php echo $GO_CONFIG->host; ?>lib/favicon.ico" />
 </head>
 <body>
 </body>
