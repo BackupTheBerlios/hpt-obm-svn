@@ -232,27 +232,14 @@ class imap
 
       $this->message["udate"] = strtotime(str_replace('CEST', '', $overview->date));
       $this->message["date"] = $overview->date;
-      $this->message["subject"] = '';
-
-      if (isset($overview->subject))
-      {
-	$tmp = imap_mime_header_decode($overview->subject);
-	foreach ($tmp as $t)
-	  if (isset($t->text))
-	    $this->message['subject'] .= $t->text;
-      }							
+      $this->message["subject"] = isset($overview->subject) ? imap_utf8($overview->subject) : '';
       $from = imap_rfc822_parse_adrlist($overview->from, 'localhost');
       if (isset($from[0]->mailbox))
       {
 	$host = isset($from[0]->host) ? '@'.$from[0]->host : '';
 	$email = $from[0]->mailbox.$host;
       }
-      $personal = '';
-      if (isset($from[0]->personal))
-      {
-	$decoded = imap_mime_header_decode($from[0]->personal);
-	$personal = $decoded[0]->text;
-      }
+      $personal = isset($from[0]->personal) ? imap_utf8($from[0]->personal) : '';
       $this->message["from"] = $personal == '' ? $email : $personal;	
       $this->message["sender"] = $email;	
       $this->message["flagged"] = $overview->flagged;
@@ -276,15 +263,7 @@ class imap
 	      $email = $tmp[$x]->mailbox.$host;
 	    }
 
-	    $personal = '';
-	    if (isset($tmp[$x]->personal))
-	    {
-	      $decoded = imap_mime_header_decode($tmp[$x]->personal);
-	      if(isset($decoded[0]->text))
-	      {
-	      	$personal = $decoded[0]->text;
-	      }
-	    }
+	    $personal = isset($tmp[$x]->personal) ? imap_utf8($tmp[$x]->personal) : '';
 
 	    if ($personal != '' || $email != '')
 	    {
@@ -473,13 +452,7 @@ function mail_fetchparts($msgNo) {
 			$this->message["reply_to"] = $this->message["sender"];
 			
       if (isset($tmp[0]->personal))
-      {
-	$tmp = imap_mime_header_decode($tmp[0]->personal);
-	if (isset($tmp[0]->text))
-	{
-	  $this->message["from"] = $tmp[0]->text;
-	}
-      }      
+	$this->message["from"] = imap_utf8($tmp[0]->personal);
       
       if(isset($headerinfo->reply_to))
       {
@@ -488,13 +461,7 @@ function mail_fetchparts($msgNo) {
 	    }
       
       if (isset($headerinfo->Subject))
-      {
-	$tmp = imap_mime_header_decode($headerinfo->Subject);
-	$this->message["subject"] = '';
-	foreach ($tmp as $t)
-	  if (isset($t->text))
-	    $this->message['subject'] .= $t->text;
-      }
+	$this->message['subject'] .= imap_utf8($headerinfo->Subject);
 
       if (isset($headerinfo->to))
       {
@@ -510,10 +477,7 @@ function mail_fetchparts($msgNo) {
 
 	  $personal = '';
 	  if (isset($tmp[$x]->personal))
-	  {
-	    $decoded = imap_mime_header_decode($tmp[$x]->personal);
-	    $personal = $decoded[0]->text;
-	  }
+	    $personal = imap_utf8($tmp[$x]->personal);
 
 	  if ($personal != '' || $email != '')
 	  {
@@ -540,10 +504,7 @@ function mail_fetchparts($msgNo) {
 
 	  $personal = '';
 	  if (isset($tmp[$x]->personal))
-	  {
-	    $decoded = imap_mime_header_decode($tmp[$x]->personal);
-	    $personal = $decoded[0]->text;
-	  }
+	    $personal = imap_utf8($tmp[$x]->personal);
 
 	  if ($personal != '' || $email != '')
 	  {
@@ -571,10 +532,7 @@ function mail_fetchparts($msgNo) {
 
 	  $personal = '';
 	  if (isset($tmp[$x]->personal))
-	  {
-	    $decoded = imap_mime_header_decode($tmp[$x]->personal);
-	    $personal = $decoded[0]->text;
-	  }
+	    $personal = imap_utf8($tmp[$x]->personal);
 
 	  if ($personal != '' || $email != '')
 	  {
