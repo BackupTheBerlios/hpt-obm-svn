@@ -33,18 +33,21 @@ class HtmlParser {
     /**
      * Field iNodeType.
      * May be one of the NODE_TYPE_* constants above.
+	 * @var	int
      */
     var $iNodeType;
 
     /**
      * Field iNodeName.
      * For elements, it's the name of the element.
+	 * @var string
      */
     var $iNodeName = "";
 
     /**
      * Field iNodeValue.
      * For text nodes, it's the text.
+	 * @var string
      */
     var $iNodeValue = "";
 
@@ -52,21 +55,39 @@ class HtmlParser {
      * Field iNodeAttributes.
      * A string-indexed array containing attribute values
      * of the current node. Indexes are always lowercase.
+	 * @var array
      */
     var $iNodeAttributes;
 
     // The following fields should be 
     // considered private:
 
+	/**
+	* @var		string
+	* @access	private
+	*/
     var $iHtmlText;
+	/**
+	* @var		int
+	* @access	private
+	*/
     var $iHtmlTextLength;
+	/**
+	* @var		int
+	* @access	private
+	*/
     var $iHtmlTextIndex = 0;
+	/**
+	* @var		char
+	* @access	private
+	*/
     var $iHtmlCurrentChar;
 
     /**
      * Constructor.
      * Constructs an HtmlParser instance with
      * the HTML text given.
+	 * @param	string	$aHtmlText
      */
     function HtmlParser ($aHtmlText) {
         $this->iHtmlText = $aHtmlText;
@@ -79,6 +100,7 @@ class HtmlParser {
      * Parses the next node. Returns false only if
      * the end of the HTML text has been reached.
      * Updates values of iNode* fields.
+	 * @return bool
      */
     function parse() {
         $text = $this->skipToElement();
@@ -91,10 +113,17 @@ class HtmlParser {
         return $this->readTag();
     }
 
+	/**
+	* Clear iNodeAttributes values
+	*/
     function clearAttributes() {
         $this->iNodeAttributes = array();
     }
 
+	/**
+	* Read tag
+	* @return bool
+	*/
     function readTag() {
         if ($this->iCurrentChar != "<") {
             $this->iNodeType = NODE_TYPE_DONE;
@@ -158,26 +187,51 @@ class HtmlParser {
         return true;            
     }
 
+	/**
+	* Check valid tag
+	* @param	string	$name	Tag name
+	* @return	bool	
+	*/
     function isValidTagIdentifier ($name) {
         return ereg ("[A-Za-z0-9]+", $name);
     }
     
+	/**
+	* Skip blanks in tag
+	* @return string
+	*/
     function skipBlanksInTag() {
         return "" != ($this->skipInTag (array (" ", "\t", "\r", "\n" )));
     }
 
+	/**
+	* Skip to blanks or equals in tag
+	* @return string
+	*/
     function skipToBlanksOrEqualsInTag() {
         return $this->skipToInTag (array (" ", "\t", "\r", "\n", "=" ));
     }
 
+	/**
+	* Skip to blanks in tag
+	* @return string
+	*/
     function skipToBlanksInTag() {
         return $this->skipToInTag (array (" ", "\t", "\r", "\n" ));
     }
 
+	/**
+	* Skip equals in tag
+	* @return string
+	*/
     function skipEqualsInTag() {
         return $this->skipInTag (array ( "=" ));
     }
 
+	/**
+	* Read value in tag
+	* @return string
+	*/
     function readValueInTag() {
         $ch = $this->iCurrentChar;
         $value = "";
@@ -197,6 +251,10 @@ class HtmlParser {
         return $value;
     }
 
+	/**
+	* Set text index
+	* @param	int	$index
+	*/
     function setTextIndex ($index) {
         $this->iHtmlTextIndex = $index;
         if ($index >= $this->iHtmlTextLength) {
@@ -207,6 +265,10 @@ class HtmlParser {
         }
     }
 
+	/**
+	* Move next Htmltext
+	* @return bool
+	*/
     function moveNext() {
         if ($this->iHtmlTextIndex < $this->iHtmlTextLength) {
             $this->setTextIndex ($this->iHtmlTextIndex + 1);
@@ -217,6 +279,10 @@ class HtmlParser {
         }
     }
 
+	/**
+	* Skip end of tag
+	* @return string
+	*/
     function skipEndOfTag() {
         $sb = "";
         if (($ch = $this->iCurrentChar) !== -1) {
@@ -230,6 +296,11 @@ class HtmlParser {
         return $sb;
     }
 
+	/**
+	* Skip in tag
+	* @param	string	$chars
+	* @return	string
+	*/
     function skipInTag ($chars) {
         $sb = "";
         while (($ch = $this->iCurrentChar) !== -1) {
@@ -253,6 +324,11 @@ class HtmlParser {
         return $sb;
     }
 
+	/**
+	* Skip to in tag
+	* @param	string	$chars
+	* @return	string
+	*/
     function skipToInTag ($chars) {
         $sb = "";
         while (($ch = $this->iCurrentChar) !== -1) {
@@ -274,6 +350,10 @@ class HtmlParser {
         return $sb;
     }
 
+	/**
+	* Skip to element
+	* @return	string
+	*/
     function skipToElement() {
         $sb = "";
         while (($ch = $this->iCurrentChar) !== -1) {
@@ -287,7 +367,9 @@ class HtmlParser {
     }
 
     /**
-     * Returns text between current position and $needle,
+	 * Skip to string in tag
+     * @param	int	$needle
+	 * @returns string	Text between current position and $needle,
      * inclusive, or "" if not found. The current index is moved to a point
      * after the location of $needle, or not moved at all
      * if nothing is found.
@@ -304,10 +386,20 @@ class HtmlParser {
     }
 }
 
+/**
+* Parser a file to Html
+* @param	string	$fileName	File Name
+* @return	HtmlParser
+*/
 function HtmlParser_ForFile ($fileName) { 
     return new HtmlParser (file_get_contents($filename)); 
 }
 
+/**
+* Parser a URL to Html
+* @param	string	$url
+* @return	HtmlParser
+*/
 function HtmlParser_ForURL ($url) {
     $fp = fopen ($url, "r");
     $content = "";
