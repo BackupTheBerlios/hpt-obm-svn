@@ -475,7 +475,7 @@ function split_name($full_name)
 function print_acl($acl_id,$acl_table = 'acl')
 {
   global $GO_CONFIG;
-  echo '<iframe width="550"; height="320" border="0" frameborder="0" '.
+  echo '<iframe width="700"; height="320" border="0" frameborder="0" '.
 				'scrolling="no" src="'.$GO_CONFIG->control_url.'acl.php?acl_id='.
 				$acl_id.'&acl_table='.$acl_table.'"></iframe>';
 }

@@ -125,6 +125,7 @@ $error_missing_field = "You didn't fill in all the required fields.";
 $acl_control_auth_groups = "Authorized groups";
 $acl_control_auth_users = "Authorized users";
 $acl_control_no_contacts = "You don't have any member contacts to select.<br /> Use the Addressbook to add members to your contacts.";
+$acl_all_auth_users = "All authorized users";
 
 $strShowProfile = "View Profile";
 $strShowGroup = "View group members";

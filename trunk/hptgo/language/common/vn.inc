@@ -127,6 +127,7 @@ $error_missing_field = "Bạn chưa nhập đủ thông tin.";
 $acl_control_auth_groups = "Nhóm được phép";
 $acl_control_auth_users = "Người được phép";
 $acl_control_no_contacts = "Bạn chưa có thành viên nào trong sổ liên hệ.<br /> Dùng sổ địa chỉ để thêm các thành viên vào sổ liên hệ của bạn.";
+$acl_all_auth_users = "Mọi người được phép";
 
 $strShowProfile = "Xem thông tin";
 $strShowGroup = "Xem nhóm thành viên";

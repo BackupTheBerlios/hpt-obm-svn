@@ -262,11 +262,10 @@ class acl
   function print_groups_in_acl()
   {
     global $GO_SECURITY, $GO_CONFIG, $cmdAdd, $cmdDelete;
-
     $disabled = $this->read_only ? 'disabled' : '';
 
     echo '<select name="'.$this->selected_groups_name.'[]"'.
-      ' multiple="true" style="width: 250px;height: 250px;"'.
+      ' multiple="true" style="width: 220px;height: 250px;"'.
       ' class="textbox" '.$disabled.'>';
 
     $this->ACL->get_groups_in_acl($this->acl_id);
@@ -322,7 +321,7 @@ class acl
 
     $this->ACL->get_users_in_acl($this->acl_id);
     echo '<select name="'.$this->selected_users_name.
-      '[]" multiple="true" style="width: 250px;height: 250px;"'.
+      '[]" multiple="true" style="width: 220px;height: 250px;"'.
       ' class="textbox" '.$disabled.'>';
 
     while ($this->ACL->next_record())
@@ -347,6 +346,29 @@ class acl
     }
   }
 
+  /** 
+   * Print list of users in acl (test mode). That is, print all authorised users.
+   */
+  function test_mode_print_users_in_acl()
+  {
+    global $GO_SECURITY, $GO_USERS, $cmdAdd, $cmdDelete;
+
+    $this->ACL->get_all_users_in_acl($this->acl_id,true);
+    $db = &$this->ACL;
+    echo '<select name="'.$this->selected_users_name.
+      '[]" multiple="true" style="background: none;width: 220px;height: 250px;"'.
+      ' class="textbox" disabled="1">';
+
+    while ($db->next_record())
+    {
+	$middle_name = $db->f("middle_name") == '' ?
+	  '' : $db->f("middle_name").' ';
+	$name = $db->f("last_name").' '.$middle_name.$db->f("first_name");
+	echo '<option value="'.$db->f('id').'">'
+	  .htmlspecialchars($name).'</option>';
+    }
+    echo '</select>';
+  }
   /**
    * Print the ACL form.
    */
@@ -377,7 +399,7 @@ class acl
 		}
 		</script>
 		  ';
-    global $acl_control_auth_groups, $acl_control_auth_users;
+    global $acl_control_auth_groups, $acl_control_auth_users,$acl_all_auth_users;
     echo '<form name="'.$this->form_name.'" method="post" action="'.$_SERVER['PHP_SELF'].'">';
     echo '<input type="hidden" name="task" value="" />';
     echo '<input type="hidden" name="acl_id" value="'.$this->acl_id.'" />';
@@ -385,11 +407,14 @@ class acl
     echo '<input type="hidden" name="read_only" value="'.$this->read_only.'" />';
     echo '<table border="0" cellspacing="0" cellpadding="0">';
     echo '<tr><td><h3>'.$acl_control_auth_users.'</h3></td><td width="20">&nbsp;</td>';
-    echo '<td><h3>'.$acl_control_auth_groups.'</h3></td></tr>';
+    echo '<td><h3>'.$acl_control_auth_groups.'</h3></td><td width="20">&nbsp;</td>';
+    echo '<td><h3>'.$acl_all_auth_users.'</td></tr>';
     echo '<tr><td>';
     $this->print_users_in_acl();
     echo '</td><td width="20">&nbsp;</td><td>';
     $this->print_groups_in_acl();
+    echo '</td><td width="20">&nbsp;</td><td valign="top">';
+    $this->test_mode_print_users_in_acl();
     echo '</td></tr>';
     echo '</table>';
     /*

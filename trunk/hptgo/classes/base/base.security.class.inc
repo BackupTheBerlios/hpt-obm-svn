@@ -332,6 +332,30 @@ window.top.location="<?php echo $GO_CONFIG->host.'index.php'.(isset($link_back) 
   }
 
 	/**
+	* Get's all users from an ACL include users in groups
+	*
+	* @param	int			$acl_id	The ACL ID
+	* @access public
+	* @return int			Number of users in the acl
+	*/
+  function get_all_users_in_acl($acl_id,$user_info = false)
+  {
+    $sql = "SELECT DISTINCT ".($user_info ? "users.*" : "users.id")." ".
+		  "FROM ".
+				"({$this->acl_table} ".
+			  	"LEFT JOIN users_groups ".
+				 	 "ON ({$this->acl_table}.user_id=0	".
+						  "AND {$this->acl_table}.group_id=users_groups.group_id)) ".
+				"INNER JOIN users ".
+				  "ON (users.id={$this->acl_table}.user_id ".
+					  "OR users.id=users_groups.user_id) ".
+			"WHERE {$this->acl_table}.acl_id='$acl_id'";
+    if ($user_info) $sql .= " ORDER BY users.first_name";
+    $this->query($sql);
+    return $this->num_rows();    
+  }
+
+	/**
 	* Checks presence of a user in an ACL
 	*
 	* @param	int			$user_id	The user ID
