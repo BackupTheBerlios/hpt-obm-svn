@@ -81,7 +81,7 @@ class dropbox
     $multiple_str = $multiple ? ' multiple="true" size="'.$size.'"' : '';
 
     $optgroup_open = false;
-    echo '<select name="'.$name.'" class="textbox"'.$multiple_str.' '.$attributes;
+    echo '<select name="'.$name.'" class="textbox"'.$multiple_str.' '.$attributes.' ';
 
     if ($width > 0)
     {
