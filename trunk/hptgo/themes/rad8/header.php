@@ -54,18 +54,26 @@ function Bold_Text(id,imgfile)
 
 <table border="0" cellpadding="0" cellspacing="0" width="100%" class="HeaderBar">
 <tr height="46">
+	<td width="100%">
+	
+	<table border="0" cellpadding="0" cellspacing="0" height="46" width="100%">
+	<tr>
 	<td width="200">
 	<a target="main" href="http://www.hptvietnam.com.vn" title="<?php echo $menu_about; ?>">
 	<img src="<?php echo $GO_THEME->images['go_header']; ?>" border="0" height="40" width="200" />
 	</a>
 	</td>
 	
-	<td border="0" class="bigtitle" align="left" width="*">
+	<td border="0" class="bigtitle" align="left" width="100%">
 	<?php echo $title; ?>
 	</td>
 	
 	<td class="HeaderBar" border="0" width="150" valign="top">
 	<img id="modicon">
+	</td>
+	</tr>
+	</table>
+	
 	</td>
 </tr>
 
