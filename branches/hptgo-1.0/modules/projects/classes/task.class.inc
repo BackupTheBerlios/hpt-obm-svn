@@ -428,6 +428,8 @@ class project_task extends db {
   }
 
   function set_status($status) {
+    if ($status == $this->status) return;
+
     if ($this->approved)
       $this->set_approve(false);
 
