@@ -30,7 +30,7 @@ if (isset($_REQUEST['delete_catagory']))
 {
 	if ($catagory = $bookmarks->get_catagory($_REQUEST['delete_catagory']))
 	{
-		if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $catagory['acl_write']))
+		if ($GO_SECURITY->user_id == $catagory['user_id'])
 		{
 			if ($bookmarks->delete_catagory($_REQUEST['delete_catagory']))
 			{
@@ -40,6 +40,7 @@ if (isset($_REQUEST['delete_catagory']))
 		}
 	}
 }
+
 if (isset($_POST['bookmarks']))
 {
 	switch($task)
@@ -49,7 +50,8 @@ if (isset($_POST['bookmarks']))
 			{
 				if ($bookmark = $bookmarks->get_bookmark($bookmark_id))
 				{
-					if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $bookmark['acl_write']))
+					$catagory = $bookmarks->get_catagory($bookmark['catagory_id']);
+					if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $catagory['acl_write']))
 					{
 						if ($bookmarks->delete_bookmark($GO_SECURITY->user_id, $bookmark_id))
 						{
@@ -131,14 +133,17 @@ while($bookmarks->next_record())
 
 					'<td width="16"><a class="normal" href="catagory.php?catagory_id='.
 							$bookmarks->f("id").'"><img src="'.$GO_THEME->images['edit'].
-							'" border="0"></a></td>'.
-
+							'" border="0"></a></td>';
+			if ($GO_SECURITY->user_id == $bookmarks->f('user_id'))
+			{
+				$title .=
 					"<td width=\"16\"><a href='javascript:div_confirm_action(\"".
 					$_SERVER['PHP_SELF']."?delete_catagory=".$bookmarks->f('id').
 					"\",\"".div_confirm_id($strDeletePrefix."'".$bookmarks->f('name').
 					"' ".$bm_and_all_contents." ".$strDeleteSuffix)."\")' title=\"".$strDeleteItem." '".
 					htmlspecialchars($bookmarks->f('name'))."'\"><img src=\"".$GO_THEME->images['delete'].
 					"\" border=\"0\"></a></td>";
+			}
 		}
 
 		$title .=	'</tr></table>';
