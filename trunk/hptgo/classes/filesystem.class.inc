@@ -104,6 +104,9 @@ class filesystem extends db
     $this->root = $GO_CONFIG->file_storage_path;
     while ($this->root[strlen($this->root)-1] == '/')
       $this->root = substr($this->root,0,strlen($this->root)-1);
+    
+    // WORKAROUND: used when file_storage_path has a trailing slash
+    $GO_CONFIG->file_storage_path = $this->root;
   }
 
   /**
