@@ -96,7 +96,7 @@ echo '<tr><td colspan="99">';
 echo '<table border="0"><tr>';
 if ($ab->get_subscribed_addressbooks($GO_SECURITY->user_id) > 1)
 {
-  echo '<td>'.$ab_addressbook.':</td><td>';
+  echo '<td nowrap>'.$ab_addressbook.':</td><td>';
   $subscribed_addressbooks = new dropbox();
   while ($ab->next_record())
   {

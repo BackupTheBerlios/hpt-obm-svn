@@ -94,7 +94,7 @@ echo '<input type="hidden" name="post_action" value="'.$post_action.'" />';
 echo '<table border="0" width="700"><tr>';
 if ($ab->get_subscribed_addressbooks($GO_SECURITY->user_id) > 1)
 {
-	echo '<td>'.$ab_addressbook.':</td><td>';
+	echo '<td nowrap>'.$ab_addressbook.':</td><td>';
 	$subscribed_addressbooks = new dropbox();
 	while ($ab->next_record())
 	{
