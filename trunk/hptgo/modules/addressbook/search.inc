@@ -292,7 +292,7 @@ if ($task=='search' || $task == 'show_letter')
 				}
 			}
 
-			$result_str =  ($count == 1) ? $count.' '.$contacts_result : $count.' '.$contacts_results;
+			$result_str =  ($allcount == 1) ? $allcount.' '.$contacts_result : $allcount.' '.$contacts_results;
 			echo '<br /><h2>'.$result_str.'</h2>';
 
 			if ($count > 0)
@@ -405,7 +405,7 @@ if ($task=='search' || $task == 'show_letter')
 				}
 			}
 
-			$result_str =  ($count == 1) ? $count.' '.$contacts_result : $count.' '.$contacts_results;
+			$result_str =  ($allcount == 1) ? $allcount.' '.$contacts_result : $allcount.' '.$contacts_results;
 			echo '<br /><h2>'.$result_str.'</h2>';
 
 			if ($count > 0)
@@ -514,7 +514,7 @@ if ($task=='search' || $task == 'show_letter')
 				}
 			}
 
-			$result_str =  ($count == 1) ? $count.' '.$contacts_result : $count.' '.$contacts_results;
+			$result_str =  ($allcount == 1) ? $allcount.' '.$contacts_result : $allcount.' '.$contacts_results;
 			echo '<br /><h2>'.$result_str.'</h2>';
 
 			if ($count > 0)
