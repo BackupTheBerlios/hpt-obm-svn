@@ -369,6 +369,7 @@ CREATE TABLE `users` (
   `language` varchar(20) NOT NULL default '',
   `theme` varchar(20) NOT NULL default '',
   `first_weekday` tinyint(4) NOT NULL default '0',
+  `modules` varchar(255) NOT NULL default '',
   PRIMARY KEY  (`id`),
   KEY `id` (`id`)
 ) TYPE=MyISAM;

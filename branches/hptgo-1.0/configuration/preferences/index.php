@@ -52,13 +52,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST")
   }
 }
 
-$tabtable = new tabtable('preferences', $menu_preferences, '100%', '400');
+$tabtable = new tabtable('preferences_tab', $menu_preferences, '100%', '400','120','',true);
+$tabtable->add_tab('preferences',$menu_preferences_tab);
+$tabtable->add_tab('modules',$menu_modules_tab);
 ?>
 <form name="preferences" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <input type="hidden" name="save_action" />
+<input type="hidden" name="task" />
 <input type="hidden" name="close" value="false" />
-
-<?php $tabtable->print_head(); ?>
+<?php $tabtable->print_head();
+if ($tabtable->get_active_tab_id() == 'preferences') {
+?>
 <table border="0" cellpadding="0" cellspacing="3">
 <tr>
 <td>&nbsp;</td>
@@ -325,7 +329,11 @@ if ($_SESSION['GO_SESSION']['start_module'] != '')
 </td>
 </tr>
 </table>
-<?php $tabtable->print_foot(); ?>
+<?php
+} else
+  require('edit_modules.inc');
+$tabtable->print_foot();
+?>
 
   <script type="text/javascript">
 function save_preferences(close)
