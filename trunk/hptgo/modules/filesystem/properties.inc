@@ -18,6 +18,8 @@ $location = dirname($path);
 $share = $fs->find_share($path);
 //do not let user share it's home folder or modify the name!
 $write_perms = ($fs->has_write_permission($GO_SECURITY->user_id, $path) && !$fs->is_home_path($GO_SECURITY->user_id, $path));
+//do not let user rename common folder too!
+$write_perms &= $path != $GO_CONFIG->file_storage_path.'common';
 
 $return_to = $_SERVER['PHP_SELF'].'?path='.$return_to_path;
 $link_back = $_SERVER['REQUEST_URI'];

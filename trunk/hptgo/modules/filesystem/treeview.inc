@@ -268,23 +268,18 @@ if (!$fs->get_share($folder['path']) &&
 
 $is_expanded = in_array('//workspace',$_SESSION['expanded']);
 $has_children = false;
-if ($fs->has_read_permission2($GO_SECURITY->user_id,$folder['path'])) {
+$from_root =  ($fs->has_read_permission2($GO_SECURITY->user_id,$folder['path']));
+$my_folders = $fs->get_visible_folders($GO_SECURITY->user_id,$folder['path']);
+if (count($my_folders) > 0)
   $has_children = true;
-  $from_root = true;
-} else {
-  $my_folders = $fs->get_visible_folders($GO_SECURITY->user_id,$folder['path']);
-  if (count($my_folders) > 0) {
-    $has_children = true;
-    $from_root = false;
-  }
-}
 echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//workspace'.$arguments.'">'.($has_children ? ($is_expanded ? $image['mnode'] : $image['pnode']) : $image['emptynode']).'</a>';
-echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.urlencode($path).'&expand_path=//workspace'.$arguments.'">'.$image['group'].$fbWorkspace.'</a><br />';
+echo '<a href="'.$_SERVER['PHP_SELF'].'?path='.($from_root ? $GO_CONFIG->file_storage_path.'common' : urlencode($path)).$arguments.'">'.$image['group'].$fbWorkspace.'</a><br />';
 
 if ($is_expanded && $has_children) {
+  /*
   if ($from_root)
     print_common_filesystem(array($folder),$image['vertline'],$arguments);
-  else {
+  else*/ {
     for ($i = 0;$i < count($my_folders);$i ++)
       $my_folders[$i]['parent'] = '';
     print_common_filesystem($my_folders,$image['vertline'],$arguments);
