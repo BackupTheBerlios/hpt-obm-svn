@@ -80,7 +80,8 @@ CREATE TABLE `cal_events` (
 DROP TABLE IF EXISTS `cal_events_calendars`;
 CREATE TABLE `cal_events_calendars` (
   `calendar_id` int(11) NOT NULL default '0',
-  `event_id` int(11) NOT NULL default '0',
+  `event_id` int(11) NOT NULL default '0', PRIMARY KEY  (`calendar_id`,`event_id`),
+
   KEY `calendar_id` (`calendar_id`,`event_id`)
 ) TYPE=MyISAM;
 
