@@ -268,14 +268,14 @@ switch($tabtable->get_active_tab_id())
 	break;
 
 	default:
-		$name = isset($name) ? htmlspecialchars(stripslashes($name)) : '';
+		$name = isset($name) ? stripslashes($name) : '';
 		echo '<table border="0">';
 		if (isset($feedback))
 		{
 			echo '<tr><td colspan="2" class="Error">'.$feedback.'</td></tr>';
 		}
 		if ($write_permission)
-			echo '<tr><td>'.$strName.':</td><td><input type="text" class="textbox" name="name" value="'.$name.'" size="40" /></td></tr></table>';
+			echo '<tr><td>'.$strName.':</td><td><input type="text" class="textbox" name="name" value="'.htmlspecialchars($name).'" size="40" /></td></tr></table>';
 		else
 			echo '<tr><td>'.$strName.':</td><td>'.htmlspecialchars($name).'</td></tr></table>';
 		echo '<br />';
