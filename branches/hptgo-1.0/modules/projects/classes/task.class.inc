@@ -247,8 +247,12 @@ class project_task extends db {
       $url = $_SERVER['PHP_SELF'] . "?task=show_task_doc".
              "&project_id=".$this->project_id.
              "&task_id=".$this->id."&task_status=show_doc";
-      echo "<td align=\"center\"><a href=\"$url\">".
+      if ($this->is_owner || $this->is_manager)
+        echo "<td align=\"center\"><a href=\"$url\">".
            "<img border=\"0\" src=\"".$GO_THEME->images['doc']."\"/></a></td>";
+      else
+        echo "<td align=\"center\">".
+           "<img border=\"0\" src=\"".$GO_THEME->images['doc_disable']."\"/></td>";
     }
     else
       echo "<td>&nbsp;</td>";

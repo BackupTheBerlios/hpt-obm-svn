@@ -170,9 +170,11 @@ echo "</td></tr></table>";
 
 function show_planned_eslapsed_times() {
   global $tasks, $pstop_date, $pstart_date, $pm_delay, $pm_days, $pm_remain,
-  		 $pm_legend_planning, $pm_legend_ongoing, $today;
+  		 $pm_legend_planning, $pm_legend_ongoing, $today, $max_task_id;
 
   $tasks[1]->get_elapsed();
+  if ($tasks[$max_task_id]->approved)
+	  $today = strtotime($tasks[$max_task_id]->approved_date);
   $plan_days = round(($pstop_date - $pstart_date) / (24 * 3600));
   $done_days = round(($today - $pstart_date) / (24 * 3600));
   if ($done_days > $plan_days)
