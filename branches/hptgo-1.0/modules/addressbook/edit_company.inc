@@ -38,6 +38,12 @@
 		</td>
 		<td><?php $parent_dropbox->print_dropbox('parent_id',$company['parent_id'],'',false,10,230);?></td>
 	</tr>
+	
+<script language="javascript">
+	if (navigator.userAgent.indexOf("Windows")==-1)
+		document.forms[0].parent_id.style.width = 222;
+</script>
+
 	<tr><td>&nbsp;</td></tr>
 	<tr>
 		<td align="right" nowrap>
