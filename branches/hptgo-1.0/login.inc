@@ -118,7 +118,7 @@ $button = new button($cmdLogin, 'javascript:document.forms[0].submit();');
 </tr>
 <tr>
 <td id="FooterBar">
-<a style="color: white;" target="_blank" href="http://www.hptvietnam.com.vn">HPT Commerce&nbsp;&nbsp;-&nbsp;&nbsp;Group-Office <?php echo $GO_CONFIG->version; ?></a>
+<a style="color: white;" target="_blank" href="http://www.hptvietnam.com.vn">HPT Commerce&nbsp;&nbsp;-&nbsp;&nbsp;HPT Open Business Management <?php echo $GO_CONFIG->version; ?></a>
 </td>
 </tr>
 </table>
