@@ -67,6 +67,7 @@ function Bold_Text(id)
 			$module_list = explode(' ',$module_list);
 			foreach ($module_list as $module)
 			{
+				if (!isset($module_map[$module])) continue;
 				$module = $modules[$module_map[$module]];
 				echo "\n<!-- ".$module['id']." -->\n";
 				if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read']))
