@@ -211,3 +211,12 @@ CREATE TABLE `cal_views_calendars` (
   `view_id` int(11) NOT NULL default '0',
   `calendar_id` int(11) NOT NULL default '0'
 ) TYPE=MyISAM;
+
+DROP TABLE IF EXISTS `cal_config`;
+CREATE TABLE cal_config (
+  user_id int(11) unsigned NOT NULL default '0',
+  calendar_id int(11) unsigned NOT NULL default '0',
+  PRIMARY KEY  (calendar_id,user_id)
+) TYPE=MyISAM;
+
+      

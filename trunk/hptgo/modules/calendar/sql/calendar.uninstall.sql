@@ -7,3 +7,4 @@ DROP TABLE IF EXISTS `cal_reminders`;
 DROP TABLE IF EXISTS `cal_views`;
 DROP TABLE IF EXISTS `cal_settings`;
 DROP TABLE IF EXISTS `cal_todos`;
+DROP TABLE IF EXISTS `cal_config`;
