@@ -339,6 +339,12 @@ switch ($task)
     if (isset($_POST['name']))
     {
       $name = trim($_POST['name']);
+      if ($name[0] == '.')
+      {
+	$feedback = '<p class="Error">'.$name_width_dot_at_begin.'</p>';
+      }
+      else
+      {
       if(validate_input($name))
       {
 	if (isset($_POST['share_folder']) && !$fs->get_share($path))
@@ -406,6 +412,7 @@ switch ($task)
       }else
       {
 	$feedback = '<p class="Error">'.$invalid_chars .': " & ? / \</p>';
+      }
       }
       if ($_POST['close']=='true' && !isset($feedback))
       {
@@ -573,6 +580,10 @@ switch ($task)
       if ($name =='')
       {
 	$feedback = '<p class="Error">'.$error_missing_field.'</p>';
+	require('new_folder.inc');
+      }elseif ($name[0] == '.')
+      {
+	$feedback = '<p class="Error">'.$name_width_dot_at_begin.'</p>';
 	require('new_folder.inc');
       }elseif(!validate_input($name))
       {

@@ -80,4 +80,5 @@ $fs_set_permissions = 'Customize access permissions';
 $strUsePermissionsOf = 'Access permissions is as same as';
 $fbGroupFolders = 'Group folders';
 $fbMyDocuments = 'My Documents';
+$name_width_dot_at_begin = 'Name can not be started with a dot';
 ?>
