@@ -1,0 +1,7 @@
+<?php
+$module['notes']['description'] = 'Send messages to other members';
+$module['notes']['version'] = '1.0';
+$module['notes']['release_date'] = '2004-04-05';
+$module['notes']['status'] = 'Stable';
+$module['notes']['authors'][] = array('name'=>'Nguyễn Thái Ngọc Duy', 'email'=>'duyntn@hptvietnam.com.vn');
+?>

@@ -1,0 +1,8 @@
+<?php
+$module['daogen']['description'] = 'Module to generate Database Objects.';
+$module['daogen']['version'] = '1.0';
+$module['daogen']['release_date'] = '2004-04-05';
+$module['daogen']['status'] = 'Alpha';
+$module['daogen']['authors'][] = array('name'=>'Mike Hostetler', 'email'=>'mike@tm-web.com');
+?>
+	

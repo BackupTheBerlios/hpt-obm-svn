@@ -1,0 +1,16 @@
+RewriteEngine On 
+
+# / or index.html is requested so call rewrite.php with a special parameter 
+RewriteRule ^$ rewrite.php?rw_url=index.php&rw_host=%{HTTP_HOST}&rw_from=%{REQUEST_URI} [QSA,L] 
+RewriteRule ^index\.html$ rewrite.php?rw_url=index.php&rw_host=%{HTTP_HOST}&rw_from=%{REQUEST_URI} [QSA,L] 
+RewriteRule ^rewrite\.php$ rewrite.php?rw_url=index.php&rw_host=%{HTTP_HOST}&rw_from=%{REQUEST_URI} [QSA,L] 
+
+# then if we have a request which is neither file nor dir send the request to rewrite.php 
+#RewriteCond %{REQUEST_FILENAME} !-f 
+#RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteRule (.*) rewrite.php?rw_url=$1&rw_host=%{HTTP_HOST}&rw_from=%{REQUEST_URI} [QSA,L]
+
+php_flag magic_quotes_gpc Off
+
+#If we are using XUL files, we need to include this
+AddType application/vnd.mozilla.xul+xml .xul

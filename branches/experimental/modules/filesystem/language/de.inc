@@ -1,0 +1,74 @@
+<?php
+require($GO_LANGUAGE->get_fallback_language_file('filesystem'));
+
+$strLookIn = '&Ouml;ffnen';
+$strType = "Typ";
+$strModified = "Ge&auml;ndert";
+$strCreated = "Angelegt";
+$strAccessed = "Zugegriffen";
+$strSize = "Gr&ouml;sse";
+$fbRefresh = "Aktualisieren";
+$fbProperties = "Eigenschaften";
+$fbNewFolder = "Neuer Ordner";
+$fbDelete = "L&ouml;schen";
+$fbCut = "Ausschneiden";
+$fbPaste = "Einf&uuml;gen";
+$fbCopy = "Kopieren";
+$fbFiletypes = "Dateitypen";
+$fbSharing = "Eigene Freigaben";
+$fbShares = "Freigaben";
+$fbShare = "Freigabe";
+$fbPath = "Pfad";
+$fbFolders = "Ordner";
+$fbNoSelect = "Sie haben kein Element ausgewält. Zum Auswählen bitte auf das Symbol neben dem Namen eines Elementes klicken.";
+$fbConfirmDelete = "Löschung bestätigen";
+$fbWritePermissions = "Schreibberechtigungen";
+$fbReadPermissions = "Leseberechtigungen";
+$fbGeneral = "Allgemein";
+$fbConfirmOverwrite = "Ueberschreiben bestaetigen";
+$strOverwritePrefix = "Soll die Datei ";
+$strOverwriteSuffix = " ueberschrieben werden?";
+$fbDescription = "Beschreibung";
+$fbLocation = "Position";
+$fbUpload = "Hochladen";
+$fbUpload_text = "Datei zum Hochladen auswaehlen";
+$fbUpload_nofile = "Es wurde keine Datei empfangen.";
+$fbVersions = "Versionen";
+$fbDelete_version = "Soll die aktuelle Version gelöscht werden?";
+$fbFolderExists = "Der Ordner existiert bereits.";
+$fbEmailFile = "Email-Datei";
+$fbFolder = "Ordner";
+$fbSelect = "Datei w&auml;hlen...";
+$fbNoFile = "Die Datei ist zu gross.<br /> Die maximale Groesse fuer eine zu uebertragende Datei liegt bei: ";
+$fbPleaseWait = "Bitte warten. Daten werden gesendet...";
+$fbFilename = "Dateiname";
+$fbUpLevel = "Ebene hoeher";
+$fbItems = "Element(e)";
+$fbFolderSize = "Groesse des Ordners";
+$fbMaxUploadSize = "Maximale Groesse";
+$ml_file_too_big = "Die Datei ist zu gross. Die maximale Groesse fuer einen Dateianhang liegt bei: ";
+$cmdSearch = "Suchen";
+$fbNoRightToOverwrite = "Die Datei existiert bereits. Und Sie haben nicht die erforderlichen Rechte, diese zu ueberschreiben.";
+$fbSaveFile = "Datei speichern unter...";
+$fbNameExists = "Der Name existiert bereits in diesem Ordner.";
+$fbThis = 'diese';
+$fbFiles = 'Dateien';
+$fs_activate_sharing = 'Freigabe aktivieren';
+$fs_calculate_folder_size = 'Ordnergr&ouml;sse berechnen';
+$fs_no_multi_select = 'Es darf nicht mehr als ein Element mit dieser Option ausgewaehlt werden';
+$fs_search = 'Suchen';
+$search_title = "Suchen nach Dateien und Ordnern";
+$fs_keyword = 'Suchbegriff';
+$fs_enter_keyword = 'Bitte einen Suchbegriff eingeben';
+$fs_modified_before = 'Geaendert vor';
+$fs_modified_after = 'Geaendert nach';
+
+//translation required
+$fb_compress='Packen';
+$fb_decompress='Entpacken';
+$fb_failed_to_create = 'Das Packen ist fehlgeschlagen.';
+$fb_failed_to_extract = 'Das Entpacken ist fehlgeschlagen.';
+$fb_compression_type = 'Kompression';
+
+$fbFreeQuotaSpace = 'Frei verf&uuml;gbarer Speicher';
+?>

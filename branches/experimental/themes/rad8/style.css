@@ -1,0 +1,816 @@
+.cal_todos{
+	background-color: #eee;
+	
+	border-style: solid;
+		
+	border-left-color: #333;
+	border-bottom-color: #bbb;
+        border-top-color: #444;
+	border-right-color: #bbb;
+
+        border-left-width: 2px;
+	border-bottom-width: 2px;
+	border-top-width: 2px;
+	border-right-width: 2px;
+}
+a.todo:visited, a.todo:link, a.todo:active {
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+        color: #000000;		
+}
+a.todo:hover{
+	color:  #900;
+	text-decoration: none;
+	font-size: 12px;
+}
+
+a.todo_completed:visited, a.todo_completed:link, a.todo_completed:active {
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+        color: #000000;	
+        text-decoration: line-through;
+}
+a.todo_completed:hover{
+	color:  #900;
+	text-decoration: none;
+	font-size: 12px;
+}
+
+a.todo_late:visited, a.todo_late:link, a.todo_late:active {
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+        color: red;	
+}
+a.todo_late:hover{
+	color:  black;
+	text-decoration: none;
+	font-size: 12px;
+}
+
+.ModuleIcons {
+	padding: 2px;
+	margin:0px; 
+	padding-right: 10px;
+	padding-left: 7px;
+	font-size: 11px;
+	text-align: center;
+}
+
+a.ModuleIcons:link, a.ModuleIcons:visited, a.ModuleIcons:active {
+	color: #ccc;
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: none;
+	border: 0;
+	padding: 2px;
+	padding-right: 10px;
+	padding-left: 7px;
+}
+
+a.ModuleIcons:hover {
+	color: yellow;
+	text-decoration: none;
+}
+
+.ModuleIcons1 {
+	color: #000;
+	padding: 2px;
+	margin:0px; 
+	padding-right: 5px;
+	font-size: 10px;
+	text-align: right;
+}
+
+a.ModuleIcons1:link, a.ModuleIcons1:visited, a.ModuleIcons1:active {
+	color: #000;
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 10px;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: none;
+	border: 0;
+	padding: 2px;
+	padding-right: 5px;
+}
+
+a.ModuleIcons1:hover {
+	color: #0869b5;
+	text-decoration: none;
+}
+
+.Menu_modoff {
+	color: #000;
+	background: url(images/menu/modoff_bg.gif);
+	padding: 0px;
+	margin:0px; 
+	font-size: 12px;
+	text-align: center;
+}
+
+.Menu_modon {
+	color: #0869b5;
+	background: url(images/menu/modon_bg.gif);
+	padding: 0px;
+	margin:0px; 
+	font-size: 12px;
+	font-weight: bold;
+	text-align: center;
+}
+
+a.ActiveModuleIcon:link, a.ActiveModuleIcon:visited, a.ActiveModuleIcon:active {
+	
+}
+
+.HeaderBar {
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	background-color: #fff;
+	padding: 0px;
+	border-top: 0px solid #8b1b2b;
+	border-bottom: 0px solid #8b1b2b;
+	text-align: right;
+}
+
+a.HeaderBar:link, a.HeaderBar:visited, a.HeaderBar:active {
+	color: #000;
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: none;
+	border: 0;
+	padding: 0px;
+}
+
+a.HeaderBar:hover {
+	color: yellow;
+	text-decoration: none;
+}
+
+.FooterBar {
+	color: #000;
+	font-family:	tahoma, arial, verdana, sans-serif;
+	font-size:	12px;
+	font-weight: normal;
+	background: url(images/menu/footer_bg.gif);
+	padding: 0;
+	border-bottom: 0px solid #8b1b2b;
+	border-top: 0px solid #8b1b2b;
+	height: 26px;
+	/*padding-right: 5px;
+	padding-left: 5px; */
+}
+
+a.FooterBar:link, a.FooterBar:visited, a.FooterBar:active {
+	color: #000;
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: none;
+	border: 0;
+	padding: 2px;
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+a.FooterBar:hover {
+	color: yellow;
+	text-decoration: underline;
+}
+
+.LeftBar {
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: normal;
+	background-color: #ffafbf;
+	padding: 0;
+	border-left: 1px solid #8b1b2b;
+	border-right: 2px solid #8b1b2b;
+	text-align: center;
+}
+
+a.LeftBar:link, a.LeftBar:visited, a.LeftBar:active {
+	color: #000000;
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 11px;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: none;
+	border: 0;
+	padding: 2px;
+}
+
+a.LeftBar:hover {
+	color: #a83546;
+	text-decoration: underline;
+}
+
+#tabtable
+{
+	background-color: #f7f7f7;
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	color: #000000;
+	
+	border-style: solid;
+	
+	border-left-color: #bbb;
+	border-bottom-color: #333;
+	border-top-color: #bbb;
+	border-right-color: #333;
+
+	border-left-width: 2px;
+	border-bottom-width: 2px;
+	border-top-width: 2px;
+	border-right-width: 2px;
+}
+#tabtable th {
+        background-color: #eee;
+        font-size: 14px;
+	padding: 2px;
+        font-weight: bold;
+        color: #333;
+        border: 0px;
+        border-bottom: 2px solid #8b1b2b;
+        text-align: left;
+}
+
+.ActiveTab{
+	background-color: #f7f7f7;
+	border-right: 2px solid #333;
+	border-top: 2px solid #ddd;
+	border-left: 1px solid #ddd;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: bold;
+	text-decoration: none;
+	color: #0896b5;
+	text-align: center;
+
+}
+
+.Tab {	
+	background-color: #bbb;
+	border-right: 1px solid #ddd;
+	border-left: 0px solid #bbb;
+	border-bottom:2px solid #ddd;
+	text-align: center;
+}
+a.Tab:link, a.Tab:visited, a.Tab:active {
+	color: #000;
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: none;
+	border: 0;
+	text-align: center;
+}
+a.Tab:hover {
+	color: #0869b5;
+	text-decoration: none;
+}
+.TabBackground {
+	background-color: #aaa;
+        border-bottom: 0px solid #aaa;
+}
+.TabSpan {	
+	background-color: #bbb;
+	border-right: 2px solid #ddd;
+	border-left: 0px solid #bbb;
+	border-bottom:2px solid #ddd;
+	text-align: center;
+}
+
+.ActiveTabVert{
+	background-color: #f7f7f7;
+	border-bottom: 2px solid #333;
+	border-top: 1px solid #eee;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: bold;
+	text-decoration: none;
+	color: #0896b5;
+	padding: 2px;
+
+}
+
+.TabVert {	
+	background-color: #bbb;
+	border-right: 2px solid #ddd;
+	border-left: 0px solid #ddd;
+	border-bottom:1px solid #ddd;
+	padding: 2px;
+}
+a.TabVert:link, a.TabVert:visited, a.TabVert:active {
+	color: #000;
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: none;
+	border: 0;
+
+}
+.TabBackgroundVert {
+	background-color: #fff;
+	border-bottom: 0px solid #fff;
+}
+.TabVertSpan {	
+	background-color: #bbb;
+	border-right: 2px solid #ddd;
+	border-left: 0px solid #ddd;
+	border-bottom:2px solid #ddd;
+	padding: 2px;
+}
+
+
+.alert{
+	padding: 5px;
+	margin: 5px;
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 10px;
+	background-color: #ccc;
+	border: 1px solid #666666;
+}
+.alert a {
+	font-decoration: underline;
+}
+
+.alert td {
+	padding: 5px;
+}
+
+#cal{
+	border: 0px solid #666666;
+	border-collapse: collapse;
+	margin: 0px;
+	padding: 0px;
+}
+#cal td {
+	vertical-align: top;
+	border-collapse: collapse;
+	border: 1px solid #666666;
+	margin: 0px;
+	padding: 0px;
+	vertical-align: top;
+}
+.cal_title{
+	background-color: #eee;
+	color: #000;
+	padding: 4px !important;
+	font-weight: bold;
+	font-size: 14px;
+	border-bottom: 2px solid #8b1b2b;
+}
+#cal th {
+	vertical-align: top;
+	border-collapse: collapse;
+	border: 1px solid #666666;
+	padding: 0px;
+	margin: 5px;
+	vertical-align: top;
+	background-color: #ccc;
+	color: black;
+	text-align: center;
+	font-weight: normal;
+}
+
+#cal_event{
+	border-collapse: collapse;
+	border: 0px;
+	padding: 0px;
+	margin: 0px;
+	vertical-align: top;
+}
+
+#cal_event td{
+	border: 0px;
+	padding: 2px;
+	margin: 0px;
+	vertical-align: top;
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 10px;
+}
+
+#cal_all_day_events{
+	background-color: #FFFFCC;
+}
+
+.cal_hour {
+	background-color: #f1f1f1;
+	padding: 2px;
+	font-size: 10px;
+}
+
+.calendar_event_link {
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+}
+
+body {
+	background-color: #fff;
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+}
+
+table {
+
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+        color: #000000;
+	margin: 0;
+}
+
+.bigtitle{
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 16px;
+        color: #000;
+	font-weight: bold;
+	margin: 0px;
+	margin-bottom: 0px;
+}
+
+h1{
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 16px;
+        color: #000000;
+	font-weight: bold;
+	margin: 0px;
+	margin-bottom: 12px;
+	
+}
+
+h2{
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 14px;
+        font-weight: bold;
+        color: #000000;
+	margin: 0px;
+	margin-bottom: 5px;
+}
+
+h3{
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+        font-weight: bold;
+        color: #000000;
+	margin: 0px;
+}
+
+a:link, a:visited, a:active  {
+    text-decoration:    none;
+    color:  #000000;
+}
+a:hover {
+    text-decoration:    none;
+    color:  #A5B2CE;
+}
+
+.Header {
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 18px;
+        color: #18425b;
+	font-weight: bold;
+	font-style: italic;
+	background-color: #E6EFF4;
+}
+
+
+.TableHead{
+        background-color: #ab3b4b;
+        font-size: 14px;
+	padding: 2px;
+        font-weight: bold;
+        color: #ccc;
+}
+
+.TableHead2{
+        background-color: #ddd;
+        font-size: 12px;
+	padding: 2px;
+        font-weight: bold;
+        color: #333;
+}
+td.TableHead2{
+        background-color: #ddd;
+        font-size: 12px;
+	padding: 2px;
+        font-weight: bold;
+        color: #333;
+	border-bottom: 2px solid #8b1b2b;
+}
+a.TableHead2:link, a.TableHead2:visited, a.TableHead2:active {
+        font-size: 12px;
+	padding: 2px;
+        font-weight: bold;
+        color: #333;
+}
+a.TableHead2:hover{
+	text-decoration: underline;
+}
+
+.TableBorder{
+        background-color: #8b1b2b;
+        font-size: 12px;
+        font-weight: bold;
+        color: #ccc;
+}
+
+.TableInside{
+        background-color: #f7f7f7;
+        font-family: tahoma, arial, helvetica, sans-serif;
+        font-size: 12px;
+        font-weight: normal;
+        color: #000000;
+	cursor: default;
+	padding-left: 2px;
+	padding-right: 2px;
+
+}
+
+.Table1{
+        font-family: tahoma, arial, helvetica, sans-serif;
+        font-size: 12px;
+        font-weight: normal;
+        color: #000000;
+	padding-left: 2px;
+	padding-right: 2px;
+
+}
+.Table2{
+        background-color: #FFFFCC;
+        font-family: tahoma, arial, helvetica, sans-serif;
+        font-size: 12px;
+        font-weight: normal;
+        color: #000000;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+.Table3{
+        background-color: #ccffff;
+        font-family: tahoma, arial, helvetica, sans-serif;
+        font-size: 12px;
+        font-weight: normal;
+        color: #000000;
+	padding-left: 2px;
+	padding-right: 2px;
+
+}
+.Table4{
+        background-color: #e6eff4;
+        font-family: tahoma, arial, helvetica, sans-serif;
+        font-size: 12px;
+        font-weight: normal;
+        color: #000000;
+	cursor: default;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+.Table5{
+        font-family: tahoma, arial, helvetica, sans-serif;
+        font-size: 12px;
+        font-weight: bold;
+        color: #000000;
+	cursor: default;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+
+.TableInside1{
+	background-color: #f7f7f7;
+        font-family: tahoma, arial, helvetica, sans-serif;
+        font-size: 11px;
+        font-weight: normal;
+        color: #000000;
+	cursor: default;
+	padding-left: 2px;
+	padding-right: 2px;
+
+}
+.TableInside2{
+        background-color: #e6eff4;
+        font-family: tahoma, arial, helvetica, sans-serif;
+        font-size: 11px;
+        font-weight: normal;
+        color: #000000;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+.TableInside3{
+        background-color: #ccffff;
+        font-family: tahoma, arial, helvetica, sans-serif;
+        font-size: 11px;
+        font-weight: normal;
+        color: #000000;
+	cursor: default;
+	padding-left: 2px;
+	padding-right: 2px;
+
+}
+.TableInside4{
+        background-color: #FFFFCC;
+        font-family: tahoma, arial, helvetica, sans-serif;
+        font-size: 11px;
+        font-weight: normal;
+        color: #000000;
+	cursor: default;
+	padding: 0px;
+}
+
+.GanttDate{
+        font-family: tahoma, arial, helvetica, sans-serif;
+        font-size: 10px;
+        font-weight: normal;
+	cursor: default;
+	padding: 0px;
+}
+
+.Error {
+	font-size: 12px;
+        color: red;
+	font-weight: bold;
+}
+a.Error:link, a.Error:visited, a.Error:active{
+	font-size: 12px;
+	color: red;
+	font-weight: bold;
+	text-decoration: underline;
+}
+
+.Success {
+	font-size: 12px;
+        color: #6666FF;
+	font-weight: bold;
+}
+
+.normal {
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+        color: #000000;
+}
+a.normal:link, a.normal:visited, a.normal:active {
+	text-decoration: underline;
+}
+a.normal:hover {
+    text-decoration:    none;
+    color:  #A5B2CE;
+}
+
+.normal2 {
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+        color: #FFFFCC;
+}
+
+.blue {
+        color: blue;
+}
+a.blue:link, a.blue:visited, a.blue:active {
+	text-decoration: underline;
+	color: blue;
+}
+a.blue:hover {
+    text-decoration:    none;
+    color:  red;
+}
+
+a.HoverLink, a.HoverLink:visited, a.HoverLink:active {
+  background-color: #ccc;
+  color: #000000;
+  display: block;
+  font-family: tahoma, arial, helvetica, sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: normal;
+  margin: 0px;
+  padding: 2px;
+  text-decoration: none;
+  white-space: nowrap;
+
+}
+a.HoverLinkSelected, a.HoverLinkSelected:visited, a.HoverLinkSelected:active {
+  background-color: #ffafbf;
+  color: #000000;
+  display: block;
+  font-family: tahoma, arial, helvetica, sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: bold;
+  margin: 0px;
+  padding: 0px;
+  text-decoration: none;
+  white-space: nowrap;
+  height: 100%;
+  width: 100%;
+}
+a.HoverLink:hover, a.HoverLinkSelected:hover {
+  background-color: #FFF7EB;
+  color: #000000;
+  text-decoration: none;
+}
+
+a.Holiday, a.Holiday:visited, a.Holiday:active {
+  background-color: #84CBFF;
+  color: #000000;
+  display: block;
+  font-family: tahoma, arial, helvetica, sans-serif;
+  font-size: 11px;
+  font-style: normal;
+  font-weight: normal;
+  margin: 0px;
+  padding: 0px;
+  text-decoration: none;
+  white-space: nowrap;
+  height: 100%;
+  width: 100%;
+
+}
+
+
+.textbox{
+	background-color: #FFF7EB;
+	border-style: solid;
+	
+        border-left-color: #666666;
+	border-bottom-color: #cccccc;
+        border-top-color: #666666;
+	border-right-color: #cccccc;
+
+        border-left-width: 1px;
+	border-bottom-width: 1px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 12px;
+	color: #000000;
+}
+
+.button{
+	background-color: #888;
+	border-style: solid;
+	
+	border-left-color: #ddd;
+	border-bottom-color: #333;
+	border-top-color: #ddd;
+	border-right-color: #333;
+
+        border-left-width: 1px;
+	border-bottom-width: 1px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: white;
+}
+.button_mo{
+	background-color: #888;
+	border-style: solid;
+	
+	border-left-color: #ddd;
+	border-bottom-color: #333;
+        border-top-color: #ddd;
+	border-right-color: #333;
+
+        border-left-width: 1px;
+	border-bottom-width: 1px;
+	border-top-width: 1px;
+	border-right-width: 1px;
+	
+	font-family: tahoma, arial, helvetica, sans-serif;
+	font-size: 11px;
+	font-weight: bold;
+	color: 48d6f5;
+}
+
+.small{
+        font-family: tahoma, arial, helvetica, sans-serif;
+        font-size: 10px;
+        font-weight: italic;
+}
+a.small_underline, a.small_underline:visited, a.small_underline:active{
+        font-family: tahoma, arial, helvetica, sans-serif;
+        font-size: 10px;	
+	text-decoration: underline;
+}
+
+.count{
+        font-family: tahoma, arial, helvetica, sans-serif;
+        font-size: 10px;
+        font-weight: bold;
+        color: blue;
+}
+
+.HiLi {
+	background-color: #E6EFF4;
+}

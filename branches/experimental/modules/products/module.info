@@ -1,0 +1,9 @@
+<?php
+$module['products']['description'] = 'With the products module you can easily '.
+			'administrate your sales. You can create a quotation with '.
+			'entered products.';
+$module['products']['version'] = '1.0';
+$module['products']['release_date'] = '2004-10-01';
+$module['products']['status'] = 'Stable';
+$module['products']['authors'][] = array('name'=>'Duc Kien Tran', 'email'=>'trankien_duc@yahoo.com');
+?>	
