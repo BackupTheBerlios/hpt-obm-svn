@@ -115,6 +115,8 @@ function Bold_Text(id,imgfile)
 					$GO_THEME->images[$module['id']] = isset($GO_THEME->images[$module['id']]) ? $GO_THEME->images[$module['id']] : $GO_THEME->images['unknown'];
 					if ($show_text)
 					$lang_var = isset($lang_modules[$module['id']]) ? $lang_modules[$module['id']] : $module['id'];
+					else
+					$lang_var = '';
 //					echo '<td class="ModuleIcons" align="center" valign="top" nowrap><a  id="'.$module['id'].'" class="LeftBar" href="javascript:Bold_Text(\''.$module['id'].'\',\''.$module['url'].'\')"><img src="'.$GO_THEME->images[$module['id']].'" border="0" width="32" height="32" /><br />'.$lang_var.'</a></td>';	
 					echo '<td border="0" align="center" valign="middle" nowrap height="28">';
 					echo '<img id="left_modon'.$module['id'].'" src="images/menu/modoff_begin.gif">';
@@ -123,7 +125,7 @@ function Bold_Text(id,imgfile)
 					echo '<td id="icon_bg_'.$module['id'].'" class="Menu_modoff" border="0" align="center" valign="middle" nowrap height="28">';
 					echo '<a id="icon_'.$module['id'].'"  onClick="javascript:Bold_Text(\''.$module['id'].'\',\''.$GO_THEME->images[$module['id']].'\')" href="'.$module['url'].'" target="main"><img src="'.$GO_THEME->images['mod_'.$module['id']].'" border="0" width="22" height="22" /></a></td>';
 					echo '<td id="text_bg_'.$module['id'].'" class="Menu_modoff" border="0" align="center" valign="middle" nowrap height="28">';
-					echo '<a id="text_'.$module['id'].'"  onClick="javascript:Bold_Text(\''.$module['id'].'\',\''.$GO_THEME->images[$module['id']].'\')" href="'.$module['url'].'" target="main">&nbsp;'.$lang_var.'&nbsp;</a>';
+					echo '<a id="text_'.$module['id'].'"  onClick="javascript:Bold_Text(\''.$module['id'].'\',\''.$GO_THEME->images[$module['id']].'\')" href="'.$module['url'].'" target="main">'.($lang_var != '' ? '&nbsp;'.$lang_var.'&nbsp;' : '').'</a>';
 					echo '</td>';	
 					
 					echo '<td border="0" align="center" valign="middle" nowrap height="28">';
