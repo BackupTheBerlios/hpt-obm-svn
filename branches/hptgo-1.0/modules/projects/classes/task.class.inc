@@ -210,6 +210,9 @@ class project_task extends db {
 
     $this->doc_path = $GO_CONFIG->file_storage_path . 'projects/' .
       $this->project_id . '/' . $this->id;
+    $this->doc_url = $_SERVER['PHP_SELF'] . "?task=show_task_doc".
+             "&project_id=".$this->project_id.
+             "&task_id=".$this->id."&task_status=show_doc";
   }
 
   function print_info($member_ids, $member_names, $member_list) {
@@ -243,9 +246,7 @@ class project_task extends db {
         echo "<td>".$pm_task_status_values[$this->status]."</td>";
     }
     echo "<td align=\"center\">".($this->approved ? "<img border=\"0\" src=\"".$GO_THEME->images['checked']."\"/>" : "&nbsp;")."</td>";
-    $url = $_SERVER['PHP_SELF'] . "?task=show_task_doc".
-             "&project_id=".$this->project_id.
-             "&task_id=".$this->id."&task_status=show_doc";
+    $url = $this->doc_url;
 
     if ($this->level == -1) {
       if ($this->is_owner || $this->is_manager)
@@ -367,6 +368,12 @@ class project_task extends db {
     }
     else
       echo "<td align=\"center\">".($this->approved ? "<img border=\"0\" src=\"".$GO_THEME->images['checked']."\"/>" : "&nbsp;")."</td>";
+    if ($this->level >= 0)
+      echo '<td align="center"><a href="'.$this->doc_url.'">'.
+           '<img border="0" src="'.$GO_THEME->images['doc_red'].'"/></a></td>';
+    else
+      echo '<td align="center"><a href="'.$this->doc_url.'">'.
+           '<img border="0" src="'.$GO_THEME->images['doc'].'"/></a></td>';
     echo "</tr>";
     echo "<tr><td>&nbsp;</td></tr>";
     echo "</table>";
@@ -423,7 +430,7 @@ class project_task extends db {
     echo "<td align=\"center\">".($this->approved ? "<img border=\"0\" src=\"".$GO_THEME->images['checked']."\"/>" : "&nbsp;")."</td>";
     echo "</tr>";
     echo "<tr><td>&nbsp;</td></tr>";
-    echo "<tr><td colspan=\"8\"><iframe src=\""."folder.php?path=".$this->doc_path."\" width=720 height=300>".
+    echo "<tr><td colspan=\"8\" width=\"100%\"><iframe src=\"folder.php?path=".$this->doc_path."\" width=\"100%\" height=\"300\">".
          "</iframe></td></tr>";
   }
 
