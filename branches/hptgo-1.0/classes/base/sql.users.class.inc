@@ -435,7 +435,7 @@ class GO_USERS extends base_users
     $user_modules_properties = explode(':',$module_preference);
     if ($user_modules_properties[0] == '')
     {
-      global $GO_MODULES;
+      global $GO_MODULES,$GO_SECURITY;
       $GO_MODULES->get_modules();
       $modules = array();
       while ($GO_MODULES->next_record())
