@@ -52,8 +52,21 @@ function Bold_Text(id)
 		<?php
 		
 			$modules = $GO_MODULES->get_modules_with_locations();
-			while ($module = array_shift($modules))
+			$user = $GO_USERS->get_user($GO_SECURITY->user_id);
+
+			foreach ($modules as $id => $module) {
+				$module_map[$module['id']] = $id;
+			}
+
+			$module_list = $user['modules'];
+			if ($module_list == '')
+				$module_list = implode(' ',array_keys($module_map));
+
+			$module_list = explode(' ',$module_list);
+			foreach ($module_list as $module)
 			{
+				$module = $modules[$module_map[$module]];
+				echo "\n<!-- ".$module['id']." -->\n";
 				if ($GO_SECURITY->has_permission($GO_SECURITY->user_id, $module['acl_read']))
 				{
 					$GO_THEME->images[$module['id']] = isset($GO_THEME->images[$module['id']]) ? $GO_THEME->images[$module['id']] : $GO_THEME->images['unknown'];
