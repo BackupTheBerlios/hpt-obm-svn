@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST')
 }
 
 $addressbook_id = isset($_REQUEST['addressbook_id']) ? $_REQUEST['addressbook_id'] : $ab->get_default_addressbook($GO_SECURITY->user_id);
-//echo "2==".$addressbook_id;
+
 $is_treeview = isset($_REQUEST['treeview']) ? $_REQUEST['treeview'] : '0';
 
 if (!$addressbook_id)

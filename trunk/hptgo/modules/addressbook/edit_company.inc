@@ -153,13 +153,15 @@
 				<td align="right" width="1%" nowrap><?php echo $strRelationDate; ?>&nbsp;:&nbsp;</td>
 				<td nowrap>&nbsp;
 <?php
-
 	if ( empty($task) && $company['relation_date'] ) 
 		$today = db_date_to_date($company['relation_date']);
 
+	if ($task=='save_company')
+		$today = $company['relation_date'];
+
 	if ($company['relation_date']==0)
 		$today = "";
-//		$company['relation_date'] = "";
+
 
 	if (!isset($_REQUEST['company_id']))
 		$today = get_today();
