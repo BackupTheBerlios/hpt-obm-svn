@@ -209,5 +209,5 @@ $cal_event_calendars = 'Lịch';
 //2.06
 $cal_view_merged = 'kết hợp';
 $cal_view_emerged = 'tách riêng';
-$strNoPastEvent = 'Bạn được thêm một sự kiện vào quá khứ';
+$strNoPastEvent = 'Bạn không được thêm một sự kiện vào quá khứ';
 ?>
